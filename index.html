@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>William Teppig — UX Design Principal</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --white:      #ffffff;
+  --offwhite:   #f8f8f6;
+  --surface:    #f2f2ef;
+  --border:     #e4e4e0;
+  --border2:    #d0d0cb;
+  --ink:        #1a1a18;
+  --ink2:       #4a4a46;
+  --ink3:       #8a8a84;
+  --teal:       #006d77;
+  --teal-light: #e8f4f5;
+  --teal-mid:   #b2d8dc;
+  --slate:      #3d5a6c;
+  --slate-light:#edf2f5;
+  --amber:      #b5621e;
+  --amber-light:#fdf0e6;
+  --gold:       #b07d2a;
+  --gold-light: #fdf5e6;
+  --gold-mid:   #e6c97a;
+  --navy:       #1e3a5f;
+  --navy-light: #e8edf5;
+  --navy-mid:   #9fb3cc;
+  --purple:      #5b2a86;
+  --purple-light:#f1eafa;
+  --purple-mid:  #cbb3e0;
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+  --serif:      'DM Serif Display', Georgia, serif;
+  --sans:       'Inter', -apple-system, sans-serif;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 16px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg:  0 12px 40px rgba(0,0,0,.09), 0 2px 8px rgba(0,0,0,.05);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--offwhite);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+
+/* ─── NAV ─── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(248,248,246,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.nav-brand {
+  font-size: 12px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+}
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  font-size: 12px; font-weight: 500; color: var(--ink2);
+  text-decoration: none; letter-spacing: .02em; transition: color .15s;
+}
+.nav-links a:hover { color: var(--teal); }
+.nav-resume {
+  font-size: 11px; font-weight: 600; letter-spacing: .06em;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+  border: 1px solid var(--border2); border-radius: 20px;
+  padding: 7px 16px; transition: background .15s, border-color .15s;
+}
+.nav-resume:hover { background: var(--white); border-color: var(--ink3); }
+
+/* ─── INTRO ─── */
+.intro { padding: 120px 48px 96px; border-bottom: 1px solid var(--border); }
+.intro-inner { max-width: 1080px; margin: 0 auto; }
+.intro-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 24px;
+}
+.intro-eyebrow::before { content: ''; width: 20px; height: 2px; background: var(--ink3); border-radius: 2px; }
+.intro h1 {
+  font-family: var(--serif); font-weight: 400; line-height: 1.1;
+  font-size: clamp(36px, 5vw, 58px); color: var(--ink);
+  max-width: 820px; margin-bottom: 28px;
+}
+.intro h1 em { color: var(--teal); font-style: italic; }
+.intro-sub {
+  font-size: 18px; color: var(--ink2); max-width: 620px;
+  line-height: 1.65; font-weight: 400; margin-bottom: 40px;
+}
+.intro-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; color: var(--teal);
+  text-decoration: none; letter-spacing: .02em;
+}
+.intro-cta::after { content: '↓'; transition: transform .15s; }
+.intro-cta:hover::after { transform: translateY(3px); }
+
+/* ─── WORK SECTION ─── */
+.work { padding: 96px 48px; }
+.work-inner { max-width: 1176px; margin: 0 auto; }
+.section-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 16px;
+}
+.work h2 {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.4vw, 38px);
+  color: var(--ink); margin-bottom: 56px; max-width: 640px;
+}
+
+.feature-list { display: flex; flex-direction: column; gap: 28px; }
+
+.feature-row {
+  border-radius: var(--radius-lg);
+  padding: 48px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+  text-decoration: none;
+}
+.feature-row.reverse { grid-template-columns: 1fr 1fr; }
+.feature-row.reverse .feature-visual { order: 1; }
+.feature-row.reverse .feature-text { order: 2; }
+
+.feature-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 14px;
+}
+.feature-title {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 2.6vw, 32px);
+  line-height: 1.2; color: var(--ink); margin-bottom: 16px;
+}
+.feature-desc {
+  font-size: 15px; color: var(--ink2); line-height: 1.65;
+  max-width: 460px; margin-bottom: 24px;
+}
+.feature-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+.feature-pill {
+  font-size: 11px; font-weight: 600; letter-spacing: .03em;
+  border-radius: 20px; padding: 6px 14px; background: var(--white);
+}
+.feature-divider { height: 1px; background: var(--border2); margin-bottom: 28px; max-width: 460px; }
+.feature-metrics { display: flex; gap: 40px; margin-bottom: 32px; }
+.feature-metric-num { font-family: var(--serif); font-size: 26px; line-height: 1; margin-bottom: 6px; color: var(--ink); }
+.feature-metric-label { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--ink3); }
+.feature-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.feature-btn-primary {
+  font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--white); text-decoration: none;
+  border-radius: 24px; padding: 14px 26px; transition: opacity .15s;
+}
+.feature-btn-primary:hover { opacity: .88; }
+
+/* visual side — mockup window */
+.feature-visual { display: flex; justify-content: center; }
+.feature-mock {
+  width: 100%; max-width: 440px; background: var(--white);
+  border-radius: var(--radius-md); overflow: hidden;
+  box-shadow: var(--shadow-lg); border: 1px solid rgba(0,0,0,.04);
+}
+.fm-chrome { background: #1c1c1c; padding: 9px 14px; display: flex; align-items: center; gap: 6px; }
+.fm-dot { width: 9px; height: 9px; border-radius: 50%; }
+.fm-url { flex: 1; background: rgba(255,255,255,.08); border-radius: 4px; height: 18px; margin-left: 10px; }
+.fm-topbar { height: 36px; display: flex; align-items: center; padding: 0 18px; }
+.fm-topbar-label { font-size: 10px; font-weight: 700; letter-spacing: .06em; color: rgba(255,255,255,.92); }
+.fm-body { background: var(--offwhite); padding: 18px; display: flex; gap: 14px; height: 200px; }
+.fm-side { width: 26%; display: flex; flex-direction: column; gap: 8px; }
+.fm-side-block { height: 9px; border-radius: 3px; background: var(--border2); }
+.fm-side-block:first-child { width: 70%; }
+.fm-main { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.fm-row { height: 34px; border-radius: 7px; background: var(--surface); border: 1px solid var(--border); }
+.fm-row.wide { flex: 1; }
+.fm-chip-row { display: flex; gap: 8px; }
+.fm-chip { height: 22px; border-radius: 12px; background: var(--border); flex: 1; }
+
+/* per-row accent colors */
+.feature-teal { background: var(--teal-light); }
+.feature-teal .feature-pill { color: var(--teal); border: 1px solid var(--teal-mid); }
+.feature-teal .feature-metric-num { color: var(--teal); }
+.feature-teal .feature-btn-primary { background: var(--teal); }
+.feature-teal .fm-topbar { background: var(--teal); }
+.feature-teal .fm-row.wide, .feature-teal .fm-chip { background: var(--teal-light); border-color: var(--teal-mid); }
+
+.feature-gold { background: var(--gold-light); }
+.feature-gold .feature-pill { color: var(--gold); border: 1px solid var(--gold-mid); }
+.feature-gold .feature-metric-num { color: var(--gold); }
+.feature-gold .feature-btn-primary { background: var(--gold); }
+.feature-gold .fm-topbar { background: var(--gold); }
+.feature-gold .fm-row.wide, .feature-gold .fm-chip { background: var(--gold-light); border-color: var(--gold-mid); }
+
+.feature-navy { background: var(--navy-light); }
+.feature-navy .feature-pill { color: var(--navy); border: 1px solid var(--navy-mid); }
+.feature-navy .feature-metric-num { color: var(--navy); }
+.feature-navy .feature-btn-primary { background: var(--navy); }
+.feature-navy .fm-topbar { background: var(--navy); }
+.feature-navy .fm-row.wide, .feature-navy .fm-chip { background: var(--navy-light); border-color: var(--navy-mid); }
+
+.feature-purple { background: var(--purple-light); }
+.feature-purple .feature-pill { color: var(--purple); border: 1px solid var(--purple-mid); }
+.feature-purple .feature-metric-num { color: var(--purple); }
+.feature-purple .feature-btn-primary { background: var(--purple); }
+.feature-purple .fm-topbar { background: var(--purple); }
+
+/* heat-map artifact visual for the ecosystem review card */
+.fm-heat { padding: 18px; background: var(--offwhite); display: flex; flex-direction: column; gap: 8px; height: 200px; justify-content: center; }
+.fm-heat-row { display: flex; gap: 8px; }
+.fm-heat-cell { flex: 1; height: 30px; border-radius: 6px; }
+.fm-heat-label { width: 70px; flex: none; display: flex; align-items: center; font-size: 9px; font-weight: 700; color: var(--ink3); letter-spacing: .03em; }
+
+/* ─── ABOUT ─── */
+.about { padding: 96px 48px; background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.about-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; }
+.about h2 {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.4vw, 38px);
+  color: var(--ink);
+}
+.about-text p { font-size: 15.5px; color: var(--ink2); line-height: 1.75; margin-bottom: 18px; }
+.about-text p:last-child { margin-bottom: 0; }
+.about-skills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.skill-pill {
+  font-size: 11px; font-weight: 600; color: var(--ink2);
+  border: 1px solid var(--border2); border-radius: 20px; padding: 5px 12px;
+}
+
+/* ─── RESUME / CONTACT ─── */
+.resume { padding: 96px 48px; text-align: center; }
+.resume-inner { max-width: 640px; margin: 0 auto; }
+.resume h2 {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.4vw, 36px);
+  color: var(--ink); margin-bottom: 16px;
+}
+.resume p { font-size: 15.5px; color: var(--ink2); margin-bottom: 32px; }
+.resume-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  font-size: 13px; font-weight: 600; letter-spacing: .02em;
+  color: var(--white); background: var(--ink); text-decoration: none;
+  border-radius: 24px; padding: 13px 28px; transition: background .15s;
+}
+.btn-primary:hover { background: var(--teal); }
+.btn-secondary {
+  font-size: 13px; font-weight: 600; letter-spacing: .02em;
+  color: var(--ink); background: transparent; text-decoration: none;
+  border: 1px solid var(--border2); border-radius: 24px; padding: 13px 28px;
+  transition: border-color .15s, background .15s;
+}
+.btn-secondary:hover { border-color: var(--ink3); background: var(--white); }
+
+footer { padding: 32px 48px; text-align: center; border-top: 1px solid var(--border); }
+footer p { font-size: 12.5px; color: var(--ink3); }
+
+@media (max-width: 900px) {
+  .feature-row { grid-template-columns: 1fr; padding: 32px; }
+  .feature-row.reverse .feature-visual { order: 1; }
+  .feature-row.reverse .feature-text { order: 2; }
+  .feature-desc, .feature-divider { max-width: none; }
+  .about-inner { grid-template-columns: 1fr; gap: 32px; }
+}
+@media (max-width: 640px) {
+  nav { flex-wrap: wrap; height: auto; padding: 12px 24px; gap: 10px; }
+  .nav-links { flex-wrap: wrap; gap: 12px 18px; justify-content: flex-start; }
+  .intro, .work, .about, .resume { padding-left: 24px; padding-right: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#top">William Teppig</a>
+  <div class="nav-links">
+    <a href="#top">Home</a>
+    <a href="#work">Case Studies</a>
+    <a href="#about">About</a>
+    <a class="nav-resume" href="resume.pdf" target="_blank" rel="noopener">Resume</a>
+  </div>
+</nav>
+
+<!-- ─── INTRO ─── -->
+<section class="intro" id="top">
+  <div class="intro-inner">
+    <div class="intro-eyebrow">UX Design Principal · Enterprise SaaS</div>
+    <h1>Designing clarity into <em>complex</em> enterprise systems.</h1>
+    <p class="intro-sub">I lead UX strategy and design for enterprise platforms in healthcare and financial services — turning fragmented, high-stakes tools into cohesive experiences people can trust under pressure.</p>
+  </div>
+</section>
+
+<!-- ─── WORK ─── -->
+<section class="work" id="work">
+  <div class="work-inner">
+    <div class="section-eyebrow">Selected Work</div>
+
+    <div class="feature-list">
+
+      <!-- CS 01 — Supply Chain -->
+      <div class="feature-row feature-teal">
+        <div class="feature-text">
+          <div class="feature-eyebrow">Case Study 01 · Healthcare SaaS</div>
+          <h3 class="feature-title">From acquisition sprawl to cohesive platform</h3>
+          <p class="feature-desc">Unifying a disconnected suite of procurement tools into a single, role-driven platform to compete with modern ERP players.</p>
+          <div class="feature-pills">
+            <span class="feature-pill">Enterprise UX</span>
+            <span class="feature-pill">0 to 1 Design</span>
+            <span class="feature-pill">Design System</span>
+          </div>
+          <div class="feature-divider"></div>
+          <div class="feature-metrics">
+            <div>
+              <div class="feature-metric-num">40%</div>
+              <div class="feature-metric-label">Fewer Task Steps</div>
+            </div>
+            <div>
+              <div class="feature-metric-num">3→1</div>
+              <div class="feature-metric-label">Products Unified</div>
+            </div>
+          </div>
+          <div class="feature-actions">
+            <a class="feature-btn-primary" href="supply_chain_hero_variant.html">View Case Study</a>
+          </div>
+        </div>
+        <div class="feature-visual">
+          <div class="feature-mock">
+            <div class="fm-chrome">
+              <div class="fm-dot" style="background:#ff5f57;"></div>
+              <div class="fm-dot" style="background:#febc2e;"></div>
+              <div class="fm-dot" style="background:#28c840;"></div>
+              <div class="fm-url"></div>
+            </div>
+            <div class="fm-topbar"><span class="fm-topbar-label">PREMIER · SUPPLY CHAIN</span></div>
+            <div class="fm-body">
+              <div class="fm-side">
+                <div class="fm-side-block"></div>
+                <div class="fm-side-block"></div>
+                <div class="fm-side-block"></div>
+                <div class="fm-side-block"></div>
+              </div>
+              <div class="fm-main">
+                <div class="fm-chip-row"><div class="fm-chip"></div><div class="fm-chip"></div><div class="fm-chip"></div></div>
+                <div class="fm-row"></div>
+                <div class="fm-row wide"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CS 02 — Hospital Quality -->
+      <div class="feature-row feature-gold reverse">
+        <div class="feature-text">
+          <div class="feature-eyebrow">Case Study 02 · Healthcare Quality</div>
+          <h3 class="feature-title">Turning quality data into decisions</h3>
+          <p class="feature-desc">Unifying five disconnected reporting systems into one role-driven intelligence platform healthcare teams can act on in time.</p>
+          <div class="feature-pills">
+            <span class="feature-pill">Cross-Platform UX</span>
+            <span class="feature-pill">Healthcare</span>
+            <span class="feature-pill">Data Integration</span>
+          </div>
+          <div class="feature-divider"></div>
+          <div class="feature-metrics">
+            <div>
+              <div class="feature-metric-num">5→1</div>
+              <div class="feature-metric-label">Systems Unified</div>
+            </div>
+            <div>
+              <div class="feature-metric-num">Near-RT</div>
+              <div class="feature-metric-label">KPI Data Delivery</div>
+            </div>
+          </div>
+          <div class="feature-actions">
+            <a class="feature-btn-primary" href="hospital_quality_performance.html">View Case Study</a>
+          </div>
+        </div>
+        <div class="feature-visual">
+          <div class="feature-mock">
+            <div class="fm-chrome">
+              <div class="fm-dot" style="background:#ff5f57;"></div>
+              <div class="fm-dot" style="background:#febc2e;"></div>
+              <div class="fm-dot" style="background:#28c840;"></div>
+              <div class="fm-url"></div>
+            </div>
+            <div class="fm-topbar"><span class="fm-topbar-label">QUALITY PERFORMANCE</span></div>
+            <div class="fm-body">
+              <div class="fm-side">
+                <div class="fm-side-block"></div>
+                <div class="fm-side-block"></div>
+                <div class="fm-side-block"></div>
+                <div class="fm-side-block"></div>
+              </div>
+              <div class="fm-main">
+                <div class="fm-chip-row"><div class="fm-chip"></div><div class="fm-chip"></div><div class="fm-chip"></div></div>
+                <div class="fm-row"></div>
+                <div class="fm-row wide"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CS 03 — Collections -->
+      <div class="feature-row feature-navy">
+        <div class="feature-text">
+          <div class="feature-eyebrow">Case Study 03 · Financial Services</div>
+          <h3 class="feature-title">When the agent is the bottleneck</h3>
+          <p class="feature-desc">Replacing a patchwork of collections tools with an embedded decisioning architecture that guides agents to the best action.</p>
+          <div class="feature-pills">
+            <span class="feature-pill">Agent Tools</span>
+            <span class="feature-pill">Financial Services</span>
+            <span class="feature-pill">Decision Support</span>
+          </div>
+          <div class="feature-divider"></div>
+          <div class="feature-metrics">
+            <div>
+              <div class="feature-metric-num">1→All</div>
+              <div class="feature-metric-label">360° Account View</div>
+            </div>
+            <div>
+              <div class="feature-metric-num">↓ AHT</div>
+              <div class="feature-metric-label">Avg. Handle Time</div>
+            </div>
+          </div>
+          <div class="feature-actions">
+            <a class="feature-btn-primary" href="collections_agent_workstation.html">View Case Study</a>
+          </div>
+        </div>
+        <div class="feature-visual">
+          <div class="feature-mock">
+            <div class="fm-chrome">
+              <div class="fm-dot" style="background:#ff5f57;"></div>
+              <div class="fm-dot" style="background:#febc2e;"></div>
+              <div class="fm-dot" style="background:#28c840;"></div>
+              <div class="fm-url"></div>
+            </div>
+            <div class="fm-topbar"><span class="fm-topbar-label">COLLECTIONS WORKSTATION</span></div>
+            <div class="fm-body">
+              <div class="fm-side">
+                <div class="fm-side-block"></div>
+                <div class="fm-side-block"></div>
+                <div class="fm-side-block"></div>
+                <div class="fm-side-block"></div>
+              </div>
+              <div class="fm-main">
+                <div class="fm-chip-row"><div class="fm-chip"></div><div class="fm-chip"></div><div class="fm-chip"></div></div>
+                <div class="fm-row"></div>
+                <div class="fm-row wide"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CS 04 — Premier Ecosystem Review -->
+      <div class="feature-row feature-purple reverse">
+        <div class="feature-text">
+          <div class="feature-eyebrow">Case Study 04 · UX Strategy &amp; Systems Design</div>
+          <h3 class="feature-title">Premier Ecosystem Review</h3>
+          <p class="feature-desc">Rationalizing the Procure-to-Pay ecosystem across tools, workflows, and stakeholder groups — surfacing where experience breakdowns were driving cost, risk, and lost decision quality.</p>
+          <div class="feature-pills">
+            <span class="feature-pill">Systems-Level UX</span>
+            <span class="feature-pill">Staff UX Strategy</span>
+            <span class="feature-pill">Procure-to-Pay</span>
+          </div>
+          <div class="feature-divider"></div>
+          <div class="feature-metrics">
+            <div>
+              <div class="feature-metric-num">4</div>
+              <div class="feature-metric-label">Ecosystem Layers Mapped</div>
+            </div>
+            <div>
+              <div class="feature-metric-num">5</div>
+              <div class="feature-metric-label">Stakeholder Groups Aligned</div>
+            </div>
+          </div>
+          <div class="feature-actions">
+            <a class="feature-btn-primary" href="premier-ecosystem-review-case-study.html">View Case Study</a>
+          </div>
+        </div>
+        <div class="feature-visual">
+          <div class="feature-mock">
+            <div class="fm-chrome">
+              <div class="fm-dot" style="background:#ff5f57;"></div>
+              <div class="fm-dot" style="background:#febc2e;"></div>
+              <div class="fm-dot" style="background:#28c840;"></div>
+              <div class="fm-url"></div>
+            </div>
+            <div class="fm-topbar"><span class="fm-topbar-label">CAPABILITY HEAT MAP</span></div>
+            <div class="fm-heat">
+              <div class="fm-heat-row">
+                <div class="fm-heat-label">Coverage</div>
+                <div class="fm-heat-cell" style="background:#3f9a5c;"></div>
+                <div class="fm-heat-cell" style="background:#e6c537;"></div>
+                <div class="fm-heat-cell" style="background:#3f9a5c;"></div>
+                <div class="fm-heat-cell" style="background:#d3433e;"></div>
+              </div>
+              <div class="fm-heat-row">
+                <div class="fm-heat-label">Consistency</div>
+                <div class="fm-heat-cell" style="background:#e08a2e;"></div>
+                <div class="fm-heat-cell" style="background:#3f9a5c;"></div>
+                <div class="fm-heat-cell" style="background:#e6c537;"></div>
+                <div class="fm-heat-cell" style="background:#e08a2e;"></div>
+              </div>
+              <div class="fm-heat-row">
+                <div class="fm-heat-label">Criticality</div>
+                <div class="fm-heat-cell" style="background:#d3433e;"></div>
+                <div class="fm-heat-cell" style="background:#e08a2e;"></div>
+                <div class="fm-heat-cell" style="background:#3f9a5c;"></div>
+                <div class="fm-heat-cell" style="background:#e6c537;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── ABOUT ─── -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <h2>About</h2>
+    <div class="about-text">
+      <p>I'm a UX Design Principal who works at the intersection of complex enterprise workflows and the people who depend on them to get their jobs done — procurement teams, quality analysts, and collections agents making high-stakes decisions under time pressure.</p>
+      <p>My approach starts with systems thinking: mapping how fragmented tools and data actually flow through a business before redesigning the experience around the roles that use them. I've led UX strategy end-to-end, from research and information architecture through the design systems that keep multi-product platforms cohesive as they scale.</p>
+      <div class="about-skills">
+        <span class="skill-pill">UX Strategy</span>
+        <span class="skill-pill">Systems Thinking</span>
+        <span class="skill-pill">Design Systems</span>
+        <span class="skill-pill">Enterprise SaaS</span>
+        <span class="skill-pill">Research</span>
+        <span class="skill-pill">Cross-Platform UX</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── RESUME / CONTACT ─── -->
+<section class="resume">
+  <div class="resume-inner">
+    <h2>Let's talk</h2>
+    <p>Open to conversations about UX leadership roles in enterprise SaaS, healthcare, and financial services.</p>
+    <div class="resume-actions">
+      <a class="btn-primary" href="resume.pdf" target="_blank" rel="noopener">Download Resume</a>
+      <a class="btn-secondary" href="mailto:hello@williamteppig.com">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>William Teppig</strong> &nbsp;·&nbsp; UX Design Principal &nbsp;·&nbsp; Enterprise Healthcare &amp; Financial Services Platforms</p>
+</footer>
+
+</body>
+</html>

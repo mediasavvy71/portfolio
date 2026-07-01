@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turning Quality Data into Decisions — UX Case Study · William Teppig</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --white:      #ffffff;
+  --offwhite:   #f8f8f6;
+  --surface:    #f2f2ef;
+  --border:     #e4e4e0;
+  --border2:    #d0d0cb;
+  --ink:        #1a1a18;
+  --ink2:       #4a4a46;
+  --ink3:       #8a8a84;
+  --teal:       #006d77;
+  --teal-light: #e8f4f5;
+  --teal-mid:   #b2d8dc;
+  --slate:      #3d5a6c;
+  --slate-light:#edf2f5;
+  --amber:      #b5621e;
+  --amber-light:#fdf0e6;
+  /* Case study 02 accent — warm amber/gold for healthcare quality */
+  --gold:       #b07d2a;
+  --gold-light: #fdf5e6;
+  --gold-mid:   #e6c97a;
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+  --serif:      'DM Serif Display', Georgia, serif;
+  --sans:       'Inter', -apple-system, sans-serif;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 16px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg:  0 12px 40px rgba(0,0,0,.09), 0 2px 8px rgba(0,0,0,.05);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--offwhite);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(248,248,246,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.nav-brand {
+  font-size: 12px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+}
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  font-size: 12px; font-weight: 500; color: var(--ink2);
+  text-decoration: none; letter-spacing: .02em; transition: color .15s;
+}
+.nav-links a:hover { color: var(--teal); }
+.nav-resume {
+  font-size: 11px; font-weight: 600; letter-spacing: .06em;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+  border: 1px solid var(--border2); border-radius: 20px;
+  padding: 7px 16px; transition: background .15s, border-color .15s;
+}
+.nav-resume:hover { background: var(--white); border-color: var(--ink3); }
+
+/* ─── HERO ─── */
+.hero {
+  background: var(--white);
+  padding: 88px 48px 72px;
+  border-bottom: 1px solid var(--border);
+}
+.hero-inner { max-width: 1080px; margin: 0 auto; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 24px;
+}
+.hero-eyebrow::before {
+  content: ''; width: 24px; height: 2px; background: var(--gold); border-radius: 2px;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 400; line-height: 1.1; color: var(--ink);
+  max-width: 820px; margin-bottom: 24px;
+}
+.hero h1 em { color: var(--gold); font-style: italic; }
+.hero-sub {
+  font-size: 16px; color: var(--ink2); max-width: 640px;
+  line-height: 1.65; margin-bottom: 48px; font-weight: 400;
+}
+.hero-meta {
+  display: flex; flex-wrap: wrap; gap: 0;
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  overflow: hidden; background: var(--offwhite);
+}
+.hero-meta-item {
+  padding: 20px 28px; flex: 1; min-width: 160px;
+  border-right: 1px solid var(--border);
+}
+.hero-meta-item:last-child { border-right: none; }
+.meta-label {
+  font-size: 10px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 6px;
+}
+.meta-val { font-size: 14px; font-weight: 500; color: var(--ink); }
+
+/* ─── IMPACT BAR ─── */
+.impact-bar { background: var(--gold); padding: 40px 48px; }
+.impact-inner {
+  max-width: 1080px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 2px;
+}
+.impact-stat { padding: 0 32px; border-right: 1px solid rgba(255,255,255,.2); }
+.impact-stat:first-child { padding-left: 0; }
+.impact-stat:last-child { border-right: none; }
+.impact-num { font-family: var(--serif); font-size: 48px; color: #fff; line-height: 1; margin-bottom: 6px; }
+.impact-desc { font-size: 13px; color: rgba(255,255,255,.8); line-height: 1.5; }
+
+/* ─── SECTIONS ─── */
+.section { padding: 80px 48px; border-bottom: 1px solid var(--border); }
+.section:nth-child(even) { background: var(--white); }
+.section:nth-child(odd)  { background: var(--offwhite); }
+.section-inner { max-width: 1080px; margin: 0 auto; }
+
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 10px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
+}
+.section-label span {
+  background: var(--gold-light); color: var(--gold);
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0;
+}
+
+h2.section-title {
+  font-family: var(--serif);
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 400; color: var(--ink); line-height: 1.2;
+  margin-bottom: 40px;
+}
+
+/* ─── TWO / THREE COL ─── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.three-col { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+.four-col { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+
+/* ─── PROBLEM CARDS ─── */
+.problem-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 28px;
+  box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+}
+.problem-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--gold);
+}
+.problem-card h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 10px; line-height: 1.3; }
+.problem-card p { font-size: 14px; color: var(--ink2); line-height: 1.6; }
+
+/* ─── QUOTE ─── */
+.pullquote {
+  background: var(--gold-light); border-left: 4px solid var(--gold);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 28px 32px; margin: 40px 0;
+}
+.pullquote blockquote {
+  font-family: var(--serif); font-size: 20px; font-style: italic;
+  color: var(--gold); line-height: 1.5; margin-bottom: 12px;
+}
+.pullquote cite {
+  font-size: 12px; font-weight: 600; color: var(--ink2);
+  letter-spacing: .06em; text-transform: uppercase; font-style: normal;
+}
+
+/* ─── PROCESS STEPS ─── */
+.process-track {
+  display: flex; gap: 0; position: relative; margin: 40px 0;
+}
+.process-track::before {
+  content: ''; position: absolute;
+  top: 28px; left: 28px; right: 28px; height: 2px;
+  background: var(--border2); z-index: 0;
+}
+.process-step { flex: 1; text-align: center; position: relative; z-index: 1; padding: 0 8px; }
+.step-dot {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--white); border: 2px solid var(--gold-mid);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px; font-size: 20px; box-shadow: var(--shadow-sm);
+}
+.process-step.active .step-dot { background: var(--gold); border-color: var(--gold); }
+.step-label { font-size: 11px; font-weight: 600; color: var(--ink2); line-height: 1.3; }
+.step-sub { font-size: 10px; color: var(--ink3); margin-top: 3px; }
+
+/* ─── INSIGHT CARDS ─── */
+.insight-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+.insight-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 20px 22px; box-shadow: var(--shadow-sm);
+}
+.insight-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  background: var(--gold-light); display: flex; align-items: center;
+  justify-content: center; margin-bottom: 12px; font-size: 18px;
+}
+.insight-card h4 { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.insight-card p { font-size: 13px; color: var(--ink2); line-height: 1.55; }
+
+/* ─── ROLE CALLOUT ─── */
+.role-callout {
+  background: var(--slate-light); border: 1px solid #c8d8e4;
+  border-radius: var(--radius-md); padding: 28px 32px; margin-bottom: 40px;
+}
+.role-callout h3 { font-size: 13px; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+.role-callout ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.role-callout li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--ink2); line-height: 1.5; }
+.role-callout li::before { content: '→'; color: var(--slate); font-weight: 600; flex-shrink: 0; }
+
+/* ─── ARTIFACT GRID ─── */
+.artifact-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 16px; margin-top: 32px;
+}
+.artifact-card {
+  border-radius: var(--radius-md); overflow: hidden;
+  border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+  background: var(--white); cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+.artifact-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.artifact-card:hover .artifact-label::after { content: ' ↗'; color: var(--gold); }
+.artifact-screen {
+  background: var(--surface); aspect-ratio: 4/3;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px; padding: 20px; overflow: hidden;
+}
+.artifact-label {
+  padding: 10px 14px; font-size: 11px; font-weight: 600;
+  color: var(--ink2); border-top: 1px solid var(--border);
+}
+
+/* ─── RESULTS ─── */
+.result-list { display: flex; flex-direction: column; gap: 16px; }
+.result-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 20px 24px; box-shadow: var(--shadow-sm);
+}
+.result-icon {
+  width: 40px; height: 40px; border-radius: var(--radius-sm);
+  background: var(--gold-light); display: flex; align-items: center;
+  justify-content: center; font-size: 20px; flex-shrink: 0;
+}
+.result-item h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.result-item p { font-size: 13px; color: var(--ink2); line-height: 1.55; }
+
+/* ─── CHIP / DELIVERABLE ─── */
+.deliverable-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.chip {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 20px; padding: 6px 14px;
+  font-size: 12px; font-weight: 500; color: var(--ink2); box-shadow: var(--shadow-sm);
+}
+
+/* ─── CASE STUDY NAV FOOTER ─── */
+.cs-nav {
+  background: var(--white); border-top: 1px solid var(--border);
+  padding: 48px;
+}
+.cs-nav-inner {
+  max-width: 1080px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+}
+.cs-nav-card {
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  padding: 28px 32px; text-decoration: none; display: block;
+  transition: box-shadow .15s, transform .15s; box-shadow: var(--shadow-sm);
+}
+.cs-nav-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.cs-nav-label {
+  font-size: 10px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 8px;
+}
+.cs-nav-title {
+  font-family: var(--serif); font-size: 20px; font-weight: 400;
+  color: var(--ink); margin-bottom: 8px; line-height: 1.25;
+}
+.cs-nav-meta { font-size: 12px; color: var(--ink3); }
+.cs-nav-card.prev .cs-nav-label::before { content: '← '; }
+.cs-nav-card.next .cs-nav-label { text-align: right; }
+.cs-nav-card.next .cs-nav-label::after { content: ' →'; }
+.cs-nav-card.next .cs-nav-title { text-align: right; }
+.cs-nav-card.next .cs-nav-meta { text-align: right; }
+
+/* ─── MODAL ─── */
+#artifact-modal {
+  display: none; position: fixed; inset: 0; z-index: 1000;
+  background: rgba(20,20,18,.72); backdrop-filter: blur(4px);
+  align-items: center; justify-content: center; padding: 32px;
+}
+#artifact-modal.open { display: flex; }
+.modal-box {
+  background: var(--white); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg); width: 100%; max-width: 1000px;
+  max-height: calc(100vh - 64px); display: flex; flex-direction: column;
+  overflow: hidden; animation: modal-in .18s ease;
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(12px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 28px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.modal-title { font-size: 14px; font-weight: 600; color: var(--ink); }
+.modal-close {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--offwhite);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--ink2); line-height: 1; transition: background .12s;
+}
+.modal-close:hover { background: var(--border); }
+.modal-body { overflow-y: auto; padding: 32px 28px; flex: 1; }
+
+/* ─── FOOTER ─── */
+footer { background: var(--ink); padding: 48px; text-align: center; }
+footer p { font-size: 13px; color: rgba(255,255,255,.4); }
+footer strong { color: rgba(255,255,255,.75); }
+
+/* ─── UTILITIES ─── */
+.text-sm  { font-size: 13px; color: var(--ink2); line-height: 1.65; }
+.text-body { font-size: 15px; color: var(--ink2); line-height: 1.7; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mt-32 { margin-top: 32px; }
+.mb-24 { margin-bottom: 24px; }
+
+@media (max-width: 640px) {
+  nav { flex-wrap: wrap; height: auto; padding: 12px 24px; gap: 10px; }
+  .nav-links { flex-wrap: wrap; gap: 14px 18px; justify-content: flex-start; }
+}
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .hero, .section, .impact-bar, .cs-nav { padding-left: 20px; padding-right: 20px; }
+  .two-col, .three-col, .four-col, .insight-grid, .artifact-grid, .cs-nav-inner { grid-template-columns: 1fr; }
+  .impact-inner { grid-template-columns: 1fr; gap: 24px; }
+  .impact-stat { border-right: none; padding-left: 0; }
+  .hero-meta { flex-direction: column; }
+  .process-track { flex-direction: column; gap: 16px; }
+  .process-track::before { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="index.html#top">William Teppig</a>
+  <div class="nav-links">
+    <a href="index.html#top">Home</a>
+    <a href="index.html#work">Case Studies</a>
+    <a href="index.html#about">About</a>
+    <a class="nav-resume" href="resume.pdf" target="_blank" rel="noopener">Resume</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Case Study 02 · Healthcare Quality · Cross-Platform UX</div>
+    <h1>Turning quality data<br>into <em>decisions</em> — a cross-platform<br>intelligence system for healthcare</h1>
+    <p class="hero-sub">Healthcare organizations collect quality measures across five disconnected systems — but can't act on them in time. I led UX strategy and design to unify a fragmented data ecosystem into a role-driven, cross-platform performance intelligence experience.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="meta-label">My Role</div>
+        <div class="meta-val">UX Lead · Researcher</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="meta-label">Domain</div>
+        <div class="meta-val">Healthcare · Quality Performance</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="meta-label">Platform</div>
+        <div class="meta-val">Web · Cross-platform Dashboard</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="meta-label">Methods</div>
+        <div class="meta-val">Research · Systems Mapping · Information Architecture</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="meta-label">NDA</div>
+        <div class="meta-val">Client confidential</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT BAR -->
+<div class="impact-bar">
+  <div class="impact-inner">
+    <div class="impact-stat">
+      <div class="impact-num">5→1</div>
+      <div class="impact-desc">Disconnected reporting systems unified into a single role-driven quality intelligence platform</div>
+    </div>
+    <div class="impact-stat">
+      <div class="impact-num">Near-RT</div>
+      <div class="impact-desc">Quality KPI data surfaced in near real-time, replacing reports that were previously 6 months stale</div>
+    </div>
+    <div class="impact-stat">
+      <div class="impact-num">↑ Sales</div>
+      <div class="impact-desc">Business team confident enough to advance to market — client requested ongoing product expansion</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTEXT -->
+<section class="section" id="context">
+  <div class="section-inner">
+    <div class="section-label"><span>1</span>Context & Problem Space</div>
+    <h2 class="section-title">Quality data collected everywhere — actionable nowhere</h2>
+
+    <div class="role-callout">
+      <h3>My Contributions</h3>
+      <ul>
+        <li>Led cross-functional discovery across clinical SMEs, quality analysts, and medical directors — mapping a fragmented data ecosystem spanning 5 reporting formats and organizational levels</li>
+        <li>Created qualitative personas grounded in observed workflows, needs, and failure modes of quality data roles</li>
+        <li>Synthesized research into an information architecture that unified measure categories, organizational hierarchies, and KPI comparisons into a single experience</li>
+        <li>Produced user flows, storyboards, wireframes, and high-fidelity mockups; championed design patterns for data-dense clinical environments</li>
+        <li>Advocated for accessibility and inclusive design in chart legibility, contrast ratios, and information hierarchy for time-pressured clinical users</li>
+      </ul>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <p class="text-body">Healthcare organizations are assessed on quality measures across dozens of clinical categories — mortality, safety of care, readmissions, patient experience. The data exists, but it's collected and stored across multiple systems in multiple formats. By the time it reaches the people who need to act on it, it's often six months old.</p>
+        <p class="text-body mt-24">Quality analysts, medical directors, and department heads had no unified view of their performance. They couldn't identify where they were falling short, compare themselves against peers, or know which corrective actions to prioritize — in time to make a difference.</p>
+      </div>
+      <div class="gap-col" style="display:flex;flex-direction:column;gap:16px;">
+        <div class="problem-card">
+          <h3>Fragmented Data Ecosystem</h3>
+          <p>Quality measures were collected, stored, and reported across five disconnected systems. No single view of organizational performance existed across measure categories or facility levels.</p>
+        </div>
+        <div class="problem-card">
+          <h3>Stale, Unusable Reporting</h3>
+          <p>Reports were delivered 4–6 months after the measurement period — by which time the data reflected conditions too old to act on. Users described the reports as "already historical" on arrival.</p>
+        </div>
+        <div class="problem-card">
+          <h3>No Path to Corrective Action</h3>
+          <p>Even when users could identify a performance gap, the system provided no guidance on what to do next. Corrective action planning was done entirely outside the platform, in spreadsheets and email.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="pullquote">
+      <blockquote>"The data is there — we just can't see it until it's too late to do anything about it."</blockquote>
+      <cite>Quality Data Analyst · Regional Hospital System</cite>
+    </div>
+
+    <div class="section-label mt-32"><span>↓</span>Goal</div>
+    <div class="three-col">
+      <div class="insight-card">
+        <div class="insight-icon">🎯</div>
+        <h4>Near Real-Time Visibility</h4>
+        <p>Create a quality performance dashboard that displays KPIs in near real-time, replacing the 6-month lag in current reporting cycles.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon">🔍</div>
+        <h4>Role-Driven Drill-Down</h4>
+        <p>Give users tools to quickly navigate from organizational summary to measure category to individual facility — matched to how each role actually investigates performance.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon">⚡</div>
+        <h4>Guided Corrective Action</h4>
+        <p>Surface the corrective actions users need to take — rather than requiring them to interpret raw data and decide independently.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISCOVERY -->
+<section class="section" id="discovery">
+  <div class="section-inner">
+    <div class="section-label"><span>2</span>Discovery & Systems Mapping</div>
+    <h2 class="section-title">A cross-functional research effort to map the full quality data ecosystem</h2>
+
+    <div class="two-col">
+      <div>
+        <p class="text-body">Our UX team conducted formative research by interviewing and observing primary stakeholders across their daily workflows. I collaborated with Clinical Subject Matter Experts to map the quality data process end-to-end — understanding how a quality analyst actually does their job, what data they access, where they get stuck, and what decisions they need to make.</p>
+        <p class="text-body mt-24">A critical finding emerged early: <strong>organization size fundamentally shapes the quality analyst role.</strong> In smaller facilities, one analyst handles every phase of the quality cycle — from pulling raw measures to presenting board-level reports. In larger systems, these responsibilities are distributed across specialized roles. This insight directly drove our persona architecture and the role-based navigation system we designed.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="insight-card">
+          <div class="insight-icon">🏥</div>
+          <h4>Org Size Shapes Everything</h4>
+          <p>Smaller organizations have one analyst handling the full quality cycle. Larger systems distribute work across 4–6 specialized roles. A single UX pattern couldn't serve both without role-based customization.</p>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon">📊</div>
+          <h4>Volume Overwhelm is Universal</h4>
+          <p>Regardless of org size, every quality analyst cited data volume as their primary challenge. They spend more time assembling data than analyzing it — the system should do the assembly.</p>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon">🔗</div>
+          <h4>Five Systems, No Single Source</h4>
+          <p>Quality data flowed through CMS, internal QI platforms, departmental spreadsheets, state reporting tools, and EHR exports. None of them talked to each other.</p>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon">🎯</div>
+          <h4>Action is the Missing Link</h4>
+          <p>Users could eventually identify a performance gap — but the path from "we're underperforming on readmissions" to "here's what we do about it" was entirely outside the system.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Process steps -->
+    <div class="mt-32">
+      <div class="section-label"><span>↓</span>Research Process</div>
+      <div class="process-track">
+        <div class="process-step active">
+          <div class="step-dot">🗣️</div>
+          <div class="step-label">Stakeholder Interviews</div>
+          <div class="step-sub">Quality analysts, medical directors, CMOs</div>
+        </div>
+        <div class="process-step active">
+          <div class="step-dot">👁️</div>
+          <div class="step-label">Workflow Observation</div>
+          <div class="step-sub">Shadowed analysts across full reporting cycles</div>
+        </div>
+        <div class="process-step active">
+          <div class="step-dot">🗺️</div>
+          <div class="step-label">Ecosystem Mapping</div>
+          <div class="step-sub">Mapped 5 data systems & their interdependencies</div>
+        </div>
+        <div class="process-step active">
+          <div class="step-dot">👤</div>
+          <div class="step-label">Persona Development</div>
+          <div class="step-sub">Role-grounded qualitative personas</div>
+        </div>
+        <div class="process-step active">
+          <div class="step-dot">📋</div>
+          <div class="step-label">Use Case Matrix</div>
+          <div class="step-sub">Consultant-provided role × task mapping</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Personas -->
+    <div class="mt-32">
+      <div class="section-label"><span>↓</span>Qualitative Personas</div>
+      <h3 style="font-family:var(--serif);font-size:22px;font-weight:400;margin-bottom:24px;color:var(--ink);">Four roles across the quality data lifecycle</h3>
+      <div class="four-col">
+
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+          <div style="height:3px;background:var(--gold);"></div>
+          <div style="padding:20px 18px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--gold-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--gold);margin-bottom:10px;">LK</div>
+            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Linda K.</div>
+            <div style="font-size:10px;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Quality Data Analyst</div>
+            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:var(--gold-light);border-radius:6px;border-left:2px solid var(--gold);margin-bottom:12px;">"I spend all day assembling data. I need the system to bring it to me."</div>
+            <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Key struggles</div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--gold);flex-shrink:0;">·</span>Uses QualityAdvisor to pull data but exports to Excel for every analysis</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--gold);flex-shrink:0;">·</span>Spends significant time formatting graphs and tables which reduces analysis time</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--gold);flex-shrink:0;">·</span>Not good at disseminating information to wider audiences</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+          <div style="height:3px;background:#3b6d11;"></div>
+          <div style="padding:20px 18px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:#eaf3de;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#3b6d11;margin-bottom:10px;">DR</div>
+            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Director of Quality</div>
+            <div style="font-size:10px;color:#3b6d11;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Dept. Quality Director</div>
+            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:#eaf3de;border-radius:6px;border-left:2px solid #3b6d11;margin-bottom:12px;">"I need to see where we stand compared to our goals — and what we need to do."</div>
+            <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Key struggles</div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#3b6d11;flex-shrink:0;">·</span>Wants to assess quality via identifying efficiencies and better care provision scores</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#3b6d11;flex-shrink:0;">·</span>Wants to evaluate individual physicians, groups, and specialty performance</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#3b6d11;flex-shrink:0;">·</span>Wants to present complex information consistently to other departments</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+          <div style="height:3px;background:#185fa5;"></div>
+          <div style="padding:20px 18px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:#e6f1fb;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#185fa5;margin-bottom:10px;">VP</div>
+            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Chief Medical Officer</div>
+            <div style="font-size:10px;color:#185fa5;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Executive Stakeholder</div>
+            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:#e6f1fb;border-radius:6px;border-left:2px solid #185fa5;margin-bottom:12px;">"Show me our biggest opportunities — and how we compare to peers."</div>
+            <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Key struggles</div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Needs monthly and yearly organizational quality reports across all facilities</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Wants to bring together disparate data from different sources for board presentation</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Needs external benchmarking against peer organizations (e.g., Premier)</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+          <div style="height:3px;background:#854f0b;"></div>
+          <div style="padding:20px 18px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:#faeeda;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#854f0b;margin-bottom:10px;">DH</div>
+            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Dept. Head / Physician</div>
+            <div style="font-size:10px;color:#854f0b;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Clinical Leader</div>
+            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:#faeeda;border-radius:6px;border-left:2px solid #854f0b;margin-bottom:12px;">"I need to know what's happening in my department — not the whole hospital."</div>
+            <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Key struggles</div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#854f0b;flex-shrink:0;">·</span>Prepares reports for multiple departments with inconsistent templates</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#854f0b;flex-shrink:0;">·</span>Needs to establish goals and monitor activities/strategies toward goal attainment</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#854f0b;flex-shrink:0;">·</span>Monitors activities/strategies based on established goals — but goals are set elsewhere</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESIGN -->
+<section class="section" id="design">
+  <div class="section-inner">
+    <div class="section-label"><span>3</span>Design Process</div>
+    <h2 class="section-title">From ecosystem map to unified design system for quality intelligence</h2>
+
+    <div class="two-col mb-24">
+      <div>
+        <p class="text-body">Research revealed that the problem wasn't a missing chart — it was a missing architecture. Quality data existed in silos because no one had designed an information model that connected measure categories, organizational levels, and time dimensions into a single navigable structure.</p>
+        <p class="text-body mt-24">I designed a role-driven experience where each persona enters at the right level of the data hierarchy and can drill down or escalate without leaving the platform. The recommendation system surfaces corrective actions inline — closing the loop that had always required a separate workflow outside the system.</p>
+      </div>
+      <div>
+        <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:var(--radius-md);padding:24px;">
+          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px;">Design System Contributions</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Established chart component patterns for data-dense clinical contexts — optimized for contrast ratios and legibility under time pressure</div>
+            <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Designed a reusable measure category card component used across 4 clinical domains (Mortality, Safety, Readmissions, Patient Experience)</div>
+            <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Created accessibility-first data visualization guidelines — WCAG AA compliant color system for performance indicators (good / watch / critical)</div>
+            <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Defined progressive disclosure patterns for org-to-facility-to-measure drill-down navigation</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Design Artifacts -->
+    <h3 style="font-family:var(--serif);font-size:22px;font-weight:400;margin-bottom:8px;color:var(--ink);">Design Artifacts</h3>
+    <p class="text-sm mb-24">Click any card to view the full artifact.</p>
+    <div class="artifact-grid">
+
+      <!-- 1: User Flow -->
+      <div class="artifact-card">
+        <div class="artifact-screen" style="padding:10px;background:var(--surface);">
+          <div style="width:100%;height:100%;display:flex;flex-direction:column;gap:6px;">
+            <div style="font-size:7px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;">User Flow — Quality Data Lifecycle</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;flex:1;">
+              <div style="display:flex;flex-direction:column;gap:3px;">
+                <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:3px;padding:3px 4px;font-size:6px;color:var(--gold);text-align:center;font-weight:600;">Data Pull</div>
+                <div style="width:1px;height:6px;background:var(--border2);margin:0 auto;"></div>
+                <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:3px;padding:3px 4px;font-size:6px;color:var(--gold);text-align:center;">Org View</div>
+                <div style="width:1px;height:6px;background:var(--border2);margin:0 auto;"></div>
+                <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:3px;padding:3px 4px;font-size:6px;color:var(--gold);text-align:center;">Drill Down</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;padding-top:24px;">
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:3px 4px;font-size:6px;color:var(--ink3);text-align:center;">Dept View</div>
+                <div style="width:1px;height:6px;background:var(--border2);margin:0 auto;"></div>
+                <div style="width:12px;height:12px;background:#faeeda;border:1px solid #fac775;transform:rotate(45deg);margin:0 auto;"></div>
+                <div style="width:1px;height:6px;background:var(--border2);margin:0 auto;"></div>
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:3px 4px;font-size:6px;color:var(--ink3);text-align:center;">Benchmark</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;padding-top:14px;">
+                <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:3px;padding:3px 4px;font-size:6px;color:#3b6d11;text-align:center;">Gap ID</div>
+                <div style="width:1px;height:6px;background:var(--border2);margin:0 auto;"></div>
+                <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:3px;padding:3px 4px;font-size:6px;color:#3b6d11;text-align:center;">Root Cause</div>
+                <div style="width:1px;height:6px;background:var(--border2);margin:0 auto;"></div>
+                <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:3px;padding:3px 4px;font-size:6px;color:#3b6d11;text-align:center;">Action Plan</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;padding-top:4px;">
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:3px 4px;font-size:6px;color:var(--ink3);text-align:center;">Monitor</div>
+                <div style="width:1px;height:6px;background:var(--border2);margin:0 auto;"></div>
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:3px 4px;font-size:6px;color:var(--ink3);text-align:center;">Report</div>
+                <div style="width:1px;height:6px;background:var(--border2);margin:0 auto;"></div>
+                <div style="background:var(--gold);border-radius:8px;padding:2px 4px;font-size:6px;color:#fff;font-weight:600;text-align:center;opacity:.8;">Improve</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="artifact-label">User Flow — Quality Data Lifecycle</div>
+      </div>
+
+      <!-- 2: IA / Hierarchy -->
+      <div class="artifact-card">
+        <div class="artifact-screen" style="padding:10px;background:var(--surface);">
+          <div style="width:100%;height:100%;display:flex;flex-direction:column;gap:5px;">
+            <div style="font-size:7px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;">Information Architecture</div>
+            <div style="display:flex;justify-content:center;margin-top:4px;">
+              <div style="background:var(--gold);border-radius:4px;padding:4px 12px;font-size:6px;color:#fff;font-weight:600;">Organization</div>
+            </div>
+            <div style="display:flex;justify-content:center;"><div style="width:1px;height:8px;background:var(--gold-mid);"></div></div>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:4px;">
+              <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:3px;padding:3px;font-size:5px;color:var(--gold);text-align:center;font-weight:600;">Facility Group A</div>
+              <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:3px;padding:3px;font-size:5px;color:var(--gold);text-align:center;font-weight:600;">Facility Group B</div>
+            </div>
+            <div style="display:flex;justify-content:center;"><div style="width:1px;height:6px;background:var(--border2);"></div></div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;">
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:3px;font-size:5px;color:var(--ink3);text-align:center;">Mortality</div>
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:3px;font-size:5px;color:var(--ink3);text-align:center;">Safety</div>
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:3px;font-size:5px;color:var(--ink3);text-align:center;">Readmissions</div>
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:3px;font-size:5px;color:var(--ink3);text-align:center;">Pt Exp</div>
+            </div>
+            <div style="display:flex;justify-content:center;"><div style="width:1px;height:6px;background:var(--border2);"></div></div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px;">
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:3px;font-size:5px;color:var(--ink3);text-align:center;">Measure Detail</div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:3px;font-size:5px;color:var(--ink3);text-align:center;">Trend / Benchmark</div>
+              <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:3px;padding:3px;font-size:5px;color:#3b6d11;text-align:center;">Action Plan</div>
+            </div>
+          </div>
+        </div>
+        <div class="artifact-label">Information Architecture & Hierarchy</div>
+      </div>
+
+      <!-- 3: Lo-fi wireframe -->
+      <div class="artifact-card">
+        <div class="artifact-screen" style="padding:0;overflow:hidden;">
+          <div style="width:100%;height:100%;background:var(--white);display:flex;flex-direction:column;">
+            <div style="height:12px;background:var(--gold);flex-shrink:0;display:flex;align-items:center;padding:0 8px;">
+              <div style="height:4px;width:48px;background:rgba(255,255,255,.5);border-radius:2px;"></div>
+            </div>
+            <div style="padding:8px;display:flex;flex-direction:column;gap:5px;flex:1;background:var(--offwhite);">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+                <div style="height:6px;width:60px;background:var(--ink);border-radius:2px;opacity:.2;"></div>
+                <div style="display:flex;gap:3px;">
+                  <div style="height:7px;width:32px;border:1px solid var(--border);border-radius:3px;background:var(--white);"></div>
+                  <div style="height:7px;width:32px;border:1px solid var(--border);border-radius:3px;background:var(--white);"></div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:4px;">
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:5px;">
+                  <div style="font-size:5px;color:var(--ink3);margin-bottom:2px;">MORTALITY</div>
+                  <div style="height:16px;background:var(--gold-light);border-radius:2px;margin-bottom:3px;"></div>
+                  <div style="display:flex;gap:2px;"><div style="height:4px;width:16px;background:var(--gold-mid);border-radius:1px;"></div><div style="height:4px;flex:1;background:var(--border);border-radius:1px;"></div></div>
+                </div>
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:5px;">
+                  <div style="font-size:5px;color:var(--ink3);margin-bottom:2px;">SAFETY OF CARE</div>
+                  <div style="height:16px;background:#e6f1fb;border-radius:2px;margin-bottom:3px;"></div>
+                  <div style="display:flex;gap:2px;"><div style="height:4px;width:20px;background:#b5d4f4;border-radius:1px;"></div><div style="height:4px;flex:1;background:var(--border);border-radius:1px;"></div></div>
+                </div>
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:5px;">
+                  <div style="font-size:5px;color:var(--ink3);margin-bottom:2px;">READMISSIONS</div>
+                  <div style="height:16px;background:#faeeda;border-radius:2px;margin-bottom:3px;"></div>
+                  <div style="display:flex;gap:2px;"><div style="height:4px;width:12px;background:#fac775;border-radius:1px;"></div><div style="height:4px;flex:1;background:var(--border);border-radius:1px;"></div></div>
+                </div>
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:5px;">
+                  <div style="font-size:5px;color:var(--ink3);margin-bottom:2px;">PATIENT EXPERIENCE</div>
+                  <div style="height:16px;background:#eaf3de;border-radius:2px;margin-bottom:3px;"></div>
+                  <div style="display:flex;gap:2px;"><div style="height:4px;width:22px;background:#c0dd97;border-radius:1px;"></div><div style="height:4px;flex:1;background:var(--border);border-radius:1px;"></div></div>
+                </div>
+              </div>
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:5px;flex:1;">
+                <div style="font-size:5px;color:var(--ink3);margin-bottom:3px;">DRILL DOWN — Premier General</div>
+                <div style="height:28px;background:var(--surface);border-radius:2px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="artifact-label">Low-Fidelity Wireframes</div>
+      </div>
+
+      <!-- 4: Hi-fi dashboard thumbnail -->
+      <div class="artifact-card">
+        <div class="artifact-screen" style="padding:0;overflow:hidden;">
+          <div style="width:100%;height:100%;background:var(--white);display:flex;flex-direction:column;">
+            <div style="background:var(--gold);padding:5px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+              <div style="font-size:6px;color:rgba(255,255,255,.85);font-weight:600;letter-spacing:.06em;">QUALITY MEASURES REPORTER</div>
+              <div style="display:flex;gap:4px;">
+                <div style="font-size:5px;color:rgba(255,255,255,.6);">Premier General</div>
+                <div style="font-size:5px;color:rgba(255,255,255,.6);">Q4 2019</div>
+              </div>
+            </div>
+            <div style="padding:6px;display:flex;flex-direction:column;gap:4px;background:var(--offwhite);flex:1;">
+              <div style="display:flex;gap:4px;">
+                <div style="flex:1;background:var(--white);border:1px solid var(--border);border-radius:3px;padding:4px;">
+                  <div style="font-size:5px;color:var(--ink3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em;">Mortality</div>
+                  <div style="height:20px;background:var(--gold-light);border-radius:2px;margin-bottom:3px;"></div>
+                  <div style="display:flex;gap:2px;align-items:center;"><div style="font-size:7px;font-weight:700;color:var(--gold);">1 of 7</div><div style="font-size:5px;color:var(--ink3);">measures</div></div>
+                </div>
+                <div style="flex:1;background:var(--white);border:1px solid var(--border);border-radius:3px;padding:4px;">
+                  <div style="font-size:5px;color:var(--ink3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em;">Safety</div>
+                  <div style="height:20px;background:#e6f1fb;border-radius:2px;margin-bottom:3px;"></div>
+                  <div style="display:flex;gap:2px;align-items:center;"><div style="font-size:7px;font-weight:700;color:#185fa5;">1 of 4</div><div style="font-size:5px;color:var(--ink3);">measures</div></div>
+                </div>
+              </div>
+              <div style="display:flex;gap:4px;">
+                <div style="flex:1;background:var(--white);border:1px solid var(--border);border-radius:3px;padding:4px;">
+                  <div style="font-size:5px;color:var(--ink3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em;">Readmissions</div>
+                  <div style="height:20px;background:#faeeda;border-radius:2px;margin-bottom:3px;"></div>
+                  <div style="display:flex;gap:2px;align-items:center;"><div style="font-size:7px;font-weight:700;color:#854f0b;">4 of 8</div><div style="font-size:5px;color:var(--ink3);">measures</div></div>
+                </div>
+                <div style="flex:1;background:var(--white);border:1px solid var(--border);border-radius:3px;padding:4px;">
+                  <div style="font-size:5px;color:var(--ink3);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em;">Patient Exp</div>
+                  <div style="height:20px;background:#eaf3de;border-radius:2px;margin-bottom:3px;"></div>
+                  <div style="display:flex;gap:2px;align-items:center;"><div style="font-size:7px;font-weight:700;color:#3b6d11;">2 of 5</div><div style="font-size:5px;color:var(--ink3);">measures</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="artifact-label">High-Fidelity Dashboard Mockup</div>
+      </div>
+
+      <!-- 5: Action Plan / Corrective Action -->
+      <div class="artifact-card">
+        <div class="artifact-screen" style="padding:8px;background:var(--surface);">
+          <div style="width:100%;height:100%;background:var(--white);border:1px solid var(--border);border-radius:4px;overflow:hidden;display:flex;flex-direction:column;">
+            <div style="background:var(--gold);padding:4px 6px;font-size:6px;color:rgba(255,255,255,.9);font-weight:600;">Action Plan — Readmission Rate</div>
+            <div style="padding:6px;display:flex;flex-direction:column;gap:4px;flex:1;">
+              <div style="background:#faeeda;border-left:2px solid #854f0b;border-radius:0 3px 3px 0;padding:3px 5px;font-size:5px;color:#854f0b;font-weight:600;">4 of 8 readmission measures below target</div>
+              <div style="display:flex;flex-direction:column;gap:3px;">
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:4px;display:flex;gap:4px;align-items:flex-start;">
+                  <div style="width:10px;height:10px;border-radius:2px;background:var(--gold-light);flex-shrink:0;"></div>
+                  <div style="display:flex;flex-direction:column;gap:1px;"><div style="height:3px;width:50px;background:var(--border);border-radius:1px;"></div><div style="height:3px;width:36px;background:var(--border);border-radius:1px;opacity:.5;"></div></div>
+                </div>
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:4px;display:flex;gap:4px;align-items:flex-start;">
+                  <div style="width:10px;height:10px;border-radius:2px;background:var(--gold-light);flex-shrink:0;"></div>
+                  <div style="display:flex;flex-direction:column;gap:1px;"><div style="height:3px;width:44px;background:var(--border);border-radius:1px;"></div><div style="height:3px;width:30px;background:var(--border);border-radius:1px;opacity:.5;"></div></div>
+                </div>
+                <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:3px;padding:4px;display:flex;gap:4px;align-items:flex-start;">
+                  <div style="width:10px;height:10px;border-radius:2px;background:#eaf3de;flex-shrink:0;"></div>
+                  <div style="display:flex;flex-direction:column;gap:1px;"><div style="height:3px;width:40px;background:#c0dd97;border-radius:1px;"></div><div style="font-size:4px;color:#3b6d11;">Recommended action</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="artifact-label">Corrective Action Plan Design</div>
+      </div>
+
+      <!-- 6: Accessibility callout card -->
+      <div class="artifact-card">
+        <div class="artifact-screen" style="padding:10px;background:var(--surface);">
+          <div style="width:100%;height:100%;display:flex;flex-direction:column;gap:6px;">
+            <div style="font-size:7px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;">Accessibility & Design Standards</div>
+            <div style="display:flex;flex-direction:column;gap:4px;flex:1;">
+              <div style="display:flex;gap:4px;align-items:center;">
+                <div style="width:16px;height:16px;border-radius:3px;background:var(--gold);flex-shrink:0;"></div>
+                <div style="flex:1;"><div style="height:3px;background:var(--gold-mid);border-radius:1px;margin-bottom:2px;width:70%;"></div><div style="font-size:5px;color:var(--ink3);">Gold — on target</div></div>
+              </div>
+              <div style="display:flex;gap:4px;align-items:center;">
+                <div style="width:16px;height:16px;border-radius:3px;background:#854f0b;flex-shrink:0;"></div>
+                <div style="flex:1;"><div style="height:3px;background:#fac775;border-radius:1px;margin-bottom:2px;width:55%;"></div><div style="font-size:5px;color:var(--ink3);">Amber — watch</div></div>
+              </div>
+              <div style="display:flex;gap:4px;align-items:center;">
+                <div style="width:16px;height:16px;border-radius:3px;background:#a32d2d;flex-shrink:0;"></div>
+                <div style="flex:1;"><div style="height:3px;background:#f4b8b8;border-radius:1px;margin-bottom:2px;width:40%;"></div><div style="font-size:5px;color:var(--ink3);">Red — below threshold</div></div>
+              </div>
+              <div style="height:1px;background:var(--border);margin:2px 0;"></div>
+              <div style="font-size:5px;color:var(--ink3);">WCAG AA · 4.5:1 min contrast</div>
+              <div style="font-size:5px;color:var(--ink3);">Color never used as sole indicator</div>
+              <div style="font-size:5px;color:var(--ink3);">Pattern + icon reinforcement for colorblind users</div>
+            </div>
+          </div>
+        </div>
+        <div class="artifact-label">Accessibility & Performance Color System</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- VALIDATE -->
+<section class="section" id="validate">
+  <div class="section-inner">
+    <div class="section-label"><span>4</span>Validate</div>
+    <h2 class="section-title">Closing the loop with clinical SMEs and stakeholder feedback</h2>
+
+    <div class="two-col">
+      <div>
+        <p class="text-body">After producing high-fidelity mockups, we returned to the clinical SMEs and quality analysts who participated in discovery to validate key design decisions. Sessions focused on three questions: Does the hierarchy match how you actually think about your data? Can you find a performance gap within the first two interactions? Does the corrective action recommendation feel trustworthy and actionable?</p>
+        <p class="text-body mt-24">Feedback was used to refine the drill-down navigation pattern, simplify the measure category overview cards, and strengthen the contrast between "on target," "watch," and "critical" performance states — a direct response to accessibility feedback from users working on smaller monitors in clinical environments.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px 24px;box-shadow:var(--shadow-sm);">
+          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">What we validated</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">✓</span>Org → Facility → Measure hierarchy matched mental model of quality analysts</div>
+            <div style="display:flex;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">✓</span>Performance gap identifiable within 2 clicks from dashboard landing</div>
+            <div style="display:flex;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">✓</span>Corrective action recommendations felt relevant and trustworthy to clinical directors</div>
+            <div style="display:flex;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">✓</span>Color + icon system legible on clinical workstation monitors at standard viewing distance</div>
+          </div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px 24px;box-shadow:var(--shadow-sm);">
+          <div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">What we refined</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--ink3);font-weight:700;flex-shrink:0;">↻</span>Simplified measure category card to show rank order + trend instead of raw score</div>
+            <div style="display:flex;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--ink3);font-weight:700;flex-shrink:0;">↻</span>Strengthened contrast ratio on performance states — increased to 5.2:1 for critical indicators</div>
+            <div style="display:flex;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--ink3);font-weight:700;flex-shrink:0;">↻</span>Added icon reinforcement to performance states so color is never the sole indicator</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOMES -->
+<section class="section" id="outcomes">
+  <div class="section-inner">
+    <div class="section-label"><span>5</span>Outcomes & Impact</div>
+    <h2 class="section-title">From siloed data to a platform the business could take to market</h2>
+
+    <div class="two-col">
+      <div class="result-list">
+        <div class="result-item">
+          <div class="result-icon">🔗</div>
+          <div>
+            <h4>Five Systems Unified Into One Experience</h4>
+            <p>The information architecture and role-driven navigation model provided a single entry point into quality data that had previously lived across CMS portals, QI platforms, state systems, EHR exports, and departmental spreadsheets.</p>
+          </div>
+        </div>
+        <div class="result-item">
+          <div class="result-icon">⚡</div>
+          <div>
+            <h4>Near Real-Time KPI Visibility</h4>
+            <p>Replacing 6-month-old static reports with a near real-time dashboard gave quality analysts and clinical directors a fundamentally different relationship with their performance data — actionable instead of historical.</p>
+          </div>
+        </div>
+        <div class="result-item">
+          <div class="result-icon">🎯</div>
+          <div>
+            <h4>Corrective Action Integrated Into the Platform</h4>
+            <p>For the first time, the path from identifying a performance gap to initiating a corrective action plan existed within a single experience — eliminating the spreadsheet and email-based workaround that had been standard practice.</p>
+          </div>
+        </div>
+        <div class="result-item">
+          <div class="result-icon">♿</div>
+          <div>
+            <h4>Accessible Performance Indicator System</h4>
+            <p>The WCAG AA-compliant color + icon system for performance states was adopted as a standard for data visualization across the product suite — ensuring legibility for colorblind users and those working in variable lighting conditions.</p>
+          </div>
+        </div>
+        <div class="result-item">
+          <div class="result-icon">📈</div>
+          <div>
+            <h4>Business Confidence to Go to Market</h4>
+            <p>The business team advanced the product to market following design completion, with the client requesting continued engagement to expand the platform's scope — a direct signal of stakeholder confidence in the experience design.</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:var(--radius-md);padding:28px 32px;margin-bottom:24px;">
+          <div style="font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;">What This Project Demonstrates</div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;gap:10px;font-size:14px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Systems thinking: designing an IA that unified 5 data sources into a single navigable model</div>
+            <div style="display:flex;gap:10px;font-size:14px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Cross-functional collaboration with clinical SMEs, product, and engineering across discovery and validation</div>
+            <div style="display:flex;gap:10px;font-size:14px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Healthcare provider tool design for time-pressured, data-dense clinical environments</div>
+            <div style="display:flex;gap:10px;font-size:14px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Accessibility-first design: WCAG AA compliance, icon reinforcement, contrast system</div>
+            <div style="display:flex;gap:10px;font-size:14px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Design system contribution: reusable measure category card and performance indicator patterns</div>
+            <div style="display:flex;gap:10px;font-size:14px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Closing the feedback loop: Discover → Design → Validate → Measure</div>
+          </div>
+        </div>
+
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:24px;">
+          <div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;">Deliverables</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span class="chip">Stakeholder Interview Guide</span>
+            <span class="chip">Workflow Observation Notes</span>
+            <span class="chip">Ecosystem Map (5 systems)</span>
+            <span class="chip">Qualitative Personas × 4</span>
+            <span class="chip">User Flow Diagram</span>
+            <span class="chip">Information Architecture</span>
+            <span class="chip">Lo-Fi Wireframes</span>
+            <span class="chip">Hi-Fi Dashboard Mockup</span>
+            <span class="chip">Corrective Action Pattern</span>
+            <span class="chip">Performance Color System</span>
+            <span class="chip">Accessibility Guidelines</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<!-- CASE STUDY NAV -->
+<div style="background:#fff;border-top:1px solid #e4e4e0;padding:48px;">
+  <div style="max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+    <a href="supply_chain_hero_variant.html" style="border:1px solid #e4e4e0;border-radius:12px;padding:28px 32px;text-decoration:none;display:block;transition:box-shadow .15s,transform .15s;box-shadow:0 1px 3px rgba(0,0,0,.06);background:#f8f8f6;">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#8a8a84;margin-bottom:8px;">← Previous Case Study</div>
+      <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px;font-weight:400;color:#1a1a18;margin-bottom:8px;line-height:1.25;">From acquisition sprawl to cohesive platform — UX strategy for a healthcare ERP competitor</div>
+      <div style="font-size:12px;color:#8a8a84;">Case Study 01 &nbsp;·&nbsp; Healthcare · Procure to Pay &nbsp;·&nbsp; Enterprise UX</div>
+    </a>
+    <a href="collections_agent_workstation.html" style="border:1px solid #e4e4e0;border-radius:12px;padding:28px 32px;text-decoration:none;display:block;transition:box-shadow .15s,transform .15s;box-shadow:0 1px 3px rgba(0,0,0,.06);background:#f8f8f6;">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#8a8a84;margin-bottom:8px;text-align:right;">Next → Case Study</div>
+      <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px;font-weight:400;color:#1a1a18;margin-bottom:8px;line-height:1.25;text-align:right;">When the agent is the bottleneck — embedding intelligence into a collections workstation</div>
+      <div style="font-size:12px;color:#8a8a84;text-align:right;">Case Study 03 &nbsp;·&nbsp; Financial Services · Collections &nbsp;·&nbsp; Enterprise Agent Tools</div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <p><strong>Hospital Quality Performance</strong> &nbsp;·&nbsp; UX Case Study 02 &nbsp;·&nbsp; William Teppig &nbsp;·&nbsp; Healthcare Enterprise Platform</p>
+</footer>
+
+<!-- MODAL -->
+<div id="artifact-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title-text"></div>
+      <button class="modal-close" id="modal-close-btn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var artifacts = {
+
+    'User Flow — Quality Data Lifecycle': { html: `
+      <div style="font-family:var(--sans);">
+        <p style="font-size:13px;color:var(--ink2);margin-bottom:24px;line-height:1.6;">Four-lane flow mapping how quality data moves from raw pull to corrective action across analyst, director, CMO, and system layers.</p>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+          <div style="border-right:1px solid var(--border);">
+            <div style="padding:10px;background:var(--gold-light);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.07em;text-align:center;">Analyst</div>
+            <div style="padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:400px;">
+              <div style="background:var(--gold);color:#fff;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:500;">Start</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--gold);text-align:center;width:100%;cursor:pointer;" title="Analyst pulls raw quality measure data from CMS and internal QI systems. Previously required 5 separate logins.">Pull Measure Data</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--gold);text-align:center;width:100%;cursor:pointer;" title="Analyst reviews org-level dashboard, drills down to facility and measure category level.">Review Dashboard</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--gold);text-align:center;width:100%;cursor:pointer;" title="Analyst identifies measures below target and flags for director review.">Identify Gaps</div>
+              <div style="width:1px;height:24px;background:var(--border2);"></div>
+              <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--gold);text-align:center;width:100%;cursor:pointer;" title="Analyst monitors corrective action plan progress and updates performance tracking.">Monitor Progress</div>
+            </div>
+          </div>
+          <div style="border-right:1px solid var(--border);">
+            <div style="padding:10px;background:#eaf3de;border-bottom:1px solid var(--border);font-size:10px;font-weight:700;color:#3b6d11;text-transform:uppercase;letter-spacing:.07em;text-align:center;">Director</div>
+            <div style="padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:400px;padding-top:80px;">
+              <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:6px;padding:8px 10px;font-size:11px;color:#3b6d11;text-align:center;width:100%;cursor:pointer;" title="Director reviews departmental performance summary and peer benchmark comparison.">Review Dept Performance</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="width:32px;height:32px;background:#faeeda;border:1px solid #fac775;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;cursor:pointer;" title="Director determines if gap is significant enough to require a formal corrective action plan."><span style="transform:rotate(-45deg);font-size:9px;color:#854f0b;font-weight:700;">?</span></div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:6px;padding:8px 10px;font-size:11px;color:#3b6d11;text-align:center;width:100%;cursor:pointer;" title="Director initiates action plan, assigns owners, and sets target improvement timeline.">Initiate Action Plan</div>
+            </div>
+          </div>
+          <div style="border-right:1px solid var(--border);">
+            <div style="padding:10px;background:#e6f1fb;border-bottom:1px solid var(--border);font-size:10px;font-weight:700;color:#185fa5;text-transform:uppercase;letter-spacing:.07em;text-align:center;">CMO</div>
+            <div style="padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:400px;padding-top:40px;">
+              <div style="background:#e6f1fb;border:1px solid #b5d4f4;border-radius:6px;padding:8px 10px;font-size:11px;color:#185fa5;text-align:center;width:100%;cursor:pointer;" title="CMO reviews org-wide quality summary and peer benchmarking at the Premier network level.">Org-Wide Summary</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:#e6f1fb;border:1px solid #b5d4f4;border-radius:6px;padding:8px 10px;font-size:11px;color:#185fa5;text-align:center;width:100%;cursor:pointer;" title="CMO reviews performance against peer hospitals in the Premier network for board reporting.">Benchmark vs Peers</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:#e6f1fb;border:1px solid #b5d4f4;border-radius:6px;padding:8px 10px;font-size:11px;color:#185fa5;text-align:center;width:100%;cursor:pointer;" title="CMO reviews and approves board-ready quality reports generated from the platform.">Approve Board Report</div>
+            </div>
+          </div>
+          <div>
+            <div style="padding:10px;background:var(--surface);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;text-align:center;">System</div>
+            <div style="padding:12px;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:400px;padding-top:60px;">
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--ink2);text-align:center;width:100%;cursor:pointer;" title="System aggregates data from 5 source systems on a near real-time basis — no manual exports required.">Aggregate 5 Sources</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--ink2);text-align:center;width:100%;cursor:pointer;" title="System applies role-based views — analyst sees raw measures, director sees dept rollup, CMO sees org summary.">Apply Role-Based View</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--ink2);text-align:center;width:100%;cursor:pointer;" title="System surfaces recommended corrective actions based on measure category and gap severity.">Surface Recommendations</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:var(--gold);color:#fff;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:500;opacity:.7;">Improve</div>
+            </div>
+          </div>
+        </div>
+      </div>` },
+
+    'Information Architecture & Hierarchy': { html: `
+      <div style="font-family:var(--sans);">
+        <p style="font-size:13px;color:var(--ink2);margin-bottom:28px;line-height:1.6;">The IA model that replaced five disconnected systems with a single navigable hierarchy — from organization to facility group to measure category to individual measure and corrective action.</p>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+          <div style="width:100%;background:var(--gold);padding:14px 20px;text-align:center;color:#fff;font-size:13px;font-weight:600;letter-spacing:.04em;">Organization Level</div>
+          <div style="width:2px;height:20px;background:var(--gold-mid);"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;padding:0 40px 16px;">
+            <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:8px;padding:12px 16px;text-align:center;">
+              <div style="font-size:12px;font-weight:600;color:var(--gold);">Facility Group A</div>
+              <div style="font-size:11px;color:var(--ink3);margin-top:3px;">Premier General · Premier Regional</div>
+            </div>
+            <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:8px;padding:12px 16px;text-align:center;">
+              <div style="font-size:12px;font-weight:600;color:var(--gold);">Facility Group B</div>
+              <div style="font-size:11px;color:var(--ink3);margin-top:3px;">Community East · Community West</div>
+            </div>
+          </div>
+          <div style="width:2px;height:20px;background:var(--border2);"></div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%;padding:0 20px 16px;">
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+              <div style="font-size:20px;margin-bottom:4px;">💔</div>
+              <div style="font-size:11px;font-weight:600;color:var(--ink);">Mortality</div>
+              <div style="font-size:10px;color:var(--ink3);margin-top:2px;">7 measures</div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+              <div style="font-size:20px;margin-bottom:4px;">🛡️</div>
+              <div style="font-size:11px;font-weight:600;color:var(--ink);">Safety of Care</div>
+              <div style="font-size:10px;color:var(--ink3);margin-top:2px;">4 measures</div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+              <div style="font-size:20px;margin-bottom:4px;">🔄</div>
+              <div style="font-size:11px;font-weight:600;color:var(--ink);">Readmissions</div>
+              <div style="font-size:10px;color:var(--ink3);margin-top:2px;">8 measures</div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
+              <div style="font-size:20px;margin-bottom:4px;">😊</div>
+              <div style="font-size:11px;font-weight:600;color:var(--ink);">Patient Experience</div>
+              <div style="font-size:10px;color:var(--ink3);margin-top:2px;">5 measures</div>
+            </div>
+          </div>
+          <div style="width:2px;height:20px;background:var(--border2);"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%;padding:0 20px 16px;">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;">
+              <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:4px;">Measure Detail</div>
+              <div style="font-size:11px;color:var(--ink2);">Score, trend, peer benchmark, percentile rank</div>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;">
+              <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:4px;">Trend & Benchmark</div>
+              <div style="font-size:11px;color:var(--ink2);">12-month trend + peer comparison chart</div>
+            </div>
+            <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:8px;padding:12px;">
+              <div style="font-size:11px;font-weight:600;color:#3b6d11;margin-bottom:4px;">→ Corrective Action</div>
+              <div style="font-size:11px;color:var(--ink2);">Recommended steps, owner assignment, timeline</div>
+            </div>
+          </div>
+        </div>
+      </div>` },
+
+    'Low-Fidelity Wireframes': { html: `
+      <div style="font-family:var(--sans);">
+        <p style="font-size:13px;color:var(--ink2);margin-bottom:28px;line-height:1.6;">Lo-fi wireframes establishing the measure category grid, drill-down hierarchy, and corrective action integration — before visual design was applied.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-sm);">
+            <div style="background:var(--surface);padding:10px 14px;border-bottom:1px solid var(--border);font-size:10px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.07em;">Dashboard — Org Overview</div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;"><div style="height:10px;width:120px;background:var(--border);border-radius:3px;"></div><div style="display:flex;gap:6px;"><div style="height:28px;width:80px;border:1px solid var(--border);border-radius:6px;"></div><div style="height:28px;width:80px;border:1px solid var(--border);border-radius:6px;"></div></div></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div style="border:1px solid var(--border);border-radius:6px;padding:12px;"><div style="height:6px;width:50px;background:var(--gold-mid);border-radius:2px;margin-bottom:6px;"></div><div style="height:32px;background:var(--gold-light);border-radius:3px;margin-bottom:6px;"></div><div style="height:6px;width:36px;background:var(--border);border-radius:2px;"></div></div>
+                <div style="border:1px solid var(--border);border-radius:6px;padding:12px;"><div style="height:6px;width:50px;background:var(--border2);border-radius:2px;margin-bottom:6px;"></div><div style="height:32px;background:var(--surface);border-radius:3px;margin-bottom:6px;"></div><div style="height:6px;width:36px;background:var(--border);border-radius:2px;"></div></div>
+                <div style="border:1px solid var(--border);border-radius:6px;padding:12px;"><div style="height:6px;width:50px;background:var(--border2);border-radius:2px;margin-bottom:6px;"></div><div style="height:32px;background:var(--surface);border-radius:3px;margin-bottom:6px;"></div><div style="height:6px;width:36px;background:var(--border);border-radius:2px;"></div></div>
+                <div style="border:1px solid var(--border);border-radius:6px;padding:12px;"><div style="height:6px;width:50px;background:var(--border2);border-radius:2px;margin-bottom:6px;"></div><div style="height:32px;background:var(--surface);border-radius:3px;margin-bottom:6px;"></div><div style="height:6px;width:36px;background:var(--border);border-radius:2px;"></div></div>
+              </div>
+            </div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-sm);">
+            <div style="background:var(--surface);padding:10px 14px;border-bottom:1px solid var(--border);font-size:10px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.07em;">Measure Detail — Drill Down</div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:10px;">
+              <div style="height:8px;width:160px;background:var(--border);border-radius:3px;"></div>
+              <div style="height:80px;border:1px solid var(--border);border-radius:6px;background:var(--gold-light);display:flex;align-items:center;justify-content:center;"><div style="font-size:10px;color:var(--gold);opacity:.5;">Trend Chart</div></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div style="border:1px solid var(--border);border-radius:6px;padding:10px;"><div style="height:6px;width:40px;background:var(--border);border-radius:2px;margin-bottom:5px;"></div><div style="height:24px;background:var(--surface);border-radius:3px;"></div></div>
+                <div style="border:1px solid var(--border);border-radius:6px;padding:10px;"><div style="height:6px;width:40px;background:var(--border);border-radius:2px;margin-bottom:5px;"></div><div style="height:24px;background:var(--surface);border-radius:3px;"></div></div>
+              </div>
+              <div style="border:1px solid #c0dd97;border-radius:6px;padding:10px;background:#eaf3de;"><div style="height:6px;width:80px;background:#c0dd97;border-radius:2px;margin-bottom:6px;"></div><div style="height:6px;width:100%;background:#c0dd97;border-radius:2px;opacity:.5;margin-bottom:4px;"></div><div style="height:6px;width:80%;background:#c0dd97;border-radius:2px;opacity:.5;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>` },
+
+    'High-Fidelity Dashboard Mockup': { html: `
+      <div style="font-family:var(--sans);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-md);">
+        <div style="background:var(--gold);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:13px;font-weight:600;color:#fff;letter-spacing:.04em;">Quality Measures Reporter and Ratings</div>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <div style="font-size:11px;color:rgba(255,255,255,.75);">Premier General (S1Y75)</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.75);">Q4 2019</div>
+            <div style="background:rgba(255,255,255,.2);color:#fff;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:500;">Top Performance ★</div>
+          </div>
+        </div>
+        <div style="padding:24px;background:var(--offwhite);display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:20px;">
+            <div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Mortality</div>
+            <div style="height:80px;background:var(--gold-light);border-radius:6px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;"><div style="font-size:11px;color:var(--gold);opacity:.6;">Trend line chart — 12 months</div></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div><span style="font-size:22px;font-weight:600;color:var(--gold);">1</span><span style="font-size:13px;color:var(--ink3);"> of 7</span></div>
+              <div style="display:flex;gap:4px;">
+                <div style="width:10px;height:10px;border-radius:50%;background:var(--gold);"></div>
+                <div style="width:10px;height:10px;border-radius:50%;background:var(--border);"></div>
+                <div style="width:10px;height:10px;border-radius:50%;background:var(--border);"></div>
+              </div>
+            </div>
+          </div>
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:20px;">
+            <div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Safety of Care</div>
+            <div style="height:80px;background:#e6f1fb;border-radius:6px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;"><div style="font-size:11px;color:#185fa5;opacity:.6;">Trend line chart — 12 months</div></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div><span style="font-size:22px;font-weight:600;color:#185fa5;">1</span><span style="font-size:13px;color:var(--ink3);"> of 4</span></div>
+              <div style="display:flex;gap:4px;">
+                <div style="width:10px;height:10px;border-radius:50%;background:#185fa5;"></div>
+                <div style="width:10px;height:10px;border-radius:50%;background:var(--border);"></div>
+              </div>
+            </div>
+          </div>
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:20px;">
+            <div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Readmissions</div>
+            <div style="height:80px;background:#faeeda;border-radius:6px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;"><div style="font-size:11px;color:#854f0b;opacity:.6;">Trend line chart — 12 months</div></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div><span style="font-size:22px;font-weight:600;color:#854f0b;">4</span><span style="font-size:13px;color:var(--ink3);"> of 8</span></div>
+              <div style="background:#faeeda;color:#854f0b;font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;">Action needed</div>
+            </div>
+          </div>
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:10px;padding:20px;">
+            <div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Patient Experience</div>
+            <div style="height:80px;background:#eaf3de;border-radius:6px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;"><div style="font-size:11px;color:#3b6d11;opacity:.6;">Trend line chart — 12 months</div></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div><span style="font-size:22px;font-weight:600;color:#3b6d11;">2</span><span style="font-size:13px;color:var(--ink3);"> of 5</span></div>
+              <div style="display:flex;gap:4px;">
+                <div style="width:10px;height:10px;border-radius:50%;background:#3b6d11;"></div>
+                <div style="width:10px;height:10px;border-radius:50%;background:#3b6d11;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>` },
+
+    'Corrective Action Plan Design': { html: `
+      <div style="font-family:var(--sans);">
+        <p style="font-size:13px;color:var(--ink2);margin-bottom:28px;line-height:1.6;">The corrective action plan pattern — the key design decision that closed the loop from data analysis to action. Previously done entirely in spreadsheets outside the platform.</p>
+        <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-sm);">
+          <div style="background:var(--gold);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;">
+            <div style="font-size:13px;font-weight:600;color:#fff;">Action Plan — Readmission Rate</div>
+            <div style="background:rgba(255,255,255,.2);color:#fff;font-size:11px;padding:4px 12px;border-radius:20px;">4 measures below target</div>
+          </div>
+          <div style="padding:24px;display:flex;flex-direction:column;gap:16px;">
+            <div style="background:#faeeda;border-left:3px solid #854f0b;border-radius:0 8px 8px 0;padding:12px 16px;">
+              <div style="font-size:12px;font-weight:600;color:#854f0b;margin-bottom:4px;">Performance Gap Identified</div>
+              <div style="font-size:12px;color:var(--ink2);">Readmission rate is 2.3 percentile points below the Premier network median. This gap has widened over the past 3 quarters.</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Recommended Actions</div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;">
+                  <div style="width:32px;height:32px;border-radius:6px;background:var(--gold-light);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📋</div>
+                  <div><div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px;">Review discharge planning protocols for CHF patients</div><div style="font-size:11px;color:var(--ink3);">Assigned to: Dir. of Quality &nbsp;·&nbsp; Target: Q1 2020 &nbsp;·&nbsp; Priority: High</div></div>
+                </div>
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;">
+                  <div style="width:32px;height:32px;border-radius:6px;background:var(--gold-light);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📞</div>
+                  <div><div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px;">Implement 48-hour post-discharge follow-up call program</div><div style="font-size:11px;color:var(--ink3);">Assigned to: Care Coordination &nbsp;·&nbsp; Target: Q1 2020 &nbsp;·&nbsp; Priority: High</div></div>
+                </div>
+                <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:8px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;">
+                  <div style="width:32px;height:32px;border-radius:6px;background:#eaf3de;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">✓</div>
+                  <div><div style="font-size:13px;font-weight:500;color:#3b6d11;margin-bottom:3px;">Medication reconciliation checklist — complete</div><div style="font-size:11px;color:var(--ink3);">Completed Q3 2019 &nbsp;·&nbsp; Impact: Contributed to 0.4pt improvement in CHF measure</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>` },
+
+    'Accessibility & Performance Color System': { html: `
+      <div style="font-family:var(--sans);">
+        <p style="font-size:13px;color:var(--ink2);margin-bottom:28px;line-height:1.6;">The WCAG AA-compliant performance indicator system designed for clinical environments — where users work under time pressure on monitors with variable display settings. Color is never the sole indicator.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;">Performance States</div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div style="background:var(--gold-light);border:1.5px solid var(--gold-mid);border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:14px;">
+                <div style="width:36px;height:36px;border-radius:6px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">★</div>
+                <div><div style="font-size:13px;font-weight:600;color:var(--gold);">On Target</div><div style="font-size:11px;color:var(--ink2);margin-top:2px;">Meeting or exceeding Premier network median</div><div style="font-size:10px;color:var(--ink3);margin-top:4px;">Contrast ratio: 5.8:1 · Icon: star · Pattern: solid</div></div>
+              </div>
+              <div style="background:#faeeda;border:1.5px solid #fac775;border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:14px;">
+                <div style="width:36px;height:36px;border-radius:6px;background:#854f0b;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">⚠</div>
+                <div><div style="font-size:13px;font-weight:600;color:#854f0b;">Watch</div><div style="font-size:11px;color:var(--ink2);margin-top:2px;">Within 1 percentile point of threshold</div><div style="font-size:10px;color:var(--ink3);margin-top:4px;">Contrast ratio: 5.1:1 · Icon: warning · Pattern: diagonal</div></div>
+              </div>
+              <div style="background:#fcebeb;border:1.5px solid #f4b8b8;border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:14px;">
+                <div style="width:36px;height:36px;border-radius:6px;background:#a32d2d;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">✕</div>
+                <div><div style="font-size:13px;font-weight:600;color:#a32d2d;">Critical</div><div style="font-size:11px;color:var(--ink2);margin-top:2px;">More than 1 percentile point below threshold</div><div style="font-size:10px;color:var(--ink3);margin-top:4px;">Contrast ratio: 6.2:1 · Icon: X · Pattern: cross-hatch</div></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;">Accessibility Principles Applied</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+                <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px;">WCAG AA Compliance</div>
+                <div style="font-size:12px;color:var(--ink2);">All text and interactive elements meet minimum 4.5:1 contrast ratio. Critical states achieve 6.2:1.</div>
+              </div>
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+                <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px;">Color is Never Sole Indicator</div>
+                <div style="font-size:12px;color:var(--ink2);">Every performance state is reinforced with an icon (star / warning / X) and a fill pattern — ensuring legibility for colorblind users.</div>
+              </div>
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+                <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px;">Clinical Environment Testing</div>
+                <div style="font-size:12px;color:var(--ink2);">Validated on clinical workstation monitors at standard viewing distance (60–80cm) in both bright and dim lighting conditions.</div>
+              </div>
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px 16px;">
+                <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px;">Design System Adoption</div>
+                <div style="font-size:12px;color:var(--ink2);">This performance indicator system was adopted as a standard pattern across the product suite — beyond Hospital Quality Performance.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>` }
+  };
+
+  // Wire up cards
+  var cards = document.querySelectorAll('.artifact-card');
+  cards.forEach(function(card) {
+    var label = card.querySelector('.artifact-label');
+    if (!label) return;
+    var key = label.textContent.trim().replace(' ↗','');
+    if (!artifacts[key]) return;
+    card.setAttribute('tabindex','0');
+    card.setAttribute('role','button');
+    card.setAttribute('aria-label','View full ' + key);
+    card.addEventListener('click', function() { openModal(key); });
+    card.addEventListener('keydown', function(e) { if (e.key==='Enter'||e.key===' '){e.preventDefault();openModal(key);} });
+  });
+
+  var modal = document.getElementById('artifact-modal');
+  var modalTitle = document.getElementById('modal-title-text');
+  var modalBody = document.getElementById('modal-body');
+  var closeBtn = document.getElementById('modal-close-btn');
+
+  function openModal(key) {
+    modalTitle.textContent = key;
+    modalBody.innerHTML = artifacts[key].html;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+    modalBody.innerHTML = '';
+  }
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e) { if (e.target===modal) closeModal(); });
+  document.addEventListener('keydown', function(e) { if (e.key==='Escape'&&modal.classList.contains('open')) closeModal(); });
+})();
+</script>
+
+</body>
+</html>

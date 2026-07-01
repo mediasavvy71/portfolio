@@ -1,0 +1,1917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>From Acquisition Sprawl to Cohesive Platform — UX Case Study · William Teppig</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --white:      #ffffff;
+  --offwhite:   #f8f8f6;
+  --surface:    #f2f2ef;
+  --border:     #e4e4e0;
+  --border2:    #d0d0cb;
+  --ink:        #1a1a18;
+  --ink2:       #4a4a46;
+  --ink3:       #8a8a84;
+  --teal:       #006d77;
+  --teal-light: #e8f4f5;
+  --teal-mid:   #b2d8dc;
+  --slate:      #3d5a6c;
+  --slate-light:#edf2f5;
+  --amber:      #b5621e;
+  --amber-light:#fdf0e6;
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+  --serif:      'DM Serif Display', Georgia, serif;
+  --sans:       'Inter', -apple-system, sans-serif;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 16px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg:  0 12px 40px rgba(0,0,0,.09), 0 2px 8px rgba(0,0,0,.05);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--offwhite);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(248,248,246,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.nav-brand {
+  font-size: 12px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+}
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  font-size: 12px; font-weight: 500; color: var(--ink2);
+  text-decoration: none; letter-spacing: .02em; transition: color .15s;
+}
+.nav-links a:hover { color: var(--teal); }
+.nav-resume {
+  font-size: 11px; font-weight: 600; letter-spacing: .06em;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+  border: 1px solid var(--border2); border-radius: 20px;
+  padding: 7px 16px; transition: background .15s, border-color .15s;
+}
+.nav-resume:hover { background: var(--white); border-color: var(--ink3); }
+
+/* ─── HERO ─── */
+.hero {
+  background: var(--white);
+  padding: 88px 48px 72px;
+  border-bottom: 1px solid var(--border);
+}
+.hero-inner { max-width: 1080px; margin: 0 auto; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--teal);
+  margin-bottom: 24px;
+}
+.hero-eyebrow::before {
+  content: ''; width: 24px; height: 2px; background: var(--teal); border-radius: 2px;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 400; line-height: 1.1; color: var(--ink);
+  max-width: 780px; margin-bottom: 24px;
+}
+.hero h1 em { color: var(--teal); font-style: italic; }
+.hero-sub {
+  font-size: 17px; color: var(--ink2); max-width: 600px;
+  line-height: 1.65; margin-bottom: 48px; font-weight: 400;
+}
+.hero-meta {
+  display: flex; flex-wrap: wrap; gap: 0;
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  overflow: hidden; background: var(--offwhite);
+}
+.hero-meta-item {
+  padding: 20px 28px; flex: 1; min-width: 160px;
+  border-right: 1px solid var(--border);
+}
+.hero-meta-item:last-child { border-right: none; }
+.meta-label {
+  font-size: 10px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 6px;
+}
+.meta-val { font-size: 14px; font-weight: 500; color: var(--ink); }
+
+/* ─── IMPACT BAR ─── */
+.impact-bar {
+  background: var(--teal);
+  padding: 40px 48px;
+}
+.impact-inner {
+  max-width: 1080px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 2px;
+}
+.impact-stat { padding: 0 32px; border-right: 1px solid rgba(255,255,255,.2); }
+.impact-stat:first-child { padding-left: 0; }
+.impact-stat:last-child { border-right: none; }
+.impact-num {
+  font-family: var(--serif); font-size: 48px; color: #fff;
+  line-height: 1; margin-bottom: 6px;
+}
+.impact-desc { font-size: 13px; color: rgba(255,255,255,.75); line-height: 1.5; }
+
+/* ─── SECTIONS ─── */
+.section {
+  padding: 80px 48px;
+  border-bottom: 1px solid var(--border);
+}
+.section:nth-child(even) { background: var(--white); }
+.section:nth-child(odd)  { background: var(--offwhite); }
+
+.section-inner { max-width: 1080px; margin: 0 auto; }
+
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 10px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--teal);
+  margin-bottom: 16px;
+}
+.section-label span {
+  background: var(--teal-light); color: var(--teal);
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0;
+}
+
+h2.section-title {
+  font-family: var(--serif);
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 400; color: var(--ink); line-height: 1.2;
+  margin-bottom: 40px;
+}
+
+/* ─── TWO COL ─── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.three-col { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+
+/* ─── PROBLEM CARDS ─── */
+.problem-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  position: relative; overflow: hidden;
+}
+.problem-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--teal);
+}
+.problem-card h3 {
+  font-size: 15px; font-weight: 600; color: var(--ink);
+  margin-bottom: 10px; line-height: 1.3;
+}
+.problem-card p { font-size: 14px; color: var(--ink2); line-height: 1.6; }
+
+/* ─── QUOTE ─── */
+.pullquote {
+  background: var(--teal-light);
+  border-left: 4px solid var(--teal);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 28px 32px;
+  margin: 40px 0;
+}
+.pullquote blockquote {
+  font-family: var(--serif); font-size: 20px; font-style: italic;
+  color: var(--teal); line-height: 1.5; margin-bottom: 12px;
+}
+.pullquote cite {
+  font-size: 12px; font-weight: 600; color: var(--ink2);
+  letter-spacing: .06em; text-transform: uppercase; font-style: normal;
+}
+
+/* ─── PROCESS STEPS ─── */
+.process-track {
+  display: flex; gap: 0; position: relative; margin: 40px 0;
+}
+.process-track::before {
+  content: ''; position: absolute;
+  top: 28px; left: 28px; right: 28px; height: 2px;
+  background: var(--border2); z-index: 0;
+}
+.process-step { flex: 1; text-align: center; position: relative; z-index: 1; padding: 0 8px; }
+.step-dot {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--white); border: 2px solid var(--teal-mid);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px; font-size: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.process-step.active .step-dot { background: var(--teal); border-color: var(--teal); }
+.process-step.active .step-dot svg { color: #fff; }
+.step-label { font-size: 11px; font-weight: 600; color: var(--ink2); line-height: 1.3; }
+.step-sub { font-size: 10px; color: var(--ink3); margin-top: 3px; }
+
+/* ─── INSIGHT PILLS ─── */
+.insight-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+.insight-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  box-shadow: var(--shadow-sm);
+}
+.insight-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  background: var(--teal-light); display: flex; align-items: center;
+  justify-content: center; margin-bottom: 12px; font-size: 18px;
+}
+.insight-card h4 { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.insight-card p  { font-size: 13px; color: var(--ink2); line-height: 1.55; }
+
+/* ─── PERSONA CARDS ─── */
+.persona-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+.persona-avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; margin-bottom: 14px;
+  background: var(--teal-light);
+}
+.persona-name { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.persona-role { font-size: 11px; color: var(--teal); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
+.persona-card p  { font-size: 13px; color: var(--ink2); line-height: 1.55; margin-bottom: 10px; }
+.persona-need {
+  background: var(--teal-light);
+  border-radius: var(--radius-sm); padding: 10px 12px;
+  font-size: 12px; color: var(--teal); font-style: italic; line-height: 1.5;
+}
+
+/* ─── RECOMMENDATION CARDS ─── */
+.rec-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+}
+.rec-number {
+  font-family: var(--serif); font-size: 40px; color: var(--border2);
+  line-height: 1; margin-bottom: 12px;
+}
+.rec-card h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+.rec-card p  { font-size: 13px; color: var(--ink2); line-height: 1.6; }
+.rec-tag {
+  display: inline-block; margin-top: 14px;
+  background: var(--teal-light); color: var(--teal);
+  font-size: 10px; font-weight: 600; letter-spacing: .06em;
+  text-transform: uppercase; padding: 4px 10px; border-radius: 20px;
+}
+
+/* ─── DELIVERABLE CHIPS ─── */
+.deliverable-list {
+  display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px;
+}
+.chip {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 20px; padding: 6px 14px;
+  font-size: 12px; font-weight: 500; color: var(--ink2);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ─── ARTIFACT GRID (screen mockup placeholders) ─── */
+.artifact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px; margin-top: 32px;
+}
+.artifact-card {
+  border-radius: var(--radius-md); overflow: hidden;
+  border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+  background: var(--white);
+}
+.artifact-screen {
+  background: var(--surface);
+  aspect-ratio: 4/3;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px; padding: 20px;
+}
+.artifact-screen-inner {
+  width: 100%; background: var(--white);
+  border-radius: var(--radius-sm); border: 1px solid var(--border);
+  padding: 10px; height: 100%;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.mock-bar { height: 8px; border-radius: 4px; background: var(--border); }
+.mock-bar.teal { background: var(--teal-mid); }
+.mock-bar.short { width: 55%; }
+.mock-bar.shorter { width: 35%; }
+.mock-row { display: flex; gap: 5px; }
+.mock-block { flex: 1; height: 28px; border-radius: 3px; background: var(--surface); border: 1px solid var(--border); }
+.mock-block.teal { background: var(--teal-light); border-color: var(--teal-mid); }
+.mock-block.sm { height: 18px; }
+.artifact-label {
+  padding: 10px 14px;
+  font-size: 11px; font-weight: 600; color: var(--ink2);
+  border-top: 1px solid var(--border);
+}
+
+/* ─── RESULTS ─── */
+.result-list { display: flex; flex-direction: column; gap: 16px; }
+.result-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+}
+.result-icon {
+  width: 40px; height: 40px; border-radius: var(--radius-sm);
+  background: var(--teal-light); display: flex; align-items: center;
+  justify-content: center; font-size: 20px; flex-shrink: 0;
+}
+.result-item h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.result-item p  { font-size: 13px; color: var(--ink2); line-height: 1.55; }
+
+/* ─── ROLE CALLOUT ─── */
+.role-callout {
+  background: var(--slate-light);
+  border: 1px solid #c8d8e4;
+  border-radius: var(--radius-md);
+  padding: 28px 32px;
+  margin-bottom: 40px;
+}
+.role-callout h3 { font-size: 13px; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+.role-callout ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.role-callout li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px; color: var(--ink2); line-height: 1.5;
+}
+.role-callout li::before { content: '→'; color: var(--slate); font-weight: 600; flex-shrink: 0; }
+
+/* ─── JOURNEY FLOW ─── */
+.journey-flow {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 2px; margin: 32px 0;
+}
+.journey-phase {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 16px 14px;
+}
+.journey-phase-label {
+  font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 10px; padding-bottom: 8px;
+  border-bottom: 2px solid var(--teal-light);
+}
+.journey-phase ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.journey-phase li { font-size: 11px; color: var(--ink2); line-height: 1.4; padding-left: 10px; position: relative; }
+.journey-phase li::before { content: '·'; position: absolute; left: 0; color: var(--teal); font-weight: 700; }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--ink);
+  padding: 48px;
+  text-align: center;
+}
+footer p { font-size: 13px; color: rgba(255,255,255,.4); }
+footer strong { color: rgba(255,255,255,.75); }
+
+/* ─── UTILITIES ─── */
+.text-sm  { font-size: 13px; color: var(--ink2); line-height: 1.65; }
+.text-body { font-size: 15px; color: var(--ink2); line-height: 1.7; }
+.mt-8  { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mt-32 { margin-top: 32px; }
+.mb-24 { margin-bottom: 24px; }
+.mb-32 { margin-bottom: 32px; }
+.gap-col { display: flex; flex-direction: column; gap: 16px; }
+
+/* ─── ARTIFACT MODAL ─── */
+.artifact-card {
+  cursor: pointer;
+  transition: transform .15s, box-shadow .15s;
+}
+.artifact-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.artifact-card:hover .artifact-label::after {
+  content: ' ↗';
+  color: var(--teal);
+}
+
+#artifact-modal {
+  display: none;
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(20,20,18,.72);
+  backdrop-filter: blur(4px);
+  align-items: center; justify-content: center;
+  padding: 32px;
+}
+#artifact-modal.open { display: flex; }
+
+.modal-box {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  width: 100%; max-width: 1000px;
+  max-height: calc(100vh - 64px);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  animation: modal-in .18s ease;
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(12px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 28px 18px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.modal-title {
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  letter-spacing: .01em;
+}
+.modal-close {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--offwhite);
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; font-size: 18px; color: var(--ink2);
+  line-height: 1; transition: background .12s;
+}
+.modal-close:hover { background: var(--border); }
+.modal-body {
+  overflow-y: auto; padding: 32px 28px;
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  #artifact-modal { padding: 16px; }
+  .modal-body { padding: 20px 16px; }
+}
+
+@media (max-width: 640px) {
+  nav { flex-wrap: wrap; height: auto; padding: 12px 20px; gap: 10px; }
+  .nav-links { flex-wrap: wrap; gap: 12px 16px; justify-content: flex-start; }
+}
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .hero, .section, .impact-bar { padding-left: 20px; padding-right: 20px; }
+  .two-col, .three-col, .insight-grid, .artifact-grid, .journey-flow { grid-template-columns: 1fr; }
+  .impact-inner { grid-template-columns: 1fr; gap: 24px; }
+  .impact-stat { border-right: none; padding-left: 0; }
+  .hero-meta { flex-direction: column; }
+  .process-track { flex-direction: column; gap: 16px; }
+  .process-track::before { display: none; }
+}
+
+/* ─── HERO VARIANT — MOCKUP HERO ─── */
+.hero {
+  background: var(--white);
+  display: flex; flex-direction: column;
+  padding-top: 88px;
+  border-bottom: 1px solid var(--border);
+}
+.hero-content {
+  padding: 0 48px 56px;
+  max-width: 1176px;
+  width: 100%;
+  margin: 0 auto;
+}
+.hero-mockup-band {
+  padding: 0 48px;
+  display: flex; justify-content: center;
+  margin-bottom: -1px;
+}
+.hero-mockup-window {
+  width: 100%; max-width: 1100px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  box-shadow: 0 -8px 40px rgba(0,109,119,.1), 0 -2px 16px rgba(0,0,0,.08);
+  font-family: var(--sans);
+}
+.mockup-chrome {
+  background: #1c1c1c;
+  padding: 8px 14px;
+  display: flex; align-items: center; gap: 6px;
+}
+.mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+.mockup-url {
+  flex: 1; background: rgba(255,255,255,.08); border-radius: 4px;
+  height: 20px; margin: 0 12px; display: flex; align-items: center; padding: 0 10px;
+}
+.mockup-url span { font-size: 10px; color: rgba(255,255,255,.35); }
+.app-topbar {
+  background: var(--teal); padding: 0 20px; height: 40px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.app-nav { display: flex; gap: 20px; align-items: center; }
+.app-nav-item { font-size: 11px; color: rgba(255,255,255,.6); cursor: pointer; }
+.app-nav-item.active { color: #fff; font-weight: 600; border-bottom: 2px solid rgba(255,255,255,.5); padding-bottom: 2px; }
+.app-brand { font-size: 11px; font-weight: 600; color: rgba(255,255,255,.85); letter-spacing: .06em; text-transform: uppercase; }
+.app-avatar { width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; color: #fff; }
+.app-body { display: flex; background: var(--offwhite); }
+.app-sidebar { width: 160px; background: var(--white); border-right: 1px solid var(--border); padding: 14px 0; flex-shrink: 0; }
+.sidebar-group { padding: 0 10px; margin-bottom: 16px; }
+.sidebar-label { font-size: 8px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); padding: 0 6px; margin-bottom: 5px; }
+.sidebar-item { display: flex; align-items: center; gap: 6px; padding: 6px; border-radius: 5px; font-size: 10px; color: var(--ink2); cursor: pointer; margin-bottom: 1px; }
+.sidebar-item.active { background: var(--teal-light); color: var(--teal); font-weight: 500; }
+.sidebar-badge { margin-left: auto; background: var(--teal); color: #fff; font-size: 8px; font-weight: 700; padding: 1px 5px; border-radius: 8px; }
+.app-main { flex: 1; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.greeting { font-size: 13px; font-weight: 600; color: var(--ink); }
+.greeting-sub { font-size: 10px; color: var(--ink3); margin-top: 2px; }
+.stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.stat-card { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+.stat-n { font-size: 20px; font-weight: 600; color: var(--teal); line-height: 1; }
+.stat-l { font-size: 8px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink3); margin-top: 3px; }
+.stat-d { font-size: 9px; color: var(--ink3); margin-top: 5px; }
+.stat-d.up { color: #3b6d11; }
+.stat-d.warn { color: #a32d2d; }
+.alert-strip { background: var(--teal-light); border-left: 2px solid var(--teal); border-radius: 0 6px 6px 0; padding: 7px 12px; font-size: 10px; color: var(--teal); display: flex; align-items: center; gap: 6px; }
+.panel-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.panel { background: var(--white); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.panel-head { padding: 8px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.panel-title { font-size: 10px; font-weight: 600; color: var(--ink); }
+.panel-action { font-size: 9px; color: var(--teal); }
+.table-head { display: grid; padding: 5px 12px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.table-row { display: grid; padding: 6px 12px; border-bottom: 1px solid var(--border); align-items: center; }
+.table-row:last-child { border-bottom: none; }
+.cell-id { font-size: 9px; font-weight: 600; color: var(--ink); }
+.cell-desc { font-size: 9px; color: var(--ink2); }
+.mbadge { display: inline-block; padding: 1px 7px; border-radius: 8px; font-size: 9px; font-weight: 700; }
+.mbadge-review  { background: #faeeda; color: #854f0b; }
+.mbadge-approved{ background: #eaf3de; color: #3b6d11; }
+.mbadge-pending { background: var(--teal-light); color: var(--teal); }
+.mbadge-rejected{ background: #fcebeb; color: #a32d2d; }
+.task-item { display: flex; align-items: flex-start; gap: 8px; padding: 7px 12px; border-bottom: 1px solid var(--border); }
+.task-item:last-child { border-bottom: none; }
+.task-icon { width: 24px; height: 24px; border-radius: 5px; background: var(--teal-light); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--teal); flex-shrink: 0; }
+.task-icon.warn { background: #faeeda; color: #854f0b; }
+.task-text { font-size: 9px; color: var(--ink); line-height: 1.4; }
+.task-meta { font-size: 8px; color: var(--ink3); margin-top: 1px; }
+.task-chip { display: inline-block; padding: 0 5px; border-radius: 3px; font-size: 7px; background: var(--teal-light); color: var(--teal); font-weight: 600; }
+/* Override original hero styles for this variant */
+.hero-inner { display: none; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 20px;
+}
+.hero-eyebrow::before { content: ''; width: 20px; height: 2px; background: var(--teal); border-radius: 2px; }
+.hero h1 { font-family: var(--serif); font-size: clamp(32px, 4.5vw, 52px); font-weight: 400; line-height: 1.1; color: var(--ink); margin-bottom: 20px; }
+.hero h1 em { color: var(--teal); font-style: italic; }
+.hero-sub { font-size: 16px; color: var(--ink2); line-height: 1.65; margin-bottom: 36px; max-width: 540px; }
+.meta-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 4px; }
+.meta-val { font-size: 13px; font-weight: 500; color: var(--ink); }
+/* Override hero-meta card for light hero */
+.hero-content .hero-meta {
+  background: var(--offwhite);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.hero-content .hero-meta-item {
+  border-right: 1px solid var(--border);
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="index.html#top">William Teppig</a>
+  <div class="nav-links">
+    <a href="index.html#top">Home</a>
+    <a href="index.html#work">Case Studies</a>
+    <a href="index.html#about">About</a>
+    <a class="nav-resume" href="resume.pdf" target="_blank" rel="noopener">Resume</a>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+
+  <!-- Text content — sits above the mockup -->
+  <div class="hero-content">
+    <div class="hero-eyebrow">Case Study 01 · Healthcare SaaS · Enterprise UX</div>
+    <h1>From acquisition sprawl<br>to <em>cohesive platform</em></h1>
+    <p class="hero-sub">A healthcare technology company was losing market share to modern ERP competitors. I led the UX strategy to transform a disconnected suite of procurement tools into a unified, role-driven platform — rebuilding the experience from the inside out.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="meta-label">Role</div>
+        <div class="meta-val">UX Design Principal</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="meta-label">Domain</div>
+        <div class="meta-val">Healthcare · Procure to Pay</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="meta-label">Scope</div>
+        <div class="meta-val">End-to-end · Multi-product</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="meta-label">Methods</div>
+        <div class="meta-val">Research · Systems Thinking · Design System</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hi-fi mockup — below text -->
+  <div class="hero-mockup-band">
+    <div class="hero-mockup-window">
+      <!-- Browser chrome -->
+      <div class="mockup-chrome">
+        <div class="mockup-dot" style="background:#ff5f57;"></div>
+        <div class="mockup-dot" style="background:#febc2e;"></div>
+        <div class="mockup-dot" style="background:#28c840;"></div>
+        <div class="mockup-url"><span>premier.supplychainplus.com/dashboard</span></div>
+      </div>
+      <!-- App topbar -->
+      <div class="app-topbar">
+        <div class="app-brand">Premier · Supply Chain</div>
+        <div class="app-nav">
+          <span class="app-nav-item active">Dashboard</span>
+          <span class="app-nav-item">Requisitions</span>
+          <span class="app-nav-item">Purchase Orders</span>
+          <span class="app-nav-item">Invoices</span>
+          <span class="app-nav-item">Vendors</span>
+        </div>
+        <div class="app-avatar">JM</div>
+      </div>
+      <!-- App body -->
+      <div class="app-body">
+        <!-- Sidebar -->
+        <div class="app-sidebar">
+          <div class="sidebar-group">
+            <div class="sidebar-label">My Work</div>
+            <div class="sidebar-item active">&#9632; Dashboard <span class="sidebar-badge">5</span></div>
+            <div class="sidebar-item">&#43; New Request</div>
+            <div class="sidebar-item">&#9673; Pending Approval</div>
+            <div class="sidebar-item">&#9660; Receiving</div>
+          </div>
+          <div class="sidebar-group">
+            <div class="sidebar-label">Procurement</div>
+            <div class="sidebar-item">&#9632; Requisitions</div>
+            <div class="sidebar-item">&#9675; Purchase Orders</div>
+            <div class="sidebar-item">&#9633; Invoices <span class="sidebar-badge">3</span></div>
+            <div class="sidebar-item">&#9670; Vendors</div>
+          </div>
+          <div class="sidebar-group">
+            <div class="sidebar-label">Reports</div>
+            <div class="sidebar-item">&#9650; Spend Analysis</div>
+            <div class="sidebar-item">&#9632; Compliance</div>
+          </div>
+        </div>
+        <!-- Main content -->
+        <div class="app-main">
+          <div>
+            <div class="greeting">Good morning, Jordan</div>
+            <div class="greeting-sub">You have 5 items that need attention today</div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-card">
+              <div class="stat-n">11</div>
+              <div class="stat-l">Open Requisitions</div>
+              <div class="stat-d up">↑ 3 added this week</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-n">24</div>
+              <div class="stat-l">Purchase Orders</div>
+              <div class="stat-d">6 pending receipt</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-n">14</div>
+              <div class="stat-l">Invoices to Match</div>
+              <div class="stat-d warn">3 past due</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-n" style="font-size:16px;">$71,124</div>
+              <div class="stat-l">Monthly Spend</div>
+              <div class="stat-d up">↓ 12% vs last month</div>
+            </div>
+          </div>
+          <div class="alert-strip">
+            ⚡ <strong>Invoice #INV-2847</strong> requires 3-way match before Thursday — vendor payment terms at risk.
+          </div>
+          <div class="panel-row">
+            <div class="panel">
+              <div class="panel-head">
+                <span class="panel-title">Recent Requisitions</span>
+                <span class="panel-action">View all</span>
+              </div>
+              <div class="table-head" style="grid-template-columns:70px 1fr 55px 60px;gap:8px;">
+                <span style="font-size:8px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);">Req #</span>
+                <span style="font-size:8px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);">Description</span>
+                <span style="font-size:8px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);">Amount</span>
+                <span style="font-size:8px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);">Status</span>
+              </div>
+              <div class="table-row" style="grid-template-columns:70px 1fr 55px 60px;gap:8px;">
+                <span class="cell-id">REQ-1042</span><span class="cell-desc">Surgical supplies</span><span class="cell-desc">$4,210</span><span><span class="mbadge mbadge-review">Review</span></span>
+              </div>
+              <div class="table-row" style="grid-template-columns:70px 1fr 55px 60px;gap:8px;">
+                <span class="cell-id">REQ-1039</span><span class="cell-desc">IV Fluid stock</span><span class="cell-desc">$1,875</span><span><span class="mbadge mbadge-approved">Approved</span></span>
+              </div>
+              <div class="table-row" style="grid-template-columns:70px 1fr 55px 60px;gap:8px;">
+                <span class="cell-id">REQ-1036</span><span class="cell-desc">HVAC Maintenance</span><span class="cell-desc">$12,400</span><span><span class="mbadge mbadge-pending">Pending</span></span>
+              </div>
+              <div class="table-row" style="grid-template-columns:70px 1fr 55px 60px;gap:8px;">
+                <span class="cell-id">REQ-1028</span><span class="cell-desc">PPE restock</span><span class="cell-desc">$980</span><span><span class="mbadge mbadge-rejected">Rejected</span></span>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head">
+                <span class="panel-title">My Task Queue</span>
+                <span class="panel-action">Mark all read</span>
+              </div>
+              <div class="task-item">
+                <div class="task-icon">✓</div>
+                <div><div class="task-text">Approve REQ-1042 — Surgical Supplies</div><div class="task-meta">R. Okafor · <span class="task-chip">Approver</span></div></div>
+              </div>
+              <div class="task-item">
+                <div class="task-icon">≡</div>
+                <div><div class="task-text">Match Invoice #INV-2847 to PO-8821</div><div class="task-meta">Due Thu Jun 26 · <span class="task-chip">AP Match</span></div></div>
+              </div>
+              <div class="task-item">
+                <div class="task-icon">□</div>
+                <div><div class="task-text">Confirm receipt — PO-8804 (Lab reagents)</div><div class="task-meta">Delivered Jun 22 · <span class="task-chip">Receiving</span></div></div>
+              </div>
+              <div class="task-item">
+                <div class="task-icon warn">▲</div>
+                <div><div class="task-text">Resolve price discrepancy — INV-2831</div><div class="task-meta">$340 variance vs PO · <span class="task-chip">Exception</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</section>
+
+<!-- IMPACT BAR -->
+<div class="impact-bar">
+  <div class="impact-inner">
+    <div class="impact-stat">
+      <div class="impact-num">40%</div>
+      <div class="impact-desc">Reduction in primary task completion steps across the procurement workflow</div>
+    </div>
+    <div class="impact-stat">
+      <div class="impact-num">3→1</div>
+      <div class="impact-desc">Fragmented product experiences unified into a single cohesive platform</div>
+    </div>
+    <div class="impact-stat">
+      <div class="impact-num">↑ ACV</div>
+      <div class="impact-desc">Positive sales and demo reception, directly supporting annual contract value growth targets</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTEXT -->
+<section class="section" id="context">
+  <div class="section-inner">
+    <div class="section-label"><span>1</span>Context & Problem Space</div>
+    <h2 class="section-title">A suite of products growing in silos, losing ground to modern competitors</h2>
+
+    <div class="role-callout">
+      <h3>My Contributions</h3>
+      <ul>
+        <li>Facilitated and participated in stakeholder and user interviews across buyer, approver, and finance roles</li>
+        <li>Synthesized qualitative research into personas, journey maps, and service blueprints</li>
+        <li>Led creation of user flows, storyboards, wireframes, and high-fidelity mockups</li>
+        <li>Partnered with the Fireball Design System team to drive unified visual and interaction standards</li>
+        <li>Influenced product roadmap priorities through design strategy and executive communication</li>
+      </ul>
+    </div>
+
+    <div class="three-col">
+      <div class="problem-card">
+        <h3>Individual vs. Integrated</h3>
+        <p>Products were acquired and developed by separate teams, each with distinct workflows and visual languages. Users switching between tools experienced constant context disruption.</p>
+      </div>
+      <div class="problem-card">
+        <h3>Confusing Workflows</h3>
+        <p>Features were built without understanding how users actually work. Repetitive, deep-click task flows generated substantial negative feedback from clients and internal product teams.</p>
+      </div>
+      <div class="problem-card">
+        <h3>Inconsistent Aesthetics</h3>
+        <p>Healthcare organizations didn't perceive the suite as a unified platform. Competing visual styles undermined trust and made demos feel disjointed to prospective buyers.</p>
+      </div>
+    </div>
+
+    <div class="pullquote mt-32">
+      <blockquote>"Whenever anyone demos our products it takes…like…four clicks to get somewhere to actually do something… It is embarrassing… nothing looks the same… we are getting our lunch handed to us by our competitors."</blockquote>
+      <cite>VP of Supply Chain Management</cite>
+    </div>
+  </div>
+</section>
+
+<!-- RESEARCH -->
+<section class="section" id="research">
+  <div class="section-inner">
+    <div class="section-label"><span>2</span>Research & Discovery</div>
+    <h2 class="section-title">Listening to the full procurement ecosystem—from solo practitioners to enterprise teams</h2>
+
+    <div class="two-col mb-32">
+      <div>
+        <p class="text-body">We conducted contextual interviews and workflow observations across healthcare organizations of varying sizes. A key insight emerged early: <strong>org size fundamentally shapes how users navigate the procure-to-pay journey</strong>—a finding that directly informed our persona and workflow architecture.</p>
+        <div class="deliverable-list mt-24">
+          <span class="chip">Stakeholder Interviews</span>
+          <span class="chip">Contextual Observation</span>
+          <span class="chip">Use Case Matrix</span>
+          <span class="chip">Workflow Mapping</span>
+          <span class="chip">Affinity Clustering</span>
+        </div>
+      </div>
+      <div class="insight-grid">
+        <div class="insight-card">
+          <div class="insight-icon">🏥</div>
+          <h4>Small Orgs: Generalist Buyers</h4>
+          <p>One person handles every phase of procurement—requisition through payment—requiring a streamlined, all-in-one view.</p>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon">🏢</div>
+          <h4>Large Orgs: Specialized Roles</h4>
+          <p>Higher transaction volume drives specialization. Each role needs a focused, task-specific interface that reduces noise.</p>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon">🔄</div>
+          <h4>Repetitive Task Overload</h4>
+          <p>Most buyers felt overwhelmed by daily volume. They wanted the system to surface what needs action—not hunt for it.</p>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon">🎯</div>
+          <h4>Proactive Over Reactive</h4>
+          <p>Users consistently asked for the system to tell them what to do next, rather than requiring manual status checks.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Personas -->
+    <h3 style="font-family: var(--serif); font-size: 22px; font-weight:400; margin-bottom: 24px; color: var(--ink);">Proto-Personas</h3>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+
+      <!-- Persona 1: Buyer -->
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+        <div style="height:3px;background:var(--teal)"></div>
+        <div style="padding:20px 20px 16px;">
+          <div style="width:42px;height:42px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--teal);margin-bottom:12px;">RO</div>
+          <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Rosa Okafor</div>
+          <div style="font-size:10px;color:var(--teal);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Buyer · Mid-size Hospital</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;">
+            <span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">High-volume tasks</span>
+            <span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Daily user</span>
+            <span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Non-specialist</span>
+          </div>
+        </div>
+        <div style="padding:0 20px 20px;">
+          <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">In her own words</div>
+          <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:10px 12px;background:var(--teal-light);border-radius:6px;border-left:2px solid var(--teal);margin-bottom:14px;">"I just want the system to tell me what I need to do. I shouldn't have to hunt around to find my tasks every morning."</div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">Key pain points</div>
+          <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;">
+            <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:4px;"></div>Too many clicks to reach everyday tasks</div>
+            <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:4px;"></div>No visibility into where her requests stand</div>
+            <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:4px;"></div>Products look and behave inconsistently</div>
+          </div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">Task frequency</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:90px;flex-shrink:0;">Requisitions</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:var(--teal);width:95%;"></div></div></div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:90px;flex-shrink:0;">PO tracking</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:var(--teal);width:70%;"></div></div></div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:90px;flex-shrink:0;">Invoicing</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:var(--teal);width:20%;"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Persona 2: Manager -->
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+        <div style="height:3px;background:#3b6d11;"></div>
+        <div style="padding:20px 20px 16px;">
+          <div style="width:42px;height:42px;border-radius:50%;background:#eaf3de;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#3b6d11;margin-bottom:12px;">DK</div>
+          <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">David Kim</div>
+          <div style="font-size:10px;color:#3b6d11;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Manager · Large Health System</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;">
+            <span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Intermittent user</span>
+            <span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Budget owner</span>
+            <span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Mobile-first</span>
+          </div>
+        </div>
+        <div style="padding:0 20px 20px;">
+          <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">In his own words</div>
+          <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:10px 12px;background:#eaf3de;border-radius:6px;border-left:2px solid #3b6d11;margin-bottom:14px;">"I approve maybe 15 things a week. I don't need a full training every time I log in — just show me what needs my attention."</div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">Key pain points</div>
+          <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;">
+            <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:#3b6d11;flex-shrink:0;margin-top:4px;"></div>Approval workflows buried in navigation</div>
+            <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:#3b6d11;flex-shrink:0;margin-top:4px;"></div>No context on reqs — has to ask the buyer</div>
+            <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:#3b6d11;flex-shrink:0;margin-top:4px;"></div>No budget visibility at time of approval</div>
+          </div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">Task frequency</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:90px;flex-shrink:0;">Approvals</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:#3b6d11;width:90%;"></div></div></div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:90px;flex-shrink:0;">Spend reports</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:#3b6d11;width:50%;"></div></div></div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:90px;flex-shrink:0;">Requisitions</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:#3b6d11;width:15%;"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Persona 3: AP Specialist -->
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+        <div style="height:3px;background:#854f0b;"></div>
+        <div style="padding:20px 20px 16px;">
+          <div style="width:42px;height:42px;border-radius:50%;background:#faeeda;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#854f0b;margin-bottom:12px;">LT</div>
+          <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Linda Torres</div>
+          <div style="font-size:10px;color:#854f0b;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">AP Specialist · Community Hospital</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;">
+            <span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Power user</span>
+            <span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">All phases</span>
+            <span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Exception-heavy</span>
+          </div>
+        </div>
+        <div style="padding:0 20px 20px;">
+          <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">In her own words</div>
+          <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:10px 12px;background:#faeeda;border-radius:6px;border-left:2px solid #854f0b;margin-bottom:14px;">"I touch every part of this process. When products don't connect, I end up doing everything manually to bridge the gaps."</div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">Key pain points</div>
+          <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;">
+            <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:#854f0b;flex-shrink:0;margin-top:4px;"></div>Manual reconciliation due to disconnected data</div>
+            <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:#854f0b;flex-shrink:0;margin-top:4px;"></div>Invoice exceptions require switching 3 screens</div>
+            <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:#854f0b;flex-shrink:0;margin-top:4px;"></div>No unified audit trail across the lifecycle</div>
+          </div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">Task frequency</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:90px;flex-shrink:0;">Invoicing</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:#854f0b;width:100%;"></div></div></div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:90px;flex-shrink:0;">PO matching</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:#854f0b;width:85%;"></div></div></div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:90px;flex-shrink:0;">Requisitions</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:#854f0b;width:60%;"></div></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Journey map overview -->
+    <h3 style="font-family: var(--serif); font-size: 22px; font-weight:400; margin: 40px 0 20px; color: var(--ink);">End-to-End Journey: Procure to Pay</h3>
+    <div class="journey-flow">
+      <div class="journey-phase">
+        <div class="journey-phase-label">Requisition</div>
+        <ul>
+          <li>Identify need</li>
+          <li>Search catalog</li>
+          <li>Create req</li>
+          <li>Submit for approval</li>
+        </ul>
+      </div>
+      <div class="journey-phase">
+        <div class="journey-phase-label">Approval</div>
+        <ul>
+          <li>Review queue</li>
+          <li>Validate budget</li>
+          <li>Approve or reject</li>
+          <li>Route to PO</li>
+        </ul>
+      </div>
+      <div class="journey-phase">
+        <div class="journey-phase-label">Purchasing</div>
+        <ul>
+          <li>Generate PO</li>
+          <li>Send to vendor</li>
+          <li>Track order status</li>
+          <li>Manage changes</li>
+        </ul>
+      </div>
+      <div class="journey-phase">
+        <div class="journey-phase-label">Receiving</div>
+        <ul>
+          <li>Confirm delivery</li>
+          <li>3-way match</li>
+          <li>Flag discrepancies</li>
+          <li>Update inventory</li>
+        </ul>
+      </div>
+      <div class="journey-phase">
+        <div class="journey-phase-label">Payment</div>
+        <ul>
+          <li>Invoice matching</li>
+          <li>AP review</li>
+          <li>Schedule payment</li>
+          <li>Reconcile GL</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESIGN -->
+<section class="section" id="design">
+  <div class="section-inner">
+    <div class="section-label"><span>3</span>Design Strategy & Execution</div>
+    <h2 class="section-title">Three strategic shifts to unify the experience at a systems level</h2>
+
+    <div class="three-col mb-32">
+      <div class="rec-card">
+        <div class="rec-number">01</div>
+        <h3>Persona-Driven Workflows</h3>
+        <p>Tailored available features and navigation to each role's actual responsibilities. Reduced cognitive load by surfacing only what each user needs to accomplish their job—aligned to how they actually work, not how the system was architected.</p>
+        <span class="rec-tag">Systems Thinking</span>
+      </div>
+      <div class="rec-card">
+        <div class="rec-number">02</div>
+        <h3>Unified Aesthetic via Design System</h3>
+        <p>Partnered with the Fireball Design System team to drive consistent visual vocabulary across all procurement modules. Collaborated with engineering to ensure implementation fidelity—not just design specs on a shelf.</p>
+        <span class="rec-tag">Design System</span>
+      </div>
+      <div class="rec-card">
+        <div class="rec-number">03</div>
+        <h3>Surface Actions Proactively</h3>
+        <p>Redesigned the dashboard and task flow to prioritize work-to-be-done. Users see a prioritized action queue on arrival—eliminating the "go find it" burden that drove the most negative feedback in research.</p>
+        <span class="rec-tag">Interaction Design</span>
+      </div>
+    </div>
+
+    <!-- Process artifacts -->
+    <h3 style="font-family: var(--serif); font-size: 22px; font-weight:400; margin-bottom: 20px; color: var(--ink);">Design Artifacts</h3>
+    <div class="artifact-grid">
+
+      <!-- 1: Personas thumbnail -->
+      <div class="artifact-card">
+        <div class="artifact-screen" style="padding:12px;">
+          <div style="width:100%;height:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;">
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+              <div style="height:2px;background:var(--teal);"></div>
+              <div style="padding:7px;">
+                <div style="width:22px;height:22px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:600;color:var(--teal);margin-bottom:5px;">RO</div>
+                <div style="font-size:7px;font-weight:600;color:var(--ink);margin-bottom:1px;">Rosa Okafor</div>
+                <div style="font-size:6px;color:var(--teal);font-weight:600;text-transform:uppercase;margin-bottom:5px;">Buyer</div>
+                <div style="height:3px;border-radius:2px;background:var(--border);margin-bottom:2px;"><div style="height:3px;border-radius:2px;background:var(--teal);width:95%;"></div></div>
+                <div style="height:3px;border-radius:2px;background:var(--border);margin-bottom:2px;"><div style="height:3px;border-radius:2px;background:var(--teal);width:70%;"></div></div>
+                <div style="height:3px;border-radius:2px;background:var(--border);"><div style="height:3px;border-radius:2px;background:var(--teal);width:20%;"></div></div>
+              </div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+              <div style="height:2px;background:#3b6d11;"></div>
+              <div style="padding:7px;">
+                <div style="width:22px;height:22px;border-radius:50%;background:#eaf3de;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:600;color:#3b6d11;margin-bottom:5px;">DK</div>
+                <div style="font-size:7px;font-weight:600;color:var(--ink);margin-bottom:1px;">David Kim</div>
+                <div style="font-size:6px;color:#3b6d11;font-weight:600;text-transform:uppercase;margin-bottom:5px;">Manager</div>
+                <div style="height:3px;border-radius:2px;background:var(--border);margin-bottom:2px;"><div style="height:3px;border-radius:2px;background:#3b6d11;width:90%;"></div></div>
+                <div style="height:3px;border-radius:2px;background:var(--border);margin-bottom:2px;"><div style="height:3px;border-radius:2px;background:#3b6d11;width:50%;"></div></div>
+                <div style="height:3px;border-radius:2px;background:var(--border);"><div style="height:3px;border-radius:2px;background:#3b6d11;width:15%;"></div></div>
+              </div>
+            </div>
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:6px;overflow:hidden;">
+              <div style="height:2px;background:#854f0b;"></div>
+              <div style="padding:7px;">
+                <div style="width:22px;height:22px;border-radius:50%;background:#faeeda;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:600;color:#854f0b;margin-bottom:5px;">LT</div>
+                <div style="font-size:7px;font-weight:600;color:var(--ink);margin-bottom:1px;">Linda Torres</div>
+                <div style="font-size:6px;color:#854f0b;font-weight:600;text-transform:uppercase;margin-bottom:5px;">AP Specialist</div>
+                <div style="height:3px;border-radius:2px;background:var(--border);margin-bottom:2px;"><div style="height:3px;border-radius:2px;background:#854f0b;width:100%;"></div></div>
+                <div style="height:3px;border-radius:2px;background:var(--border);margin-bottom:2px;"><div style="height:3px;border-radius:2px;background:#854f0b;width:85%;"></div></div>
+                <div style="height:3px;border-radius:2px;background:var(--border);"><div style="height:3px;border-radius:2px;background:#854f0b;width:60%;"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="artifact-label">Proto-Personas</div>
+      </div>
+
+      <!-- 2: User Flow thumbnail -->
+      <div class="artifact-card">
+        <div class="artifact-screen" style="padding:10px;">
+          <div style="width:100%;height:100%;display:flex;flex-direction:column;gap:4px;">
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;">
+              <div style="background:var(--teal-light);border-radius:3px;padding:3px;text-align:center;font-size:6px;font-weight:700;color:var(--teal);text-transform:uppercase;">Buyer</div>
+              <div style="background:#eaf3de;border-radius:3px;padding:3px;text-align:center;font-size:6px;font-weight:700;color:#3b6d11;text-transform:uppercase;">Manager</div>
+              <div style="background:#faeeda;border-radius:3px;padding:3px;text-align:center;font-size:6px;font-weight:700;color:#854f0b;text-transform:uppercase;">AP</div>
+              <div style="background:#e6f1fb;border-radius:3px;padding:3px;text-align:center;font-size:6px;font-weight:700;color:#185fa5;text-transform:uppercase;">Vendor</div>
+              <div style="background:var(--surface);border-radius:3px;padding:3px;text-align:center;font-size:6px;font-weight:700;color:var(--ink3);text-transform:uppercase;">System</div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;flex:1;">
+              <div style="display:flex;flex-direction:column;gap:3px;align-items:center;">
+                <div style="background:var(--teal);border-radius:8px;padding:2px 5px;font-size:6px;color:#fff;font-weight:600;">Start</div>
+                <div style="width:1px;height:4px;background:var(--border2);"></div>
+                <div style="background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:3px;padding:3px 4px;font-size:6px;color:var(--teal);text-align:center;width:100%;">Create Req</div>
+                <div style="width:1px;height:4px;background:var(--border2);"></div>
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:3px 4px;font-size:6px;color:var(--ink2);text-align:center;width:100%;">Catalog Search</div>
+                <div style="width:1px;height:4px;background:var(--border2);"></div>
+                <div style="background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:3px;padding:3px 4px;font-size:6px;color:var(--teal);text-align:center;width:100%;">Submit</div>
+                <div style="width:1px;height:12px;background:var(--border2);"></div>
+                <div style="background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:3px;padding:3px 4px;font-size:6px;color:var(--teal);text-align:center;width:100%;">Confirm Receipt</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;align-items:center;padding-top:32px;">
+                <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:3px;padding:3px 4px;font-size:6px;color:#3b6d11;text-align:center;width:100%;">Review Req</div>
+                <div style="width:1px;height:4px;background:var(--border2);"></div>
+                <div style="width:14px;height:14px;background:#faeeda;border:1px solid #fac775;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;"><span style="transform:rotate(-45deg);font-size:5px;color:#854f0b;font-weight:700;">?</span></div>
+                <div style="width:1px;height:4px;background:var(--border2);"></div>
+                <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:3px;padding:3px 4px;font-size:6px;color:#3b6d11;text-align:center;width:100%;">Approve PO</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;align-items:center;padding-top:72px;">
+                <div style="background:#faeeda;border:1px solid #fac775;border-radius:3px;padding:3px 4px;font-size:6px;color:#854f0b;text-align:center;width:100%;">Process Inv</div>
+                <div style="width:1px;height:4px;background:var(--border2);"></div>
+                <div style="width:14px;height:14px;background:#faeeda;border:1px solid #fac775;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;"><span style="transform:rotate(-45deg);font-size:5px;color:#854f0b;font-weight:700;">?</span></div>
+                <div style="width:1px;height:4px;background:var(--border2);"></div>
+                <div style="background:#faeeda;border:1px solid #fac775;border-radius:3px;padding:3px 4px;font-size:6px;color:#854f0b;text-align:center;width:100%;">Schedule Pay</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;align-items:center;padding-top:56px;">
+                <div style="background:#e6f1fb;border:1px solid #b5d4f4;border-radius:3px;padding:3px 4px;font-size:6px;color:#185fa5;text-align:center;width:100%;">Receive PO</div>
+                <div style="width:1px;height:4px;background:var(--border2);"></div>
+                <div style="background:#e6f1fb;border:1px solid #b5d4f4;border-radius:3px;padding:3px 4px;font-size:6px;color:#185fa5;text-align:center;width:100%;">Deliver</div>
+                <div style="width:1px;height:4px;background:var(--border2);"></div>
+                <div style="background:#e6f1fb;border:1px solid #b5d4f4;border-radius:3px;padding:3px 4px;font-size:6px;color:#185fa5;text-align:center;width:100%;">Submit Inv</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;align-items:center;padding-top:44px;">
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:3px 4px;font-size:6px;color:var(--ink3);text-align:center;width:100%;">Route Approval</div>
+                <div style="width:1px;height:4px;background:var(--border2);"></div>
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:3px 4px;font-size:6px;color:var(--ink3);text-align:center;width:100%;">Notify</div>
+                <div style="width:1px;height:4px;background:var(--border2);"></div>
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:3px 4px;font-size:6px;color:var(--ink3);text-align:center;width:100%;">Audit Trail</div>
+                <div style="width:1px;height:4px;background:var(--border2);"></div>
+                <div style="background:var(--teal);border-radius:8px;padding:2px 5px;font-size:6px;color:#fff;font-weight:600;opacity:.6;">Done</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="artifact-label">User Flow & Journey Map</div>
+      </div>
+
+      <!-- 3: Low-Fidelity Wireframes thumbnail (zoomed single wireframe) -->
+      <div class="artifact-card">
+        <div class="artifact-screen" style="padding:0;overflow:hidden;">
+          <div style="width:100%;height:100%;background:var(--white);display:flex;flex-direction:column;">
+            <div style="height:14px;background:var(--teal-mid);flex-shrink:0;display:flex;align-items:center;padding:0 10px;gap:6px;">
+              <div style="height:5px;width:32px;background:rgba(255,255,255,.5);border-radius:2px;"></div>
+              <div style="margin-left:auto;display:flex;gap:5px;">
+                <div style="height:4px;width:20px;background:rgba(255,255,255,.3);border-radius:2px;"></div>
+                <div style="height:4px;width:20px;background:rgba(255,255,255,.3);border-radius:2px;"></div>
+                <div style="height:4px;width:20px;background:rgba(255,255,255,.3);border-radius:2px;"></div>
+              </div>
+            </div>
+            <div style="display:flex;flex:1;overflow:hidden;">
+              <div style="width:28px;background:var(--offwhite);border-right:1px solid var(--border);padding:8px 4px;display:flex;flex-direction:column;gap:4px;flex-shrink:0;">
+                <div style="height:6px;background:var(--teal-light);border-radius:2px;"></div>
+                <div style="height:6px;background:var(--border);border-radius:2px;"></div>
+                <div style="height:6px;background:var(--border);border-radius:2px;"></div>
+                <div style="height:6px;background:var(--border);border-radius:2px;"></div>
+                <div style="height:1px;background:var(--border2);margin:2px 0;"></div>
+                <div style="height:6px;background:var(--border);border-radius:2px;"></div>
+                <div style="height:6px;background:var(--border);border-radius:2px;"></div>
+                <div style="height:6px;background:var(--border);border-radius:2px;"></div>
+              </div>
+              <div style="flex:1;padding:10px;display:flex;flex-direction:column;gap:7px;background:var(--offwhite);">
+                <div style="display:flex;align-items:center;justify-content:space-between;">
+                  <div style="display:flex;flex-direction:column;gap:3px;">
+                    <div style="height:7px;width:72px;background:var(--ink);border-radius:2px;opacity:.25;"></div>
+                    <div style="height:4px;width:52px;background:var(--border);border-radius:2px;"></div>
+                  </div>
+                  <div style="height:12px;width:36px;background:var(--teal);border-radius:3px;"></div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;">
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:5px;"><div style="font-size:10px;font-weight:700;color:var(--teal);line-height:1;">11</div><div style="height:3px;width:26px;background:var(--border);border-radius:1px;margin-top:3px;"></div></div>
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:5px;"><div style="font-size:10px;font-weight:700;color:var(--teal);line-height:1;">24</div><div style="height:3px;width:26px;background:var(--border);border-radius:1px;margin-top:3px;"></div></div>
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:5px;"><div style="font-size:10px;font-weight:700;color:var(--teal);line-height:1;">14</div><div style="height:3px;width:26px;background:var(--border);border-radius:1px;margin-top:3px;"></div></div>
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:5px;"><div style="font-size:8px;font-weight:700;color:var(--teal);line-height:1;">$71k</div><div style="height:3px;width:26px;background:var(--border);border-radius:1px;margin-top:3px;"></div></div>
+                </div>
+                <div style="background:var(--teal-light);border-left:2px solid var(--teal);border-radius:0 3px 3px 0;padding:4px 6px;"><div style="height:4px;width:80%;background:var(--teal-mid);border-radius:1px;"></div></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;flex:1;">
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
+                    <div style="height:10px;background:var(--surface);border-bottom:1px solid var(--border);padding:0 5px;display:flex;align-items:center;"><div style="height:4px;width:40px;background:var(--border2);border-radius:1px;"></div></div>
+                    <div style="padding:4px;display:flex;flex-direction:column;gap:3px;">
+                      <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:3px;border-bottom:1px solid var(--border);"><div style="height:3px;width:36px;background:var(--border);border-radius:1px;"></div><div style="height:5px;width:14px;background:#faeeda;border-radius:2px;"></div></div>
+                      <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:3px;border-bottom:1px solid var(--border);"><div style="height:3px;width:30px;background:var(--border);border-radius:1px;"></div><div style="height:5px;width:14px;background:#eaf3de;border-radius:2px;"></div></div>
+                      <div style="display:flex;justify-content:space-between;align-items:center;"><div style="height:3px;width:34px;background:var(--border);border-radius:1px;"></div><div style="height:5px;width:14px;background:var(--teal-light);border-radius:2px;"></div></div>
+                    </div>
+                  </div>
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
+                    <div style="height:10px;background:var(--surface);border-bottom:1px solid var(--border);padding:0 5px;display:flex;align-items:center;"><div style="height:4px;width:36px;background:var(--border2);border-radius:1px;"></div></div>
+                    <div style="padding:4px;display:flex;flex-direction:column;gap:4px;">
+                      <div style="display:flex;gap:3px;align-items:center;padding-bottom:4px;border-bottom:1px solid var(--border);"><div style="width:10px;height:10px;border-radius:2px;background:var(--teal-light);flex-shrink:0;"></div><div style="height:3px;flex:1;background:var(--border);border-radius:1px;"></div></div>
+                      <div style="display:flex;gap:3px;align-items:center;padding-bottom:4px;border-bottom:1px solid var(--border);"><div style="width:10px;height:10px;border-radius:2px;background:var(--teal-light);flex-shrink:0;"></div><div style="height:3px;flex:1;background:var(--border);border-radius:1px;"></div></div>
+                      <div style="display:flex;gap:3px;align-items:center;"><div style="width:10px;height:10px;border-radius:2px;background:#faeeda;flex-shrink:0;"></div><div style="height:3px;flex:1;background:var(--border);border-radius:1px;"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="artifact-label">Low-Fidelity Wireframes</div>
+      </div>
+
+      <!-- 4: Recommended Screen Flow thumbnail — matches screenshot exactly -->
+      <div class="artifact-card">
+        <div class="artifact-screen" style="padding:0;overflow:hidden;background:#fff;">
+          <!-- Inner content rendered at 690px wide, scaled to fit ~345px card width -->
+          <div style="width:690px;transform:scale(0.5) translate(315px, 200px);transform-origin:top left;height:560px;padding:20px 24px;display:flex;flex-direction:column;justify-content:space-between;background:#fff;font-family:var(--sans);margin-left:0;">
+
+            <!-- BUYER FLOW -->
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+                <div style="width:22px;height:22px;border-radius:5px;background:#e8f4f5;border:1.5px solid #b2d8dc;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#006d77;flex-shrink:0;">B</div>
+                <span style="font-size:11px;font-weight:700;color:#006d77;letter-spacing:.1em;text-transform:uppercase;">Buyer Flow</span>
+              </div>
+              <div style="display:flex;align-items:center;">
+                <div style="background:#006d77;color:#fff;border-radius:24px;padding:11px 22px;font-size:14px;font-weight:600;white-space:nowrap;">Login</div>
+                <div style="height:1.5px;flex:1;background:#d0d0cb;"></div>
+                <div style="background:#fff;border:1.5px solid #e4e4e0;border-radius:8px;padding:10px 16px;min-width:130px;">
+                  <div style="font-size:13px;font-weight:500;color:#1a1a18;">Dashboard</div>
+                  <div style="font-size:10px;color:#8a8a84;margin-top:2px;">Task queue visible</div>
+                </div>
+                <div style="height:1.5px;flex:1;background:#d0d0cb;"></div>
+                <div style="background:#fff;border:1.5px solid #e4e4e0;border-radius:8px;padding:10px 16px;min-width:130px;">
+                  <div style="font-size:13px;font-weight:500;color:#1a1a18;">Create Req</div>
+                  <div style="font-size:10px;color:#8a8a84;margin-top:2px;">Role-filtered form</div>
+                </div>
+                <div style="height:1.5px;flex:1;background:#d0d0cb;"></div>
+                <div style="background:#fff;border:1.5px solid #e4e4e0;border-radius:8px;padding:10px 16px;min-width:100px;">
+                  <div style="font-size:13px;font-weight:500;color:#1a1a18;">Submit</div>
+                  <div style="font-size:10px;color:#8a8a84;margin-top:2px;">Auto-routes</div>
+                </div>
+                <div style="height:1.5px;width:16px;background:#d0d0cb;"></div>
+                <div style="background:#f2f2ef;border:1.5px solid #e4e4e0;border-radius:8px;padding:10px 14px;white-space:nowrap;">
+                  <span style="font-size:12px;font-weight:700;color:#1a1a18;">3 steps</span><span style="font-size:12px;color:#8a8a84;"> vs 7+ before</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="height:1px;background:#e4e4e0;"></div>
+
+            <!-- MANAGER FLOW -->
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+                <div style="width:22px;height:22px;border-radius:5px;background:#eaf3de;border:1.5px solid #c0dd97;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#3b6d11;flex-shrink:0;">M</div>
+                <span style="font-size:11px;font-weight:700;color:#3b6d11;letter-spacing:.1em;text-transform:uppercase;">Manager / Approver Flow</span>
+              </div>
+              <div style="display:flex;align-items:center;">
+                <div style="background:#3b6d11;color:#fff;border-radius:24px;padding:11px 22px;font-size:14px;font-weight:600;white-space:nowrap;">Login</div>
+                <div style="height:1.5px;flex:1;background:#c0dd97;"></div>
+                <div style="background:#fff;border:1.5px solid #c0dd97;border-radius:8px;padding:10px 16px;min-width:130px;">
+                  <div style="font-size:13px;font-weight:500;color:#3b6d11;">Approval Queue</div>
+                  <div style="font-size:10px;color:#8a8a84;margin-top:2px;">Default landing</div>
+                </div>
+                <div style="height:1.5px;flex:1;background:#c0dd97;"></div>
+                <div style="background:#fff;border:1.5px solid #c0dd97;border-radius:8px;padding:10px 16px;min-width:130px;">
+                  <div style="font-size:13px;font-weight:500;color:#3b6d11;">Review Detail</div>
+                  <div style="font-size:10px;color:#8a8a84;margin-top:2px;">Budget shown inline</div>
+                </div>
+                <div style="height:1.5px;flex:1;background:#c0dd97;"></div>
+                <div style="background:#fff;border:1.5px solid #c0dd97;border-radius:8px;padding:10px 16px;min-width:130px;">
+                  <div style="font-size:13px;font-weight:500;color:#3b6d11;">Approve / Reject</div>
+                  <div style="font-size:10px;color:#8a8a84;margin-top:2px;">One action</div>
+                </div>
+                <div style="height:1.5px;width:16px;background:#c0dd97;"></div>
+                <div style="background:#f2f2ef;border:1.5px solid #e4e4e0;border-radius:8px;padding:10px 14px;white-space:nowrap;">
+                  <span style="font-size:12px;font-weight:700;color:#1a1a18;">2 steps</span><span style="font-size:12px;color:#8a8a84;"> to decision</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="height:1px;background:#e4e4e0;"></div>
+
+            <!-- AP SPECIALIST FLOW -->
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+                <div style="width:22px;height:22px;border-radius:5px;background:#faeeda;border:1.5px solid #fac775;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#854f0b;flex-shrink:0;">A</div>
+                <span style="font-size:11px;font-weight:700;color:#854f0b;letter-spacing:.1em;text-transform:uppercase;">AP Specialist Flow</span>
+              </div>
+              <div style="display:flex;align-items:center;">
+                <div style="background:#5c3311;color:#fff;border-radius:24px;padding:11px 22px;font-size:14px;font-weight:600;white-space:nowrap;">Login</div>
+                <div style="height:1.5px;flex:1;background:#fac775;"></div>
+                <div style="background:#fff;border:1.5px solid #fac775;border-radius:8px;padding:10px 16px;min-width:130px;">
+                  <div style="font-size:13px;font-weight:500;color:#854f0b;">Invoice Queue</div>
+                  <div style="font-size:10px;color:#8a8a84;margin-top:2px;">Exceptions first</div>
+                </div>
+                <div style="height:1.5px;flex:1;background:#fac775;"></div>
+                <div style="background:#fff;border:1.5px solid #fac775;border-radius:8px;padding:10px 16px;min-width:130px;">
+                  <div style="font-size:13px;font-weight:500;color:#854f0b;">Match / Resolve</div>
+                  <div style="font-size:10px;color:#8a8a84;margin-top:2px;">PO inline</div>
+                </div>
+                <div style="height:1.5px;flex:1;background:#fac775;"></div>
+                <div style="background:#fff;border:1.5px solid #fac775;border-radius:8px;padding:10px 16px;min-width:140px;">
+                  <div style="font-size:13px;font-weight:500;color:#854f0b;">Schedule Payment</div>
+                  <div style="font-size:10px;color:#8a8a84;margin-top:2px;">Terms shown</div>
+                </div>
+                <div style="height:1.5px;width:16px;background:#fac775;"></div>
+                <div style="background:#f2f2ef;border:1.5px solid #e4e4e0;border-radius:8px;padding:10px 14px;white-space:nowrap;">
+                  <span style="font-size:12px;font-weight:700;color:#1a1a18;">No screen switches</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="artifact-label">Recommended Screen Flow</div>
+      </div>
+
+      <!-- 5: Hi-Fi Dashboard thumbnail (teal — pre-ERP version) -->
+      <div class="artifact-card">
+        <div class="artifact-screen" style="padding:0;overflow:hidden;">
+          <div style="width:100%;height:100%;display:flex;flex-direction:column;">
+            <div style="background:var(--teal);padding:5px 8px;display:flex;align-items:center;justify-content:space-between;">
+              <div style="font-size:6px;color:rgba(255,255,255,.8);font-weight:600;letter-spacing:.06em;text-transform:uppercase;">Premier · Supply Chain</div>
+              <div style="display:flex;gap:5px;">
+                <div style="font-size:6px;color:rgba(255,255,255,.5);">Dashboard</div>
+                <div style="font-size:6px;color:rgba(255,255,255,.5);">Requisitions</div>
+                <div style="font-size:6px;color:rgba(255,255,255,.5);">POs</div>
+              </div>
+            </div>
+            <div style="display:flex;flex:1;overflow:hidden;">
+              <div style="width:36px;background:var(--white);border-right:1px solid var(--border);padding:6px 4px;display:flex;flex-direction:column;gap:3px;">
+                <div style="height:6px;border-radius:2px;background:var(--teal-light);"></div>
+                <div style="height:6px;border-radius:2px;background:var(--surface);"></div>
+                <div style="height:6px;border-radius:2px;background:var(--surface);"></div>
+                <div style="height:6px;border-radius:2px;background:var(--surface);"></div>
+                <div style="margin-top:4px;height:1px;background:var(--border);"></div>
+                <div style="height:6px;border-radius:2px;background:var(--surface);"></div>
+                <div style="height:6px;border-radius:2px;background:var(--surface);"></div>
+              </div>
+              <div style="flex:1;padding:6px;display:flex;flex-direction:column;gap:4px;background:var(--offwhite);">
+                <div style="font-size:7px;color:var(--ink);font-weight:600;">Good morning, Jordan</div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;">
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:3px;"><div style="font-size:9px;font-weight:600;color:var(--teal);">11</div><div style="font-size:5px;color:var(--ink3);text-transform:uppercase;">Reqs</div></div>
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:3px;"><div style="font-size:9px;font-weight:600;color:var(--teal);">24</div><div style="font-size:5px;color:var(--ink3);text-transform:uppercase;">POs</div></div>
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:3px;"><div style="font-size:9px;font-weight:600;color:var(--teal);">14</div><div style="font-size:5px;color:var(--ink3);text-transform:uppercase;">Inv</div></div>
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;padding:3px;"><div style="font-size:8px;font-weight:600;color:var(--teal);">$71k</div><div style="font-size:5px;color:var(--ink3);text-transform:uppercase;">Spend</div></div>
+                </div>
+                <div style="background:var(--teal-light);border-left:2px solid var(--teal);border-radius:0 3px 3px 0;padding:3px 5px;font-size:6px;color:var(--teal);">Invoice #INV-2847 requires 3-way match before Thursday</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;flex:1;">
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
+                    <div style="padding:3px 4px;border-bottom:1px solid var(--border);font-size:6px;font-weight:600;color:var(--ink);">Recent Requisitions</div>
+                    <div style="padding:2px 4px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;"><span style="font-size:5px;color:var(--ink2);">REQ-1042 · Surgical</span><span style="font-size:5px;background:#faeeda;color:#854f0b;border-radius:3px;padding:0 3px;">Review</span></div>
+                    <div style="padding:2px 4px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;"><span style="font-size:5px;color:var(--ink2);">REQ-1039 · IV Fluid</span><span style="font-size:5px;background:#eaf3de;color:#3b6d11;border-radius:3px;padding:0 3px;">Approved</span></div>
+                    <div style="padding:2px 4px;display:flex;justify-content:space-between;"><span style="font-size:5px;color:var(--ink2);">REQ-1036 · HVAC</span><span style="font-size:5px;background:var(--teal-light);color:var(--teal);border-radius:3px;padding:0 3px;">Pending</span></div>
+                  </div>
+                  <div style="background:var(--white);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
+                    <div style="padding:3px 4px;border-bottom:1px solid var(--border);font-size:6px;font-weight:600;color:var(--ink);">My Task Queue</div>
+                    <div style="padding:3px 4px;border-bottom:1px solid var(--border);display:flex;gap:3px;align-items:center;"><div style="width:10px;height:10px;border-radius:2px;background:var(--teal-light);flex-shrink:0;"></div><div><div style="font-size:5px;color:var(--ink);">Approve REQ-1042</div><div style="font-size:5px;color:var(--ink3);">Approver</div></div></div>
+                    <div style="padding:3px 4px;border-bottom:1px solid var(--border);display:flex;gap:3px;align-items:center;"><div style="width:10px;height:10px;border-radius:2px;background:var(--teal-light);flex-shrink:0;"></div><div><div style="font-size:5px;color:var(--ink);">Match Invoice #INV-2847</div><div style="font-size:5px;color:var(--ink3);">AP Match</div></div></div>
+                    <div style="padding:3px 4px;display:flex;gap:3px;align-items:center;"><div style="width:10px;height:10px;border-radius:2px;background:var(--teal-light);flex-shrink:0;"></div><div><div style="font-size:5px;color:var(--ink);">Confirm receipt PO-8804</div><div style="font-size:5px;color:var(--ink3);">Receiving</div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="artifact-label">High-Fidelity Dashboard Mockup</div>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOMES -->
+<section class="section" id="outcomes">
+  <div class="section-inner">
+    <div class="section-label"><span>4</span>Outcomes & Impact</div>
+    <h2 class="section-title">Measurable improvements in usability, consistency, and market confidence</h2>
+
+    <div class="two-col">
+      <div class="result-list">
+        <div class="result-item">
+          <div class="result-icon">⚡</div>
+          <div>
+            <h4>40% Reduction in Task Steps</h4>
+            <p>Primary procurement workflows were streamlined from deep, multi-click flows to focused, role-appropriate task paths—directly addressing the #1 user pain point.</p>
+          </div>
+        </div>
+        <div class="result-item">
+          <div class="result-icon">🎨</div>
+          <div>
+            <h4>Unified Visual Language via Fireball Design System</h4>
+            <p>Consistent interaction patterns and visual components were implemented across all applications, eliminating the fragmented feel that hurt sales demos and user adoption.</p>
+          </div>
+        </div>
+        <div class="result-item">
+          <div class="result-icon">📈</div>
+          <div>
+            <h4>Positive Sales & Demo Reception</h4>
+            <p>Sales and demo teams reported strong positive feedback from prospective clients, directly supporting the client's goal of recovering market share from ERP competitors.</p>
+          </div>
+        </div>
+        <div class="result-item">
+          <div class="result-icon">🧭</div>
+          <div>
+            <h4>Reduced Navigation Confusion</h4>
+            <p>Role-driven workflows and proactive task surfacing reduced the cognitive burden of navigating complex procurement systems for users across all organization sizes.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 28px; box-shadow: var(--shadow-sm);">
+          <h3 style="font-size:14px; font-weight:600; color:var(--ink); margin-bottom:20px; text-transform:uppercase; letter-spacing:.06em;">What This Project Demonstrates</h3>
+          <div class="gap-col">
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--teal);margin-top:6px;flex-shrink:0"></div>
+              <div><strong style="font-size:13px;color:var(--ink)">Systems-level experience design</strong><p class="text-sm mt-8">Unified fragmented multi-product ecosystems into coherent, role-driven customer journeys.</p></div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--teal);margin-top:6px;flex-shrink:0"></div>
+              <div><strong style="font-size:13px;color:var(--ink)">Cross-functional design leadership</strong><p class="text-sm mt-8">Partnered with product, engineering, and design system teams to influence roadmap and implementation quality.</p></div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--teal);margin-top:6px;flex-shrink:0"></div>
+              <div><strong style="font-size:13px;color:var(--ink)">Research-informed strategy</strong><p class="text-sm mt-8">Translated qualitative insights into actionable design principles that shaped both product direction and visual systems.</p></div>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--teal);margin-top:6px;flex-shrink:0"></div>
+              <div><strong style="font-size:13px;color:var(--ink)">End-to-end journey ownership</strong><p class="text-sm mt-8">Managed the complete design lifecycle—discovery through high-fidelity delivery—across a complex, multi-touchpoint ecosystem.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CASE STUDY NAV -->
+<div style="background:#fff;border-top:1px solid #e4e4e0;padding:48px;">
+  <div style="max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+    <a href="collections_agent_workstation.html" style="border:1px solid #e4e4e0;border-radius:12px;padding:28px 32px;text-decoration:none;display:block;transition:box-shadow .15s,transform .15s;box-shadow:0 1px 3px rgba(0,0,0,.06);background:#f8f8f6;">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#8a8a84;margin-bottom:8px;">← Previous Case Study</div>
+      <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px;font-weight:400;color:#1a1a18;margin-bottom:8px;line-height:1.25;">When the agent is the bottleneck — embedding intelligence into a collections workstation</div>
+      <div style="font-size:12px;color:#8a8a84;">Case Study 03 &nbsp;·&nbsp; Financial Services · Collections &nbsp;·&nbsp; Enterprise Agent Tools</div>
+    </a>
+    <a href="hospital_quality_performance.html" style="border:1px solid #e4e4e0;border-radius:12px;padding:28px 32px;text-decoration:none;display:block;transition:box-shadow .15s,transform .15s;box-shadow:0 1px 3px rgba(0,0,0,.06);background:#f8f8f6;">
+      <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#8a8a84;margin-bottom:8px;text-align:right;">Next → Case Study</div>
+      <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px;font-weight:400;color:#1a1a18;margin-bottom:8px;line-height:1.25;text-align:right;">Turning quality data into decisions — a cross-platform intelligence system for healthcare</div>
+      <div style="font-size:12px;color:#8a8a84;text-align:right;">Case Study 02 &nbsp;·&nbsp; Healthcare · Quality Performance &nbsp;·&nbsp; Cross-Platform UX</div>
+    </a>
+  </div>
+</div>
+
+<footer>
+  <p><strong>Supply Chain + Procure to Pay</strong> &nbsp;·&nbsp; UX Case Study 01 &nbsp;·&nbsp; William Teppig &nbsp;·&nbsp; Healthcare Enterprise Platform</p>
+</footer>
+
+
+<!-- ─── ARTIFACT LIGHTBOX MODAL ─── -->
+<div id="artifact-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title-text"></div>
+      <button class="modal-close" id="modal-close-btn" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var artifacts = {
+
+    'Proto-Personas': { html: `
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+          <div style="height:3px;background:var(--teal)"></div>
+          <div style="padding:24px 22px 0;">
+            <div style="width:48px;height:48px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:var(--teal);margin-bottom:14px;">RO</div>
+            <div style="font-size:16px;font-weight:600;color:var(--ink);margin-bottom:2px;">Rosa Okafor</div>
+            <div style="font-size:11px;color:var(--teal);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Buyer &middot; Mid-size Regional Hospital</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;"><span style="font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">High-volume tasks</span><span style="font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Daily user</span><span style="font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Non-specialist</span></div>
+          </div>
+          <div style="padding:0 22px 22px;">
+            <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;">In her own words</div>
+            <div style="font-size:13px;color:var(--ink2);font-style:italic;line-height:1.6;padding:12px 14px;background:var(--teal-light);border-radius:6px;border-left:3px solid var(--teal);margin-bottom:16px;">"I just want the system to tell me what I need to do. I shouldn't have to hunt around to find my tasks every morning."</div>
+            <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;">Key pain points</div>
+            <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:16px;">
+              <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink2);line-height:1.5;"><div style="width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:5px;"></div>Too many clicks to reach everyday tasks</div>
+              <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink2);line-height:1.5;"><div style="width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:5px;"></div>No visibility into where her requests stand</div>
+              <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink2);line-height:1.5;"><div style="width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:5px;"></div>Products look and behave inconsistently</div>
+            </div>
+            <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;">Usage frequency</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:11px;color:var(--ink2);width:100px;flex-shrink:0;">Requisitions</span><div style="height:5px;border-radius:3px;background:var(--border);flex:1;"><div style="height:5px;border-radius:3px;background:var(--teal);width:95%;"></div></div></div>
+              <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:11px;color:var(--ink2);width:100px;flex-shrink:0;">PO tracking</span><div style="height:5px;border-radius:3px;background:var(--border);flex:1;"><div style="height:5px;border-radius:3px;background:var(--teal);width:70%;"></div></div></div>
+              <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:11px;color:var(--ink2);width:100px;flex-shrink:0;">Invoicing</span><div style="height:5px;border-radius:3px;background:var(--border);flex:1;"><div style="height:5px;border-radius:3px;background:var(--teal);width:20%;"></div></div></div>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+          <div style="height:3px;background:#3b6d11;"></div>
+          <div style="padding:24px 22px 0;">
+            <div style="width:48px;height:48px;border-radius:50%;background:#eaf3de;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#3b6d11;margin-bottom:14px;">DK</div>
+            <div style="font-size:16px;font-weight:600;color:var(--ink);margin-bottom:2px;">David Kim</div>
+            <div style="font-size:11px;color:#3b6d11;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Manager / Approver &middot; Large Health System</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;"><span style="font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Intermittent user</span><span style="font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Budget owner</span><span style="font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Mobile-first</span></div>
+          </div>
+          <div style="padding:0 22px 22px;">
+            <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;">In his own words</div>
+            <div style="font-size:13px;color:var(--ink2);font-style:italic;line-height:1.6;padding:12px 14px;background:#eaf3de;border-radius:6px;border-left:3px solid #3b6d11;margin-bottom:16px;">"I approve maybe 15 things a week. I don't need a full training every time I log in — just show me what needs my attention."</div>
+            <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;">Key pain points</div>
+            <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:16px;">
+              <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink2);line-height:1.5;"><div style="width:6px;height:6px;border-radius:50%;background:#3b6d11;flex-shrink:0;margin-top:5px;"></div>Approval workflows buried deep in navigation</div>
+              <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink2);line-height:1.5;"><div style="width:6px;height:6px;border-radius:50%;background:#3b6d11;flex-shrink:0;margin-top:5px;"></div>No context on requisitions — has to chase the buyer</div>
+              <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink2);line-height:1.5;"><div style="width:6px;height:6px;border-radius:50%;background:#3b6d11;flex-shrink:0;margin-top:5px;"></div>No budget visibility at the moment of approval</div>
+            </div>
+            <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;">Usage frequency</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:11px;color:var(--ink2);width:100px;flex-shrink:0;">Approvals</span><div style="height:5px;border-radius:3px;background:var(--border);flex:1;"><div style="height:5px;border-radius:3px;background:#3b6d11;width:90%;"></div></div></div>
+              <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:11px;color:var(--ink2);width:100px;flex-shrink:0;">Spend reports</span><div style="height:5px;border-radius:3px;background:var(--border);flex:1;"><div style="height:5px;border-radius:3px;background:#3b6d11;width:50%;"></div></div></div>
+              <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:11px;color:var(--ink2);width:100px;flex-shrink:0;">Requisitions</span><div style="height:5px;border-radius:3px;background:var(--border);flex:1;"><div style="height:5px;border-radius:3px;background:#3b6d11;width:15%;"></div></div></div>
+            </div>
+          </div>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+          <div style="height:3px;background:#854f0b;"></div>
+          <div style="padding:24px 22px 0;">
+            <div style="width:48px;height:48px;border-radius:50%;background:#faeeda;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#854f0b;margin-bottom:14px;">LT</div>
+            <div style="font-size:16px;font-weight:600;color:var(--ink);margin-bottom:2px;">Linda Torres</div>
+            <div style="font-size:11px;color:#854f0b;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">AP Specialist &middot; Community Hospital</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;"><span style="font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Power user</span><span style="font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Handles all phases</span><span style="font-size:10px;padding:3px 9px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Exception-heavy</span></div>
+          </div>
+          <div style="padding:0 22px 22px;">
+            <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;">In her own words</div>
+            <div style="font-size:13px;color:var(--ink2);font-style:italic;line-height:1.6;padding:12px 14px;background:#faeeda;border-radius:6px;border-left:3px solid #854f0b;margin-bottom:16px;">"I touch every part of this process. When products don't connect to each other, I end up doing everything manually to bridge the gaps."</div>
+            <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;">Key pain points</div>
+            <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:16px;">
+              <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink2);line-height:1.5;"><div style="width:6px;height:6px;border-radius:50%;background:#854f0b;flex-shrink:0;margin-top:5px;"></div>Manual reconciliation due to disconnected product data</div>
+              <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink2);line-height:1.5;"><div style="width:6px;height:6px;border-radius:50%;background:#854f0b;flex-shrink:0;margin-top:5px;"></div>Invoice exceptions require switching between 3 screens</div>
+              <div style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--ink2);line-height:1.5;"><div style="width:6px;height:6px;border-radius:50%;background:#854f0b;flex-shrink:0;margin-top:5px;"></div>No unified audit trail across the full lifecycle</div>
+            </div>
+            <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;">Usage frequency</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:11px;color:var(--ink2);width:100px;flex-shrink:0;">Invoicing</span><div style="height:5px;border-radius:3px;background:var(--border);flex:1;"><div style="height:5px;border-radius:3px;background:#854f0b;width:100%;"></div></div></div>
+              <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:11px;color:var(--ink2);width:100px;flex-shrink:0;">PO matching</span><div style="height:5px;border-radius:3px;background:var(--border);flex:1;"><div style="height:5px;border-radius:3px;background:#854f0b;width:85%;"></div></div></div>
+              <div style="display:flex;align-items:center;gap:10px;"><span style="font-size:11px;color:var(--ink2);width:100px;flex-shrink:0;">Requisitions</span><div style="height:5px;border-radius:3px;background:var(--border);flex:1;"><div style="height:5px;border-radius:3px;background:#854f0b;width:60%;"></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>` },
+
+    'User Flow & Journey Map': { html: `
+      <div style="font-family:var(--sans);">
+        <p style="font-size:13px;color:var(--ink2);margin-bottom:24px;line-height:1.6;">Five-lane swimlane showing role-driven task paths across the full procure-to-pay lifecycle. Hover any step to reveal the design intent.</p>
+        <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink2);"><div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div>Buyer</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink2);"><div style="width:10px;height:10px;border-radius:50%;background:#3b6d11;"></div>Manager</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink2);"><div style="width:10px;height:10px;border-radius:50%;background:#854f0b;"></div>AP Specialist</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink2);"><div style="width:10px;height:10px;border-radius:50%;background:#185fa5;"></div>Vendor</div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink2);"><div style="width:10px;height:10px;border-radius:50%;background:var(--ink3);"></div>System</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;background:var(--white);">
+          <div style="border-right:1px solid var(--border);">
+            <div style="padding:10px;text-align:center;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;background:var(--teal-light);color:var(--teal);border-bottom:1px solid var(--border);">Buyer</div>
+            <div style="padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:440px;">
+              <div style="background:var(--teal);color:#fff;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:500;">Start</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--teal);text-align:center;width:100%;cursor:pointer;" title="Buyer identifies a need and submits a request. Role-based form surfaces only relevant fields.">Create Requisition</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--ink2);text-align:center;width:100%;cursor:pointer;" title="System surfaces preferred vendors and contract pricing automatically.">Search Catalog</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--teal);text-align:center;width:100%;cursor:pointer;" title="Requisition routes by value threshold and category to the appropriate approval chain automatically.">Submit for Approval</div>
+              <div style="width:1px;height:52px;background:var(--border2);"></div>
+              <div style="background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--teal);text-align:center;width:100%;cursor:pointer;" title="Buyer confirms goods received. Triggers 3-way match in AP.">Confirm Receipt</div>
+            </div>
+          </div>
+          <div style="border-right:1px solid var(--border);">
+            <div style="padding:10px;text-align:center;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;background:#eaf3de;color:#3b6d11;border-bottom:1px solid var(--border);">Manager</div>
+            <div style="padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:440px;padding-top:100px;">
+              <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:6px;padding:8px 10px;font-size:11px;color:#3b6d11;text-align:center;width:100%;cursor:pointer;" title="Manager sees line items, budget availability, and policy flags.">Review Requisition</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="width:36px;height:36px;background:#faeeda;border:1px solid #fac775;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;cursor:pointer;" title="Approval routing triggered by dollar threshold and org hierarchy."><span style="transform:rotate(-45deg);font-size:10px;color:#854f0b;font-weight:700;">?</span></div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:6px;padding:8px 10px;font-size:11px;color:#3b6d11;text-align:center;width:100%;cursor:pointer;" title="Approval triggers automatic PO generation sent to vendor.">Approve PO</div>
+            </div>
+          </div>
+          <div style="border-right:1px solid var(--border);">
+            <div style="padding:10px;text-align:center;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;background:#faeeda;color:#854f0b;border-bottom:1px solid var(--border);">AP Specialist</div>
+            <div style="padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:440px;padding-top:200px;">
+              <div style="background:#faeeda;border:1px solid #fac775;border-radius:6px;padding:8px 10px;font-size:11px;color:#854f0b;text-align:center;width:100%;cursor:pointer;" title="Invoice matched against PO and receipt. System flags discrepancies.">Process Invoice</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="width:36px;height:36px;background:#faeeda;border:1px solid #fac775;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;cursor:pointer;" title="3-way match: PO vs goods receipt vs invoice. Auto-approves within tolerance."><span style="transform:rotate(-45deg);font-size:10px;color:#854f0b;font-weight:700;">?</span></div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:#faeeda;border:1px solid #fac775;border-radius:6px;padding:8px 10px;font-size:11px;color:#854f0b;text-align:center;width:100%;cursor:pointer;" title="Approved invoices queued for payment run with terms surfaced automatically.">Schedule Payment</div>
+            </div>
+          </div>
+          <div style="border-right:1px solid var(--border);">
+            <div style="padding:10px;text-align:center;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;background:#e6f1fb;color:#185fa5;border-bottom:1px solid var(--border);">Vendor</div>
+            <div style="padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:440px;padding-top:150px;">
+              <div style="background:#e6f1fb;border:1px solid #b5d4f4;border-radius:6px;padding:8px 10px;font-size:11px;color:#185fa5;text-align:center;width:100%;cursor:pointer;" title="Vendor receives PO via portal or EDI and confirms acceptance.">Receive PO</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:#e6f1fb;border:1px solid #b5d4f4;border-radius:6px;padding:8px 10px;font-size:11px;color:#185fa5;text-align:center;width:100%;cursor:pointer;" title="Vendor fulfills order. Tracking surfaced in buyer dashboard.">Deliver Goods</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:#e6f1fb;border:1px solid #b5d4f4;border-radius:6px;padding:8px 10px;font-size:11px;color:#185fa5;text-align:center;width:100%;cursor:pointer;" title="Vendor submits invoice via portal validated before routing to AP.">Submit Invoice</div>
+            </div>
+          </div>
+          <div>
+            <div style="padding:10px;text-align:center;font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;background:var(--surface);color:var(--ink3);border-bottom:1px solid var(--border);">System</div>
+            <div style="padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:440px;padding-top:118px;">
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--ink2);text-align:center;width:100%;cursor:pointer;" title="Routing determined by spend category, dollar value, and org hierarchy.">Route Approval</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--ink2);text-align:center;width:100%;cursor:pointer;" title="Real-time status updates and proactive alerts for overdue actions.">Notify Stakeholders</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--ink2);text-align:center;width:100%;cursor:pointer;" title="All actions timestamped. Full lifecycle visible for compliance.">Audit Trail</div>
+              <div style="width:1px;height:8px;background:var(--border2);"></div>
+              <div style="background:var(--teal);color:#fff;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:500;opacity:.7;">Complete</div>
+            </div>
+          </div>
+        </div>
+      </div>` },
+
+    'Low-Fidelity Wireframes': { html: `
+      <div style="font-family:var(--sans);">
+        <p style="font-size:13px;color:var(--ink2);margin-bottom:28px;line-height:1.6;">Early-stage wireframes establishing the role-driven layout architecture. Gray blocks represent UI regions; teal highlights indicate primary action zones prioritized per persona.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+          <div style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;background:var(--white);box-shadow:var(--shadow-sm);">
+            <div style="background:var(--surface);padding:10px 14px;border-bottom:1px solid var(--border);font-size:10px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.07em;">Dashboard — Buyer view</div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:10px;">
+              <div style="height:12px;border-radius:3px;background:var(--teal-light);border:1px solid var(--teal-mid);width:40%;"></div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+                <div style="height:52px;border-radius:6px;background:var(--teal-light);border:1px solid var(--teal-mid);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--teal);font-weight:600;">11 Reqs</div>
+                <div style="height:52px;border-radius:6px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink3);">24 POs</div>
+                <div style="height:52px;border-radius:6px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink3);">14 Inv</div>
+              </div>
+              <div style="height:8px;border-radius:3px;background:var(--border);width:100%;"></div>
+              <div style="height:8px;border-radius:3px;background:var(--border);width:85%;"></div>
+              <div style="height:36px;border-radius:6px;background:var(--surface);border:1px solid var(--border);"></div>
+              <div style="height:36px;border-radius:6px;background:var(--surface);border:1px solid var(--border);"></div>
+              <div style="height:36px;border-radius:6px;background:var(--teal-light);border:1px solid var(--teal-mid);"></div>
+            </div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;background:var(--white);box-shadow:var(--shadow-sm);">
+            <div style="background:var(--surface);padding:10px 14px;border-bottom:1px solid var(--border);font-size:10px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.07em;">Requisition form — New request</div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:10px;">
+              <div style="height:10px;border-radius:3px;background:var(--border);width:55%;"></div>
+              <div style="height:36px;border-radius:6px;background:var(--surface);border:1px solid var(--border);"></div>
+              <div style="height:10px;border-radius:3px;background:var(--border);width:40%;margin-top:4px;"></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div style="height:36px;border-radius:6px;background:var(--surface);border:1px solid var(--border);"></div>
+                <div style="height:36px;border-radius:6px;background:var(--surface);border:1px solid var(--border);"></div>
+              </div>
+              <div style="height:10px;border-radius:3px;background:var(--border);width:35%;margin-top:4px;"></div>
+              <div style="height:72px;border-radius:6px;background:var(--surface);border:1px solid var(--border);"></div>
+              <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px;">
+                <div style="height:34px;width:90px;border-radius:6px;background:var(--surface);border:1px solid var(--border);"></div>
+                <div style="height:34px;width:120px;border-radius:6px;background:var(--teal);"></div>
+              </div>
+            </div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;background:var(--white);box-shadow:var(--shadow-sm);">
+            <div style="background:var(--surface);padding:10px 14px;border-bottom:1px solid var(--border);font-size:10px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.07em;">Approval queue — Manager view</div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;"><div style="height:10px;border-radius:3px;background:var(--border);width:38%;"></div><div style="height:28px;width:100px;border-radius:6px;background:var(--teal);"></div></div>
+              <div style="border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-top:4px;">
+                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 80px;background:var(--surface);border-bottom:1px solid var(--border);">
+                  <div style="height:28px;border-right:1px solid var(--border);"></div><div style="height:28px;border-right:1px solid var(--border);"></div><div style="height:28px;border-right:1px solid var(--border);"></div><div style="height:28px;"></div>
+                </div>
+                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 80px;border-bottom:1px solid var(--border);">
+                  <div style="height:36px;border-right:1px solid var(--border);padding:10px 12px;"><div style="height:8px;background:var(--border);border-radius:3px;width:80%;"></div></div>
+                  <div style="height:36px;border-right:1px solid var(--border);"></div><div style="height:36px;border-right:1px solid var(--border);"></div>
+                  <div style="height:36px;display:flex;align-items:center;justify-content:center;"><div style="height:20px;width:52px;background:var(--teal-light);border-radius:4px;"></div></div>
+                </div>
+                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 80px;border-bottom:1px solid var(--border);">
+                  <div style="height:36px;border-right:1px solid var(--border);padding:10px 12px;"><div style="height:8px;background:var(--border);border-radius:3px;width:65%;"></div></div>
+                  <div style="height:36px;border-right:1px solid var(--border);"></div><div style="height:36px;border-right:1px solid var(--border);"></div>
+                  <div style="height:36px;display:flex;align-items:center;justify-content:center;"><div style="height:20px;width:52px;background:var(--teal-light);border-radius:4px;"></div></div>
+                </div>
+                <div style="display:grid;grid-template-columns:2fr 1fr 1fr 80px;">
+                  <div style="height:36px;border-right:1px solid var(--border);padding:10px 12px;"><div style="height:8px;background:var(--border);border-radius:3px;width:75%;"></div></div>
+                  <div style="height:36px;border-right:1px solid var(--border);"></div><div style="height:36px;border-right:1px solid var(--border);"></div>
+                  <div style="height:36px;display:flex;align-items:center;justify-content:center;"><div style="height:20px;width:52px;background:var(--teal-light);border-radius:4px;"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;background:var(--white);box-shadow:var(--shadow-sm);">
+            <div style="background:var(--surface);padding:10px 14px;border-bottom:1px solid var(--border);font-size:10px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.07em;">Invoice matching — AP view</div>
+            <div style="padding:20px;display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;gap:8px;">
+                <div style="flex:1;border:1px solid var(--border);border-radius:6px;padding:10px;background:var(--surface);"><div style="height:8px;background:var(--border);border-radius:3px;width:60%;margin-bottom:8px;"></div><div style="height:8px;background:var(--border);border-radius:3px;width:80%;margin-bottom:6px;"></div><div style="height:8px;background:var(--border);border-radius:3px;width:50%;"></div></div>
+                <div style="flex:1;border:1px solid var(--border);border-radius:6px;padding:10px;background:var(--surface);"><div style="height:8px;background:var(--border);border-radius:3px;width:60%;margin-bottom:8px;"></div><div style="height:8px;background:var(--border);border-radius:3px;width:80%;margin-bottom:6px;"></div><div style="height:8px;background:var(--border);border-radius:3px;width:50%;"></div></div>
+              </div>
+              <div style="background:#faeeda;border:1px solid #fac775;border-radius:6px;padding:10px;display:flex;align-items:center;gap:8px;"><div style="width:8px;height:8px;border-radius:50%;background:#854f0b;flex-shrink:0;"></div><div style="font-size:11px;color:#854f0b;font-weight:500;">Price variance of $340 detected — requires AP review</div></div>
+              <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:4px;"><div style="height:34px;width:110px;border-radius:6px;background:var(--surface);border:1px solid var(--border);"></div><div style="height:34px;width:110px;border-radius:6px;background:var(--teal);"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>` },
+
+    'Recommended Screen Flow': { html: `
+      <div style="font-family:var(--sans);">
+        <p style="font-size:13px;color:var(--ink2);margin-bottom:28px;line-height:1.6;">Recommended navigation architecture showing how each role reaches their primary tasks in the fewest possible steps — the core response to the "four clicks to do anything" problem.</p>
+        <div style="display:flex;flex-direction:column;gap:28px;">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;display:flex;align-items:center;gap:8px;"><span style="background:var(--teal-light);color:var(--teal);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;">B</span>Buyer flow</div>
+            <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;">
+              <div style="background:var(--teal);color:#fff;border-radius:6px;padding:10px 16px;font-size:12px;font-weight:500;white-space:nowrap;">Login</div>
+              <div style="height:2px;width:24px;background:var(--teal-mid);"></div>
+              <div style="background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:6px;padding:10px 16px;font-size:12px;color:var(--teal);white-space:nowrap;">Dashboard<br><span style="font-size:10px;color:var(--ink3);">Task queue visible</span></div>
+              <div style="height:2px;width:24px;background:var(--teal-mid);"></div>
+              <div style="background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:6px;padding:10px 16px;font-size:12px;color:var(--teal);white-space:nowrap;">Create Req<br><span style="font-size:10px;color:var(--ink3);">Role-filtered form</span></div>
+              <div style="height:2px;width:24px;background:var(--teal-mid);"></div>
+              <div style="background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:6px;padding:10px 16px;font-size:12px;color:var(--teal);white-space:nowrap;">Submit<br><span style="font-size:10px;color:var(--ink3);">Auto-routes</span></div>
+              <div style="margin-left:12px;font-size:11px;color:var(--ink3);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;"><strong style="color:var(--teal);">3 steps</strong> vs 7+ before</div>
+            </div>
+          </div>
+          <div style="height:1px;background:var(--border);"></div>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:#3b6d11;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;display:flex;align-items:center;gap:8px;"><span style="background:#eaf3de;color:#3b6d11;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;">M</span>Manager / Approver flow</div>
+            <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;">
+              <div style="background:#3b6d11;color:#fff;border-radius:6px;padding:10px 16px;font-size:12px;font-weight:500;white-space:nowrap;">Login</div>
+              <div style="height:2px;width:24px;background:#c0dd97;"></div>
+              <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:6px;padding:10px 16px;font-size:12px;color:#3b6d11;white-space:nowrap;">Approval Queue<br><span style="font-size:10px;color:var(--ink3);">Default landing</span></div>
+              <div style="height:2px;width:24px;background:#c0dd97;"></div>
+              <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:6px;padding:10px 16px;font-size:12px;color:#3b6d11;white-space:nowrap;">Review Detail<br><span style="font-size:10px;color:var(--ink3);">Budget shown inline</span></div>
+              <div style="height:2px;width:24px;background:#c0dd97;"></div>
+              <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:6px;padding:10px 16px;font-size:12px;color:#3b6d11;white-space:nowrap;">Approve / Reject<br><span style="font-size:10px;color:var(--ink3);">One action</span></div>
+              <div style="margin-left:12px;font-size:11px;color:var(--ink3);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;"><strong style="color:#3b6d11;">2 steps</strong> to decision</div>
+            </div>
+          </div>
+          <div style="height:1px;background:var(--border);"></div>
+          <div>
+            <div style="font-size:11px;font-weight:600;color:#854f0b;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;display:flex;align-items:center;gap:8px;"><span style="background:#faeeda;color:#854f0b;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;">A</span>AP Specialist flow</div>
+            <div style="display:flex;align-items:center;gap:0;flex-wrap:wrap;">
+              <div style="background:#854f0b;color:#fff;border-radius:6px;padding:10px 16px;font-size:12px;font-weight:500;white-space:nowrap;">Login</div>
+              <div style="height:2px;width:24px;background:#fac775;"></div>
+              <div style="background:#faeeda;border:1px solid #fac775;border-radius:6px;padding:10px 16px;font-size:12px;color:#854f0b;white-space:nowrap;">Invoice Queue<br><span style="font-size:10px;color:var(--ink3);">Exceptions first</span></div>
+              <div style="height:2px;width:24px;background:#fac775;"></div>
+              <div style="background:#faeeda;border:1px solid #fac775;border-radius:6px;padding:10px 16px;font-size:12px;color:#854f0b;white-space:nowrap;">Match / Resolve<br><span style="font-size:10px;color:var(--ink3);">PO inline</span></div>
+              <div style="height:2px;width:24px;background:#fac775;"></div>
+              <div style="background:#faeeda;border:1px solid #fac775;border-radius:6px;padding:10px 16px;font-size:12px;color:#854f0b;white-space:nowrap;">Schedule Payment<br><span style="font-size:10px;color:var(--ink3);">Terms shown</span></div>
+              <div style="margin-left:12px;font-size:11px;color:var(--ink3);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:4px 10px;"><strong style="color:#854f0b;">No screen switches</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>` },
+
+    'High-Fidelity Dashboard Mockup': { html: `
+      <div style="font-family:var(--sans);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-md);">
+        <div style="background:var(--teal);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:11px;color:rgba(255,255,255,.85);font-weight:600;letter-spacing:.07em;text-transform:uppercase;">Premier &middot; Supply Chain</div>
+          <div style="display:flex;gap:20px;">
+            <span style="font-size:11px;color:#fff;font-weight:500;border-bottom:1px solid rgba(255,255,255,.5);padding-bottom:2px;">Dashboard</span>
+            <span style="font-size:11px;color:rgba(255,255,255,.5);">Requisitions</span>
+            <span style="font-size:11px;color:rgba(255,255,255,.5);">Purchase Orders</span>
+            <span style="font-size:11px;color:rgba(255,255,255,.5);">Invoices</span>
+            <span style="font-size:11px;color:rgba(255,255,255,.5);">Vendors</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:#fff;">JM</div>
+            <span style="font-size:11px;color:rgba(255,255,255,.75);">J. Martinez</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:180px 1fr;">
+          <div style="background:var(--white);border-right:1px solid var(--border);padding:16px 0;min-height:540px;">
+            <div style="padding:0 12px;margin-bottom:20px;">
+              <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding:0 8px;margin-bottom:6px;">My work</div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;background:var(--teal-light);margin-bottom:2px;"><span style="font-size:12px;color:var(--teal);">&#9632;</span><span style="font-size:12px;color:var(--teal);font-weight:500;">Dashboard</span><span style="margin-left:auto;background:var(--teal);color:#fff;font-size:9px;font-weight:600;padding:1px 6px;border-radius:10px;">5</span></div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;margin-bottom:2px;"><span style="font-size:12px;color:var(--ink3);">&#43;</span><span style="font-size:12px;color:var(--ink2);">New Request</span></div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;margin-bottom:2px;"><span style="font-size:12px;color:var(--ink3);">&#9673;</span><span style="font-size:12px;color:var(--ink2);">Pending Approval</span></div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;"><span style="font-size:12px;color:var(--ink3);">&#9660;</span><span style="font-size:12px;color:var(--ink2);">Receiving</span></div>
+            </div>
+            <div style="padding:0 12px;margin-bottom:20px;">
+              <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);padding:0 8px;margin-bottom:6px;">Procurement</div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;margin-bottom:2px;"><span style="font-size:12px;color:var(--ink3);">&#9632;</span><span style="font-size:12px;color:var(--ink2);">Requisitions</span></div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;margin-bottom:2px;"><span style="font-size:12px;color:var(--ink3);">&#9675;</span><span style="font-size:12px;color:var(--ink2);">Purchase Orders</span></div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;margin-bottom:2px;"><span style="font-size:12px;color:var(--ink3);">&#9633;</span><span style="font-size:12px;color:var(--ink2);">Invoices</span><span style="margin-left:auto;background:var(--teal);color:#fff;font-size:9px;font-weight:600;padding:1px 6px;border-radius:10px;">3</span></div>
+              <div style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;"><span style="font-size:12px;color:var(--ink3);">&#9670;</span><span style="font-size:12px;color:var(--ink2);">Vendors</span></div>
+            </div>
+          </div>
+          <div style="padding:24px;background:var(--offwhite);display:flex;flex-direction:column;gap:16px;">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+              <div><div style="font-size:16px;font-weight:600;color:var(--ink);margin-bottom:3px;">Good morning, Jordan</div><div style="font-size:12px;color:var(--ink3);">You have 5 items that need attention today</div></div>
+              <div style="background:var(--teal);color:#fff;border-radius:6px;padding:9px 16px;font-size:12px;font-weight:500;cursor:pointer;">+ New Requisition</div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px;"><div style="font-size:22px;font-weight:500;color:var(--teal);line-height:1;">11</div><div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-top:4px;">Open Requisitions</div><div style="font-size:10px;color:#3b6d11;margin-top:6px;">&#8593; 3 added this week</div></div>
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px;"><div style="font-size:22px;font-weight:500;color:var(--teal);line-height:1;">24</div><div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-top:4px;">Purchase Orders</div><div style="font-size:10px;color:var(--ink3);margin-top:6px;">6 pending receipt</div></div>
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px;"><div style="font-size:22px;font-weight:500;color:var(--teal);line-height:1;">14</div><div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-top:4px;">Invoices to Match</div><div style="font-size:10px;color:#a32d2d;margin-top:6px;">3 past due</div></div>
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px;"><div style="font-size:18px;font-weight:500;color:var(--teal);line-height:1;">$71,124</div><div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;margin-top:4px;">Monthly Spend</div><div style="font-size:10px;color:#3b6d11;margin-top:6px;">&#8595; 12% vs last month</div></div>
+            </div>
+            <div style="background:var(--teal-light);border-left:3px solid var(--teal);border-radius:0 6px 6px 0;padding:10px 14px;font-size:12px;color:var(--teal);display:flex;align-items:center;gap:8px;">&#9432; &nbsp;<strong>Invoice #INV-2847</strong> requires 3-way match before Thursday — vendor payment terms at risk.</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+                <div style="padding:12px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;"><span style="font-size:12px;font-weight:500;color:var(--ink);">Recent Requisitions</span><span style="font-size:11px;color:var(--teal);cursor:pointer;">View all</span></div>
+                <table style="width:100%;border-collapse:collapse;">
+                  <thead><tr style="background:var(--surface);"><th style="font-size:9px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);padding:8px 14px;text-align:left;">Req #</th><th style="font-size:9px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);padding:8px 14px;text-align:left;">Description</th><th style="font-size:9px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);padding:8px 14px;text-align:left;">Status</th></tr></thead>
+                  <tbody>
+                    <tr style="border-top:1px solid var(--border);"><td style="padding:9px 14px;font-size:11px;font-weight:500;color:var(--ink);">REQ-1042</td><td style="padding:9px 14px;font-size:11px;color:var(--ink2);">Surgical supplies</td><td style="padding:9px 14px;"><span style="font-size:9px;font-weight:600;background:#faeeda;color:#854f0b;padding:2px 8px;border-radius:10px;">In Review</span></td></tr>
+                    <tr style="border-top:1px solid var(--border);"><td style="padding:9px 14px;font-size:11px;font-weight:500;color:var(--ink);">REQ-1039</td><td style="padding:9px 14px;font-size:11px;color:var(--ink2);">IV Fluid stock</td><td style="padding:9px 14px;"><span style="font-size:9px;font-weight:600;background:#eaf3de;color:#3b6d11;padding:2px 8px;border-radius:10px;">Approved</span></td></tr>
+                    <tr style="border-top:1px solid var(--border);"><td style="padding:9px 14px;font-size:11px;font-weight:500;color:var(--ink);">REQ-1036</td><td style="padding:9px 14px;font-size:11px;color:var(--ink2);">HVAC Maintenance</td><td style="padding:9px 14px;"><span style="font-size:9px;font-weight:600;background:var(--teal-light);color:var(--teal);padding:2px 8px;border-radius:10px;">Pending</span></td></tr>
+                    <tr style="border-top:1px solid var(--border);"><td style="padding:9px 14px;font-size:11px;font-weight:500;color:var(--ink);">REQ-1028</td><td style="padding:9px 14px;font-size:11px;color:var(--ink2);">PPE restock</td><td style="padding:9px 14px;"><span style="font-size:9px;font-weight:600;background:#fcebeb;color:#a32d2d;padding:2px 8px;border-radius:10px;">Rejected</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+                <div style="padding:12px 14px;border-bottom:1px solid var(--border);font-size:12px;font-weight:500;color:var(--ink);">My Task Queue</div>
+                <div style="display:flex;flex-direction:column;">
+                  <div style="display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border);"><div style="width:30px;height:30px;border-radius:6px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;color:var(--teal);font-size:14px;flex-shrink:0;">&#10003;</div><div><div style="font-size:12px;color:var(--ink);margin-bottom:2px;">Approve REQ-1042 — Surgical Supplies</div><div style="font-size:10px;color:var(--ink3);">Submitted by R. Okafor &middot; <span style="background:var(--teal-light);color:var(--teal);padding:1px 6px;border-radius:4px;font-weight:500;">Approver</span></div></div></div>
+                  <div style="display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border);"><div style="width:30px;height:30px;border-radius:6px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;color:var(--teal);font-size:14px;flex-shrink:0;">&#9776;</div><div><div style="font-size:12px;color:var(--ink);margin-bottom:2px;">Match Invoice #INV-2847 to PO-8821</div><div style="font-size:10px;color:var(--ink3);">Due Thu, Jun 26 &middot; <span style="background:var(--teal-light);color:var(--teal);padding:1px 6px;border-radius:4px;font-weight:500;">AP Match</span></div></div></div>
+                  <div style="display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border);"><div style="width:30px;height:30px;border-radius:6px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;color:var(--teal);font-size:14px;flex-shrink:0;">&#9633;</div><div><div style="font-size:12px;color:var(--ink);margin-bottom:2px;">Confirm receipt — PO-8804 (Lab reagents)</div><div style="font-size:10px;color:var(--ink3);">Delivered Jun 22 &middot; <span style="background:var(--teal-light);color:var(--teal);padding:1px 6px;border-radius:4px;font-weight:500;">Receiving</span></div></div></div>
+                  <div style="display:flex;align-items:flex-start;gap:10px;padding:11px 14px;"><div style="width:30px;height:30px;border-radius:6px;background:#faeeda;display:flex;align-items:center;justify-content:center;color:#854f0b;font-size:14px;flex-shrink:0;">&#9650;</div><div><div style="font-size:12px;color:var(--ink);margin-bottom:2px;">Resolve price discrepancy — INV-2831</div><div style="font-size:10px;color:var(--ink3);">$340 variance vs PO &middot; <span style="background:#faeeda;color:#854f0b;padding:1px 6px;border-radius:4px;font-weight:500;">Exception</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>` },
+
+    'Service Blueprint': { html: `
+      <div style="font-family:var(--sans);">
+        <p style="font-size:13px;color:var(--ink2);margin-bottom:28px;line-height:1.6;">Service blueprint mapping what users see and do (front stage) against what happens behind the scenes (back stage) across the five phases of the procure-to-pay journey.</p>
+        <div style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;">
+          <div style="display:grid;grid-template-columns:140px repeat(5,1fr);background:var(--teal);color:#fff;">
+            <div style="padding:10px 14px;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;opacity:.7;display:flex;align-items:flex-end;">Layer</div>
+            <div style="padding:10px 12px;font-size:11px;font-weight:600;border-left:1px solid rgba(255,255,255,.15);">Requisition</div>
+            <div style="padding:10px 12px;font-size:11px;font-weight:600;border-left:1px solid rgba(255,255,255,.15);">Approval</div>
+            <div style="padding:10px 12px;font-size:11px;font-weight:600;border-left:1px solid rgba(255,255,255,.15);">Purchasing</div>
+            <div style="padding:10px 12px;font-size:11px;font-weight:600;border-left:1px solid rgba(255,255,255,.15);">Receiving</div>
+            <div style="padding:10px 12px;font-size:11px;font-weight:600;border-left:1px solid rgba(255,255,255,.15);">Payment</div>
+          </div>
+          <div style="display:grid;grid-template-columns:140px repeat(5,1fr);background:var(--teal-light);">
+            <div style="padding:10px 14px;font-size:10px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:.07em;display:flex;align-items:center;">User Actions</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">Identifies need<br>Searches catalog<br>Fills request form<br>Submits</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">Reviews queue<br>Checks budget<br>Approves or rejects</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">Tracks PO status<br>Manages changes</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">Confirms delivery<br>Notes discrepancies</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">Reviews invoice<br>Schedules payment</div>
+          </div>
+          <div style="background:var(--border);height:1px;display:flex;align-items:center;"><div style="margin-left:14px;font-size:9px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;background:var(--border);padding:0 6px;">Line of Visibility</div></div>
+          <div style="display:grid;grid-template-columns:140px repeat(5,1fr);background:var(--white);">
+            <div style="padding:10px 14px;font-size:10px;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:.07em;display:flex;align-items:center;">Front Stage<br>(UI/System)</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">Role-filtered form<br>Catalog search UI<br>Status confirmation</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">Approval card<br>Budget widget<br>Decision buttons</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">PO detail view<br>Vendor timeline<br>Change order form</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">Receiving screen<br>Item checklist<br>Exception flag</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">Invoice detail<br>Match comparison<br>Payment schedule</div>
+          </div>
+          <div style="background:var(--border2);height:1px;display:flex;align-items:center;"><div style="margin-left:14px;font-size:9px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;background:var(--border2);padding:0 6px;">Line of Interaction</div></div>
+          <div style="display:grid;grid-template-columns:140px repeat(5,1fr);background:var(--surface);">
+            <div style="padding:10px 14px;font-size:10px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;display:flex;align-items:center;">Back Stage<br>(Automated)</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">Budget check<br>Routing rules<br>Policy validation</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">Threshold routing<br>Escalation logic<br>Notification dispatch</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">PO generation<br>Vendor EDI<br>Status sync</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">3-way match trigger<br>Inventory update<br>GL posting</div>
+            <div style="padding:10px 12px;border-left:1px solid var(--border);font-size:11px;color:var(--ink2);line-height:1.5;">Payment run<br>Early-pay calc<br>Audit log write</div>
+          </div>
+          <div style="background:var(--teal);height:2px;"></div>
+          <div style="background:var(--ink);padding:10px 14px;display:grid;grid-template-columns:140px repeat(5,1fr);">
+            <div style="font-size:9px;font-weight:600;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.08em;">Support Systems</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.55);border-left:1px solid rgba(255,255,255,.1);padding-left:12px;">Fireball DS</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.55);border-left:1px solid rgba(255,255,255,.1);padding-left:12px;">Auth / Roles</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.55);border-left:1px solid rgba(255,255,255,.1);padding-left:12px;">ERP Connector</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.55);border-left:1px solid rgba(255,255,255,.1);padding-left:12px;">WMS API</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.55);border-left:1px solid rgba(255,255,255,.1);padding-left:12px;">Payments API</div>
+          </div>
+        </div>
+      </div>` }
+  };
+
+  var cards = document.querySelectorAll('.artifact-card');
+  cards.forEach(function(card) {
+    var label = card.querySelector('.artifact-label');
+    if (!label) return;
+    var key = label.textContent.trim().replace(' ↗','');
+    if (!artifacts[key]) return;
+    card.setAttribute('tabindex','0');
+    card.setAttribute('role','button');
+    card.setAttribute('aria-label','View full ' + key);
+    card.addEventListener('click', function() { openModal(key); });
+    card.addEventListener('keydown', function(e) { if (e.key==='Enter'||e.key===' '){e.preventDefault();openModal(key);} });
+  });
+
+  var modal = document.getElementById('artifact-modal');
+  var modalTitle = document.getElementById('modal-title-text');
+  var modalBody = document.getElementById('modal-body');
+  var closeBtn = document.getElementById('modal-close-btn');
+
+  function openModal(key) {
+    modalTitle.textContent = key;
+    modalBody.innerHTML = artifacts[key].html;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+    modalBody.innerHTML = '';
+  }
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e) { if (e.target===modal) closeModal(); });
+  document.addEventListener('keydown', function(e) { if (e.key==='Escape'&&modal.classList.contains('open')) closeModal(); });
+})();
+</script>
+</body>
+</html>

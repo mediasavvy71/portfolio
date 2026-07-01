@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Premier Ecosystem Review — UX Staff Case Study</title>
+<style>
+  :root{
+    --navy:#0d1b4c;
+    --purple:#5b2a86;
+    --teal:#0f9aa6;
+    --magenta:#c8268f;
+    --bg:#f4f6fb;
+    --card:#ffffff;
+    --ink:#16213e;
+    --muted:#5b6680;
+    --line:#e3e7f1;
+    --red:#d3433e;
+    --orange:#e08a2e;
+    --yellow:#e6c537;
+    --green:#3f9a5c;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Segoe UI', Helvetica, Arial, sans-serif;
+    line-height:1.5;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:32px 28px 80px;}
+
+  .brandbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;color:var(--navy);letter-spacing:.5px;}
+  .logo .mark{width:30px;height:30px;border-radius:8px;background:conic-gradient(from 220deg, var(--teal), var(--purple), var(--magenta));}
+  .vision{border:1.5px solid var(--purple);border-radius:10px;padding:10px 16px;font-size:12.5px;color:var(--navy);max-width:300px;}
+  .vision b{display:block;color:var(--purple);font-size:11px;letter-spacing:.08em;margin-bottom:3px;}
+
+  .hero{background:linear-gradient(120deg, var(--navy), var(--purple) 70%);color:#fff;border-radius:16px;padding:42px 40px;margin-bottom:8px;}
+  .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#c9b8ea;font-weight:700;}
+  h1{font-size:36px;margin:8px 0 6px;}
+  .hero p{max-width:680px;color:#dfe3f5;font-size:15px;}
+  .role-strip{display:flex;gap:22px;flex-wrap:wrap;margin-top:22px;font-size:12.5px;color:#e9e6fa;}
+  .role-strip span b{display:block;color:#fff;font-size:13px;}
+
+  .section{margin-top:46px;}
+  .section h2{font-size:22px;color:var(--navy);margin-bottom:4px;}
+  .section .sub{color:var(--muted);font-size:13.5px;margin-bottom:18px;}
+  .tag{display:inline-block;background:var(--navy);color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:6px;margin-bottom:10px;}
+
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .pill{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;border-top:4px solid var(--magenta);font-size:13.5px;color:var(--ink);}
+  .pill b{display:block;color:var(--navy);font-size:13px;margin-bottom:4px;}
+
+  .layer-row{display:grid;grid-template-columns:48px 1fr;gap:16px;margin-bottom:18px;}
+  .layer-num{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;}
+  .layer-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
+  .layer-card h3{margin:0 0 6px;font-size:16px;color:var(--navy);}
+  .layer-card p{margin:0 0 8px;font-size:13.5px;color:var(--muted);}
+  .layer-card .out{font-size:12.5px;font-weight:700;color:var(--teal);background:#e6f7f8;display:inline-block;padding:4px 10px;border-radius:6px;margin-top:4px;}
+
+  /* ---- Artifact thumbnail card ---- */
+  .artifact-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+    margin-top:20px;
+    box-shadow:0 2px 12px rgba(13,27,76,.07);
+  }
+  .artifact-thumb{
+    width:100%;
+    display:block;
+    border-bottom:1px solid var(--line);
+    cursor:zoom-in;
+    transition:opacity .2s;
+  }
+  .artifact-thumb:hover{opacity:.92;}
+  .artifact-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 18px;
+  }
+  .artifact-meta .alabel{
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--navy);
+  }
+  .artifact-meta .atag{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--purple);
+    background:#f0e8f8;
+    padding:3px 10px;
+    border-radius:20px;
+  }
+
+  /* lightbox */
+  .lb-overlay{display:none;position:fixed;inset:0;background:rgba(10,10,20,.82);z-index:100;align-items:center;justify-content:center;padding:24px;}
+  .lb-overlay.open{display:flex;}
+  .lb-overlay img{max-width:96vw;max-height:92vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.4);}
+  .lb-close{position:fixed;top:18px;right:24px;color:#fff;font-size:28px;cursor:pointer;font-weight:300;line-height:1;}
+
+  table.heat{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--card);border-radius:10px;overflow:hidden;border:1px solid var(--line);}
+  table.heat th{background:var(--navy);color:#fff;text-align:left;padding:9px 10px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;}
+  table.heat td{padding:9px 10px;border-top:1px solid var(--line);}
+  .chip{display:inline-block;padding:3px 10px;border-radius:20px;font-weight:700;font-size:11px;color:#fff;}
+  .c-high{background:var(--red);}
+  .c-med{background:var(--orange);}
+  .c-low{background:var(--green);}
+
+  .lane-wrap{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;}
+  .lane{min-width:200px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;flex:1;}
+  .lane h4{margin:0 0 8px;font-size:13px;color:#fff;background:var(--purple);display:inline-block;padding:3px 10px;border-radius:6px;}
+  .lane p{font-size:12px;color:var(--muted);margin:0 0 6px;}
+  .sev{font-size:11px;font-weight:800;margin-top:8px;}
+
+  .opp{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .opp-card{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--teal);border-radius:10px;padding:16px;}
+  .opp-card h4{margin:0 0 6px;font-size:14px;color:var(--navy);}
+  .opp-card ul{margin:0;padding-left:18px;font-size:12.5px;color:var(--muted);}
+
+  .insight-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  .insight{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;}
+  .insight .num{color:var(--magenta);font-weight:800;font-size:13px;margin-bottom:4px;}
+  .insight h4{margin:0 0 6px;font-size:15px;color:var(--navy);}
+  .insight p{margin:0;font-size:13px;color:var(--muted);}
+
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .list-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px;}
+  .list-card h3{margin:0 0 12px;font-size:15px;color:var(--navy);}
+  .list-card ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--ink);}
+  .list-card li{margin-bottom:7px;}
+
+  .demo-strip{display:flex;flex-wrap:wrap;gap:10px;}
+  .demo-chip{background:#fff;border:1px solid var(--purple);color:var(--purple);font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:20px;}
+
+  .footer-banner{margin-top:48px;background:var(--navy);color:#fff;text-align:center;border-radius:12px;padding:16px;font-weight:700;letter-spacing:.02em;font-size:14px;}
+  .footer-banner span{color:#9ad8e0;}
+</style>
+</head>
+<body>
+
+<!-- Lightbox overlay -->
+<div class="lb-overlay" id="lb" onclick="this.classList.remove('open')">
+  <span class="lb-close">✕</span>
+  <img id="lb-img" src="" alt="">
+</div>
+<script>
+  function openLB(src){
+    document.getElementById('lb-img').src = src;
+    document.getElementById('lb').classList.add('open');
+  }
+</script>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">UX Strategy &amp; Systems Design · Staff UX Designer</div>
+    <h1>Premier Ecosystem Review</h1>
+    <p>Rationalizing the Procure-to-Pay ecosystem across tools, workflows, and stakeholder groups — surfacing where experience breakdowns were driving cost, risk, and lost decision quality.</p>
+    <div class="role-strip">
+      <span><b>Engagement type</b>Systems-level UX strategy</span>
+      <span><b>Role</b>Staff UX Designer / UX Strategist</span>
+      <span><b>Scope</b>Procure-to-Pay ecosystem, end to end</span>
+      <span><b>Stakeholders</b>Clinical, procurement, finance, suppliers, IT</span>
+    </div>
+  </div>
+
+  <!-- CAPABILITY PILLS -->
+  <div class="demo-strip" style="margin-top:18px;margin-bottom:4px;">
+    <div class="demo-chip">System thinking</div>
+    <div class="demo-chip">Operating across ambiguous, multi-stakeholder environments</div>
+    <div class="demo-chip">Strategic synthesis into decision frameworks</div>
+    <div class="demo-chip">Workshop facilitation &amp; alignment</div>
+    <div class="demo-chip">Translating research into investment-level recommendations</div>
+  </div>
+
+  <!-- PROBLEM -->
+  <div class="section">
+    <div class="tag">Problem</div>
+    <h2>An ecosystem that evolved faster than it was ever designed</h2>
+    <p class="sub">Premier's Procure-to-Pay environment grew organically over years — leaving no shared, structured understanding of how the pieces fit together.</p>
+    <div class="grid4">
+      <div class="pill"><b>Fragmented tools</b>Across procurement, contracting, and supply chain workflows</div>
+      <div class="pill"><b>Inconsistent experience</b>Quality varied sharply across clinicians, procurement, finance, suppliers</div>
+      <div class="pill"><b>Low visibility</b>No end-to-end view of operational flow</div>
+      <div class="pill"><b>Redundant capability</b>Overlapping systems with unclear ownership</div>
+    </div>
+  </div>
+
+  <!-- APPROACH -->
+  <div class="section">
+    <div class="tag">Approach</div>
+    <h2>Four layers, moving from discovery to investment-ready opportunity</h2>
+    <p class="sub">Structured as a systems-level engagement — not a feature redesign.</p>
+
+    <div class="layer-row">
+      <div class="layer-num" style="background:var(--purple);">1</div>
+      <div class="layer-card">
+        <h3>Ecosystem Discovery &amp; Alignment</h3>
+        <p>Stakeholder interviews across product, operations, clinical and finance; audit of fragmented journey documentation; full system inventory; review of business objectives and cost drivers.</p>
+        <span class="out">Output → Ecosystem inventory &amp; relationship map</span>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-num" style="background:var(--teal);">2</div>
+      <div class="layer-card">
+        <h3>Ecosystem Mapping — System-Level View</h3>
+        <p>Mapped user roles, the request → approve → procure → pay workflow, supporting systems at each step, and every handoff between them — surfacing duplicated work and manual "bridging" behavior.</p>
+        <span class="out">Output → Multi-role, multi-system ecosystem map</span>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-num" style="background:var(--orange);">3</div>
+      <div class="layer-card">
+        <h3>Capability Heat Map</h3>
+        <p>Scored every capability on coverage, consistency, and criticality — exposing high-cost / low-maturity workflows, over-invested overlapping tools, and orphan capabilities with no owner.</p>
+        <span class="out">Output → Investment + UX maturity heat map</span>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-num" style="background:var(--magenta);">4</div>
+      <div class="layer-card">
+        <h3>Opportunity Definition — OST + Synthesis</h3>
+        <p>Built an Opportunity Solution Tree connecting business outcomes to user needs to system gaps, converting research into a structured, prioritized set of opportunity areas.</p>
+        <span class="out">Output → Opportunity Solution Tree aligned to business outcomes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ECOSYSTEM MAP ARTIFACT -->
+  <div class="section">
+    <div class="tag">Artifact 01</div>
+    <h2>Procure-to-Pay Ecosystem Map</h2>
+    <p class="sub">A multi-role, multi-system map of the end-to-end lifecycle — revealing where roles, workflows, applications, and data layers connect and where they break down.</p>
+    
+    <table class="heat" style="margin-top:18px;">
+      <tr><th>Capability</th><th>Strategic Importance</th><th>Maturity</th><th>Adoption</th><th>Priority</th></tr>
+      <tr><td>Item Search &amp; Compare</td><td>High</td><td>Low</td><td>Low</td><td><span class="chip c-high">High</span></td></tr>
+      <tr><td>PO Exceptions Management</td><td>High</td><td>Low</td><td>High</td><td><span class="chip c-high">High</span></td></tr>
+      <tr><td>Invoice Matching &amp; Approvals</td><td>High</td><td>Low</td><td>Medium</td><td><span class="chip c-high">High</span></td></tr>
+      <tr><td>Contract Intelligence</td><td>High</td><td>Medium</td><td>Medium</td><td><span class="chip c-high">High</span></td></tr>
+      <tr><td>AP Automation &amp; Payments</td><td>High</td><td>Medium</td><td>Medium</td><td><span class="chip c-high">High</span></td></tr>
+      <tr><td>Item Master Management</td><td>Medium</td><td>Low</td><td>Low</td><td><span class="chip c-high">High</span></td></tr>
+      <tr><td>Spend Analytics &amp; Dashboards</td><td>Medium</td><td>High</td><td>High</td><td><span class="chip c-med">Medium</span></td></tr>
+      <tr><td>Supplier Management</td><td>Medium</td><td>Medium</td><td>Medium</td><td><span class="chip c-med">Medium</span></td></tr>
+      <tr><td>Demand Planning</td><td>Low</td><td>Medium</td><td>Low</td><td><span class="chip c-med">Medium</span></td></tr>
+      <tr><td>Resource Utilization</td><td>Low</td><td>Low</td><td>Low</td><td><span class="chip c-low">Low</span></td></tr>
+    </table>
+  </div>
+
+  <!-- GAP ANALYSIS ARTIFACT -->
+  <div class="section">
+    <div class="tag">Artifact 03</div>
+    <h2>Experience Gap Analysis — Procure-to-Pay Journey</h2>
+    <p class="sub">Friction, root causes, and opportunity mapped across each stage — from Plan through Analyze.</p>
+    
+    <div class="lane-wrap" style="margin-top:18px;">
+      <div class="lane"><h4>Plan</h4><p>Data pulled from scattered sources; limited visibility into demand and historical spend.</p><div class="sev" style="color:var(--yellow);">Gap severity: Medium</div></div>
+      <div class="lane"><h4>Source</h4><p>Supplier and pricing data scattered across systems and spreadsheets.</p><div class="sev" style="color:var(--orange);">Gap severity: High</div></div>
+      <div class="lane"><h4>Contract</h4><p>Contracts live across multiple repositories with no single source of truth.</p><div class="sev" style="color:var(--red);">Gap severity: Critical</div></div>
+      <div class="lane"><h4>Buy</h4><p>Users navigate multiple systems to search items, build requisitions, and place POs.</p><div class="sev" style="color:var(--red);">Gap severity: Critical</div></div>
+      <div class="lane"><h4>Receive</h4><p>Limited real-time visibility into PO status and exceptions during receiving.</p><div class="sev" style="color:var(--orange);">Gap severity: High</div></div>
+      <div class="lane"><h4>Invoice</h4><p>Invoices arrive through inconsistent channels; matching remains manual.</p><div class="sev" style="color:var(--red);">Gap severity: Critical</div></div>
+      <div class="lane"><h4>Pay</h4><p>Payment processes vary by system; rebates and discounts are inconsistently captured.</p><div class="sev" style="color:var(--orange);">Gap severity: High</div></div>
+      <div class="lane"><h4>Analyze</h4><p>Siloed data; reporting requires manual work across multiple tools.</p><div class="sev" style="color:var(--yellow);">Gap severity: Medium</div></div>
+    </div>
+  </div>
+
+  <!-- OPPORTUNITY TREE ARTIFACT -->
+  <div class="section">
+    <div class="tag">Artifact 04</div>
+    <h2>Opportunity Solution Tree</h2>
+    <p class="sub">Connecting business outcomes, user needs, and system gaps into a prioritized investment path — focused on the highest-value opportunities.</p>
+    
+    <div class="opp" style="margin-top:18px;">
+      <div class="opp-card"><h4>Reduce procurement cycle fragmentation</h4><ul><li>Unify contract and item search</li><li>Guide users to preferred, compliant choices</li><li>Cut manual touchpoints in PO entry</li></ul></div>
+      <div class="opp-card"><h4>Consolidate overlapping workflow tools</h4><ul><li>Standardize item master &amp; data quality</li><li>Automate invoice matching across systems</li><li>Streamline approvals and exception handling</li></ul></div>
+      <div class="opp-card"><h4>Improve lifecycle visibility</h4><ul><li>Real-time PO and exception alerts</li><li>Unified, governed data platform</li><li>Actionable spend &amp; savings analytics</li></ul></div>
+    </div>
+  </div>
+
+  <!-- KEY INSIGHTS -->
+  <div class="section">
+    <div class="tag">Synthesis</div>
+    <h2>Key Insights</h2>
+    <div class="insight-grid">
+      <div class="insight"><div class="num">01</div><h4>The problem was never the UI</h4><p>Most UX issues were downstream of structural duplication and unclear system ownership — not interface quality.</p></div>
+      <div class="insight"><div class="num">02</div><h4>Users were the integration layer</h4><p>Procurement and finance staff manually reconciled systems that should have been connected from the start.</p></div>
+      <div class="insight"><div class="num">03</div><h4>Investment decisions lacked experience visibility</h4><p>Teams optimized within silos rather than across the end-to-end journey, missing the highest-leverage fixes.</p></div>
+      <div class="insight"><div class="num">04</div><h4>Capability overlap was hiding real cost</h4><p>Multiple systems served the same function at different maturity and adoption levels — with no shared view of the redundancy.</p></div>
+    </div>
+  </div>
+
+  <!-- DELIVERABLES + OUTCOMES -->
+  <div class="section">
+    <div class="tag">Results</div>
+    <h2>Deliverables &amp; Outcomes</h2>
+    <div class="twocol">
+      <div class="list-card">
+        <h3>Deliverables</h3>
+        <ul>
+          <li>End-to-end ecosystem map (multi-role, multi-system)</li>
+          <li>Capability heat map (investment + UX maturity view)</li>
+          <li>Opportunity Solution Tree aligned to business outcomes</li>
+          <li>Experience gap analysis (handoff &amp; friction points)</li>
+          <li>Strategic roadmap inputs (0–3 year horizons)</li>
+          <li>Workshop facilitation artifacts for alignment sessions</li>
+        </ul>
+      </div>
+      <div class="list-card">
+        <h3>Outcomes &amp; Impact</h3>
+        <ul>
+          <li>Shared system-level language across product and business teams</li>
+          <li>Prioritization of high-impact consolidation opportunities</li>
+          <li>Shifted conversation from "feature gaps" to ecosystem optimization</li>
+          <li>Direct input into multi-year modernization roadmap</li>
+          <li>Reduced ambiguity in ownership across overlapping capabilities</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-banner">One Connected Ecosystem. One Source of Truth. <span>Better Decisions. Lower Costs. Better Outcomes.</span></div>
+
+</div>
+</body>
+</html>
