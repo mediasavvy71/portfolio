@@ -28,6 +28,15 @@
     line-height:1.5;
   }
   .wrap{max-width:1180px;margin:0 auto;padding:32px 28px 80px;}
+  .page-eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:11px;font-weight:600;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--purple);
+    margin-bottom:16px;
+  }
+  .page-eyebrow::before{
+    content:'';width:24px;height:2px;background:var(--purple);border-radius:2px;
+  }
 
   .brandbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;}
   .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;color:var(--navy);letter-spacing:.5px;}
@@ -39,8 +48,17 @@
   .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#c9b8ea;font-weight:700;}
   h1{font-size:36px;margin:8px 0 6px;}
   .hero p{max-width:680px;color:#dfe3f5;font-size:15px;}
-  .role-strip{display:flex;gap:22px;flex-wrap:wrap;margin-top:22px;font-size:12.5px;color:#e9e6fa;}
-  .role-strip span b{display:block;color:#fff;font-size:13px;}
+  .hero-meta{
+    display:flex;flex-wrap:wrap;gap:0;margin-top:26px;
+    border-radius:12px;overflow:hidden;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+  }
+  .hero-meta-item{padding:16px 24px;flex:1;min-width:160px;border-right:1px solid rgba(255,255,255,.18);}
+  .hero-meta-item:last-child{border-right:none;}
+  .meta-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#c9b8ea;margin-bottom:6px;}
+  .meta-val{font-size:13.5px;font-weight:600;color:#fff;}
+  @media (max-width:700px){ .hero-meta{flex-direction:column;} .hero-meta-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.18);} .hero-meta-item:last-child{border-bottom:none;} }
 
   .section{margin-top:46px;}
   .section h2{font-size:22px;color:var(--navy);margin-bottom:4px;}
@@ -202,15 +220,28 @@
 
 <div class="wrap">
 
+  <div class="page-eyebrow">Case Study 04 · UX Strategy &amp; Systems Design</div>
+
   <div class="hero">
-    <div class="eyebrow">UX Strategy &amp; Systems Design · Staff UX Designer</div>
     <h1>Premier Ecosystem Review</h1>
     <p>Rationalizing the Procure-to-Pay ecosystem across tools, workflows, and stakeholder groups — surfacing where experience breakdowns were driving cost, risk, and lost decision quality.</p>
-    <div class="role-strip">
-      <span><b>Engagement type</b>Systems-level UX strategy</span>
-      <span><b>Role</b>Staff UX Designer / UX Strategist</span>
-      <span><b>Scope</b>Procure-to-Pay ecosystem, end to end</span>
-      <span><b>Stakeholders</b>Clinical, procurement, finance, suppliers, IT</span>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="meta-label">Engagement Type</div>
+        <div class="meta-val">Systems-level UX strategy</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="meta-label">Role</div>
+        <div class="meta-val">Staff UX Designer / UX Strategist</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="meta-label">Scope</div>
+        <div class="meta-val">Procure-to-Pay ecosystem, end to end</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="meta-label">Stakeholders</div>
+        <div class="meta-val">Clinical, procurement, finance, suppliers, IT</div>
+      </div>
     </div>
   </div>
 
