@@ -390,18 +390,18 @@ footer strong { color: rgba(255,255,255,.75); }
 .qm-scope .url-bar { flex: 1; background: rgba(255,255,255,.07); border-radius: 5px; height: 22px; margin: 0 14px; display: flex; align-items: center; padding: 0 12px; }
 .qm-scope .url-bar span { font-size: 10px; color: rgba(255,255,255,.3); letter-spacing: .01em; }
 
-/* ── app topbar (real product branding — dark teal, distinct from case-study gold accent) ── */
+/* ── app topbar (real product branding — matches Supply Chain variant teal) ── */
 .qm-scope .qm-topbar {
-  background: #0c3d47; height: 46px; padding: 0 22px;
+  background: var(--teal); height: 46px; padding: 0 22px;
   display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
 }
 .qm-scope .qm-brand { display: flex; align-items: center; gap: 9px; }
-.qm-scope .qm-brand-mark { width: 18px; height: 18px; background: linear-gradient(135deg,#1c94ab,var(--teal)); clip-path: polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
+.qm-scope .qm-brand-mark { width: 18px; height: 18px; background: linear-gradient(135deg,var(--teal-mid),var(--teal)); clip-path: polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
 .qm-scope .qm-brand-text { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; color: #fff; text-transform: uppercase; }
 .qm-scope .qm-nav { display: flex; align-items: center; gap: 4px; }
-.qm-scope .qm-nav-item { font-size: 11px; font-weight: 600; padding: 7px 14px; border-radius: 6px; color: rgba(255,255,255,.45); }
+.qm-scope .qm-nav-item { font-size: 11px; font-weight: 600; padding: 7px 14px; border-radius: 6px; color: rgba(255,255,255,.55); transition: background .12s, color .12s; }
 .qm-scope .qm-nav-item.on { color: rgba(255,255,255,.9); }
-.qm-scope .qm-nav-item.active { background: #1c94ab; color: #fff; }
+.qm-scope .qm-nav-item.active { background: rgba(255,255,255,.15); color: #fff; }
 .qm-scope .qm-avatar { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; }
 
 /* ── breadcrumb + page header ── */
