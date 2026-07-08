@@ -32,6 +32,11 @@
   --purple:      #5b2a86;
   --purple-light:#f1eafa;
   --purple-mid:  #cbb3e0;
+  --teal-d:      #00555e;
+  --green:       #3b6d11;
+  --green-light: #eaf3de;
+  --red:         #a32d2d;
+  --red-light:   #fcebeb;
   --radius-sm:  6px;
   --radius-md:  12px;
   --radius-lg:  20px;
@@ -270,6 +275,258 @@ footer p { font-size: 12.5px; color: var(--ink3); }
   .nav-links { flex-wrap: wrap; gap: 12px 18px; justify-content: flex-start; }
   .intro, .work, .about, .resume { padding-left: 24px; padding-right: 24px; }
 }
+
+/* ─── CS01 dashboard thumbnail (real prototype UI, scaled) ─── */
+.pd-scope .chrome {
+  background: #1e1e1e; padding: 9px 16px;
+  display: flex; align-items: center; gap: 7px;
+}
+.pd-scope .dot { width: 11px; height: 11px; border-radius: 50%; }
+.pd-scope .url-bar {
+  flex: 1; background: rgba(255,255,255,.07); border-radius: 5px;
+  height: 22px; margin: 0 14px; display: flex; align-items: center; padding: 0 12px;
+  cursor: text;
+}
+.pd-scope .url-bar span { font-size: 10px; color: rgba(255,255,255,.3); letter-spacing: .01em; }
+
+/* ── App topbar ── */
+.pd-scope .topbar {
+  background: var(--teal); height: 44px; padding: 0 22px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.pd-scope .brand { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.9); letter-spacing: .07em; text-transform: uppercase; }
+.pd-scope .top-nav { display: flex; gap: 4px; align-items: center; }
+.pd-scope .top-nav-item {
+  font-size: 11px; color: rgba(255,255,255,.55); cursor: pointer;
+  padding: 6px 12px; border-radius: 6px; transition: background .12s, color .12s;
+  white-space: nowrap;
+}
+.pd-scope .top-nav-item:hover { background: rgba(255,255,255,.1); color: rgba(255,255,255,.85); }
+.pd-scope .top-nav-item.active { color: #fff; font-weight: 600; background: rgba(255,255,255,.15); }
+.pd-scope .topbar-right { display: flex; align-items: center; gap: 10px; }
+.pd-scope .avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,.25); display: flex; align-items: center;
+  justify-content: center; font-size: 10px; font-weight: 700; color: #fff;
+  cursor: pointer;
+}
+.pd-scope .topbar-search {
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.15);
+  border-radius: 6px; padding: 4px 10px; font-size: 10px; color: rgba(255,255,255,.45);
+  width: 140px;
+}
+
+/* ── App layout ── */
+.pd-scope .app-layout { display: flex; height: 600px; }
+
+/* ── Sidebar ── */
+.pd-scope .sidebar {
+  width: 172px; background: var(--white); border-right: 1px solid var(--border);
+  padding: 16px 0; flex-shrink: 0; overflow-y: auto;
+}
+.pd-scope .sidebar-group { padding: 0 10px; margin-bottom: 18px; }
+.pd-scope .sidebar-section {
+  font-size: 8px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink3); padding: 0 8px; margin-bottom: 4px;
+}
+.pd-scope .sidebar-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 8px; border-radius: 6px;
+  font-size: 11px; color: var(--ink2); cursor: pointer;
+  margin-bottom: 1px; transition: background .1s, color .1s;
+}
+.pd-scope .sidebar-item:hover { background: var(--offwhite); color: var(--ink); }
+.pd-scope .sidebar-item.active { background: var(--teal-light); color: var(--teal); font-weight: 600; }
+.pd-scope .sidebar-item .si-icon { font-size: 12px; width: 16px; text-align: center; flex-shrink: 0; }
+.pd-scope .sbadge {
+  margin-left: auto; font-size: 8px; font-weight: 700; padding: 1px 6px;
+  border-radius: 8px; background: var(--teal); color: #fff;
+}
+.pd-scope .sbadge.warn { background: var(--red); }
+
+/* ── Main content ── */
+.pd-scope .main-content {
+  flex: 1; overflow-y: auto; background: var(--offwhite);
+  display: flex; flex-direction: column;
+}
+
+/* ── Screen visibility ── */
+.pd-scope .screen { display: none; flex-direction: column; flex: 1; }
+.pd-scope .screen.active { display: flex; }
+
+/* ── Page top bar ── */
+.pd-scope .page-top {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 14px 22px; display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-shrink: 0;
+}
+.pd-scope .page-top-left h1 { font-size: 15px; font-weight: 600; color: var(--ink); }
+.pd-scope .page-top-left p { font-size: 10px; color: var(--ink3); margin-top: 2px; }
+.pd-scope .page-top-right { display: flex; gap: 8px; align-items: center; }
+.pd-scope .search-input {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--offwhite); border: 1px solid var(--border);
+  border-radius: 6px; padding: 5px 10px; font-size: 10px; color: var(--ink3); width: 180px;
+}
+.pd-scope .btn {
+  padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  border: none; cursor: pointer; font-family: var(--sans); transition: opacity .12s;
+}
+.pd-scope .btn:hover { opacity: .85; }
+.pd-scope .btn-primary { background: var(--teal); color: #fff; }
+.pd-scope .btn-ghost { background: var(--white); border: 1px solid var(--border); color: var(--ink2); }
+
+/* ── Stat strip ── */
+.pd-scope .stat-strip {
+  display: grid; background: var(--white);
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.pd-scope .stat-cell {
+  padding: 14px 18px; border-right: 1px solid var(--border); cursor: pointer;
+  transition: background .12s;
+}
+.pd-scope .stat-cell:last-child { border-right: none; }
+.pd-scope .stat-cell:hover { background: var(--teal-light); }
+.pd-scope .sc-n { font-size: 22px; font-weight: 600; color: var(--teal); line-height: 1; }
+.pd-scope .sc-l { font-size: 9px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink3); margin-top: 4px; }
+.pd-scope .sc-d { font-size: 9px; margin-top: 5px; }
+.pd-scope .sc-d.up { color: var(--green); }
+.pd-scope .sc-d.warn { color: var(--red); }
+.pd-scope .sc-d.neu { color: var(--ink3); }
+
+/* ── Alert strips ── */
+.pd-scope .alert {
+  padding: 9px 22px; font-size: 11px; display: flex;
+  align-items: center; gap: 8px; flex-shrink: 0; border-bottom: 1px solid transparent;
+}
+.pd-scope .alert.info { background: var(--teal-light); border-color: var(--teal-mid); color: var(--teal); }
+.pd-scope .alert.warn { background: var(--amber-light); border-color: #f0c090; color: var(--amber); }
+.pd-scope .alert.danger { background: var(--red-light); border-color: #f4b8b8; color: var(--red); }
+.pd-scope .alert-cta {
+  margin-left: auto; font-size: 10px; font-weight: 700; cursor: pointer;
+  text-decoration: underline; white-space: nowrap;
+}
+
+/* ── Filter bar ── */
+.pd-scope .filter-bar {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 8px 22px; display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.pd-scope .filter-label { font-size: 9px; color: var(--ink3); font-weight: 700; text-transform: uppercase; letter-spacing: .07em; }
+.pd-scope .fchip {
+  padding: 3px 12px; border-radius: 14px; font-size: 10px; font-weight: 500;
+  border: 1px solid var(--border); color: var(--ink2); cursor: pointer;
+  background: var(--white); transition: all .1s;
+}
+.pd-scope .fchip:hover { border-color: var(--teal-mid); color: var(--teal); }
+.pd-scope .fchip.active { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 600; }
+.pd-scope .fdivider { width: 1px; height: 16px; background: var(--border); margin: 0 4px; }
+
+/* ── Table ── */
+.pd-scope .table-wrap { flex: 1; overflow-y: auto; }
+.pd-scope table { width: 100%; border-collapse: collapse; }
+.pd-scope thead tr { background: var(--surface); position: sticky; top: 0; z-index: 1; }
+.pd-scope th {
+  font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+  color: var(--ink3); padding: 9px 12px; text-align: left;
+  border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+.pd-scope td { font-size: 11px; color: var(--ink2); padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.pd-scope tr:last-child td { border-bottom: none; }
+.pd-scope tr.data-row:hover td { background: rgba(0,109,119,.04); cursor: pointer; }
+.pd-scope .td-id { font-weight: 600; color: var(--ink); }
+.pd-scope .td-flag { color: var(--red); }
+.pd-scope .td-link-style { color: var(--teal); font-weight: 500; }
+
+/* ── Badges ── */
+.pd-scope .chip {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 2px 9px; border-radius: 10px; font-size: 9px; font-weight: 700; white-space: nowrap;
+}
+.pd-scope .chip-review { background: var(--amber-light); color: var(--amber); }
+.pd-scope .chip-approved { background: var(--green-light); color: var(--green); }
+.pd-scope .chip-pending { background: var(--teal-light); color: var(--teal); }
+.pd-scope .chip-rejected { background: var(--red-light); color: var(--red); }
+.pd-scope .chip-transit { background: var(--teal-light); color: var(--teal); }
+.pd-scope .chip-received { background: var(--green-light); color: var(--green); }
+.pd-scope .chip-partial { background: var(--amber-light); color: var(--amber); }
+.pd-scope .chip-unmatched { background: var(--amber-light); color: var(--amber); }
+.pd-scope .chip-overdue { background: var(--red-light); color: var(--red); }
+.pd-scope .chip-matched { background: var(--green-light); color: var(--green); }
+
+/* ── Row actions ── */
+.pd-scope .row-actions { display: flex; gap: 4px; }
+.pd-scope .act {
+  padding: 3px 9px; border-radius: 5px; font-size: 9px; font-weight: 600;
+  border: 1px solid var(--border); background: var(--white); color: var(--ink2);
+  cursor: pointer; white-space: nowrap; font-family: var(--sans); transition: all .1s;
+}
+.pd-scope .act:hover { border-color: var(--teal-mid); color: var(--teal); }
+.pd-scope .act.primary { background: var(--teal); border-color: var(--teal); color: #fff; }
+.pd-scope .act.primary:hover { background: var(--teal-d); }
+.pd-scope .act.danger { background: var(--red-light); border-color: #f4b8b8; color: var(--red); }
+
+/* ── Pagination ── */
+.pd-scope .pagination {
+  background: var(--white); border-top: 1px solid var(--border);
+  padding: 8px 22px; display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.pd-scope .pg-info { font-size: 9px; color: var(--ink3); }
+.pd-scope .pg-btns { display: flex; gap: 4px; }
+.pd-scope .pg-btn {
+  padding: 3px 9px; border-radius: 5px; font-size: 9px;
+  border: 1px solid var(--border); background: var(--white); color: var(--ink2);
+  cursor: pointer; font-family: var(--sans);
+}
+.pd-scope .pg-btn.active { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 600; }
+
+/* ── Dashboard specific ── */
+.pd-scope .dash-grid { padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 1; }
+.pd-scope .panel { background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.pd-scope .panel-head {
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pd-scope .panel-title { font-size: 11px; font-weight: 600; color: var(--ink); }
+.pd-scope .panel-link { font-size: 10px; color: var(--teal); cursor: pointer; }
+.pd-scope .panel-link:hover { text-decoration: underline; }
+.pd-scope .dash-stat-row { display: grid; grid-template-columns: repeat(4,1fr); }
+.pd-scope .dash-stat { padding: 14px 18px; border-right: 1px solid var(--border); cursor: pointer; transition: background .12s; }
+.pd-scope .dash-stat:last-child { border-right: none; }
+.pd-scope .dash-stat:hover { background: var(--teal-light); }
+.pd-scope .ds-n { font-size: 22px; font-weight: 600; color: var(--teal); line-height: 1; }
+.pd-scope .ds-l { font-size: 9px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink3); margin-top: 4px; }
+.pd-scope .ds-d { font-size: 9px; margin-top: 5px; }
+.pd-scope .ds-d.up { color: var(--green); }
+.pd-scope .ds-d.warn { color: var(--red); }
+.pd-scope .ds-d.neu { color: var(--ink3); }
+.pd-scope .dash-alert {
+  margin: 0 16px 4px; border-radius: 0 8px 8px 0;
+  padding: 9px 14px; font-size: 11px; display: flex; align-items: center; gap: 8px;
+  border-left: 3px solid var(--red); background: var(--red-light); color: var(--red);
+  cursor: pointer; transition: opacity .12s;
+}
+.pd-scope .dash-alert:hover { opacity: .85; }
+.pd-scope .task-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 14px; border-bottom: 1px solid var(--border); cursor: pointer;
+  transition: background .1s;
+}
+.pd-scope .task-item:last-child { border-bottom: none; }
+.pd-scope .task-item:hover { background: var(--offwhite); }
+.pd-scope .task-icon {
+  width: 26px; height: 26px; border-radius: 6px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 12px;
+  background: var(--teal-light); color: var(--teal);
+}
+.pd-scope .task-icon.warn { background: var(--amber-light); color: var(--amber); }
+.pd-scope .task-icon.danger { background: var(--red-light); color: var(--red); }
+.pd-scope .task-text { font-size: 11px; color: var(--ink); line-height: 1.4; font-weight: 500; }
+.pd-scope .task-meta { font-size: 9px; color: var(--ink3); margin-top: 2px; }
+.pd-scope .task-chip { display: inline-block; padding: 0 6px; border-radius: 3px; font-size: 8px; background: var(--teal-light); color: var(--teal); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -304,7 +561,7 @@ footer p { font-size: 12.5px; color: var(--ink3); }
       <!-- CS 01 — Supply Chain -->
       <div class="feature-row feature-teal">
         <div class="feature-text">
-          <div class="feature-eyebrow">Case Study 01 · Healthcare SaaS</div>
+          <div class="feature-eyebrow">Case Study 01 · Healthcare Supply Chain</div>
           <h3 class="feature-title">From acquisition sprawl to cohesive platform</h3>
           <p class="feature-desc">Unifying a disconnected suite of procurement tools into a single, role-driven platform to compete with modern ERP players.</p>
           <div class="feature-pills">
@@ -328,25 +585,193 @@ footer p { font-size: 12.5px; color: var(--ink3); }
           </div>
         </div>
         <div class="feature-visual">
-          <div class="feature-mock">
-            <div class="fm-chrome">
-              <div class="fm-dot" style="background:#ff5f57;"></div>
-              <div class="fm-dot" style="background:#febc2e;"></div>
-              <div class="fm-dot" style="background:#28c840;"></div>
-              <div class="fm-url"></div>
+          <div class="feature-mock" style="padding:0;">
+            <div style="width:100%;aspect-ratio:440/275;overflow:hidden;position:relative;background:#fff;">
+              <div style="width:1100px;transform:scale(0.4);transform-origin:top left;position:absolute;top:0;left:0;">
+<div class="pd-scope">
+  <!-- Browser chrome -->
+  <div class="chrome">
+    <div class="dot" style="background:#ff5f57;"></div>
+    <div class="dot" style="background:#febc2e;"></div>
+    <div class="dot" style="background:#28c840;"></div>
+    <div class="url-bar"><span id="url-display">premier.supplychainplus.com/dashboard</span></div>
+  </div>
+
+  <!-- App topbar -->
+  <div class="topbar">
+    <div class="brand">Premier · Supply Chain</div>
+    <div class="topbar-right">
+      <div class="topbar-search">🔍 Search…</div>
+      <div class="avatar" title="Maria Delgado">MD</div>
+    </div>
+  </div>
+
+  <!-- App body -->
+  <div class="app-layout">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-section">My Work</div>
+        <div class="sidebar-item active" id="snav-dashboard">
+          <span class="si-icon">⬛</span> Dashboard <span class="sbadge">5</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="si-icon">＋</span> New Request
+        </div>
+        <div class="sidebar-item">
+          <span class="si-icon">⏳</span> Pending Approval
+        </div>
+        <div class="sidebar-item">
+          <span class="si-icon">📦</span> Receiving
+        </div>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-section">Procurement</div>
+        <div class="sidebar-item" id="snav-req">
+          <span class="si-icon">📋</span> Requisitions
+        </div>
+        <div class="sidebar-item" id="snav-po">
+          <span class="si-icon">📄</span> Purchase Orders
+        </div>
+        <div class="sidebar-item" id="snav-inv">
+          <span class="si-icon">🧾</span> Invoices <span class="sbadge warn">3</span>
+        </div>
+        <div class="sidebar-item">
+          <span class="si-icon">🏢</span> Vendors
+        </div>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-section">Reports</div>
+        <div class="sidebar-item" id="snav-spend">
+          <span class="si-icon">📊</span> Spend Analysis
+        </div>
+        <div class="sidebar-item">
+          <span class="si-icon">✅</span> Compliance
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="main-content">
+
+      <!-- ══════════════════════════════════════
+           DASHBOARD
+      ══════════════════════════════════════ -->
+      <div class="screen active" id="screen-dashboard">
+
+          <div class="page-top-left" style="padding:16px 22px 12px;background:var(--white);border-bottom:1px solid var(--border);flex-shrink:0;">
+            <h1>Good morning, Maria</h1>
+            <p>You have 5 items that need attention today &nbsp;·&nbsp; Thursday, Jun 26</p>
+          </div>
+
+        <!-- Stat cards -->
+        <div class="dash-stat-row" style="background:var(--white);border-bottom:1px solid var(--border);flex-shrink:0;">
+          <div class="dash-stat" title="View all requisitions">
+            <div class="ds-n">11</div>
+            <div class="ds-l">Open Requisitions</div>
+            <div class="ds-d up">↑ 3 added this week</div>
+          </div>
+          <div class="dash-stat" title="View purchase orders">
+            <div class="ds-n">24</div>
+            <div class="ds-l">Purchase Orders</div>
+            <div class="ds-d neu">6 pending receipt</div>
+          </div>
+          <div class="dash-stat" title="View invoices to match">
+            <div class="ds-n">14</div>
+            <div class="ds-l">Invoices to Match</div>
+            <div class="ds-d warn">3 past due</div>
+          </div>
+          <div class="dash-stat" title="View spend analysis">
+            <div class="ds-n">$71,124</div>
+            <div class="ds-l">Monthly Spend</div>
+            <div class="ds-d up">↓ 12% vs last month</div>
+          </div>
+        </div>
+
+        <!-- Alert -->
+        <div style="padding:10px 16px 0;flex-shrink:0;background:var(--offwhite);">
+          <div class="dash-alert">
+            🔴 <strong>Invoice #INV-2847</strong> requires 3-way match before today — vendor payment terms at risk.
+            <span class="alert-cta">Match now →</span>
+          </div>
+        </div>
+
+        <!-- Two panels -->
+        <div class="dash-grid">
+
+          <!-- Requisitions panel -->
+          <div class="panel">
+            <div class="panel-head">
+              <span class="panel-title">Recent Requisitions</span>
+              <span class="panel-link">View all →</span>
             </div>
-            <div class="fm-topbar"><span class="fm-topbar-label">PREMIER · SUPPLY CHAIN</span></div>
-            <div class="fm-body">
-              <div class="fm-side">
-                <div class="fm-side-block"></div>
-                <div class="fm-side-block"></div>
-                <div class="fm-side-block"></div>
-                <div class="fm-side-block"></div>
+            <table>
+              <thead><tr>
+                <th>Req #</th><th>Description</th><th>Amount</th><th>Status</th>
+              </tr></thead>
+              <tbody>
+                <tr class="data-row">
+                  <td class="td-id">REQ-1042</td><td>Surgical supplies</td><td style="font-weight:600;">$4,210</td>
+                  <td><span class="chip chip-review">⏳ Review</span></td>
+                </tr>
+                <tr class="data-row">
+                  <td class="td-id">REQ-1039</td><td>IV Fluid stock</td><td style="font-weight:600;">$1,875</td>
+                  <td><span class="chip chip-approved">✓ Approved</span></td>
+                </tr>
+                <tr class="data-row">
+                  <td class="td-id">REQ-1036</td><td>HVAC Maintenance</td><td style="font-weight:600;">$12,400</td>
+                  <td><span class="chip chip-pending">◷ Pending</span></td>
+                </tr>
+                <tr class="data-row">
+                  <td class="td-id">REQ-1028</td><td>PPE restock</td><td style="font-weight:600;">$980</td>
+                  <td><span class="chip chip-rejected">✕ Rejected</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Task queue panel -->
+          <div class="panel">
+            <div class="panel-head">
+              <span class="panel-title">My Task Queue</span>
+              <span class="panel-link">Mark all read</span>
+            </div>
+            <div class="task-item">
+              <div class="task-icon">✓</div>
+              <div>
+                <div class="task-text">Approve REQ-1042 — Surgical Supplies</div>
+                <div class="task-meta">M. Delgado &nbsp;·&nbsp; <span class="task-chip">Approver</span></div>
               </div>
-              <div class="fm-main">
-                <div class="fm-chip-row"><div class="fm-chip"></div><div class="fm-chip"></div><div class="fm-chip"></div></div>
-                <div class="fm-row"></div>
-                <div class="fm-row wide"></div>
+            </div>
+            <div class="task-item" style="border-left:3px solid var(--red);">
+              <div class="task-icon danger">!</div>
+              <div>
+                <div class="task-text">Match Invoice #INV-2847 to PO-8821</div>
+                <div class="task-meta">Due today Jun 26 &nbsp;·&nbsp; <span class="task-chip" style="background:var(--red-light);color:var(--red);">Urgent</span></div>
+              </div>
+            </div>
+            <div class="task-item">
+              <div class="task-icon">📦</div>
+              <div>
+                <div class="task-text">Confirm receipt — PO-8804 (Lab reagents)</div>
+                <div class="task-meta">Delivered Jun 22 &nbsp;·&nbsp; <span class="task-chip">Receiving</span></div>
+              </div>
+            </div>
+            <div class="task-item">
+              <div class="task-icon warn">▲</div>
+              <div>
+                <div class="task-text">Resolve price discrepancy — INV-2831</div>
+                <div class="task-meta">$340 variance vs PO &nbsp;·&nbsp; <span class="task-chip">Exception</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /dashboard -->
+      </div><!-- /main-content -->
+    </div><!-- /app-layout -->
+      </div>
               </div>
             </div>
           </div>
