@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premier Supply Chain — Interactive Prototype</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --white:       #ffffff;
+  --offwhite:    #f8f8f6;
+  --surface:     #f2f2ef;
+  --border:      #e4e4e0;
+  --border2:     #d0d0cb;
+  --ink:         #1a1a18;
+  --ink2:        #4a4a46;
+  --ink3:        #8a8a84;
+  --teal:        #006d77;
+  --teal-d:      #00555e;
+  --teal-light:  #e8f4f5;
+  --teal-mid:    #b2d8dc;
+  --green:       #3b6d11;
+  --green-light: #eaf3de;
+  --amber:       #854f0b;
+  --amber-light: #faeeda;
+  --red:         #a32d2d;
+  --red-light:   #fcebeb;
+  --sans: 'Inter', -apple-system, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--sans);
+  background: #0d2b2e;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 32px 24px 48px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Prototype header ── */
+.proto-header {
+  width: 100%; max-width: 1180px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+}
+.proto-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(255,255,255,.35);
+}
+.proto-breadcrumb {
+  font-size: 11px; color: rgba(255,255,255,.5);
+  display: flex; align-items: center; gap: 6px;
+}
+.proto-breadcrumb span { color: rgba(255,255,255,.25); }
+
+/* ── App window ── */
+.app-window {
+  width: 100%; max-width: 1180px;
+  background: var(--white);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 32px 100px rgba(0,0,0,.5), 0 4px 24px rgba(0,0,0,.25);
+}
+
+/* ── Browser chrome ── */
+.chrome {
+  background: #1e1e1e; padding: 9px 16px;
+  display: flex; align-items: center; gap: 7px;
+}
+.dot { width: 11px; height: 11px; border-radius: 50%; }
+.url-bar {
+  flex: 1; background: rgba(255,255,255,.07); border-radius: 5px;
+  height: 22px; margin: 0 14px; display: flex; align-items: center; padding: 0 12px;
+  cursor: text;
+}
+.url-bar span { font-size: 10px; color: rgba(255,255,255,.3); letter-spacing: .01em; }
+
+/* ── App topbar ── */
+.topbar {
+  background: var(--teal); height: 44px; padding: 0 22px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.brand { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.9); letter-spacing: .07em; text-transform: uppercase; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,.25); display: flex; align-items: center;
+  justify-content: center; font-size: 10px; font-weight: 700; color: #fff;
+  cursor: pointer;
+}
+.topbar-search {
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.15);
+  border-radius: 6px; padding: 4px 10px; font-size: 10px; color: rgba(255,255,255,.45);
+  width: 140px;
+}
+
+/* ── App layout ── */
+.app-layout { display: flex; height: 600px; }
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 172px; background: var(--white); border-right: 1px solid var(--border);
+  padding: 16px 0; flex-shrink: 0; overflow-y: auto;
+}
+.sidebar-group { padding: 0 10px; margin-bottom: 18px; }
+.sidebar-section {
+  font-size: 8px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink3); padding: 0 8px; margin-bottom: 4px;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 8px; border-radius: 6px;
+  font-size: 11px; color: var(--ink2); cursor: pointer;
+  margin-bottom: 1px; transition: background .1s, color .1s;
+}
+.sidebar-item:hover { background: var(--offwhite); color: var(--ink); }
+.sidebar-item.active { background: var(--teal-light); color: var(--teal); font-weight: 600; }
+.sidebar-item .si-icon { font-size: 12px; width: 16px; text-align: center; flex-shrink: 0; }
+.sbadge {
+  margin-left: auto; font-size: 8px; font-weight: 700; padding: 1px 6px;
+  border-radius: 8px; background: var(--teal); color: #fff;
+}
+.sbadge.warn { background: var(--red); }
+
+/* ── Main content ── */
+.main-content {
+  flex: 1; overflow-y: auto; background: var(--offwhite);
+  display: flex; flex-direction: column;
+}
+
+/* ── Screen visibility ── */
+.screen { display: none; flex-direction: column; flex: 1; }
+.screen.active { display: flex; }
+
+/* ── Page top bar ── */
+.page-top {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 14px 22px; display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-shrink: 0;
+}
+.page-top-left h1 { font-size: 15px; font-weight: 600; color: var(--ink); }
+.page-top-left p { font-size: 10px; color: var(--ink3); margin-top: 2px; }
+.page-top-right { display: flex; gap: 8px; align-items: center; }
+.search-input {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--offwhite); border: 1px solid var(--border);
+  border-radius: 6px; padding: 5px 10px; font-size: 10px; color: var(--ink3); width: 180px;
+}
+.btn {
+  padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  border: none; cursor: pointer; font-family: var(--sans); transition: opacity .12s;
+}
+.btn:hover { opacity: .85; }
+.btn-primary { background: var(--teal); color: #fff; }
+.btn-ghost { background: var(--white); border: 1px solid var(--border); color: var(--ink2); }
+
+/* ── Stat strip ── */
+.stat-strip {
+  display: grid; background: var(--white);
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.stat-cell {
+  padding: 14px 18px; border-right: 1px solid var(--border); cursor: pointer;
+  transition: background .12s;
+}
+.stat-cell:last-child { border-right: none; }
+.stat-cell:hover { background: var(--teal-light); }
+.sc-n { font-size: 22px; font-weight: 600; color: var(--teal); line-height: 1; }
+.sc-l { font-size: 9px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink3); margin-top: 4px; }
+.sc-d { font-size: 9px; margin-top: 5px; }
+.sc-d.up   { color: var(--green); }
+.sc-d.warn { color: var(--red); }
+.sc-d.neu  { color: var(--ink3); }
+
+/* ── Alert strips ── */
+.alert {
+  padding: 9px 22px; font-size: 11px; display: flex;
+  align-items: center; gap: 8px; flex-shrink: 0; border-bottom: 1px solid transparent;
+}
+.alert.info   { background: var(--teal-light); border-color: var(--teal-mid); color: var(--teal); }
+.alert.warn   { background: var(--amber-light); border-color: #f0c090; color: var(--amber); }
+.alert.danger { background: var(--red-light); border-color: #f4b8b8; color: var(--red); }
+.alert-cta {
+  margin-left: auto; font-size: 10px; font-weight: 700; cursor: pointer;
+  text-decoration: underline; white-space: nowrap;
+}
+
+/* ── Filter bar ── */
+.filter-bar {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 8px 22px; display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.filter-label { font-size: 9px; color: var(--ink3); font-weight: 700; text-transform: uppercase; letter-spacing: .07em; }
+.fchip {
+  padding: 3px 12px; border-radius: 14px; font-size: 10px; font-weight: 500;
+  border: 1px solid var(--border); color: var(--ink2); cursor: pointer;
+  background: var(--white); transition: all .1s;
+}
+.fchip:hover { border-color: var(--teal-mid); color: var(--teal); }
+.fchip.active { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 600; }
+.fdivider { width: 1px; height: 16px; background: var(--border); margin: 0 4px; }
+
+/* ── Table ── */
+.table-wrap { flex: 1; overflow-y: auto; }
+table { width: 100%; border-collapse: collapse; }
+thead tr { background: var(--surface); position: sticky; top: 0; z-index: 1; }
+th {
+  font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+  color: var(--ink3); padding: 9px 12px; text-align: left;
+  border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+td { font-size: 11px; color: var(--ink2); padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+tr.data-row:hover td { background: rgba(0,109,119,.04); cursor: pointer; }
+.td-id { font-weight: 600; color: var(--ink); }
+.td-flag { color: var(--red); }
+.td-link-style { color: var(--teal); font-weight: 500; }
+
+/* ── Badges ── */
+.chip {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 2px 9px; border-radius: 10px; font-size: 9px; font-weight: 700; white-space: nowrap;
+}
+.chip-review   { background: var(--amber-light); color: var(--amber); }
+.chip-approved { background: var(--green-light); color: var(--green); }
+.chip-pending  { background: var(--teal-light); color: var(--teal); }
+.chip-rejected { background: var(--red-light); color: var(--red); }
+.chip-transit  { background: var(--teal-light); color: var(--teal); }
+.chip-received { background: var(--green-light); color: var(--green); }
+.chip-partial  { background: var(--amber-light); color: var(--amber); }
+.chip-unmatched{ background: var(--amber-light); color: var(--amber); }
+.chip-overdue  { background: var(--red-light); color: var(--red); }
+.chip-matched  { background: var(--green-light); color: var(--green); }
+
+/* ── Row actions ── */
+.row-actions { display: flex; gap: 4px; }
+.act {
+  padding: 3px 9px; border-radius: 5px; font-size: 9px; font-weight: 600;
+  border: 1px solid var(--border); background: var(--white); color: var(--ink2);
+  cursor: pointer; white-space: nowrap; font-family: var(--sans); transition: all .1s;
+}
+.act:hover { border-color: var(--teal-mid); color: var(--teal); }
+.act.primary { background: var(--teal); border-color: var(--teal); color: #fff; }
+.act.primary:hover { background: var(--teal-d); }
+.act.danger  { background: var(--red-light); border-color: #f4b8b8; color: var(--red); }
+
+/* ── Pagination ── */
+.pagination {
+  background: var(--white); border-top: 1px solid var(--border);
+  padding: 8px 22px; display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.pg-info { font-size: 9px; color: var(--ink3); }
+.pg-btns { display: flex; gap: 4px; }
+.pg-btn {
+  padding: 3px 9px; border-radius: 5px; font-size: 9px;
+  border: 1px solid var(--border); background: var(--white); color: var(--ink2);
+  cursor: pointer; font-family: var(--sans);
+}
+.pg-btn.active { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 600; }
+
+/* ── Dashboard specific ── */
+.dash-grid { padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 1; }
+.panel { background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.panel-head {
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.panel-title { font-size: 11px; font-weight: 600; color: var(--ink); }
+.panel-link { font-size: 10px; color: var(--teal); cursor: pointer; }
+.panel-link:hover { text-decoration: underline; }
+.dash-stat-row { display: grid; grid-template-columns: repeat(4,1fr); }
+.dash-stat { padding: 14px 18px; border-right: 1px solid var(--border); cursor: pointer; transition: background .12s; }
+.dash-stat:last-child { border-right: none; }
+.dash-stat:hover { background: var(--teal-light); }
+.ds-n { font-size: 22px; font-weight: 600; color: var(--teal); line-height: 1; }
+.ds-l { font-size: 9px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink3); margin-top: 4px; }
+.ds-d { font-size: 9px; margin-top: 5px; }
+.ds-d.up   { color: var(--green); }
+.ds-d.warn { color: var(--red); }
+.ds-d.neu  { color: var(--ink3); }
+.dash-alert {
+  margin: 0 16px 4px; border-radius: 0 8px 8px 0;
+  padding: 9px 14px; font-size: 11px; display: flex; align-items: center; gap: 8px;
+  border-left: 3px solid var(--red); background: var(--red-light); color: var(--red);
+  cursor: pointer; transition: opacity .12s;
+}
+.dash-alert:hover { opacity: .85; }
+.task-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 14px; border-bottom: 1px solid var(--border); cursor: pointer;
+  transition: background .1s;
+}
+.task-item:last-child { border-bottom: none; }
+.task-item:hover { background: var(--offwhite); }
+.task-icon {
+  width: 26px; height: 26px; border-radius: 6px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 12px;
+  background: var(--teal-light); color: var(--teal);
+}
+.task-icon.warn { background: var(--amber-light); color: var(--amber); }
+.task-icon.danger { background: var(--red-light); color: var(--red); }
+.task-text { font-size: 11px; color: var(--ink); line-height: 1.4; font-weight: 500; }
+.task-meta { font-size: 9px; color: var(--ink3); margin-top: 2px; }
+.task-chip { display: inline-block; padding: 0 6px; border-radius: 3px; font-size: 8px; background: var(--teal-light); color: var(--teal); font-weight: 600; }
+
+/* ── Spend charts ── */
+.spend-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; flex: 1; }
+.spend-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.spend-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+.sc-title { font-size: 11px; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
+.bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.bl { font-size: 9px; color: var(--ink2); width: 100px; flex-shrink: 0; text-align: right; }
+.bt { flex: 1; background: var(--border); border-radius: 3px; height: 10px; }
+.bf { height: 10px; border-radius: 3px; background: var(--teal); }
+.bf.a { background: var(--amber); }
+.bv { font-size: 9px; color: var(--ink2); width: 52px; }
+.trend-wrap { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
+.trend-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.trend-bar-outer { flex: 1; width: 100%; display: flex; align-items: flex-end; }
+.trend-bar-inner { width: 100%; border-radius: 3px 3px 0 0; background: var(--teal-light); }
+.trend-bar-inner.cur { background: var(--teal); }
+.trend-label { font-size: 7px; color: var(--ink3); }
+.trend-val { font-size: 7px; color: var(--ink3); }
+.trend-label.cur { color: var(--teal); font-weight: 700; }
+.trend-val.cur { color: var(--teal); font-weight: 600; }
+
+/* ── Toast ── */
+.toast {
+  position: fixed; bottom: 32px; right: 32px;
+  background: var(--ink); color: #fff;
+  padding: 12px 20px; border-radius: 8px;
+  font-size: 12px; font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0,0,0,.3);
+  display: none; z-index: 999;
+  animation: toast-in .2s ease;
+}
+.toast.show { display: block; }
+@keyframes toast-in { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+</style>
+</head>
+<body>
+
+<!-- Prototype label -->
+<div class="proto-header">
+  <div class="proto-label">Interactive Prototype &nbsp;·&nbsp; William Teppig &nbsp;·&nbsp; Premier Supply Chain</div>
+  <div class="proto-breadcrumb" id="breadcrumb">Dashboard</div>
+</div>
+
+<!-- App window -->
+<div class="app-window">
+
+  <!-- Browser chrome -->
+  <div class="chrome">
+    <div class="dot" style="background:#ff5f57;"></div>
+    <div class="dot" style="background:#febc2e;"></div>
+    <div class="dot" style="background:#28c840;"></div>
+    <div class="url-bar"><span id="url-display">premier.supplychainplus.com/dashboard</span></div>
+  </div>
+
+  <!-- App topbar -->
+  <div class="topbar">
+    <div class="brand">Premier · Supply Chain</div>
+    <div class="topbar-right">
+      <div class="topbar-search">🔍 Search…</div>
+      <div class="avatar" title="Maria Delgado">MD</div>
+    </div>
+  </div>
+
+  <!-- App body -->
+  <div class="app-layout">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-section">My Work</div>
+        <div class="sidebar-item active" id="snav-dashboard" onclick="nav('dashboard')">
+          <span class="si-icon">⬛</span> Dashboard <span class="sbadge">5</span>
+        </div>
+        <div class="sidebar-item" onclick="nav('req')">
+          <span class="si-icon">＋</span> New Request
+        </div>
+        <div class="sidebar-item" onclick="nav('req')">
+          <span class="si-icon">⏳</span> Pending Approval
+        </div>
+        <div class="sidebar-item" onclick="nav('po')">
+          <span class="si-icon">📦</span> Receiving
+        </div>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-section">Procurement</div>
+        <div class="sidebar-item" id="snav-req" onclick="nav('req')">
+          <span class="si-icon">📋</span> Requisitions
+        </div>
+        <div class="sidebar-item" id="snav-po" onclick="nav('po')">
+          <span class="si-icon">📄</span> Purchase Orders
+        </div>
+        <div class="sidebar-item" id="snav-inv" onclick="nav('inv')">
+          <span class="si-icon">🧾</span> Invoices <span class="sbadge warn">3</span>
+        </div>
+        <div class="sidebar-item" onclick="toast('Vendors page coming soon')">
+          <span class="si-icon">🏢</span> Vendors
+        </div>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-section">Reports</div>
+        <div class="sidebar-item" id="snav-spend" onclick="nav('spend')">
+          <span class="si-icon">📊</span> Spend Analysis
+        </div>
+        <div class="sidebar-item" onclick="toast('Compliance report coming soon')">
+          <span class="si-icon">✅</span> Compliance
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="main-content">
+
+      <!-- ══════════════════════════════════════
+           DASHBOARD
+      ══════════════════════════════════════ -->
+      <div class="screen active" id="screen-dashboard">
+
+          <div class="page-top-left" style="padding:16px 22px 12px;background:var(--white);border-bottom:1px solid var(--border);flex-shrink:0;">
+            <h1>Good morning, Maria</h1>
+            <p>You have 5 items that need attention today &nbsp;·&nbsp; Thursday, Jun 26</p>
+          </div>
+
+        <!-- Stat cards -->
+        <div class="dash-stat-row" style="background:var(--white);border-bottom:1px solid var(--border);flex-shrink:0;">
+          <div class="dash-stat" onclick="nav('req')" title="View all requisitions">
+            <div class="ds-n">11</div>
+            <div class="ds-l">Open Requisitions</div>
+            <div class="ds-d up">↑ 3 added this week</div>
+          </div>
+          <div class="dash-stat" onclick="nav('po')" title="View purchase orders">
+            <div class="ds-n">24</div>
+            <div class="ds-l">Purchase Orders</div>
+            <div class="ds-d neu">6 pending receipt</div>
+          </div>
+          <div class="dash-stat" onclick="nav('inv')" title="View invoices to match">
+            <div class="ds-n">14</div>
+            <div class="ds-l">Invoices to Match</div>
+            <div class="ds-d warn">3 past due</div>
+          </div>
+          <div class="dash-stat" onclick="nav('spend')" title="View spend analysis">
+            <div class="ds-n">$71,124</div>
+            <div class="ds-l">Monthly Spend</div>
+            <div class="ds-d up">↓ 12% vs last month</div>
+          </div>
+        </div>
+
+        <!-- Alert -->
+        <div style="padding:10px 16px 0;flex-shrink:0;background:var(--offwhite);">
+          <div class="dash-alert" onclick="nav('inv')">
+            🔴 <strong>Invoice #INV-2847</strong> requires 3-way match before today — vendor payment terms at risk.
+            <span class="alert-cta">Match now →</span>
+          </div>
+        </div>
+
+        <!-- Two panels -->
+        <div class="dash-grid">
+
+          <!-- Requisitions panel -->
+          <div class="panel">
+            <div class="panel-head">
+              <span class="panel-title">Recent Requisitions</span>
+              <span class="panel-link" onclick="nav('req')">View all →</span>
+            </div>
+            <table>
+              <thead><tr>
+                <th>Req #</th><th>Description</th><th>Amount</th><th>Status</th>
+              </tr></thead>
+              <tbody>
+                <tr class="data-row" onclick="nav('req')">
+                  <td class="td-id">REQ-1042</td><td>Surgical supplies</td><td style="font-weight:600;">$4,210</td>
+                  <td><span class="chip chip-review">⏳ Review</span></td>
+                </tr>
+                <tr class="data-row" onclick="nav('req')">
+                  <td class="td-id">REQ-1039</td><td>IV Fluid stock</td><td style="font-weight:600;">$1,875</td>
+                  <td><span class="chip chip-approved">✓ Approved</span></td>
+                </tr>
+                <tr class="data-row" onclick="nav('req')">
+                  <td class="td-id">REQ-1036</td><td>HVAC Maintenance</td><td style="font-weight:600;">$12,400</td>
+                  <td><span class="chip chip-pending">◷ Pending</span></td>
+                </tr>
+                <tr class="data-row" onclick="nav('req')">
+                  <td class="td-id">REQ-1028</td><td>PPE restock</td><td style="font-weight:600;">$980</td>
+                  <td><span class="chip chip-rejected">✕ Rejected</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Task queue panel -->
+          <div class="panel">
+            <div class="panel-head">
+              <span class="panel-title">My Task Queue</span>
+              <span class="panel-link" onclick="toast('All tasks marked as read')">Mark all read</span>
+            </div>
+            <div class="task-item" onclick="nav('req')">
+              <div class="task-icon">✓</div>
+              <div>
+                <div class="task-text">Approve REQ-1042 — Surgical Supplies</div>
+                <div class="task-meta">R. Okafor &nbsp;·&nbsp; <span class="task-chip">Approver</span></div>
+              </div>
+            </div>
+            <div class="task-item" onclick="nav('inv')" style="border-left:3px solid var(--red);">
+              <div class="task-icon danger">!</div>
+              <div>
+                <div class="task-text">Match Invoice #INV-2847 to PO-8821</div>
+                <div class="task-meta">Due today Jun 26 &nbsp;·&nbsp; <span class="task-chip" style="background:var(--red-light);color:var(--red);">Urgent</span></div>
+              </div>
+            </div>
+            <div class="task-item" onclick="nav('po')">
+              <div class="task-icon">📦</div>
+              <div>
+                <div class="task-text">Confirm receipt — PO-8804 (Lab reagents)</div>
+                <div class="task-meta">Delivered Jun 22 &nbsp;·&nbsp; <span class="task-chip">Receiving</span></div>
+              </div>
+            </div>
+            <div class="task-item" onclick="nav('inv')">
+              <div class="task-icon warn">▲</div>
+              <div>
+                <div class="task-text">Resolve price discrepancy — INV-2831</div>
+                <div class="task-meta">$340 variance vs PO &nbsp;·&nbsp; <span class="task-chip">Exception</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div><!-- /dashboard -->
+
+      <!-- ══════════════════════════════════════
+           REQUISITIONS
+      ══════════════════════════════════════ -->
+      <div class="screen" id="screen-req">
+        <div class="page-top">
+          <div class="page-top-left">
+            <h1>Requisitions</h1>
+            <p>11 open &nbsp;·&nbsp; ↑ 3 added this week</p>
+          </div>
+          <div class="page-top-right">
+            <div class="search-input">🔍 &nbsp;Search requisitions…</div>
+            <button class="btn btn-ghost">Export</button>
+            <button class="btn btn-primary" onclick="toast('New requisition form opened')">+ New Requisition</button>
+          </div>
+        </div>
+        <div class="stat-strip" style="grid-template-columns:repeat(4,1fr);">
+          <div class="stat-cell" onclick="toast('Filtered: All open requisitions')">
+            <div class="sc-n">11</div><div class="sc-l">Open</div><div class="sc-d up">↑ 3 this week</div>
+          </div>
+          <div class="stat-cell" onclick="toast('Filtered: Awaiting approval')">
+            <div class="sc-n">4</div><div class="sc-l">Awaiting Approval</div><div class="sc-d warn">1 overdue</div>
+          </div>
+          <div class="stat-cell" onclick="toast('Filtered: Approved')">
+            <div class="sc-n">5</div><div class="sc-l">Approved</div><div class="sc-d neu">Ready to PO</div>
+          </div>
+          <div class="stat-cell">
+            <div class="sc-n">$27,865</div><div class="sc-l">Total Value</div><div class="sc-d neu">Open reqs</div>
+          </div>
+        </div>
+        <div class="alert warn">
+          ⚠ <strong>REQ-1042</strong> has been pending approval for 3 days — vendor lead time at risk.
+          <span class="alert-cta" onclick="toast('REQ-1042 approved ✓')">Approve now →</span>
+        </div>
+        <div class="filter-bar">
+          <span class="filter-label">Status</span>
+          <span class="fchip active">All (11)</span>
+          <span class="fchip" onclick="filterClick(this)">Review (4)</span>
+          <span class="fchip" onclick="filterClick(this)">Approved (5)</span>
+          <span class="fchip" onclick="filterClick(this)">Rejected (2)</span>
+          <div class="fdivider"></div>
+          <span class="filter-label">Category</span>
+          <span class="fchip" onclick="filterClick(this)">Clinical</span>
+          <span class="fchip" onclick="filterClick(this)">Facilities</span>
+          <span class="fchip" onclick="filterClick(this)">Lab</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Req #</th><th>Description</th><th>Requested By</th><th>Category</th><th>Date</th><th>Amount</th><th>Status</th><th>Actions</th>
+            </tr></thead>
+            <tbody>
+              <tr class="data-row" style="background:#fffbf5;">
+                <td class="td-id">REQ-1042</td>
+                <td>Surgical supplies — sterile gloves, drapes, suture kits</td>
+                <td>R. Okafor</td><td>Clinical</td><td>Jun 23</td>
+                <td style="font-weight:600;">$4,210</td>
+                <td><span class="chip chip-review">⏳ Review</span></td>
+                <td><div class="row-actions">
+                  <button class="act primary" onclick="toast('REQ-1042 approved ✓'); event.stopPropagation()">Approve</button>
+                  <button class="act" onclick="toast('Opening REQ-1042 detail…'); event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">REQ-1041</td><td>Patient monitoring electrodes — bulk pack</td>
+                <td>T. Nguyen</td><td>Clinical</td><td>Jun 22</td>
+                <td style="font-weight:600;">$1,340</td>
+                <td><span class="chip chip-review">⏳ Review</span></td>
+                <td><div class="row-actions">
+                  <button class="act primary" onclick="toast('REQ-1041 approved ✓'); event.stopPropagation()">Approve</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">REQ-1040</td><td>Anesthesia breathing circuits × 48</td>
+                <td>D. Patel</td><td>Clinical</td><td>Jun 22</td>
+                <td style="font-weight:600;">$2,880</td>
+                <td><span class="chip chip-review">⏳ Review</span></td>
+                <td><div class="row-actions">
+                  <button class="act primary" onclick="toast('REQ-1040 approved ✓'); event.stopPropagation()">Approve</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">REQ-1039</td><td>IV Fluid stock — NS 1L × 200 units</td>
+                <td>M. Santos</td><td>Clinical</td><td>Jun 21</td>
+                <td style="font-weight:600;">$1,875</td>
+                <td><span class="chip chip-approved">✓ Approved</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('Creating PO from REQ-1039…'); nav('po'); event.stopPropagation()">Create PO</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">REQ-1038</td><td>Lab reagent kit — PCR panels × 10</td>
+                <td>K. Williams</td><td>Lab</td><td>Jun 21</td>
+                <td style="font-weight:600;">$3,400</td>
+                <td><span class="chip chip-approved">✓ Approved</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('Creating PO from REQ-1038…'); nav('po'); event.stopPropagation()">Create PO</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">REQ-1037</td><td>Isolation gowns level 3 × 500</td>
+                <td>R. Okafor</td><td>Clinical</td><td>Jun 20</td>
+                <td style="font-weight:600;">$1,260</td>
+                <td><span class="chip chip-approved">✓ Approved</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('Creating PO from REQ-1037…'); nav('po'); event.stopPropagation()">Create PO</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">REQ-1036</td><td>HVAC Maintenance — AHU units 3 & 7</td>
+                <td>J. Martinez</td><td>Facilities</td><td>Jun 19</td>
+                <td style="font-weight:600;">$12,400</td>
+                <td><span class="chip chip-pending">◷ Pending</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">REQ-1035</td><td>Needle disposal containers × 24</td>
+                <td>T. Nguyen</td><td>Clinical</td><td>Jun 18</td>
+                <td style="font-weight:600;">$310</td>
+                <td><span class="chip chip-approved">✓ Approved</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('Creating PO from REQ-1035…'); nav('po'); event.stopPropagation()">Create PO</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">REQ-1034</td><td>Infusion pump calibration service</td>
+                <td>D. Patel</td><td>Clinical</td><td>Jun 17</td>
+                <td style="font-weight:600;">$890</td>
+                <td><span class="chip chip-review">⏳ Review</span></td>
+                <td><div class="row-actions">
+                  <button class="act primary" onclick="toast('REQ-1034 approved ✓'); event.stopPropagation()">Approve</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">REQ-1029</td><td>Blood pressure cuffs — adult/pedi × 30</td>
+                <td>M. Santos</td><td>Clinical</td><td>Jun 14</td>
+                <td style="font-weight:600;">$420</td>
+                <td><span class="chip chip-approved">✓ Approved</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('Creating PO from REQ-1029…'); nav('po'); event.stopPropagation()">Create PO</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">REQ-1028</td><td>PPE restock — N95 masks, face shields</td>
+                <td>R. Okafor</td><td>Clinical</td><td>Jun 12</td>
+                <td style="font-weight:600;">$980</td>
+                <td><span class="chip chip-rejected">✕ Rejected</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('REQ-1028 resubmitted'); event.stopPropagation()">Resubmit</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <span class="pg-info">Showing 11 of 11 requisitions</span>
+          <div class="pg-btns"><button class="pg-btn active">1</button></div>
+        </div>
+      </div><!-- /req -->
+
+      <!-- ══════════════════════════════════════
+           PURCHASE ORDERS
+      ══════════════════════════════════════ -->
+      <div class="screen" id="screen-po">
+        <div class="page-top">
+          <div class="page-top-left">
+            <h1>Purchase Orders</h1>
+            <p>24 active &nbsp;·&nbsp; 6 pending receipt</p>
+          </div>
+          <div class="page-top-right">
+            <div class="search-input">🔍 &nbsp;Search POs…</div>
+            <button class="btn btn-ghost">Export</button>
+          </div>
+        </div>
+        <div class="stat-strip" style="grid-template-columns:repeat(4,1fr);">
+          <div class="stat-cell"><div class="sc-n">24</div><div class="sc-l">Active POs</div><div class="sc-d neu">This month</div></div>
+          <div class="stat-cell" onclick="toast('Filtered: Pending receipt')"><div class="sc-n">6</div><div class="sc-l">Pending Receipt</div><div class="sc-d warn">2 delayed</div></div>
+          <div class="stat-cell"><div class="sc-n">15</div><div class="sc-l">Received</div><div class="sc-d up">Awaiting invoice</div></div>
+          <div class="stat-cell" onclick="nav('spend')"><div class="sc-n">$48,340</div><div class="sc-l">Open PO Value</div><div class="sc-d neu">Committed spend</div></div>
+        </div>
+        <div class="alert info">
+          ⚡ <strong>PO-8804</strong> (Lab reagents) was delivered Jun 22 — confirm receipt to release invoice payment.
+          <span class="alert-cta" onclick="toast('PO-8804 receipt confirmed ✓')">Confirm receipt →</span>
+        </div>
+        <div class="filter-bar">
+          <span class="filter-label">Status</span>
+          <span class="fchip active">All (24)</span>
+          <span class="fchip" onclick="filterClick(this)">Pending Receipt (6)</span>
+          <span class="fchip" onclick="filterClick(this)">In Transit (4)</span>
+          <span class="fchip" onclick="filterClick(this)">Received (15)</span>
+          <div class="fdivider"></div>
+          <span class="filter-label">Vendor</span>
+          <span class="fchip" onclick="filterClick(this)">Medline</span>
+          <span class="fchip" onclick="filterClick(this)">Cardinal Health</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>PO #</th><th>Description</th><th>Vendor</th><th>Order Date</th><th>Expected</th><th>Amount</th><th>Receipt Status</th><th>Actions</th>
+            </tr></thead>
+            <tbody>
+              <tr class="data-row">
+                <td class="td-id">PO-8821</td><td>Surgical supplies — REQ-1042</td><td>Medline Industries</td>
+                <td>Jun 24</td><td>Jun 28</td><td style="font-weight:600;">$4,210</td>
+                <td><span class="chip chip-transit">◷ In Transit</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('Tracking PO-8821…'); event.stopPropagation()">Track</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">PO-8818</td><td>IV Fluid stock NS 1L × 200 — REQ-1039</td><td>Cardinal Health</td>
+                <td>Jun 23</td><td>Jun 26</td><td style="font-weight:600;">$1,875</td>
+                <td><span class="chip chip-transit">◷ In Transit</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('Tracking PO-8818…'); event.stopPropagation()">Track</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">PO-8815</td><td>Lab reagent PCR panels × 10 — REQ-1038</td><td>Bio-Techne</td>
+                <td>Jun 22</td><td>Jun 25</td><td style="font-weight:600;">$3,400</td>
+                <td><span class="chip chip-pending">◷ Pending</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('Tracking PO-8815…'); event.stopPropagation()">Track</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row" style="background:#f5fff8;">
+                <td class="td-id td-link-style">PO-8804</td><td>Lab reagents — culture media × 50</td><td>Bio-Techne</td>
+                <td>Jun 18</td><td>Jun 22</td><td style="font-weight:600;">$2,140</td>
+                <td><span class="chip chip-partial">! Confirm</span></td>
+                <td><div class="row-actions">
+                  <button class="act primary" onclick="toast('PO-8804 receipt confirmed ✓'); event.stopPropagation()">Confirm Receipt</button>
+                  <button class="act" onclick="nav('inv'); event.stopPropagation()">View Invoice</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">PO-8812</td><td>Isolation gowns level 3 × 500 — REQ-1037</td><td>Medline Industries</td>
+                <td>Jun 21</td><td>Jun 24</td><td style="font-weight:600;">$1,260</td>
+                <td><span class="chip chip-pending">◷ Pending</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('Tracking PO-8812…'); event.stopPropagation()">Track</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">PO-8809</td><td>Anesthesia breathing circuits × 48 — REQ-1040</td><td>Smiths Medical</td>
+                <td>Jun 22</td><td>Jun 27</td><td style="font-weight:600;">$2,880</td>
+                <td><span class="chip chip-pending">◷ Pending</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('Tracking PO-8809…'); event.stopPropagation()">Track</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">PO-8801</td><td>Needle disposal containers × 24 — REQ-1035</td><td>Stericycle</td>
+                <td>Jun 19</td><td>Jun 21</td><td style="font-weight:600;">$310</td>
+                <td><span class="chip chip-received">✓ Received</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="nav('inv'); event.stopPropagation()">View Invoice</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">PO-8796</td><td>Blood pressure cuffs adult/pedi × 30</td><td>Cardinal Health</td>
+                <td>Jun 16</td><td>Jun 20</td><td style="font-weight:600;">$420</td>
+                <td><span class="chip chip-received">✓ Received</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="nav('inv'); event.stopPropagation()">View Invoice</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">PO-8790</td><td>Patient monitoring electrodes bulk</td><td>Philips Healthcare</td>
+                <td>Jun 14</td><td>Jun 18</td><td style="font-weight:600;">$1,340</td>
+                <td><span class="chip chip-received">✓ Received</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="nav('inv'); event.stopPropagation()">View Invoice</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">PO-8784</td><td>HVAC maintenance AHU 3 & 7 — REQ-1036</td><td>Grainger</td>
+                <td>Jun 20</td><td>Jul 5</td><td style="font-weight:600;">$12,400</td>
+                <td><span class="chip chip-transit">◷ In Transit</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('Tracking PO-8784…'); event.stopPropagation()">Track</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <span class="pg-info">Showing 10 of 24 purchase orders</span>
+          <div class="pg-btns">
+            <button class="pg-btn active">1</button>
+            <button class="pg-btn">2</button>
+            <button class="pg-btn">3</button>
+            <button class="pg-btn">›</button>
+          </div>
+        </div>
+      </div><!-- /po -->
+
+      <!-- ══════════════════════════════════════
+           INVOICES TO MATCH
+      ══════════════════════════════════════ -->
+      <div class="screen" id="screen-inv">
+        <div class="page-top">
+          <div class="page-top-left">
+            <h1>Invoices to Match</h1>
+            <p>14 unmatched &nbsp;·&nbsp; 3 past due</p>
+          </div>
+          <div class="page-top-right">
+            <div class="search-input">🔍 &nbsp;Search invoices…</div>
+            <button class="btn btn-ghost">Export</button>
+          </div>
+        </div>
+        <div class="stat-strip" style="grid-template-columns:repeat(4,1fr);">
+          <div class="stat-cell"><div class="sc-n">14</div><div class="sc-l">To Match</div><div class="sc-d neu">Awaiting 3-way</div></div>
+          <div class="stat-cell" onclick="toast('Filtered: Past due invoices')"><div class="sc-n">3</div><div class="sc-l">Past Due</div><div class="sc-d warn">Payment at risk</div></div>
+          <div class="stat-cell" onclick="toast('Filtered: Price exceptions')"><div class="sc-n">2</div><div class="sc-l">Exceptions</div><div class="sc-d warn">Price variance</div></div>
+          <div class="stat-cell" onclick="nav('spend')"><div class="sc-n">$34,218</div><div class="sc-l">Value Pending</div><div class="sc-d neu">Unmatched total</div></div>
+        </div>
+        <div class="alert danger">
+          🔴 <strong>INV-2847</strong> must be matched before end of day — payment terms expire tonight.
+          <span class="alert-cta" onclick="toast('INV-2847 matched to PO-8821 ✓')">Match now →</span>
+        </div>
+        <div class="filter-bar">
+          <span class="filter-label">Status</span>
+          <span class="fchip active">All (14)</span>
+          <span class="fchip" onclick="filterClick(this)">Past Due (3)</span>
+          <span class="fchip" onclick="filterClick(this)">Exceptions (2)</span>
+          <span class="fchip" onclick="filterClick(this)">Ready to Match (9)</span>
+          <div class="fdivider"></div>
+          <span class="filter-label">Vendor</span>
+          <span class="fchip" onclick="filterClick(this)">Medline</span>
+          <span class="fchip" onclick="filterClick(this)">Cardinal Health</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Invoice #</th><th>Vendor</th><th>Linked PO</th><th>Invoice Date</th><th>Due Date</th><th>PO Amt</th><th>Inv Amt</th><th>Status</th><th>Actions</th>
+            </tr></thead>
+            <tbody>
+              <tr class="data-row" style="background:#fff5f5;border-left:3px solid var(--red);">
+                <td class="td-id td-flag">INV-2847</td>
+                <td>Medline Industries</td>
+                <td class="td-link-style" onclick="nav('po'); event.stopPropagation()" style="cursor:pointer;">PO-8821</td>
+                <td>Jun 20</td>
+                <td style="color:var(--red);font-weight:600;">Jun 26 🔴</td>
+                <td>$4,210</td><td style="font-weight:600;">$4,210</td>
+                <td><span class="chip chip-unmatched">Unmatched</span></td>
+                <td><div class="row-actions">
+                  <button class="act primary" onclick="toast('INV-2847 matched to PO-8821 ✓'); event.stopPropagation()">Match Now</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row" style="background:#fff9f5;">
+                <td class="td-id" style="color:var(--amber);">INV-2844</td>
+                <td>Cardinal Health</td>
+                <td class="td-link-style" onclick="nav('po'); event.stopPropagation()" style="cursor:pointer;">PO-8818</td>
+                <td>Jun 19</td>
+                <td style="color:var(--amber);font-weight:600;">Jun 24 !</td>
+                <td>$1,875</td><td style="font-weight:600;">$1,875</td>
+                <td><span class="chip chip-unmatched">Unmatched</span></td>
+                <td><div class="row-actions">
+                  <button class="act primary" onclick="toast('INV-2844 matched to PO-8818 ✓'); event.stopPropagation()">Match Now</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row" style="background:#fff9f5;">
+                <td class="td-id" style="color:var(--amber);">INV-2831</td>
+                <td>Stericycle</td>
+                <td class="td-link-style" onclick="nav('po'); event.stopPropagation()" style="cursor:pointer;">PO-8801</td>
+                <td>Jun 15</td>
+                <td style="color:var(--amber);font-weight:600;">Jun 22 !</td>
+                <td>$310</td><td style="font-weight:600;color:var(--red);">$650 ▲$340</td>
+                <td><span class="chip chip-overdue">Exception</span></td>
+                <td><div class="row-actions">
+                  <button class="act danger" onclick="toast('Dispute raised on INV-2831 — $340 variance flagged'); event.stopPropagation()">Resolve</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">INV-2841</td><td>Bio-Techne</td>
+                <td class="td-link-style" onclick="nav('po'); event.stopPropagation()" style="cursor:pointer;">PO-8815</td>
+                <td>Jun 21</td><td>Jun 28</td>
+                <td>$3,400</td><td style="font-weight:600;">$3,400</td>
+                <td><span class="chip chip-unmatched">Unmatched</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('INV-2841 matched ✓'); event.stopPropagation()">Match</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">INV-2839</td><td>Philips Healthcare</td>
+                <td class="td-link-style" onclick="nav('po'); event.stopPropagation()" style="cursor:pointer;">PO-8790</td>
+                <td>Jun 20</td><td>Jun 27</td>
+                <td>$1,340</td><td style="font-weight:600;">$1,340</td>
+                <td><span class="chip chip-unmatched">Unmatched</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('INV-2839 matched ✓'); event.stopPropagation()">Match</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">INV-2836</td><td>Smiths Medical</td>
+                <td class="td-link-style" onclick="nav('po'); event.stopPropagation()" style="cursor:pointer;">PO-8809</td>
+                <td>Jun 22</td><td>Jun 29</td>
+                <td>$2,880</td><td style="font-weight:600;">$2,880</td>
+                <td><span class="chip chip-unmatched">Unmatched</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('INV-2836 matched ✓'); event.stopPropagation()">Match</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">INV-2834</td><td>Cardinal Health</td>
+                <td class="td-link-style" onclick="nav('po'); event.stopPropagation()" style="cursor:pointer;">PO-8796</td>
+                <td>Jun 17</td><td>Jun 30</td>
+                <td>$420</td><td style="font-weight:600;">$420</td>
+                <td><span class="chip chip-unmatched">Unmatched</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('INV-2834 matched ✓'); event.stopPropagation()">Match</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">INV-2829</td><td>Bio-Techne</td>
+                <td class="td-link-style" onclick="nav('po'); event.stopPropagation()" style="cursor:pointer;">PO-8804</td>
+                <td>Jun 23</td><td>Jul 3</td>
+                <td>$2,140</td><td style="font-weight:600;">$2,140</td>
+                <td><span class="chip chip-unmatched">Unmatched</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('INV-2829 matched ✓'); event.stopPropagation()">Match</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+              <tr class="data-row">
+                <td class="td-id">INV-2826</td><td>Medline Industries</td>
+                <td class="td-link-style" onclick="nav('po'); event.stopPropagation()" style="cursor:pointer;">PO-8812</td>
+                <td>Jun 24</td><td>Jul 5</td>
+                <td>$1,260</td><td style="font-weight:600;">$1,260</td>
+                <td><span class="chip chip-unmatched">Unmatched</span></td>
+                <td><div class="row-actions">
+                  <button class="act" onclick="toast('INV-2826 matched ✓'); event.stopPropagation()">Match</button>
+                  <button class="act" onclick="event.stopPropagation()">View</button>
+                </div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <span class="pg-info">Showing 9 of 14 invoices</span>
+          <div class="pg-btns">
+            <button class="pg-btn active">1</button>
+            <button class="pg-btn">2</button>
+            <button class="pg-btn">›</button>
+          </div>
+        </div>
+      </div><!-- /inv -->
+
+      <!-- ══════════════════════════════════════
+           MONTHLY SPEND
+      ══════════════════════════════════════ -->
+      <div class="screen" id="screen-spend">
+        <div class="page-top">
+          <div class="page-top-left">
+            <h1>Spend Analysis</h1>
+            <p>June 2024 &nbsp;·&nbsp; ↓ 12% vs May 2024</p>
+          </div>
+          <div class="page-top-right">
+            <select style="font-size:11px;border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--ink2);background:var(--white);font-family:var(--sans);">
+              <option>June 2024</option><option>May 2024</option><option>April 2024</option>
+            </select>
+            <button class="btn btn-ghost">Export PDF</button>
+          </div>
+        </div>
+        <div class="stat-strip" style="grid-template-columns:repeat(4,1fr);">
+          <div class="stat-cell"><div class="sc-n">$71,124</div><div class="sc-l">Total Spend — June</div><div class="sc-d up">↓ 12% vs May ($80,823)</div></div>
+          <div class="stat-cell"><div class="sc-n">$48,340</div><div class="sc-l">Clinical & Lab</div><div class="sc-d neu">68% of total</div></div>
+          <div class="stat-cell"><div class="sc-n">$12,400</div><div class="sc-l">Facilities</div><div class="sc-d warn">↑ 34% — HVAC service</div></div>
+          <div class="stat-cell"><div class="sc-n">$10,384</div><div class="sc-l">Other</div><div class="sc-d neu">Admin, PPE, misc</div></div>
+        </div>
+        <div class="spend-body">
+          <div class="spend-card" style="padding:16px 18px;">
+            <div class="sc-title">Monthly Spend Trend — Last 6 Months</div>
+            <div class="trend-wrap">
+              <div class="trend-col">
+                <div class="trend-bar-outer"><div class="trend-bar-inner" style="height:52px;"></div></div>
+                <div class="trend-label">Jan</div><div class="trend-val">$64k</div>
+              </div>
+              <div class="trend-col">
+                <div class="trend-bar-outer"><div class="trend-bar-inner" style="height:62px;"></div></div>
+                <div class="trend-label">Feb</div><div class="trend-val">$72k</div>
+              </div>
+              <div class="trend-col">
+                <div class="trend-bar-outer"><div class="trend-bar-inner" style="height:58px;"></div></div>
+                <div class="trend-label">Mar</div><div class="trend-val">$69k</div>
+              </div>
+              <div class="trend-col">
+                <div class="trend-bar-outer"><div class="trend-bar-inner" style="height:72px;"></div></div>
+                <div class="trend-label">Apr</div><div class="trend-val">$84k</div>
+              </div>
+              <div class="trend-col">
+                <div class="trend-bar-outer"><div class="trend-bar-inner" style="height:68px;"></div></div>
+                <div class="trend-label">May</div><div class="trend-val">$81k</div>
+              </div>
+              <div class="trend-col">
+                <div class="trend-bar-outer"><div class="trend-bar-inner cur" style="height:60px;"></div></div>
+                <div class="trend-label cur">Jun ●</div><div class="trend-val cur">$71k</div>
+              </div>
+            </div>
+            <div style="height:1px;background:var(--border);margin-top:10px;"></div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px;">
+              <div style="font-size:9px;color:var(--ink3);">6-month avg: <strong style="color:var(--ink);">$73,483</strong></div>
+              <div style="font-size:9px;color:var(--green);">June is ↓ 3.2% vs 6-month average</div>
+            </div>
+          </div>
+          <div class="spend-grid-2">
+            <div class="spend-card">
+              <div class="sc-title">Spend by Category</div>
+              <div class="bar-row"><div class="bl">Clinical</div><div class="bt"><div class="bf" style="width:68%;"></div></div><div class="bv">$48,340</div></div>
+              <div class="bar-row"><div class="bl">Facilities</div><div class="bt"><div class="bf a" style="width:17%;"></div></div><div class="bv" style="color:var(--amber);">$12,400 ↑</div></div>
+              <div class="bar-row"><div class="bl">Lab</div><div class="bt"><div class="bf" style="width:8%;"></div></div><div class="bv">$5,540</div></div>
+              <div class="bar-row"><div class="bl">Admin & PPE</div><div class="bt"><div class="bf" style="width:5%;background:var(--border2);"></div></div><div class="bv">$3,280</div></div>
+              <div class="bar-row"><div class="bl">Other</div><div class="bt"><div class="bf" style="width:2%;background:var(--border2);"></div></div><div class="bv">$1,564</div></div>
+            </div>
+            <div class="spend-card">
+              <div class="sc-title">Top Vendors — June</div>
+              <div class="bar-row"><div class="bl">Medline</div><div class="bt"><div class="bf" style="width:78%;"></div></div><div class="bv">$24,810</div></div>
+              <div class="bar-row"><div class="bl">Cardinal Health</div><div class="bt"><div class="bf" style="width:52%;"></div></div><div class="bv">$16,440</div></div>
+              <div class="bar-row"><div class="bl">Grainger</div><div class="bt"><div class="bf a" style="width:39%;"></div></div><div class="bv">$12,400</div></div>
+              <div class="bar-row"><div class="bl">Bio-Techne</div><div class="bt"><div class="bf" style="width:17%;"></div></div><div class="bv">$5,540</div></div>
+              <div class="bar-row"><div class="bl">Smiths Medical</div><div class="bt"><div class="bf" style="width:9%;"></div></div><div class="bv">$2,880</div></div>
+              <div class="bar-row"><div class="bl">Others</div><div class="bt"><div class="bf" style="width:28%;background:var(--border2);"></div></div><div class="bv">$9,054</div></div>
+            </div>
+          </div>
+          <div class="panel" style="margin:0;">
+            <div class="panel-head">
+              <span class="panel-title">All Transactions — June 2024</span>
+              <span class="panel-link" onclick="toast('Exporting CSV…')">Export CSV</span>
+            </div>
+            <table>
+              <thead><tr><th>PO #</th><th>Description</th><th>Vendor</th><th>Category</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr class="data-row" onclick="nav('po')"><td class="td-id">PO-8821</td><td>Surgical supplies</td><td>Medline Industries</td><td>Clinical</td><td>Jun 24</td><td style="font-weight:600;">$4,210</td><td><span class="chip chip-transit">In Transit</span></td></tr>
+                <tr class="data-row" onclick="nav('po')"><td class="td-id">PO-8818</td><td>IV Fluid stock NS 1L × 200</td><td>Cardinal Health</td><td>Clinical</td><td>Jun 23</td><td style="font-weight:600;">$1,875</td><td><span class="chip chip-transit">In Transit</span></td></tr>
+                <tr class="data-row" onclick="nav('po')"><td class="td-id">PO-8784</td><td>HVAC maintenance AHU 3 & 7</td><td>Grainger</td><td>Facilities</td><td>Jun 20</td><td style="font-weight:600;">$12,400</td><td><span class="chip chip-transit">In Transit</span></td></tr>
+                <tr class="data-row" onclick="nav('po')"><td class="td-id">PO-8815</td><td>Lab reagent PCR panels × 10</td><td>Bio-Techne</td><td>Lab</td><td>Jun 22</td><td style="font-weight:600;">$3,400</td><td><span class="chip chip-pending">Pending</span></td></tr>
+                <tr class="data-row" onclick="nav('po')"><td class="td-id">PO-8812</td><td>Isolation gowns level 3 × 500</td><td>Medline Industries</td><td>Clinical</td><td>Jun 21</td><td style="font-weight:600;">$1,260</td><td><span class="chip chip-pending">Pending</span></td></tr>
+                <tr class="data-row" onclick="nav('po')"><td class="td-id">PO-8809</td><td>Anesthesia breathing circuits × 48</td><td>Smiths Medical</td><td>Clinical</td><td>Jun 22</td><td style="font-weight:600;">$2,880</td><td><span class="chip chip-pending">Pending</span></td></tr>
+                <tr class="data-row" onclick="nav('po')"><td class="td-id">PO-8804</td><td>Lab reagents — culture media × 50</td><td>Bio-Techne</td><td>Lab</td><td>Jun 18</td><td style="font-weight:600;">$2,140</td><td><span class="chip chip-received">Received</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div><!-- /spend -->
+
+    </div><!-- /main-content -->
+  </div><!-- /app-layout -->
+</div><!-- /app-window -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+const SCREENS = ['dashboard','req','po','inv','spend'];
+const URLS = {
+  dashboard: 'premier.supplychainplus.com/dashboard',
+  req:       'premier.supplychainplus.com/requisitions',
+  po:        'premier.supplychainplus.com/purchase-orders',
+  inv:       'premier.supplychainplus.com/invoices',
+  spend:     'premier.supplychainplus.com/reports/spend',
+};
+const BREADCRUMBS = {
+  dashboard: 'Dashboard',
+  req:       'Dashboard &rsaquo; Requisitions',
+  po:        'Dashboard &rsaquo; Purchase Orders',
+  inv:       'Dashboard &rsaquo; Invoices to Match',
+  spend:     'Dashboard &rsaquo; Spend Analysis',
+};
+const SNAV_IDS = {
+  dashboard: 'snav-dashboard',
+  req:       'snav-req',
+  po:        'snav-po',
+  inv:       'snav-inv',
+  spend:     'snav-spend',
+};
+
+function nav(id) {
+  // Hide all screens
+  SCREENS.forEach(s => {
+    document.getElementById('screen-' + s).classList.remove('active');
+    const sn = document.getElementById(SNAV_IDS[s]);
+    if (sn) sn.classList.remove('active');
+  });
+  // Show target
+  document.getElementById('screen-' + id).classList.add('active');
+  const sn = document.getElementById(SNAV_IDS[id]);
+  if (sn) sn.classList.add('active');
+  // Update URL bar + breadcrumb
+  document.getElementById('url-display').textContent = URLS[id];
+  document.getElementById('breadcrumb').innerHTML = BREADCRUMBS[id];
+  // Scroll main content to top
+  document.querySelector('.main-content').scrollTop = 0;
+}
+
+function filterClick(el) {
+  const bar = el.closest('.filter-bar');
+  bar.querySelectorAll('.fchip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  toast('Filter applied: ' + el.textContent.trim());
+}
+
+let toastTimer;
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>
