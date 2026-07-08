@@ -527,6 +527,65 @@ footer p { font-size: 12.5px; color: var(--ink3); }
 .pd-scope .task-text { font-size: 11px; color: var(--ink); line-height: 1.4; font-weight: 500; }
 .pd-scope .task-meta { font-size: 9px; color: var(--ink3); margin-top: 2px; }
 .pd-scope .task-chip { display: inline-block; padding: 0 6px; border-radius: 3px; font-size: 8px; background: var(--teal-light); color: var(--teal); font-weight: 600; }
+
+/* ─── CS02 dashboard thumbnail (real Star Watch UI, scaled) ─── */
+
+/* ── browser chrome ── */
+.qm-scope .chrome { background: #1e1e1e; padding: 9px 16px; display: flex; align-items: center; gap: 7px; }
+.qm-scope .dot { width: 11px; height: 11px; border-radius: 50%; }
+.qm-scope .url-bar { flex: 1; background: rgba(255,255,255,.07); border-radius: 5px; height: 22px; margin: 0 14px; display: flex; align-items: center; padding: 0 12px; }
+.qm-scope .url-bar span { font-size: 10px; color: rgba(255,255,255,.3); letter-spacing: .01em; }
+
+/* ── app topbar (real product branding — dark teal, distinct from case-study gold accent) ── */
+.qm-scope .qm-topbar {
+  background: #0c3d47; height: 46px; padding: 0 22px;
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.qm-scope .qm-brand { display: flex; align-items: center; gap: 9px; }
+.qm-scope .qm-brand-mark { width: 18px; height: 18px; background: linear-gradient(135deg,#1c94ab,var(--teal)); clip-path: polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
+.qm-scope .qm-brand-text { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; color: #fff; text-transform: uppercase; }
+.qm-scope .qm-nav { display: flex; align-items: center; gap: 4px; }
+.qm-scope .qm-nav-item { font-size: 11px; font-weight: 600; padding: 7px 14px; border-radius: 6px; color: rgba(255,255,255,.45); }
+.qm-scope .qm-nav-item.on { color: rgba(255,255,255,.9); }
+.qm-scope .qm-nav-item.active { background: #1c94ab; color: #fff; }
+.qm-scope .qm-avatar { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; }
+
+/* ── breadcrumb + page header ── */
+.qm-scope .qm-crumb { background: var(--white); border-bottom: 1px solid var(--border); padding: 8px 22px; font-size: 11px; }
+.qm-scope .qm-crumb span { color: var(--ink3); }
+.qm-scope .qm-crumb a { color: var(--teal); text-decoration: none; font-weight: 500; }
+.qm-scope .qm-page-header {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 14px 22px 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+}
+.qm-scope .qm-ph-left h1 { font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.qm-scope .qm-ph-left .qm-stars { font-size: 11px; color: var(--ink2); }
+.qm-scope .qm-ph-left .qm-star-fill { color: var(--gold); }
+.qm-scope .qm-ph-left .qm-star-empty { color: var(--border2); }
+.qm-scope .qm-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.qm-scope .qm-pf-item { border: 1px solid var(--border2); border-radius: 6px; background: var(--offwhite); padding: 6px 26px 6px 10px; position: relative; min-width: 110px; }
+.qm-scope .qm-pf-label { font-size: 8.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink3); margin-bottom: 2px; }
+.qm-scope .qm-pf-val { font-size: 11px; font-weight: 600; color: var(--teal); }
+.qm-scope .qm-pf-item::after { content: '▾'; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: var(--ink3); font-size: 9px; }
+
+/* ── measure category cards ── */
+.qm-scope .qm-main { background: #eef1f2; padding: 16px 22px 20px; }
+.qm-scope .qm-section-h { font-size: 12.5px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+.qm-scope .qm-cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.qm-scope .qm-cat-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px 16px; box-shadow: var(--shadow-sm); }
+.qm-scope .qm-cat-title { font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--teal); text-transform: uppercase; margin-bottom: 6px; }
+.qm-scope .qm-cat-meta { font-size: 9.5px; color: var(--ink3); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 4px; }
+.qm-scope .qm-chart-wrap svg text { font-family: var(--sans); }
+.qm-scope .qm-cat-stats { display: flex; gap: 26px; margin-top: 8px; }
+.qm-scope .qm-cs-num { font-size: 15px; font-weight: 700; color: var(--ink); }
+.qm-scope .qm-cs-num.muted { color: var(--ink3); font-weight: 600; }
+.qm-scope .qm-cs-underline { height: 2px; width: 100%; margin: 4px 0; border-radius: 2px; }
+.qm-scope .qm-cs-underline.teal { background: var(--teal); }
+.qm-scope .qm-cs-underline.gold { border-top: 2px dashed var(--gold); }
+.qm-scope .qm-cs-label { font-size: 8.5px; color: var(--ink2); line-height: 1.3; }
+
+@media (max-width: 900px) { .qm-scope .qm-cat-grid { grid-template-columns: 1fr; } }
+
 </style>
 </head>
 <body>
@@ -805,25 +864,99 @@ footer p { font-size: 12.5px; color: var(--ink3); }
           </div>
         </div>
         <div class="feature-visual">
-          <div class="feature-mock">
-            <div class="fm-chrome">
-              <div class="fm-dot" style="background:#ff5f57;"></div>
-              <div class="fm-dot" style="background:#febc2e;"></div>
-              <div class="fm-dot" style="background:#28c840;"></div>
-              <div class="fm-url"></div>
-            </div>
-            <div class="fm-topbar"><span class="fm-topbar-label">QUALITY PERFORMANCE</span></div>
-            <div class="fm-body">
-              <div class="fm-side">
-                <div class="fm-side-block"></div>
-                <div class="fm-side-block"></div>
-                <div class="fm-side-block"></div>
-                <div class="fm-side-block"></div>
+          <div class="feature-mock" style="padding:0;">
+            <div style="width:100%;aspect-ratio:440/275;overflow:hidden;position:relative;background:#fff;">
+              <div style="width:1100px;transform:scale(0.4);transform-origin:top left;position:absolute;top:0;left:0;">
+<div class="qm-scope">
+
+        <!-- Browser chrome -->
+        <div class="chrome">
+          <div class="dot" style="background:#ff5f57;"></div>
+          <div class="dot" style="background:#febc2e;"></div>
+          <div class="dot" style="background:#28c840;"></div>
+          <div class="url-bar"><span>premierconnect.com/starwatch</span></div>
+        </div>
+
+        <!-- App topbar -->
+        <div class="qm-topbar">
+          <div class="qm-brand">
+            <div class="qm-brand-mark"></div>
+            <div class="qm-brand-text">Quality Measures Reporter and Ratings</div>
+          </div>
+          <div class="qm-nav">
+            <div class="qm-nav-item">Quality Measures Reporter</div>
+            <div class="qm-nav-item on">Pay for Performance</div>
+            <div class="qm-nav-item active">Star Watch</div>
+          </div>
+          <div class="qm-avatar">👤</div>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div class="qm-crumb"><a>PremierConnect</a><span> / </span><a>Star Watch</a></div>
+
+        <!-- Page header -->
+        <div class="qm-page-header">
+          <div class="qm-ph-left">
+            <h1>Premier General (S19175) | Q4 2019</h1>
+            <div class="qm-stars">Q4 2018 CMS Star Rating <span class="qm-star-fill">★★★</span><span class="qm-star-empty">★★</span></div>
+          </div>
+          <div class="qm-filters">
+            <div class="qm-pf-item"><div class="qm-pf-label">Health System</div><div class="qm-pf-val">Premier Health System</div></div>
+            <div class="qm-pf-item"><div class="qm-pf-label">CCN</div><div class="qm-pf-val">Premier General</div></div>
+            <div class="qm-pf-item"><div class="qm-pf-label">Time Interval</div><div class="qm-pf-val">Q4 2019</div></div>
+            <div class="qm-pf-item"><div class="qm-pf-label">Comparator</div><div class="qm-pf-val">Average</div></div>
+          </div>
+        </div>
+
+        <!-- Measure category performance -->
+        <div class="qm-main">
+          <div class="qm-section-h">Measure Category Performance</div>
+          <div class="qm-cat-grid">
+
+            <div class="qm-cat-card">
+              <div class="qm-cat-title">Mortality</div>
+              <div class="qm-cat-meta">Weight : 22%&nbsp;&nbsp;|&nbsp;&nbsp;Measure Category Score: X.XX&nbsp;(Q4 2018 score X.XX)</div>
+              <div class="qm-chart-wrap" id="cs2-chart-mortality" style="height:118px;"></div>
+              <div class="qm-cat-stats">
+                <div><div class="qm-cs-num">1 of 7</div><div class="qm-cs-underline teal"></div><div class="qm-cs-label">Measures Exceeding<br>Premier Average</div></div>
+                <div><div class="qm-cs-num muted">-- of 7</div><div class="qm-cs-underline gold"></div><div class="qm-cs-label">Measures Exceeding<br>CMS Average</div></div>
               </div>
-              <div class="fm-main">
-                <div class="fm-chip-row"><div class="fm-chip"></div><div class="fm-chip"></div><div class="fm-chip"></div></div>
-                <div class="fm-row"></div>
-                <div class="fm-row wide"></div>
+            </div>
+
+            <div class="qm-cat-card">
+              <div class="qm-cat-title">Readmission</div>
+              <div class="qm-cat-meta">Weight : 22%&nbsp;&nbsp;|&nbsp;&nbsp;Measure Category Score: X.XX&nbsp;(Q4 2018 score X.XX)</div>
+              <div class="qm-chart-wrap" id="cs2-chart-readmission" style="height:118px;"></div>
+              <div class="qm-cat-stats">
+                <div><div class="qm-cs-num">1 of 4</div><div class="qm-cs-underline teal"></div><div class="qm-cs-label">Measures Exceeding<br>Premier Average</div></div>
+                <div><div class="qm-cs-num muted">-- of 8</div><div class="qm-cs-underline gold"></div><div class="qm-cs-label">Measures Exceeding<br>CMS Average</div></div>
+              </div>
+            </div>
+
+            <div class="qm-cat-card">
+              <div class="qm-cat-title">Safety of Care</div>
+              <div class="qm-cat-meta">Weight : 22%&nbsp;&nbsp;|&nbsp;&nbsp;Measure Category Score: X.XX&nbsp;(Q4 2018 score X.XX)</div>
+              <div class="qm-chart-wrap" id="cs2-chart-safety" style="height:118px;"></div>
+              <div class="qm-cat-stats">
+                <div><div class="qm-cs-num">4 of 8</div><div class="qm-cs-underline teal"></div><div class="qm-cs-label">Measures Exceeding<br>Premier Average</div></div>
+                <div><div class="qm-cs-num muted">-- of 8</div><div class="qm-cs-underline gold"></div><div class="qm-cs-label">Measures Exceeding<br>CMS Average</div></div>
+              </div>
+            </div>
+
+            <div class="qm-cat-card">
+              <div class="qm-cat-title">Patient Experience</div>
+              <div class="qm-cat-meta">Weight : 22%&nbsp;&nbsp;|&nbsp;&nbsp;Measure Category Score: X.XX&nbsp;(Q4 2018 score X.XX)</div>
+              <div class="qm-chart-wrap" id="cs2-chart-experience" style="height:118px;"></div>
+              <div class="qm-cat-stats">
+                <div><div class="qm-cs-num muted">-- of 10</div><div class="qm-cs-underline teal"></div><div class="qm-cs-label">Measures Exceeding<br>Premier Average</div></div>
+                <div><div class="qm-cs-num muted">-- of 10</div><div class="qm-cs-underline gold"></div><div class="qm-cs-label">Measures Exceeding<br>CMS Average</div></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
               </div>
             </div>
           </div>
@@ -982,6 +1115,69 @@ footer p { font-size: 12.5px; color: var(--ink3); }
 <footer>
   <p><strong>William Teppig</strong> &nbsp;·&nbsp; UX Design Principal &nbsp;·&nbsp; Enterprise Healthcare &amp; Financial Services Platforms</p>
 </footer>
+
+<script>
+(function(){
+  var CS2_QLABELS = ['Q1 2018','Q2 2018','Q3 2018','Q4 2018','Q1 2019','Q2 2019','Q3 2019','Q4 2019'];
+  var CS2_IDX = [0,1,2,3,4,5,6,7];
+
+  var CS2_DATA = {
+    mortality:   { premier:[2,2,0.3,1,1,1,1,1],               cmsAvg:[1,1,1,1,1,1,1,1],                     yMax:4, yTicks:[0,2,4] },
+    readmission: { premier:[0,0,0,0,0,0,0,0],                 cmsAvg:[5,3.3,3.2,3.1,1,0.3,0.3,0.3],         yMax:5, yTicks:[0,5] },
+    safety:      { premier:[1,1.3,3,3,2,3,3,4],               cmsAvg:[0.3,1,3,2.2,1.8,2.3,2.6,3],           yMax:5, yTicks:[0,5] },
+    experience:  { premier:null,                              cmsAvg:[5.2,5.1,5,4.3,5.6,5.5,5.4,5.4],       yMax:6, yTicks:[5] }
+  };
+
+  function cs2RenderChart(containerId, opts){
+    var el = document.getElementById(containerId);
+    if(!el) return;
+    var width = el.clientWidth || 300;
+    var height = opts.height || 118;
+    var mL = 26, mR = 8, mT = 10, mB = 18;
+    var plotW = width - mL - mR, plotH = height - mT - mB;
+    var n = CS2_QLABELS.length, xStep = plotW/(n-1);
+    var yMin = 0, yMax = opts.yMax;
+    function X(i){ return mL + i*xStep; }
+    function Y(v){ return mT + plotH - ((v-yMin)/(yMax-yMin))*plotH; }
+
+    var svg = '<svg width="100%" height="'+height+'" viewBox="0 0 '+width+' '+height+'">';
+    (opts.yTicks||[]).forEach(function(t){
+      var y = Y(t);
+      svg += '<line x1="'+mL+'" y1="'+y+'" x2="'+(mL+plotW)+'" y2="'+y+'" stroke="#e8eaea" stroke-width="1"/>';
+      svg += '<text x="'+(mL-6)+'" y="'+(y+3)+'" font-size="8.5" fill="#8a8a84" text-anchor="end">'+t+'</text>';
+    });
+    CS2_QLABELS.forEach(function(lab,i){
+      svg += '<text x="'+X(i)+'" y="'+(height-5)+'" font-size="7.5" fill="#8a8a84" text-anchor="middle">'+lab.split(' ')[0]+'</text>';
+    });
+    (opts.series||[]).forEach(function(s){
+      if(!s.values) return;
+      var pts = '';
+      s.indices.forEach(function(i,k){ pts += X(i)+','+Y(s.values[k])+' '; });
+      svg += '<polyline points="'+pts.trim()+'" fill="none" stroke="'+s.color+'" stroke-width="'+(s.width||2)+'" '+(s.dash?'stroke-dasharray="'+s.dash+'"':'')+' stroke-linecap="round" stroke-linejoin="round"/>';
+      if(s.dots!==false){
+        s.indices.forEach(function(i,k){
+          svg += '<circle cx="'+X(i)+'" cy="'+Y(s.values[k])+'" r="2.6" fill="'+s.color+'"/>';
+        });
+      }
+    });
+    svg += '</svg>';
+    el.innerHTML = svg;
+  }
+
+  function cs2DrawAll(){
+    Object.keys(CS2_DATA).forEach(function(key){
+      var d = CS2_DATA[key];
+      var series = [];
+      if(d.premier) series.push({indices:CS2_IDX, values:d.premier, color:'#006d77', width:2.2});
+      series.push({indices:CS2_IDX, values:d.cmsAvg, color:'#b07d2a', width:1.8, dash:'5,4', dots:false});
+      cs2RenderChart('cs2-chart-'+key, {yMax:d.yMax, yTicks:d.yTicks, series:series, height:118});
+    });
+  }
+
+  window.addEventListener('load', cs2DrawAll);
+  window.addEventListener('resize', cs2DrawAll);
+})();
+</script>
 
 </body>
 </html>

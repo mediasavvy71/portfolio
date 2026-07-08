@@ -95,11 +95,11 @@ nav {
   font-family: var(--serif);
   font-size: clamp(36px, 5vw, 58px);
   font-weight: 400; line-height: 1.1; color: var(--ink);
-  max-width: 820px; margin-bottom: 24px;
+  max-width: none; margin-bottom: 24px;
 }
 .hero h1 em { color: var(--gold); font-style: italic; }
 .hero-sub {
-  font-size: 16px; color: var(--ink2); max-width: 640px;
+  font-size: 16px; color: var(--ink2); max-width: none;
   line-height: 1.65; margin-bottom: 48px; font-weight: 400;
 }
 .hero-meta {
@@ -366,6 +366,79 @@ footer strong { color: rgba(255,255,255,.75); }
   .process-track { flex-direction: column; gap: 16px; }
   .process-track::before { display: none; }
 }
+
+/* ─── HERO VARIANT — PRODUCT MOCKUP HERO ─── */
+.hero {
+  background: var(--white);
+  display: flex; flex-direction: column;
+  padding: 88px 0 0;
+  border-bottom: 1px solid var(--border);
+}
+.hero-content { padding: 0 48px 56px; max-width: 1176px; width: 100%; margin: 0 auto; }
+.hero-mockup-band { padding: 0 48px; display: flex; justify-content: center; margin-bottom: -1px; }
+.hero-mockup-window {
+  width: 100%; max-width: 1100px;
+  background: var(--white); border: 1px solid var(--border); border-bottom: none;
+  border-radius: 12px 12px 0 0; overflow: hidden;
+  box-shadow: 0 -8px 40px rgba(176,125,42,.1), 0 -2px 16px rgba(0,0,0,.08);
+  font-family: var(--sans);
+}
+
+/* ── browser chrome ── */
+.qm-scope .chrome { background: #1e1e1e; padding: 9px 16px; display: flex; align-items: center; gap: 7px; }
+.qm-scope .dot { width: 11px; height: 11px; border-radius: 50%; }
+.qm-scope .url-bar { flex: 1; background: rgba(255,255,255,.07); border-radius: 5px; height: 22px; margin: 0 14px; display: flex; align-items: center; padding: 0 12px; }
+.qm-scope .url-bar span { font-size: 10px; color: rgba(255,255,255,.3); letter-spacing: .01em; }
+
+/* ── app topbar (real product branding — dark teal, distinct from case-study gold accent) ── */
+.qm-scope .qm-topbar {
+  background: #0c3d47; height: 46px; padding: 0 22px;
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.qm-scope .qm-brand { display: flex; align-items: center; gap: 9px; }
+.qm-scope .qm-brand-mark { width: 18px; height: 18px; background: linear-gradient(135deg,#1c94ab,var(--teal)); clip-path: polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
+.qm-scope .qm-brand-text { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; color: #fff; text-transform: uppercase; }
+.qm-scope .qm-nav { display: flex; align-items: center; gap: 4px; }
+.qm-scope .qm-nav-item { font-size: 11px; font-weight: 600; padding: 7px 14px; border-radius: 6px; color: rgba(255,255,255,.45); }
+.qm-scope .qm-nav-item.on { color: rgba(255,255,255,.9); }
+.qm-scope .qm-nav-item.active { background: #1c94ab; color: #fff; }
+.qm-scope .qm-avatar { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; }
+
+/* ── breadcrumb + page header ── */
+.qm-scope .qm-crumb { background: var(--white); border-bottom: 1px solid var(--border); padding: 8px 22px; font-size: 11px; }
+.qm-scope .qm-crumb span { color: var(--ink3); }
+.qm-scope .qm-crumb a { color: var(--teal); text-decoration: none; font-weight: 500; }
+.qm-scope .qm-page-header {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 14px 22px 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+}
+.qm-scope .qm-ph-left h1 { font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.qm-scope .qm-ph-left .qm-stars { font-size: 11px; color: var(--ink2); }
+.qm-scope .qm-ph-left .qm-star-fill { color: var(--gold); }
+.qm-scope .qm-ph-left .qm-star-empty { color: var(--border2); }
+.qm-scope .qm-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.qm-scope .qm-pf-item { border: 1px solid var(--border2); border-radius: 6px; background: var(--offwhite); padding: 6px 26px 6px 10px; position: relative; min-width: 110px; }
+.qm-scope .qm-pf-label { font-size: 8.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink3); margin-bottom: 2px; }
+.qm-scope .qm-pf-val { font-size: 11px; font-weight: 600; color: var(--teal); }
+.qm-scope .qm-pf-item::after { content: '▾'; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: var(--ink3); font-size: 9px; }
+
+/* ── measure category cards ── */
+.qm-scope .qm-main { background: #eef1f2; padding: 16px 22px 20px; }
+.qm-scope .qm-section-h { font-size: 12.5px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+.qm-scope .qm-cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.qm-scope .qm-cat-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px 16px; box-shadow: var(--shadow-sm); }
+.qm-scope .qm-cat-title { font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--teal); text-transform: uppercase; margin-bottom: 6px; }
+.qm-scope .qm-cat-meta { font-size: 9.5px; color: var(--ink3); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 4px; }
+.qm-scope .qm-chart-wrap svg text { font-family: var(--sans); }
+.qm-scope .qm-cat-stats { display: flex; gap: 26px; margin-top: 8px; }
+.qm-scope .qm-cs-num { font-size: 15px; font-weight: 700; color: var(--ink); }
+.qm-scope .qm-cs-num.muted { color: var(--ink3); font-weight: 600; }
+.qm-scope .qm-cs-underline { height: 2px; width: 100%; margin: 4px 0; border-radius: 2px; }
+.qm-scope .qm-cs-underline.teal { background: var(--teal); }
+.qm-scope .qm-cs-underline.gold { border-top: 2px dashed var(--gold); }
+.qm-scope .qm-cs-label { font-size: 8.5px; color: var(--ink2); line-height: 1.3; }
+
+@media (max-width: 900px) { .qm-scope .qm-cat-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -383,7 +456,7 @@ footer strong { color: rgba(255,255,255,.75); }
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-inner">
+  <div class="hero-content">
     <div class="hero-eyebrow">Case Study 02 · Healthcare Quality · Cross-Platform UX</div>
     <h1>Turning quality data<br>into <em>decisions</em> — a cross-platform<br>intelligence system for healthcare</h1>
     <p class="hero-sub">Healthcare organizations collect quality measures across five disconnected systems — but can't act on them in time. I led UX strategy and design to unify a fragmented data ecosystem into a role-driven, cross-platform performance intelligence experience.</p>
@@ -407,6 +480,102 @@ footer strong { color: rgba(255,255,255,.75); }
       <div class="hero-meta-item">
         <div class="meta-label">NDA</div>
         <div class="meta-val">Client confidential</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hi-fi product mockup — below hero text -->
+  <div class="hero-mockup-band">
+    <div class="hero-mockup-window">
+      <div class="qm-scope">
+
+        <!-- Browser chrome -->
+        <div class="chrome">
+          <div class="dot" style="background:#ff5f57;"></div>
+          <div class="dot" style="background:#febc2e;"></div>
+          <div class="dot" style="background:#28c840;"></div>
+          <div class="url-bar"><span>premierconnect.com/starwatch</span></div>
+        </div>
+
+        <!-- App topbar -->
+        <div class="qm-topbar">
+          <div class="qm-brand">
+            <div class="qm-brand-mark"></div>
+            <div class="qm-brand-text">Quality Measures Reporter and Ratings</div>
+          </div>
+          <div class="qm-nav">
+            <div class="qm-nav-item">Quality Measures Reporter</div>
+            <div class="qm-nav-item on">Pay for Performance</div>
+            <div class="qm-nav-item active">Star Watch</div>
+          </div>
+          <div class="qm-avatar">👤</div>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div class="qm-crumb"><a>PremierConnect</a><span> / </span><a>Star Watch</a></div>
+
+        <!-- Page header -->
+        <div class="qm-page-header">
+          <div class="qm-ph-left">
+            <h1>Premier General (S19175) | Q4 2019</h1>
+            <div class="qm-stars">Q4 2018 CMS Star Rating <span class="qm-star-fill">★★★</span><span class="qm-star-empty">★★</span></div>
+          </div>
+          <div class="qm-filters">
+            <div class="qm-pf-item"><div class="qm-pf-label">Health System</div><div class="qm-pf-val">Premier Health System</div></div>
+            <div class="qm-pf-item"><div class="qm-pf-label">CCN</div><div class="qm-pf-val">Premier General</div></div>
+            <div class="qm-pf-item"><div class="qm-pf-label">Time Interval</div><div class="qm-pf-val">Q4 2019</div></div>
+            <div class="qm-pf-item"><div class="qm-pf-label">Comparator</div><div class="qm-pf-val">Average</div></div>
+          </div>
+        </div>
+
+        <!-- Measure category performance -->
+        <div class="qm-main">
+          <div class="qm-section-h">Measure Category Performance</div>
+          <div class="qm-cat-grid">
+
+            <div class="qm-cat-card">
+              <div class="qm-cat-title">Mortality</div>
+              <div class="qm-cat-meta">Weight : 22%&nbsp;&nbsp;|&nbsp;&nbsp;Measure Category Score: X.XX&nbsp;(Q4 2018 score X.XX)</div>
+              <div class="qm-chart-wrap" id="qm-chart-mortality" style="height:118px;"></div>
+              <div class="qm-cat-stats">
+                <div><div class="qm-cs-num">1 of 7</div><div class="qm-cs-underline teal"></div><div class="qm-cs-label">Measures Exceeding<br>Premier Average</div></div>
+                <div><div class="qm-cs-num muted">-- of 7</div><div class="qm-cs-underline gold"></div><div class="qm-cs-label">Measures Exceeding<br>CMS Average</div></div>
+              </div>
+            </div>
+
+            <div class="qm-cat-card">
+              <div class="qm-cat-title">Readmission</div>
+              <div class="qm-cat-meta">Weight : 22%&nbsp;&nbsp;|&nbsp;&nbsp;Measure Category Score: X.XX&nbsp;(Q4 2018 score X.XX)</div>
+              <div class="qm-chart-wrap" id="qm-chart-readmission" style="height:118px;"></div>
+              <div class="qm-cat-stats">
+                <div><div class="qm-cs-num">1 of 4</div><div class="qm-cs-underline teal"></div><div class="qm-cs-label">Measures Exceeding<br>Premier Average</div></div>
+                <div><div class="qm-cs-num muted">-- of 8</div><div class="qm-cs-underline gold"></div><div class="qm-cs-label">Measures Exceeding<br>CMS Average</div></div>
+              </div>
+            </div>
+
+            <div class="qm-cat-card">
+              <div class="qm-cat-title">Safety of Care</div>
+              <div class="qm-cat-meta">Weight : 22%&nbsp;&nbsp;|&nbsp;&nbsp;Measure Category Score: X.XX&nbsp;(Q4 2018 score X.XX)</div>
+              <div class="qm-chart-wrap" id="qm-chart-safety" style="height:118px;"></div>
+              <div class="qm-cat-stats">
+                <div><div class="qm-cs-num">4 of 8</div><div class="qm-cs-underline teal"></div><div class="qm-cs-label">Measures Exceeding<br>Premier Average</div></div>
+                <div><div class="qm-cs-num muted">-- of 8</div><div class="qm-cs-underline gold"></div><div class="qm-cs-label">Measures Exceeding<br>CMS Average</div></div>
+              </div>
+            </div>
+
+            <div class="qm-cat-card">
+              <div class="qm-cat-title">Patient Experience</div>
+              <div class="qm-cat-meta">Weight : 22%&nbsp;&nbsp;|&nbsp;&nbsp;Measure Category Score: X.XX&nbsp;(Q4 2018 score X.XX)</div>
+              <div class="qm-chart-wrap" id="qm-chart-experience" style="height:118px;"></div>
+              <div class="qm-cat-stats">
+                <div><div class="qm-cs-num muted">-- of 10</div><div class="qm-cs-underline teal"></div><div class="qm-cs-label">Measures Exceeding<br>Premier Average</div></div>
+                <div><div class="qm-cs-num muted">-- of 10</div><div class="qm-cs-underline gold"></div><div class="qm-cs-label">Measures Exceeding<br>CMS Average</div></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -570,15 +739,15 @@ footer strong { color: rgba(255,255,255,.75); }
         <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
           <div style="height:3px;background:var(--gold);"></div>
           <div style="padding:20px 18px;">
-            <div style="width:40px;height:40px;border-radius:50%;background:var(--gold-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--gold);margin-bottom:10px;">LK</div>
-            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Linda K.</div>
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--gold-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--gold);margin-bottom:10px;">L</div>
+            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Linda</div>
             <div style="font-size:10px;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Quality Data Analyst</div>
-            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:var(--gold-light);border-radius:6px;border-left:2px solid var(--gold);margin-bottom:12px;">"I spend all day assembling data. I need the system to bring it to me."</div>
+            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:var(--gold-light);border-radius:6px;border-left:2px solid var(--gold);margin-bottom:12px;">"I bring together disperse data from every department — but I spend more time formatting it than analyzing it."</div>
             <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Key struggles</div>
             <div style="display:flex;flex-direction:column;gap:4px;">
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--gold);flex-shrink:0;">·</span>Uses QualityAdvisor to pull data but exports to Excel for every analysis</div>
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--gold);flex-shrink:0;">·</span>Spends significant time formatting graphs and tables which reduces analysis time</div>
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--gold);flex-shrink:0;">·</span>Not good at disseminating information to wider audiences</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--gold);flex-shrink:0;">·</span>Uses QualityAdvisor to perform tasks the tool was never built to support, then extends and enriches the data in Excel</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--gold);flex-shrink:0;">·</span>Spends significant time formatting graphs and tables, which cuts into research and analysis time</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--gold);flex-shrink:0;">·</span>Very good at disseminating information, but struggles to present it efficiently and coherently to decision makers</div>
             </div>
           </div>
         </div>
@@ -586,15 +755,15 @@ footer strong { color: rgba(255,255,255,.75); }
         <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
           <div style="height:3px;background:#3b6d11;"></div>
           <div style="padding:20px 18px;">
-            <div style="width:40px;height:40px;border-radius:50%;background:#eaf3de;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#3b6d11;margin-bottom:10px;">DR</div>
-            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Director of Quality</div>
-            <div style="font-size:10px;color:#3b6d11;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Dept. Quality Director</div>
-            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:#eaf3de;border-radius:6px;border-left:2px solid #3b6d11;margin-bottom:12px;">"I need to see where we stand compared to our goals — and what we need to do."</div>
+            <div style="width:40px;height:40px;border-radius:50%;background:#eaf3de;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#3b6d11;margin-bottom:10px;">R</div>
+            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Romona</div>
+            <div style="font-size:10px;color:#3b6d11;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Director of Quality</div>
+            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:#eaf3de;border-radius:6px;border-left:2px solid #3b6d11;margin-bottom:12px;">"We're still exchanging data by paper and fax — that's not sustainable when patient safety is on the line."</div>
             <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Key struggles</div>
             <div style="display:flex;flex-direction:column;gap:4px;">
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#3b6d11;flex-shrink:0;">·</span>Wants to assess quality via identifying efficiencies and better care provision scores</div>
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#3b6d11;flex-shrink:0;">·</span>Wants to evaluate individual physicians, groups, and specialty performance</div>
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#3b6d11;flex-shrink:0;">·</span>Wants to present complex information consistently to other departments</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#3b6d11;flex-shrink:0;">·</span>Lack of interoperability — data is still exchanged via paper and faxes</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#3b6d11;flex-shrink:0;">·</span>Optimizing clinical workflows to provide actionable data at the point of care</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#3b6d11;flex-shrink:0;">·</span>Personnel shortages and burnout, while keeping up with advances in medical science</div>
             </div>
           </div>
         </div>
@@ -602,15 +771,15 @@ footer strong { color: rgba(255,255,255,.75); }
         <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
           <div style="height:3px;background:#185fa5;"></div>
           <div style="padding:20px 18px;">
-            <div style="width:40px;height:40px;border-radius:50%;background:#e6f1fb;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#185fa5;margin-bottom:10px;">VP</div>
-            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Chief Medical Officer</div>
-            <div style="font-size:10px;color:#185fa5;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Executive Stakeholder</div>
-            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:#e6f1fb;border-radius:6px;border-left:2px solid #185fa5;margin-bottom:12px;">"Show me our biggest opportunities — and how we compare to peers."</div>
+            <div style="width:40px;height:40px;border-radius:50%;background:#e6f1fb;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#185fa5;margin-bottom:10px;">J</div>
+            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Juan</div>
+            <div style="font-size:10px;color:#185fa5;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Chief Medical Officer</div>
+            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:#e6f1fb;border-radius:6px;border-left:2px solid #185fa5;margin-bottom:12px;">"I need physicians to understand exactly what's expected of them — and a way to raise the bar through peer competition."</div>
             <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Key struggles</div>
             <div style="display:flex;flex-direction:column;gap:4px;">
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Needs monthly and yearly organizational quality reports across all facilities</div>
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Wants to bring together disparate data from different sources for board presentation</div>
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Needs external benchmarking against peer organizations (e.g., Premier)</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Available solutions aren't centralized — no single streamlined workflow</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Inconsistent charting formats and difficulty inferring data into action plans</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Not proactive in finding more information; wants to work from a tablet</div>
             </div>
           </div>
         </div>
@@ -618,15 +787,15 @@ footer strong { color: rgba(255,255,255,.75); }
         <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
           <div style="height:3px;background:#854f0b;"></div>
           <div style="padding:20px 18px;">
-            <div style="width:40px;height:40px;border-radius:50%;background:#faeeda;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#854f0b;margin-bottom:10px;">DH</div>
-            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Dept. Head / Physician</div>
-            <div style="font-size:10px;color:#854f0b;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Clinical Leader</div>
-            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:#faeeda;border-radius:6px;border-left:2px solid #854f0b;margin-bottom:12px;">"I need to know what's happening in my department — not the whole hospital."</div>
+            <div style="width:40px;height:40px;border-radius:50%;background:#faeeda;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#854f0b;margin-bottom:10px;">R</div>
+            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Randy</div>
+            <div style="font-size:10px;color:#854f0b;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Department Manager / Physician</div>
+            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:#faeeda;border-radius:6px;border-left:2px solid #854f0b;margin-bottom:12px;">"I see 25 to 30 patients a day — I need performance data that actually reflects my practice, not noise."</div>
             <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Key struggles</div>
             <div style="display:flex;flex-direction:column;gap:4px;">
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#854f0b;flex-shrink:0;">·</span>Prepares reports for multiple departments with inconsistent templates</div>
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#854f0b;flex-shrink:0;">·</span>Needs to establish goals and monitor activities/strategies toward goal attainment</div>
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#854f0b;flex-shrink:0;">·</span>Monitors activities/strategies based on established goals — but goals are set elsewhere</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#854f0b;flex-shrink:0;">·</span>No robust system exists to measure physician performance, and limited ability to reduce noise in the data</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#854f0b;flex-shrink:0;">·</span>No defined process for what to do when a measure falls beyond threshold</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#854f0b;flex-shrink:0;">·</span>No external peer comparison, and PQRS measures apply only to Medicare patients</div>
             </div>
           </div>
         </div>
@@ -1345,6 +1514,70 @@ footer strong { color: rgba(255,255,255,.75); }
   closeBtn.addEventListener('click', closeModal);
   modal.addEventListener('click', function(e) { if (e.target===modal) closeModal(); });
   document.addEventListener('keydown', function(e) { if (e.key==='Escape'&&modal.classList.contains('open')) closeModal(); });
+})();
+</script>
+
+<!-- Static hero mockup mini-charts (Star Watch overview cards) -->
+<script>
+(function(){
+  var QM_QLABELS = ['Q1 2018','Q2 2018','Q3 2018','Q4 2018','Q1 2019','Q2 2019','Q3 2019','Q4 2019'];
+  var QM_IDX = [0,1,2,3,4,5,6,7];
+
+  var QM_DATA = {
+    mortality:   { premier:[2,2,0.3,1,1,1,1,1],               cmsAvg:[1,1,1,1,1,1,1,1],                     yMax:4, yTicks:[0,2,4] },
+    readmission: { premier:[0,0,0,0,0,0,0,0],                 cmsAvg:[5,3.3,3.2,3.1,1,0.3,0.3,0.3],         yMax:5, yTicks:[0,5] },
+    safety:      { premier:[1,1.3,3,3,2,3,3,4],               cmsAvg:[0.3,1,3,2.2,1.8,2.3,2.6,3],           yMax:5, yTicks:[0,5] },
+    experience:  { premier:null,                              cmsAvg:[5.2,5.1,5,4.3,5.6,5.5,5.4,5.4],       yMax:6, yTicks:[5] }
+  };
+
+  function qmRenderChart(containerId, opts){
+    var el = document.getElementById(containerId);
+    if(!el) return;
+    var width = el.clientWidth || 300;
+    var height = opts.height || 118;
+    var mL = 26, mR = 8, mT = 10, mB = 18;
+    var plotW = width - mL - mR, plotH = height - mT - mB;
+    var n = QM_QLABELS.length, xStep = plotW/(n-1);
+    var yMin = 0, yMax = opts.yMax;
+    function X(i){ return mL + i*xStep; }
+    function Y(v){ return mT + plotH - ((v-yMin)/(yMax-yMin))*plotH; }
+
+    var svg = '<svg width="100%" height="'+height+'" viewBox="0 0 '+width+' '+height+'">';
+    (opts.yTicks||[]).forEach(function(t){
+      var y = Y(t);
+      svg += '<line x1="'+mL+'" y1="'+y+'" x2="'+(mL+plotW)+'" y2="'+y+'" stroke="#e8eaea" stroke-width="1"/>';
+      svg += '<text x="'+(mL-6)+'" y="'+(y+3)+'" font-size="8.5" fill="#8a8a84" text-anchor="end">'+t+'</text>';
+    });
+    QM_QLABELS.forEach(function(lab,i){
+      svg += '<text x="'+X(i)+'" y="'+(height-5)+'" font-size="7.5" fill="#8a8a84" text-anchor="middle">'+lab.split(' ')[0]+'</text>';
+    });
+    (opts.series||[]).forEach(function(s){
+      if(!s.values) return;
+      var pts = '';
+      s.indices.forEach(function(i,k){ pts += X(i)+','+Y(s.values[k])+' '; });
+      svg += '<polyline points="'+pts.trim()+'" fill="none" stroke="'+s.color+'" stroke-width="'+(s.width||2)+'" '+(s.dash?'stroke-dasharray="'+s.dash+'"':'')+' stroke-linecap="round" stroke-linejoin="round"/>';
+      if(s.dots!==false){
+        s.indices.forEach(function(i,k){
+          svg += '<circle cx="'+X(i)+'" cy="'+Y(s.values[k])+'" r="2.6" fill="'+s.color+'"/>';
+        });
+      }
+    });
+    svg += '</svg>';
+    el.innerHTML = svg;
+  }
+
+  function qmDrawAll(){
+    Object.keys(QM_DATA).forEach(function(key){
+      var d = QM_DATA[key];
+      var series = [];
+      if(d.premier) series.push({indices:QM_IDX, values:d.premier, color:'#006d77', width:2.2});
+      series.push({indices:QM_IDX, values:d.cmsAvg, color:'#b07d2a', width:1.8, dash:'5,4', dots:false});
+      qmRenderChart('qm-chart-'+key, {yMax:d.yMax, yTicks:d.yTicks, series:series, height:118});
+    });
+  }
+
+  window.addEventListener('load', qmDrawAll);
+  window.addEventListener('resize', qmDrawAll);
 })();
 </script>
 
