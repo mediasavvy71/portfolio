@@ -471,7 +471,7 @@ footer strong { color: rgba(255,255,255,.75); }
       </div>
       <div class="hero-meta-item">
         <div class="meta-label">Scope</div>
-        <div class="meta-val">End-to-end · Multi-role, Multi-facility</div>
+        <div class="meta-val">Individual - Department - Specialty - Facility - System</div>
       </div>
       <div class="hero-meta-item">
         <div class="meta-label">Methods</div>
@@ -497,7 +497,7 @@ footer strong { color: rgba(255,255,255,.75); }
         <div class="qm-topbar">
           <div class="qm-brand">
             <div class="qm-brand-mark"></div>
-            <div class="qm-brand-text">Quality Measures Reporter and Ratings</div>
+            <div class="qm-brand-text">Hospital Quality Performance</div>
           </div>
           <div class="qm-nav">
             <div class="qm-nav-item">Quality Measures Reporter</div>
@@ -508,17 +508,17 @@ footer strong { color: rgba(255,255,255,.75); }
         </div>
 
         <!-- Breadcrumb -->
-        <div class="qm-crumb"><a>PremierConnect</a><span> / </span><a>Star Watch</a></div>
+        <div class="qm-crumb"><a>PremierConnect</a><span> / </span><a>Hospital Quality Performance</a></div>
 
         <!-- Page header -->
         <div class="qm-page-header">
           <div class="qm-ph-left">
-            <h1>Premier General (S19175) | Q4 2019</h1>
+            <h1>General Hospital (S19175) | Q4 2019</h1>
             <div class="qm-stars">Q4 2018 CMS Star Rating <span class="qm-star-fill">★★★</span><span class="qm-star-empty">★★</span></div>
           </div>
           <div class="qm-filters">
             <div class="qm-pf-item"><div class="qm-pf-label">Health System</div><div class="qm-pf-val">Premier Health System</div></div>
-            <div class="qm-pf-item"><div class="qm-pf-label">CCN</div><div class="qm-pf-val">Premier General</div></div>
+            <div class="qm-pf-item"><div class="qm-pf-label">CCN</div><div class="qm-pf-val">General Hospital</div></div>
             <div class="qm-pf-item"><div class="qm-pf-label">Time Interval</div><div class="qm-pf-val">Q4 2019</div></div>
             <div class="qm-pf-item"><div class="qm-pf-label">Comparator</div><div class="qm-pf-val">Average</div></div>
           </div>
@@ -1253,58 +1253,129 @@ footer strong { color: rgba(255,255,255,.75); }
 
     'Information Architecture & Hierarchy': { html: `
       <div style="font-family:var(--sans);">
-        <p style="font-size:13px;color:var(--ink2);margin-bottom:28px;line-height:1.6;">The IA model that replaced five disconnected systems with a single navigable hierarchy — from organization to facility group to measure category to individual measure and corrective action.</p>
-        <div style="display:flex;flex-direction:column;align-items:center;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
-          <div style="width:100%;background:var(--gold);padding:14px 20px;text-align:center;color:#fff;font-size:13px;font-weight:600;letter-spacing:.04em;">Organization Level</div>
-          <div style="width:2px;height:20px;background:var(--gold-mid);"></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;padding:0 40px 16px;">
-            <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:8px;padding:12px 16px;text-align:center;">
-              <div style="font-size:12px;font-weight:600;color:var(--gold);">Facility Group A</div>
-              <div style="font-size:11px;color:var(--ink3);margin-top:3px;">Premier General · Premier Regional</div>
-            </div>
-            <div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:8px;padding:12px 16px;text-align:center;">
-              <div style="font-size:12px;font-weight:600;color:var(--gold);">Facility Group B</div>
-              <div style="font-size:11px;color:var(--ink3);margin-top:3px;">Community East · Community West</div>
+        <p style="font-size:13px;color:var(--ink2);margin-bottom:18px;line-height:1.6;">The Star Watch drill-down hierarchy — a single navigable path from facility overview to individual measure, replacing the disconnected reports users previously had to assemble by hand. Each level carries a matching breadcrumb and URL state, so any view can be bookmarked or shared.</p>
+
+        <!-- Legend -->
+        <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink2);"><span style="width:10px;height:10px;border-radius:50%;background:var(--gold);display:inline-block;"></span>Shipped in this release</div>
+          <div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink2);"><span style="width:10px;height:10px;border-radius:50%;border:1.5px dashed var(--ink3);display:inline-block;"></span>Identified opportunity — not yet built</div>
+        </div>
+
+        <!-- Persistent filters -->
+        <div style="border:1px dashed var(--border2);border-radius:10px;padding:10px 16px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+          <div style="font-size:9.5px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;">Persistent at every level</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span style="font-size:10.5px;font-weight:500;color:var(--ink2);background:var(--white);border:1px solid var(--border);border-radius:20px;padding:3px 10px;">Health System</span>
+            <span style="font-size:10.5px;font-weight:500;color:var(--ink2);background:var(--white);border:1px solid var(--border);border-radius:20px;padding:3px 10px;">Facility (CCN)</span>
+            <span style="font-size:10.5px;font-weight:500;color:var(--ink2);background:var(--white);border:1px solid var(--border);border-radius:20px;padding:3px 10px;">Time Interval</span>
+            <span style="font-size:10.5px;font-weight:500;color:var(--ink2);background:var(--white);border:1px solid var(--border);border-radius:20px;padding:3px 10px;">Comparator</span>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0;">
+
+          <!-- L0 — Entry -->
+          <div style="display:flex;gap:14px;">
+            <div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--gold);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">L0</div>
+            <div style="flex:1;border:1px solid var(--border);border-radius:10px;padding:12px 16px;background:var(--white);box-shadow:var(--shadow-sm);">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                <div style="font-size:12.5px;font-weight:600;color:var(--ink);">Star Watch — Entry Point</div>
+                <div style="font-size:10px;color:var(--ink3);font-family:monospace;">PremierConnect / Star Watch</div>
+              </div>
+              <div style="font-size:11px;color:var(--ink2);margin-top:4px;">Reached from the top-level product nav (alongside Quality Measures Reporter and Pay for Performance)</div>
             </div>
           </div>
-          <div style="width:2px;height:20px;background:var(--border2);"></div>
-          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;width:100%;padding:0 20px 16px;">
-            <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
-              <div style="font-size:20px;margin-bottom:4px;">💔</div>
-              <div style="font-size:11px;font-weight:600;color:var(--ink);">Mortality</div>
-              <div style="font-size:10px;color:var(--ink3);margin-top:2px;">7 measures</div>
-            </div>
-            <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
-              <div style="font-size:20px;margin-bottom:4px;">🛡️</div>
-              <div style="font-size:11px;font-weight:600;color:var(--ink);">Safety of Care</div>
-              <div style="font-size:10px;color:var(--ink3);margin-top:2px;">4 measures</div>
-            </div>
-            <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
-              <div style="font-size:20px;margin-bottom:4px;">🔄</div>
-              <div style="font-size:11px;font-weight:600;color:var(--ink);">Readmissions</div>
-              <div style="font-size:10px;color:var(--ink3);margin-top:2px;">8 measures</div>
-            </div>
-            <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;">
-              <div style="font-size:20px;margin-bottom:4px;">😊</div>
-              <div style="font-size:11px;font-weight:600;color:var(--ink);">Patient Experience</div>
-              <div style="font-size:10px;color:var(--ink3);margin-top:2px;">5 measures</div>
+          <div style="width:2px;height:20px;background:var(--border2);margin-left:16px;"></div>
+
+          <!-- L1 — Facility overview -->
+          <div style="display:flex;gap:14px;">
+            <div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--gold);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">L1</div>
+            <div style="flex:1;border:1px solid var(--border);border-radius:10px;padding:12px 16px;background:var(--white);box-shadow:var(--shadow-sm);">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                <div style="font-size:12.5px;font-weight:600;color:var(--ink);">Overview — Premier General (S19175) | Q4 2019</div>
+                <div style="font-size:10px;color:var(--ink3);font-family:monospace;">.../starwatch</div>
+              </div>
+              <div style="font-size:11px;color:var(--ink2);margin-top:4px;">CMS Star Rating + Measure Category Performance grid — the landing view for every role</div>
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+                <span style="font-size:9.5px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;">Filterable to</span>
+                <span style="font-size:10px;font-weight:500;color:var(--gold);background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:20px;padding:2px 9px;">Facility</span>
+                <span style="font-size:10px;font-weight:500;color:var(--gold);background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:20px;padding:2px 9px;">Specialty</span>
+                <span style="font-size:10px;font-weight:500;color:var(--gold);background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:20px;padding:2px 9px;">Department</span>
+                <span style="font-size:10px;font-weight:500;color:var(--gold);background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:20px;padding:2px 9px;">Doctor</span>
+              </div>
             </div>
           </div>
-          <div style="width:2px;height:20px;background:var(--border2);"></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;width:100%;padding:0 20px 16px;">
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;">
-              <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:4px;">Measure Detail</div>
-              <div style="font-size:11px;color:var(--ink2);">Score, trend, peer benchmark, percentile rank</div>
-            </div>
-            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;">
-              <div style="font-size:11px;font-weight:600;color:var(--ink);margin-bottom:4px;">Trend & Benchmark</div>
-              <div style="font-size:11px;color:var(--ink2);">12-month trend + peer comparison chart</div>
-            </div>
-            <div style="background:#eaf3de;border:1px solid #c0dd97;border-radius:8px;padding:12px;">
-              <div style="font-size:11px;font-weight:600;color:#3b6d11;margin-bottom:4px;">→ Corrective Action</div>
-              <div style="font-size:11px;color:var(--ink2);">Recommended steps, owner assignment, timeline</div>
+          <div style="width:2px;height:20px;background:var(--border2);margin-left:16px;"></div>
+
+          <!-- L2 — 4 category cards -->
+          <div style="display:flex;gap:14px;">
+            <div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--gold);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">L2</div>
+            <div style="flex:1;">
+              <div style="font-size:10px;color:var(--ink3);margin-bottom:6px;">4 measure category cards — click any card to drill in</div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;box-shadow:var(--shadow-sm);">
+                  <div style="font-size:18px;margin-bottom:4px;">💔</div>
+                  <div style="font-size:11px;font-weight:600;color:var(--ink);">Mortality</div>
+                  <div style="font-size:9.5px;color:var(--ink3);margin-top:2px;">7 measures</div>
+                </div>
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;box-shadow:var(--shadow-sm);">
+                  <div style="font-size:18px;margin-bottom:4px;">🔄</div>
+                  <div style="font-size:11px;font-weight:600;color:var(--ink);">Readmission</div>
+                  <div style="font-size:9.5px;color:var(--ink3);margin-top:2px;">8 measures</div>
+                </div>
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;box-shadow:var(--shadow-sm);">
+                  <div style="font-size:18px;margin-bottom:4px;">🛡️</div>
+                  <div style="font-size:11px;font-weight:600;color:var(--ink);">Safety of Care</div>
+                  <div style="font-size:9.5px;color:var(--ink3);margin-top:2px;">8 measures</div>
+                </div>
+                <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;box-shadow:var(--shadow-sm);">
+                  <div style="font-size:18px;margin-bottom:4px;">😊</div>
+                  <div style="font-size:11px;font-weight:600;color:var(--ink);">Patient Experience</div>
+                  <div style="font-size:9.5px;color:var(--ink3);margin-top:2px;">10 measures</div>
+                </div>
+              </div>
             </div>
           </div>
+          <div style="width:2px;height:20px;background:var(--border2);margin-left:16px;"></div>
+
+          <!-- L3 — Category detail -->
+          <div style="display:flex;gap:14px;">
+            <div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--gold);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">L3</div>
+            <div style="flex:1;border:1px solid var(--border);border-radius:10px;padding:12px 16px;background:var(--white);box-shadow:var(--shadow-sm);">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                <div style="font-size:12.5px;font-weight:600;color:var(--ink);">Measure Category — e.g. Mortality</div>
+                <div style="font-size:10px;color:var(--ink3);font-family:monospace;">.../starwatch/category/mortality</div>
+              </div>
+              <div style="font-size:11px;color:var(--ink2);margin-top:4px;">Category trend chart + full measures table with Exceeds / Fails / Does Not Qualify status per measure — click any row to drill in</div>
+            </div>
+          </div>
+          <div style="width:2px;height:20px;background:var(--border2);margin-left:16px;"></div>
+
+          <!-- L4 — Measure detail -->
+          <div style="display:flex;gap:14px;">
+            <div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--gold);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">L4</div>
+            <div style="flex:1;border:1px solid var(--border);border-radius:10px;padding:12px 16px;background:var(--white);box-shadow:var(--shadow-sm);">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                <div style="font-size:12.5px;font-weight:600;color:var(--ink);">Measure Detail — e.g. AMI 30-Day Mortality Rate</div>
+                <div style="font-size:10px;color:var(--ink3);font-family:monospace;">.../starwatch/measure/ami-30day-mortality</div>
+              </div>
+              <div style="font-size:11px;color:var(--ink2);margin-top:4px;">Trend + peer/CMS benchmark chart with an optional forward projection, plus Service Line Performance breakdown</div>
+            </div>
+          </div>
+          <div style="width:2px;height:20px;border-left:2px dashed var(--ink3);margin-left:16px;background:none;"></div>
+
+          <!-- L5 — Corrective action (opportunity, not built) -->
+          <div style="display:flex;gap:14px;">
+            <div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--white);border:1.5px dashed var(--ink3);color:var(--ink3);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">L5</div>
+            <div style="flex:1;border:1.5px dashed var(--border2);border-radius:10px;padding:12px 16px;background:var(--offwhite);">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                <div style="font-size:12.5px;font-weight:600;color:var(--ink2);">Corrective Action Workflow — identified gap</div>
+                <div style="font-size:10px;color:var(--ink3);">Not yet built</div>
+              </div>
+              <div style="font-size:11px;color:var(--ink3);margin-top:4px;">Recommended next step, owner assignment, and timeline — today this happens outside the platform, in spreadsheets and email. Scoped as the natural extension of the L4 view.</div>
+            </div>
+          </div>
+
         </div>
       </div>` },
 
