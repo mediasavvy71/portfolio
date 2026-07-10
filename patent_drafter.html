@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Provisional Patent Application Drafter</title>
+<style>
+  :root{
+    --navy:#1b2a41;
+    --navy-light:#28405f;
+    --accent:#b5892b;
+    --accent-light:#d9ae5a;
+    --bg:#f5f3ee;
+    --card:#ffffff;
+    --border:#dcd7cb;
+    --text:#25272b;
+    --muted:#6b6f76;
+    --danger:#a3372f;
+    --success:#2e6b3e;
+    --radius:8px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.5;
+  }
+  .app-shell{max-width:960px;margin:0 auto;padding:24px 20px 80px;}
+  header.top{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:20px;
+  }
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand .mark{
+    width:40px;height:40px;border-radius:10px;
+    background:linear-gradient(135deg,var(--navy),var(--navy-light));
+    display:flex;align-items:center;justify-content:center;
+    color:var(--accent-light);font-weight:700;font-size:18px;
+    font-family:Georgia,'Times New Roman',serif;
+  }
+  .brand h1{font-size:19px;margin:0;color:var(--navy);}
+  .brand p{margin:0;font-size:12.5px;color:var(--muted);}
+  button.icon-btn{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:8px 14px;cursor:pointer;font-size:13px;color:var(--navy);
+    display:flex;align-items:center;gap:6px;
+  }
+  button.icon-btn:hover{border-color:var(--accent);}
+
+  .steps-nav{
+    display:flex;gap:4px;margin-bottom:22px;background:var(--card);
+    border:1px solid var(--border);border-radius:var(--radius);padding:6px;
+  }
+  .steps-nav button{
+    flex:1;border:none;background:transparent;padding:10px 6px;border-radius:6px;
+    cursor:pointer;font-size:12.5px;color:var(--muted);font-weight:600;
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+  }
+  .steps-nav button .num{
+    width:22px;height:22px;border-radius:50%;background:var(--bg);
+    display:flex;align-items:center;justify-content:center;font-size:12px;
+    color:var(--muted);border:1px solid var(--border);
+  }
+  .steps-nav button.active{color:var(--navy);}
+  .steps-nav button.active .num{background:var(--navy);color:#fff;border-color:var(--navy);}
+  .steps-nav button.done .num{background:var(--success);color:#fff;border-color:var(--success);}
+  .steps-nav button:disabled{cursor:not-allowed;opacity:.55;}
+
+  .settings-panel{
+    display:none;background:var(--card);border:1px solid var(--border);
+    border-radius:var(--radius);padding:16px;margin-bottom:18px;
+  }
+  .settings-panel.open{display:block;}
+  .settings-panel h3{margin:0 0 10px;font-size:14px;color:var(--navy);}
+  .settings-panel .row{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+  .settings-panel .row > div{flex:1;min-width:220px;}
+  .settings-panel label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;}
+  .settings-panel input, .settings-panel select{
+    width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;
+  }
+  .settings-note{font-size:11.5px;color:var(--muted);margin-top:6px;}
+
+  .card{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    padding:22px;margin-bottom:18px;
+  }
+  .card h2{margin:0 0 4px;font-size:18px;color:var(--navy);}
+  .card .sub{margin:0 0 18px;font-size:13px;color:var(--muted);}
+  label.field-label{display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px;}
+  input[type=text], textarea, select.form-select{
+    width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:6px;
+    font-size:14px;font-family:inherit;color:var(--text);background:#fff;
+  }
+  textarea{resize:vertical;min-height:70px;}
+  .field-block{margin-bottom:18px;}
+  .hint{font-size:12px;color:var(--muted);margin-top:4px;}
+
+  .list-row{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start;}
+  .list-row input{flex:1;}
+  .list-row button{
+    border:1px solid var(--border);background:#fff;border-radius:6px;
+    width:34px;height:38px;cursor:pointer;color:var(--danger);font-size:15px;flex-shrink:0;
+  }
+  .add-link{
+    background:none;border:none;color:var(--navy);font-weight:600;font-size:13px;
+    cursor:pointer;padding:4px 0;
+  }
+
+  .fig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:10px;}
+  .fig-card{border:1px solid var(--border);border-radius:8px;padding:8px;background:#fafaf8;}
+  .fig-card img{width:100%;height:110px;object-fit:contain;background:#fff;border-radius:4px;border:1px solid var(--border);}
+  .fig-card .fig-label{font-size:12px;font-weight:700;color:var(--navy);margin:6px 0 4px;}
+  .fig-card input{font-size:12px;padding:5px 7px;}
+  .fig-card .remove{background:none;border:none;color:var(--danger);font-size:11px;cursor:pointer;margin-top:4px;padding:0;}
+  .upload-drop{
+    border:2px dashed var(--border);border-radius:8px;padding:20px;text-align:center;
+    color:var(--muted);font-size:13px;cursor:pointer;background:#fafaf8;
+  }
+  .upload-drop:hover{border-color:var(--accent);}
+
+  .btn{
+    background:var(--navy);color:#fff;border:none;padding:11px 18px;border-radius:6px;
+    font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+  }
+  .btn:hover{background:var(--navy-light);}
+  .btn:disabled{background:#a9adb5;cursor:not-allowed;}
+  .btn.secondary{background:#fff;color:var(--navy);border:1px solid var(--border);}
+  .btn.secondary:hover{border-color:var(--navy);}
+  .btn.ghost{background:transparent;color:var(--navy);border:1px solid transparent;padding:8px 10px;font-weight:600;font-size:13px;}
+  .btn.ghost:hover{background:#f0eee7;}
+  .btn.small{padding:7px 12px;font-size:12.5px;}
+
+  .actions-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px;}
+  .footer-nav{display:flex;justify-content:space-between;margin-top:18px;}
+
+  .spinner{
+    width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;
+    border-radius:50%;animation:spin .7s linear infinite;
+  }
+  .spinner.dark{border:2px solid rgba(27,42,65,.25);border-top-color:var(--navy);}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .embodiment-card, .claim-card{
+    border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:12px;background:#fafaf8;
+  }
+  .embodiment-card .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:10px;}
+  .embodiment-card .head input[type=text]{font-weight:700;color:var(--navy);}
+  .embodiment-card .toggle{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);white-space:nowrap;}
+  .claim-card .head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+  .claim-card .num{font-weight:700;color:var(--navy);font-size:13px;}
+
+  .section-block{margin-bottom:22px;}
+  .section-block .section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:8px;}
+  .section-block h3{margin:0;font-size:14px;color:var(--navy);text-transform:uppercase;letter-spacing:.03em;}
+  .refine-row{display:flex;gap:8px;margin-top:8px;}
+  .refine-row input{flex:1;font-size:12.5px;padding:7px 9px;}
+
+  .banner{
+    padding:11px 14px;border-radius:6px;font-size:13px;margin-bottom:14px;display:flex;
+    align-items:flex-start;gap:8px;
+  }
+  .banner.error{background:#fbe9e7;color:var(--danger);border:1px solid #f0c4bd;}
+  .banner.info{background:#eaf1fb;color:#1c4f8c;border:1px solid #c9dcf3;}
+  .banner.success{background:#e9f5ec;color:var(--success);border:1px solid #c6e5cd;}
+  .banner button{background:none;border:none;margin-left:auto;cursor:pointer;color:inherit;font-size:14px;}
+
+  .empty-state{text-align:center;padding:34px 16px;color:var(--muted);}
+  .empty-state .icon{font-size:26px;margin-bottom:8px;}
+
+  .preview-doc{
+    font-family:'Times New Roman',Times,Georgia,serif;background:#fff;border:1px solid var(--border);
+    padding:40px;border-radius:6px;font-size:14.5px;color:#111;line-height:1.65;
+  }
+  .preview-doc h2.doc-title{text-align:center;font-size:16px;letter-spacing:.02em;margin-bottom:26px;}
+  .preview-doc h3.doc-h{font-size:13.5px;letter-spacing:.04em;margin:26px 0 10px;text-transform:uppercase;}
+  .preview-doc p{margin:0 0 12px;white-space:pre-wrap;}
+  .preview-doc .fig-block{text-align:center;margin:20px 0;}
+  .preview-doc .fig-block img{max-width:70%;border:1px solid #ccc;}
+  .preview-doc .fig-block .cap{font-size:12.5px;margin-top:6px;font-weight:bold;}
+
+  .export-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;}
+  .export-card{border:1px solid var(--border);border-radius:8px;padding:18px;text-align:center;background:#fafaf8;}
+  .export-card .ico{font-size:26px;margin-bottom:8px;}
+  .export-card p{font-size:12px;color:var(--muted);margin:6px 0 12px;}
+
+  @media print{
+    .app-chrome{display:none !important;}
+    .printable{display:block !important;}
+    body{background:#fff;}
+  }
+  .printable{display:none;}
+  @media (max-width:640px){
+    .steps-nav button span.label{display:none;}
+    .export-grid{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app-shell app-chrome">
+  <header class="top">
+    <div class="brand">
+      <div class="mark">P</div>
+      <div>
+        <h1>Provisional Patent Application Drafter</h1>
+        <p>Draft a USPTO-ready PPA with AI-assisted ideation and specification drafting</p>
+      </div>
+    </div>
+    <button class="icon-btn" id="settingsToggle">⚙ Settings</button>
+  </header>
+
+  <div class="settings-panel" id="settingsPanel">
+    <h3>AI Settings</h3>
+    <div class="row">
+      <div>
+        <label>Anthropic API Key</label>
+        <input type="password" id="apiKeyInput" placeholder="sk-ant-...">
+      </div>
+      <div>
+        <label>Model</label>
+        <select id="modelSelect" class="form-select">
+          <option value="claude-sonnet-5">Claude Sonnet 5 (recommended)</option>
+          <option value="claude-opus-4-8">Claude Opus 4.8 (highest quality, slower)</option>
+          <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 (fastest)</option>
+        </select>
+      </div>
+    </div>
+    <div class="actions-row">
+      <button class="btn small" id="saveKeyBtn">Save</button>
+      <button class="btn small secondary" id="clearKeyBtn">Clear key</button>
+      <button class="btn small secondary" id="resetAppBtn">Reset all data</button>
+    </div>
+    <p class="settings-note">Your API key is stored only in this browser's local storage and is sent directly to Anthropic's API — never to any third-party server. Get a key at console.anthropic.com. Requests are billed to your own Anthropic account.</p>
+  </div>
+
+  <div class="steps-nav" id="stepsNav"></div>
+  <div id="bannerZone"></div>
+  <div id="stepContent"></div>
+</div>
+
+<!-- Printable document view, populated on export -->
+<div class="printable" id="printableDoc"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@8/build/index.js"></script>
+<script>
+(function(){
+"use strict";
+
+/* ---------------------------------------------------------------
+   STATE
+--------------------------------------------------------------- */
+const STORAGE_KEY = "ppa_drafter_state_v1";
+const API_KEY_STORAGE = "ppa_drafter_api_key";
+const MODEL_STORAGE = "ppa_drafter_model";
+
+let state = {
+  currentStep: 1,
+  intake: {
+    productName: "",
+    problem: "",
+    features: [""],
+    notes: ""
+  },
+  figures: [], // {id, label, caption, dataUrl, mediaType, width, height}
+  embodiments: [], // {title, description, include}
+  embodimentsGenerated: false,
+  spec: { title:"", field:"", summary:"", drawings:"", detailedDescription:"" },
+  specGenerated: false,
+  claims: [],
+  claimsGenerated: false
+};
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      state = Object.assign(state, parsed);
+    }
+  }catch(e){ console.warn("Could not load saved state", e); }
+}
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }catch(e){
+    console.warn("Could not save state (possibly quota exceeded)", e);
+  }
+}
+
+function getApiKey(){ return localStorage.getItem(API_KEY_STORAGE) || ""; }
+function getModel(){ return localStorage.getItem(MODEL_STORAGE) || "claude-sonnet-5"; }
+
+/* ---------------------------------------------------------------
+   BANNER / ERROR HANDLING
+--------------------------------------------------------------- */
+function showBanner(type, message){
+  const zone = document.getElementById("bannerZone");
+  const div = document.createElement("div");
+  div.className = "banner " + type;
+  div.innerHTML = "<span>" + escapeHtml(message) + "</span><button aria-label='dismiss'>✕</button>";
+  div.querySelector("button").onclick = () => div.remove();
+  zone.innerHTML = "";
+  zone.appendChild(div);
+  if(type !== "error"){
+    setTimeout(()=>{ if(div.parentNode) div.remove(); }, 6000);
+  }
+}
+function escapeHtml(str){
+  const d = document.createElement("div");
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+/* ---------------------------------------------------------------
+   ANTHROPIC API CALL
+--------------------------------------------------------------- */
+async function callClaude({system, userText, images = [], maxTokens = 2048}){
+  const apiKey = getApiKey();
+  if(!apiKey){
+    showBanner("error", "Please add your Anthropic API key in Settings (top right) before using AI drafting features.");
+    document.getElementById("settingsPanel").classList.add("open");
+    throw new Error("Missing API key");
+  }
+  const content = [];
+  images.forEach(img=>{
+    content.push({ type:"image", source:{ type:"base64", media_type: img.mediaType, data: img.base64 } });
+  });
+  content.push({ type:"text", text:userText });
+
+  const body = {
+    model: getModel(),
+    max_tokens: maxTokens,
+    system: system,
+    messages: [{ role:"user", content }]
+  };
+
+  let res;
+  try{
+    res = await fetch("https://api.anthropic.com/v1/messages", {
+      method:"POST",
+      headers:{
+        "content-type":"application/json",
+        "x-api-key": apiKey,
+        "anthropic-version":"2023-06-01",
+        "anthropic-dangerous-direct-browser-access":"true"
+      },
+      body: JSON.stringify(body)
+    });
+  }catch(networkErr){
+    throw new Error("Network error reaching Anthropic API: " + networkErr.message);
+  }
+
+  if(!res.ok){
+    let detail = "";
+    try{ const j = await res.json(); detail = j.error && j.error.message ? j.error.message : JSON.stringify(j); }
+    catch(e){ detail = await res.text(); }
+    throw new Error("API error (" + res.status + "): " + detail);
+  }
+  const data = await res.json();
+  return (data.content || []).map(c=>c.text || "").join("\n");
+}
+
+function extractJSON(text){
+  // try fenced code block first
+  let m = text.match(/```json\s*([\s\S]*?)```/i) || text.match(/```\s*([\s\S]*?)```/);
+  let candidate = m ? m[1] : text;
+  // try to find first {...} or [...] spanning the widest range
+  const firstBrace = candidate.indexOf("{");
+  const firstBracket = candidate.indexOf("[");
+  let start = -1;
+  if(firstBrace === -1) start = firstBracket;
+  else if(firstBracket === -1) start = firstBrace;
+  else start = Math.min(firstBrace, firstBracket);
+  if(start === -1) throw new Error("No JSON found in AI response");
+  const isArray = candidate[start] === "[";
+  const end = isArray ? candidate.lastIndexOf("]") : candidate.lastIndexOf("}");
+  const jsonStr = candidate.slice(start, end+1);
+  return JSON.parse(jsonStr);
+}
+
+/* ---------------------------------------------------------------
+   MASTER SYSTEM PROMPT
+--------------------------------------------------------------- */
+const MASTER_SYSTEM_PROMPT = `You are an expert Patent Attorney and seasoned Product Owner specializing in bringing new hardware and software products to market. Your task is to help the user draft a high-quality Provisional Patent Application (PPA) that establishes an ironclad priority date with the USPTO and adequately discloses the invention to withstand future legal scrutiny.
+
+Guiding Principles:
+- Enablement & Best Mode: Describe the invention so clearly and comprehensively that a person having "ordinary skill in the art" could make and use the invention without needing further information.
+- Broad Protection: Envision alternative embodiments. Brainstorm variations, different materials, configurations, and use-cases. What is not disclosed may not be covered later.
+- Avoid Patentee Traps: Focus on how the system achieves functionalities (data flows, structural configurations, mechanical interactions) rather than just what it does.
+- Plain Language: Write in clear, concise, unambiguous English. Avoid confusing legalese.
+
+You will be given structured information about an invention (product name, problem solved, core features, optional images of figures/mockups, and possibly previously accepted alternative embodiments or drafted sections). Follow the specific task instructions given in each request exactly, including any requested output format.`;
+
+/* ---------------------------------------------------------------
+   IMAGE HANDLING
+--------------------------------------------------------------- */
+function resizeImageFile(file, maxDim){
+  maxDim = maxDim || 1200;
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("Could not read file"));
+    reader.onload = (e)=>{
+      const img = new Image();
+      img.onerror = () => reject(new Error("Could not decode image"));
+      img.onload = ()=>{
+        let { width, height } = img;
+        if(width > maxDim || height > maxDim){
+          const scale = Math.min(maxDim/width, maxDim/height);
+          width = Math.round(width*scale);
+          height = Math.round(height*scale);
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width; canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0,0,width,height);
+        ctx.drawImage(img, 0, 0, width, height);
+        const mediaType = "image/jpeg";
+        const dataUrl = canvas.toDataURL(mediaType, 0.87);
+        resolve({ dataUrl, mediaType, width, height, base64: dataUrl.split(",")[1] });
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function dataURLToUint8Array(dataUrl){
+  const base64 = dataUrl.split(",")[1];
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for(let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
+/* ---------------------------------------------------------------
+   STEP DEFINITIONS
+--------------------------------------------------------------- */
+const STEPS = [
+  { id:1, label:"Intake" },
+  { id:2, label:"Ideation" },
+  { id:3, label:"Specification" },
+  { id:4, label:"Claims" },
+  { id:5, label:"Export" }
+];
+
+function stepUnlocked(id){
+  if(id === 1) return true;
+  if(id === 2) return intakeValid();
+  if(id === 3) return intakeValid();
+  if(id === 4) return state.specGenerated;
+  if(id === 5) return state.specGenerated;
+  return false;
+}
+function stepDone(id){
+  if(id === 1) return intakeValid();
+  if(id === 2) return state.embodimentsGenerated;
+  if(id === 3) return state.specGenerated;
+  if(id === 4) return state.claimsGenerated;
+  return false;
+}
+function intakeValid(){
+  return state.intake.productName.trim().length > 0 &&
+         state.intake.problem.trim().length > 0 &&
+         state.intake.features.some(f=>f.trim().length>0);
+}
+
+function renderStepsNav(){
+  const nav = document.getElementById("stepsNav");
+  nav.innerHTML = "";
+  STEPS.forEach(s=>{
+    const btn = document.createElement("button");
+    btn.className = (state.currentStep===s.id ? "active " : "") + (stepDone(s.id) ? "done " : "");
+    btn.disabled = !stepUnlocked(s.id);
+    btn.innerHTML = "<span class='num'>" + (stepDone(s.id) ? "✓" : s.id) + "</span><span class='label'>" + s.label + "</span>";
+    btn.onclick = ()=>{ state.currentStep = s.id; saveState(); render(); };
+    nav.appendChild(btn);
+  });
+}
+
+/* ---------------------------------------------------------------
+   RENDER ROOT
+--------------------------------------------------------------- */
+function render(){
+  renderStepsNav();
+  const root = document.getElementById("stepContent");
+  root.innerHTML = "";
+  if(state.currentStep===1) root.appendChild(renderStep1());
+  if(state.currentStep===2) root.appendChild(renderStep2());
+  if(state.currentStep===3) root.appendChild(renderStep3());
+  if(state.currentStep===4) root.appendChild(renderStep4());
+  if(state.currentStep===5) root.appendChild(renderStep5());
+}
+
+/* ---------------------------------------------------------------
+   STEP 1: INTAKE
+--------------------------------------------------------------- */
+function renderStep1(){
+  const wrap = document.createElement("div");
+  wrap.className = "card";
+  wrap.innerHTML = `
+    <h2>Step 1 — Invention Intake</h2>
+    <p class="sub">Tell us about the invention. The more detail you provide, the stronger the disclosure will be.</p>
+    <div class="field-block">
+      <label class="field-label">Product Name</label>
+      <input type="text" id="f_productName" placeholder="e.g. SmartClip Adjustable Cable Organizer">
+    </div>
+    <div class="field-block">
+      <label class="field-label">Problem Being Solved</label>
+      <textarea id="f_problem" rows="3" placeholder="What problem does this invention solve, and how is it solved today (if at all)?"></textarea>
+    </div>
+    <div class="field-block">
+      <label class="field-label">Core Features</label>
+      <div id="featuresList"></div>
+      <button class="add-link" id="addFeature">+ Add another feature</button>
+    </div>
+    <div class="field-block">
+      <label class="field-label">Additional Notes (optional)</label>
+      <textarea id="f_notes" rows="2" placeholder="Materials, dimensions, target users, competitors, anything else relevant"></textarea>
+    </div>
+    <div class="field-block">
+      <label class="field-label">Figures / Mockups / Architecture Diagrams (optional but recommended)</label>
+      <div class="upload-drop" id="uploadDrop">Click or drag images here — they will be auto-labeled Fig. 1, Fig. 2, etc.</div>
+      <input type="file" id="fileInput" accept="image/*" multiple style="display:none;">
+      <div class="fig-grid" id="figGrid"></div>
+    </div>
+    <div class="footer-nav">
+      <span></span>
+      <button class="btn" id="toStep2">Continue to Ideation →</button>
+    </div>
+  `;
+
+  // populate fields
+  setTimeout(()=>{
+    wrap.querySelector("#f_productName").value = state.intake.productName;
+    wrap.querySelector("#f_problem").value = state.intake.problem;
+    wrap.querySelector("#f_notes").value = state.intake.notes;
+    renderFeatures();
+    renderFigures();
+  }, 0);
+
+  wrap.querySelector("#f_productName").addEventListener("input", (e)=>{ state.intake.productName = e.target.value; saveState(); syncNav(); });
+  wrap.querySelector("#f_problem").addEventListener("input", (e)=>{ state.intake.problem = e.target.value; saveState(); syncNav(); });
+  wrap.querySelector("#f_notes").addEventListener("input", (e)=>{ state.intake.notes = e.target.value; saveState(); });
+  wrap.querySelector("#addFeature").addEventListener("click", (e)=>{
+    e.preventDefault();
+    state.intake.features.push("");
+    saveState();
+    renderFeatures();
+  });
+  wrap.querySelector("#toStep2").addEventListener("click", ()=>{
+    if(!intakeValid()){
+      showBanner("error", "Please fill in the product name, problem statement, and at least one core feature.");
+      return;
+    }
+    state.currentStep = 2; saveState(); render();
+  });
+
+  const uploadDrop = wrap.querySelector("#uploadDrop");
+  const fileInput = wrap.querySelector("#fileInput");
+  uploadDrop.addEventListener("click", ()=>fileInput.click());
+  uploadDrop.addEventListener("dragover", (e)=>{ e.preventDefault(); uploadDrop.style.borderColor = "var(--accent)"; });
+  uploadDrop.addEventListener("dragleave", ()=>{ uploadDrop.style.borderColor = "var(--border)"; });
+  uploadDrop.addEventListener("drop", (e)=>{
+    e.preventDefault();
+    uploadDrop.style.borderColor = "var(--border)";
+    handleFiles(e.dataTransfer.files);
+  });
+  fileInput.addEventListener("change", (e)=>{ handleFiles(e.target.files); fileInput.value=""; });
+
+  function handleFiles(fileList){
+    const files = Array.from(fileList).filter(f=>f.type.startsWith("image/"));
+    if(!files.length) return;
+    Promise.all(files.map(f=>resizeImageFile(f, 1200))).then(results=>{
+      results.forEach(r=>{
+        const idx = state.figures.length + 1;
+        state.figures.push({
+          id: "fig_" + Date.now() + "_" + idx,
+          label: "Fig. " + idx,
+          caption: "",
+          dataUrl: r.dataUrl,
+          mediaType: r.mediaType,
+          width: r.width,
+          height: r.height
+        });
+      });
+      saveState();
+      renderFigures();
+    }).catch(err=>{
+      showBanner("error", "Could not process image: " + err.message);
+    });
+  }
+
+  function renderFeatures(){
+    const list = wrap.querySelector("#featuresList");
+    list.innerHTML = "";
+    state.intake.features.forEach((val, i)=>{
+      const row = document.createElement("div");
+      row.className = "list-row";
+      row.innerHTML = `<input type="text" placeholder="Describe one core feature or capability" value="${escapeAttr(val)}"><button title="remove" ${state.intake.features.length===1 ? "disabled":""}>✕</button>`;
+      row.querySelector("input").addEventListener("input", (e)=>{
+        state.intake.features[i] = e.target.value; saveState(); syncNav();
+      });
+      row.querySelector("button").addEventListener("click", ()=>{
+        if(state.intake.features.length===1) return;
+        state.intake.features.splice(i,1); saveState(); renderFeatures(); syncNav();
+      });
+      list.appendChild(row);
+    });
+  }
+
+  function renderFigures(){
+    const grid = wrap.querySelector("#figGrid");
+    grid.innerHTML = "";
+    state.figures.forEach((fig, i)=>{
+      const card = document.createElement("div");
+      card.className = "fig-card";
+      card.innerHTML = `
+        <img src="${fig.dataUrl}" alt="${escapeAttr(fig.label)}">
+        <div class="fig-label">${escapeHtml(fig.label)}</div>
+        <input type="text" placeholder="Caption (optional)" value="${escapeAttr(fig.caption)}">
+        <button class="remove">Remove</button>
+      `;
+      card.querySelector("input").addEventListener("input", (e)=>{ fig.caption = e.target.value; saveState(); });
+      card.querySelector(".remove").addEventListener("click", ()=>{
+        state.figures.splice(i,1);
+        relabelFigures();
+        saveState();
+        renderFigures();
+      });
+      grid.appendChild(card);
+    });
+  }
+
+  return wrap;
+}
+
+function relabelFigures(){
+  state.figures.forEach((f,i)=>{ f.label = "Fig. " + (i+1); });
+}
+
+function escapeAttr(str){
+  return (str||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+}
+
+function syncNav(){ renderStepsNav(); }
+
+/* ---------------------------------------------------------------
+   STEP 2: IDEATION
+--------------------------------------------------------------- */
+function renderStep2(){
+  const wrap = document.createElement("div");
+  wrap.className = "card";
+
+  const header = document.createElement("div");
+  header.innerHTML = `
+    <h2>Step 2 — Ideation &amp; Variations</h2>
+    <p class="sub">Claude will brainstorm 3–5 alternative embodiments or future versions of "${escapeHtml(state.intake.productName)}" that should be explicitly covered in the disclosure. Review, edit, and choose which to include.</p>
+  `;
+  wrap.appendChild(header);
+
+  const actions = document.createElement("div");
+  actions.className = "actions-row";
+  actions.style.marginBottom = "16px";
+  const genBtn = document.createElement("button");
+  genBtn.className = "btn";
+  genBtn.textContent = state.embodimentsGenerated ? "Regenerate embodiments" : "Brainstorm Alternative Embodiments";
+  actions.appendChild(genBtn);
+
+  const refineInput = document.createElement("input");
+  refineInput.type = "text";
+  refineInput.placeholder = "Optional: steer the brainstorm (e.g. 'focus on software-only variants')";
+  refineInput.style.flex = "1";
+  refineInput.style.minWidth = "240px";
+  refineInput.style.padding = "9px 12px";
+  refineInput.style.border = "1px solid var(--border)";
+  refineInput.style.borderRadius = "6px";
+  refineInput.style.fontSize = "13px";
+  actions.appendChild(refineInput);
+
+  wrap.appendChild(actions);
+
+  const listWrap = document.createElement("div");
+  listWrap.id = "embodimentsList";
+  wrap.appendChild(listWrap);
+
+  const addManual = document.createElement("button");
+  addManual.className = "add-link";
+  addManual.textContent = "+ Add a custom embodiment manually";
+  addManual.addEventListener("click", (e)=>{
+    e.preventDefault();
+    state.embodiments.push({ title:"New embodiment", description:"", include:true });
+    saveState();
+    renderEmbodimentsList();
+  });
+  wrap.appendChild(addManual);
+
+  const footer = document.createElement("div");
+  footer.className = "footer-nav";
+  footer.innerHTML = `<button class="btn secondary" id="backTo1">← Back</button>`;
+  const nextBtn = document.createElement("button");
+  nextBtn.className = "btn";
+  nextBtn.textContent = "Continue to Specification →";
+  nextBtn.addEventListener("click", ()=>{ state.currentStep = 3; saveState(); render(); });
+  footer.appendChild(nextBtn);
+  wrap.appendChild(footer);
+
+  wrap.querySelector("#backTo1").addEventListener("click", ()=>{ state.currentStep=1; saveState(); render(); });
+
+  genBtn.addEventListener("click", async ()=>{
+    genBtn.disabled = true;
+    const originalText = genBtn.textContent;
+    genBtn.innerHTML = "<span class='spinner'></span> Brainstorming…";
+    try{
+      const images = state.figures.slice(0,5).map(f=>({ mediaType:f.mediaType, base64:f.dataUrl.split(",")[1] }));
+      const featureList = state.intake.features.filter(f=>f.trim()).map(f=>"- "+f).join("\n");
+      const steer = refineInput.value.trim();
+      const userText = `TASK: Brainstorm 3 to 5 alternative embodiments / future versions of the invention below that should be explicitly disclosed in a provisional patent application, to maximize breadth of protection. For each embodiment, explain what varies (e.g. materials, configuration, form factor, software-only vs hardware, connectivity, use-case) and why it is still within the same inventive concept.
+
+PRODUCT NAME: ${state.intake.productName}
+PROBLEM SOLVED: ${state.intake.problem}
+CORE FEATURES:
+${featureList}
+ADDITIONAL NOTES: ${state.intake.notes || "(none)"}
+${steer ? "\nSPECIAL INSTRUCTION FROM USER: " + steer : ""}
+${state.embodiments.length ? "\nEXISTING EMBODIMENTS ALREADY LISTED (avoid pure duplicates, may refine): " + JSON.stringify(state.embodiments.map(e=>e.title)) : ""}
+
+OUTPUT FORMAT: Respond with ONLY a JSON array, no other text, in this exact shape:
+[{"title": "short name of embodiment", "description": "2-4 sentence description of how it works and how it differs from the base version"}, ...]`;
+
+      const raw = await callClaude({ system: MASTER_SYSTEM_PROMPT, userText, images, maxTokens: 2200 });
+      const parsed = extractJSON(raw);
+      if(!Array.isArray(parsed) || !parsed.length) throw new Error("AI did not return a valid list of embodiments.");
+      state.embodiments = parsed.map(e=>({ title: e.title || "Untitled embodiment", description: e.description || "", include:true }));
+      state.embodimentsGenerated = true;
+      saveState();
+      renderEmbodimentsList();
+      renderStepsNav();
+      showBanner("success", "Generated " + state.embodiments.length + " alternative embodiments. Review and edit below.");
+    }catch(err){
+      showBanner("error", err.message);
+    }finally{
+      genBtn.disabled = false;
+      genBtn.textContent = state.embodimentsGenerated ? "Regenerate embodiments" : "Brainstorm Alternative Embodiments";
+    }
+  });
+
+  renderEmbodimentsList();
+  return wrap;
+
+  function renderEmbodimentsList(){
+    listWrap.innerHTML = "";
+    if(!state.embodiments.length){
+      const empty = document.createElement("div");
+      empty.className = "empty-state";
+      empty.innerHTML = `<div class="icon">💡</div><div>No embodiments yet. Click "Brainstorm Alternative Embodiments" to get started, or add one manually.</div>`;
+      listWrap.appendChild(empty);
+      return;
+    }
+    state.embodiments.forEach((em, i)=>{
+      const card = document.createElement("div");
+      card.className = "embodiment-card";
+      card.innerHTML = `
+        <div class="head">
+          <input type="text" value="${escapeAttr(em.title)}" style="border:none;background:transparent;font-size:14.5px;flex:1;">
+          <label class="toggle"><input type="checkbox" ${em.include?"checked":""}> Include</label>
+          <button class="btn ghost small" title="remove">✕</button>
+        </div>
+        <textarea rows="3">${escapeHtml(em.description)}</textarea>
+      `;
+      card.querySelector('input[type=text]').addEventListener("input", (e)=>{ em.title = e.target.value; saveState(); });
+      card.querySelector('input[type=checkbox]').addEventListener("change", (e)=>{ em.include = e.target.checked; saveState(); });
+      card.querySelector("textarea").addEventListener("input", (e)=>{ em.description = e.target.value; saveState(); });
+      card.querySelector(".head button.btn").addEventListener("click", ()=>{
+        state.embodiments.splice(i,1); saveState(); renderEmbodimentsList();
+      });
+      listWrap.appendChild(card);
+    });
+  }
+}
+
+/* ---------------------------------------------------------------
+   STEP 3: SPECIFICATION
+--------------------------------------------------------------- */
+const SPEC_SECTIONS = [
+  { key:"title", label:"Title of the Invention" },
+  { key:"field", label:"Field of the Invention" },
+  { key:"summary", label:"Brief Summary of the Invention" },
+  { key:"drawings", label:"Brief Description of the Drawings" },
+  { key:"detailedDescription", label:"Detailed Description" }
+];
+
+function renderStep3(){
+  const wrap = document.createElement("div");
+  wrap.className = "card";
+  wrap.innerHTML = `
+    <h2>Step 3 — Draft the Specification</h2>
+    <p class="sub">Generates the standard USPTO provisional specification sections. Each section is editable — you can also ask Claude to revise any section individually.</p>
+  `;
+
+  const genRow = document.createElement("div");
+  genRow.className = "actions-row";
+  genRow.style.marginBottom = "18px";
+  const genBtn = document.createElement("button");
+  genBtn.className = "btn";
+  genBtn.textContent = state.specGenerated ? "Regenerate full specification" : "Generate Draft Specification";
+  genRow.appendChild(genBtn);
+  wrap.appendChild(genRow);
+
+  const sectionsWrap = document.createElement("div");
+  sectionsWrap.id = "specSections";
+  wrap.appendChild(sectionsWrap);
+
+  const footer = document.createElement("div");
+  footer.className = "footer-nav";
+  const backBtn = document.createElement("button");
+  backBtn.className = "btn secondary";
+  backBtn.textContent = "← Back";
+  backBtn.addEventListener("click", ()=>{ state.currentStep=2; saveState(); render(); });
+  footer.appendChild(backBtn);
+  const nextBtn = document.createElement("button");
+  nextBtn.className = "btn";
+  nextBtn.textContent = "Continue to Claims →";
+  nextBtn.disabled = !state.specGenerated;
+  nextBtn.addEventListener("click", ()=>{
+    if(!state.specGenerated){ showBanner("error","Generate the specification first."); return; }
+    state.currentStep = 4; saveState(); render();
+  });
+  footer.appendChild(nextBtn);
+  wrap.appendChild(footer);
+
+  genBtn.addEventListener("click", async ()=>{
+    genBtn.disabled = true;
+    genBtn.innerHTML = "<span class='spinner'></span> Drafting specification…";
+    try{
+      const raw = await generateSpecification();
+      const parsed = extractJSON(raw);
+      state.spec = {
+        title: parsed.title || state.intake.productName,
+        field: parsed.field || "",
+        summary: parsed.summary || "",
+        drawings: parsed.drawings || "",
+        detailedDescription: parsed.detailedDescription || parsed.detailed_description || ""
+      };
+      state.specGenerated = true;
+      saveState();
+      renderSections();
+      renderStepsNav();
+      showBanner("success", "Draft specification generated. Review and edit each section below.");
+    }catch(err){
+      showBanner("error", err.message);
+    }finally{
+      genBtn.disabled = false;
+      genBtn.textContent = state.specGenerated ? "Regenerate full specification" : "Generate Draft Specification";
+      const nb = wrap.querySelector(".footer-nav .btn:last-child");
+      if(nb) nb.disabled = !state.specGenerated;
+    }
+  });
+
+  renderSections();
+  return wrap;
+
+  function renderSections(){
+    sectionsWrap.innerHTML = "";
+    if(!state.specGenerated){
+      const empty = document.createElement("div");
+      empty.className = "empty-state";
+      empty.innerHTML = `<div class="icon">📝</div><div>No draft yet. Click "Generate Draft Specification" above.</div>`;
+      sectionsWrap.appendChild(empty);
+      return;
+    }
+    SPEC_SECTIONS.forEach(sec=>{
+      const block = document.createElement("div");
+      block.className = "section-block";
+      block.innerHTML = `
+        <div class="section-head">
+          <h3>${escapeHtml(sec.label)}</h3>
+          <button class="btn ghost small" data-key="${sec.key}">↻ Regenerate section</button>
+        </div>
+        <textarea rows="${sec.key==='detailedDescription' ? 14 : (sec.key==='title'?2:4)}">${escapeHtml(state.spec[sec.key])}</textarea>
+        <div class="refine-row">
+          <input type="text" placeholder="Ask Claude to revise this section (e.g. 'make this more concise')">
+          <button class="btn secondary small">Revise</button>
+        </div>
+      `;
+      const ta = block.querySelector("textarea");
+      ta.addEventListener("input", (e)=>{ state.spec[sec.key] = e.target.value; saveState(); });
+
+      block.querySelector(".section-head button").addEventListener("click", async (e)=>{
+        const btn = e.currentTarget;
+        btn.disabled = true; const orig = btn.textContent; btn.innerHTML = "<span class='spinner dark'></span>";
+        try{
+          const raw = await regenerateSection(sec.key);
+          state.spec[sec.key] = raw.trim();
+          ta.value = state.spec[sec.key];
+          saveState();
+          showBanner("success", sec.label + " regenerated.");
+        }catch(err){ showBanner("error", err.message); }
+        finally{ btn.disabled = false; btn.textContent = orig; }
+      });
+
+      const reviseBtn = block.querySelector(".refine-row button");
+      const reviseInput = block.querySelector(".refine-row input");
+      reviseBtn.addEventListener("click", async ()=>{
+        const instruction = reviseInput.value.trim();
+        if(!instruction){ showBanner("error","Enter a revision instruction first."); return; }
+        reviseBtn.disabled = true; const orig = reviseBtn.textContent; reviseBtn.innerHTML = "<span class='spinner dark'></span>";
+        try{
+          const raw = await reviseSection(sec.key, instruction);
+          state.spec[sec.key] = raw.trim();
+          ta.value = state.spec[sec.key];
+          saveState();
+          reviseInput.value = "";
+          showBanner("success", sec.label + " updated.");
+        }catch(err){ showBanner("error", err.message); }
+        finally{ reviseBtn.disabled = false; reviseBtn.textContent = orig; }
+      });
+
+      sectionsWrap.appendChild(block);
+    });
+  }
+}
+
+function includedEmbodimentsText(){
+  const inc = state.embodiments.filter(e=>e.include);
+  if(!inc.length) return "(none provided)";
+  return inc.map(e=>"- " + e.title + ": " + e.description).join("\n");
+}
+function figuresText(){
+  if(!state.figures.length) return "(no figures provided)";
+  return state.figures.map(f=>f.label + (f.caption ? " — " + f.caption : "")).join("\n");
+}
+function featuresText(){
+  return state.intake.features.filter(f=>f.trim()).map(f=>"- "+f).join("\n");
+}
+
+async function generateSpecification(){
+  const images = state.figures.slice(0,5).map(f=>({ mediaType:f.mediaType, base64:f.dataUrl.split(",")[1] }));
+  const userText = `TASK: Draft a complete provisional patent application specification for the invention below, following standard USPTO formatting. Write in plain, clear, unambiguous English (avoid legalese). The Detailed Description must be thorough and enabling — describe construction and operation in enough detail that a person of ordinary skill in the art could make and use the invention without further information. Where figures are provided, reference them explicitly (e.g. "As shown in Fig. 1...") in the Brief Description of the Drawings and Detailed Description.
+
+PRODUCT NAME: ${state.intake.productName}
+PROBLEM SOLVED: ${state.intake.problem}
+CORE FEATURES:
+${featuresText()}
+ADDITIONAL NOTES: ${state.intake.notes || "(none)"}
+
+FIGURES PROVIDED:
+${figuresText()}
+
+ACCEPTED ALTERNATIVE EMBODIMENTS TO INCORPORATE (mention these as variations within the Detailed Description, e.g. "In an alternative embodiment..."):
+${includedEmbodimentsText()}
+
+OUTPUT FORMAT: Respond with ONLY a JSON object, no other text, in this exact shape:
+{"title": "...", "field": "...", "summary": "...", "drawings": "...", "detailedDescription": "..."}
+The "detailedDescription" value should be several paragraphs (use \\n\\n between paragraphs) and should be the longest, most thorough section.`;
+  return callClaude({ system: MASTER_SYSTEM_PROMPT, userText, images, maxTokens: 6000 });
+}
+
+async function regenerateSection(key){
+  const sec = SPEC_SECTIONS.find(s=>s.key===key);
+  const images = state.figures.slice(0,5).map(f=>({ mediaType:f.mediaType, base64:f.dataUrl.split(",")[1] }));
+  const userText = `TASK: Rewrite ONLY the "${sec.label}" section of a provisional patent application specification for the invention below. Respond with ONLY the plain text of that section (no headers, no JSON, no extra commentary).
+
+PRODUCT NAME: ${state.intake.productName}
+PROBLEM SOLVED: ${state.intake.problem}
+CORE FEATURES:
+${featuresText()}
+FIGURES PROVIDED:
+${figuresText()}
+ACCEPTED ALTERNATIVE EMBODIMENTS:
+${includedEmbodimentsText()}
+CURRENT FULL DRAFT (for context/consistency):
+Title: ${state.spec.title}
+Field: ${state.spec.field}
+Summary: ${state.spec.summary}
+Drawings: ${state.spec.drawings}
+Detailed Description: ${state.spec.detailedDescription}`;
+  return callClaude({ system: MASTER_SYSTEM_PROMPT, userText, images, maxTokens: key==='detailedDescription' ? 5000 : 1500 });
+}
+
+async function reviseSection(key, instruction){
+  const sec = SPEC_SECTIONS.find(s=>s.key===key);
+  const userText = `TASK: Revise the "${sec.label}" section below per the user's instruction. Respond with ONLY the revised plain text of that section (no headers, no JSON, no extra commentary).
+
+CURRENT TEXT:
+"""
+${state.spec[key]}
+"""
+
+USER'S REVISION INSTRUCTION: ${instruction}
+
+Context — product name: ${state.intake.productName}; problem solved: ${state.intake.problem}.`;
+  return callClaude({ system: MASTER_SYSTEM_PROMPT, userText, maxTokens: key==='detailedDescription' ? 5000 : 1500 });
+}
+
+/* ---------------------------------------------------------------
+   STEP 4: CLAIMS
+--------------------------------------------------------------- */
+function renderStep4(){
+  const wrap = document.createElement("div");
+  wrap.className = "card";
+  wrap.innerHTML = `
+    <h2>Step 4 — Claims <span style="font-weight:400;color:var(--muted);font-size:13px;">(optional)</span></h2>
+    <p class="sub">Not legally required for a provisional filing, but 1–3 broad exemplary claims help outline the legal scope of protection.</p>
+  `;
+
+  const actions = document.createElement("div");
+  actions.className = "actions-row";
+  actions.style.marginBottom = "16px";
+  const genBtn = document.createElement("button");
+  genBtn.className = "btn";
+  genBtn.textContent = state.claimsGenerated ? "Regenerate claims" : "Draft Exemplary Claims";
+  actions.appendChild(genBtn);
+  wrap.appendChild(actions);
+
+  const listWrap = document.createElement("div");
+  listWrap.id = "claimsList";
+  wrap.appendChild(listWrap);
+
+  const addManual = document.createElement("button");
+  addManual.className = "add-link";
+  addManual.textContent = "+ Add a claim manually";
+  addManual.addEventListener("click", (e)=>{
+    e.preventDefault();
+    state.claims.push("");
+    saveState();
+    renderClaimsList();
+  });
+  wrap.appendChild(addManual);
+
+  const footer = document.createElement("div");
+  footer.className = "footer-nav";
+  const backBtn = document.createElement("button");
+  backBtn.className = "btn secondary";
+  backBtn.textContent = "← Back";
+  backBtn.addEventListener("click", ()=>{ state.currentStep=3; saveState(); render(); });
+  footer.appendChild(backBtn);
+  const nextBtn = document.createElement("button");
+  nextBtn.className = "btn";
+  nextBtn.textContent = "Continue to Export →";
+  nextBtn.addEventListener("click", ()=>{ state.currentStep=5; saveState(); render(); });
+  footer.appendChild(nextBtn);
+  wrap.appendChild(footer);
+
+  genBtn.addEventListener("click", async ()=>{
+    genBtn.disabled = true;
+    genBtn.innerHTML = "<span class='spinner'></span> Drafting claims…";
+    try{
+      const userText = `TASK: Draft 1 to 3 broad, exemplary patent claims for the invention below, suitable for inclusion in a provisional patent application (not legally required, but useful to outline scope). Use standard patent claim drafting conventions (a preamble, transitional phrase such as "comprising", and clearly enumerated elements). Make the first claim broad; if more are included, make subsequent claims progressively narrower or covering a different aspect (e.g. a method claim vs a system claim).
+
+PRODUCT NAME: ${state.intake.productName}
+PROBLEM SOLVED: ${state.intake.problem}
+CORE FEATURES:
+${featuresText()}
+DETAILED DESCRIPTION (for reference):
+${state.spec.detailedDescription}
+ACCEPTED ALTERNATIVE EMBODIMENTS:
+${includedEmbodimentsText()}
+
+OUTPUT FORMAT: Respond with ONLY a JSON object, no other text: {"claims": ["claim 1 text", "claim 2 text", ...]}`;
+      const raw = await callClaude({ system: MASTER_SYSTEM_PROMPT, userText, maxTokens: 1800 });
+      const parsed = extractJSON(raw);
+      if(!parsed.claims || !Array.isArray(parsed.claims) || !parsed.claims.length) throw new Error("AI did not return valid claims.");
+      state.claims = parsed.claims;
+      state.claimsGenerated = true;
+      saveState();
+      renderClaimsList();
+      renderStepsNav();
+      showBanner("success", "Generated " + state.claims.length + " exemplary claim(s).");
+    }catch(err){
+      showBanner("error", err.message);
+    }finally{
+      genBtn.disabled = false;
+      genBtn.textContent = state.claimsGenerated ? "Regenerate claims" : "Draft Exemplary Claims";
+    }
+  });
+
+  renderClaimsList();
+  return wrap;
+
+  function renderClaimsList(){
+    listWrap.innerHTML = "";
+    if(!state.claims.length){
+      const empty = document.createElement("div");
+      empty.className = "empty-state";
+      empty.innerHTML = `<div class="icon">⚖️</div><div>No claims yet. This step is optional — you can skip to Export, or click "Draft Exemplary Claims".</div>`;
+      listWrap.appendChild(empty);
+      return;
+    }
+    state.claims.forEach((c, i)=>{
+      const card = document.createElement("div");
+      card.className = "claim-card";
+      card.innerHTML = `
+        <div class="head"><span class="num">Claim ${i+1}</span><button class="btn ghost small">✕ Remove</button></div>
+        <textarea rows="3">${escapeHtml(c)}</textarea>
+      `;
+      card.querySelector("textarea").addEventListener("input", (e)=>{ state.claims[i] = e.target.value; saveState(); });
+      card.querySelector("button").addEventListener("click", ()=>{ state.claims.splice(i,1); saveState(); renderClaimsList(); });
+      listWrap.appendChild(card);
+    });
+  }
+}
+
+/* ---------------------------------------------------------------
+   STEP 5: EXPORT
+--------------------------------------------------------------- */
+function renderStep5(){
+  const wrap = document.createElement("div");
+  wrap.className = "card";
+  wrap.innerHTML = `
+    <h2>Step 5 — Preview &amp; Export</h2>
+    <p class="sub">Review the assembled document, then export it in a format ready for the USPTO Patent Center.</p>
+  `;
+
+  const preview = document.createElement("div");
+  preview.className = "preview-doc";
+  preview.innerHTML = buildDocHTML();
+  wrap.appendChild(preview);
+
+  const exportGrid = document.createElement("div");
+  exportGrid.className = "export-grid";
+  exportGrid.innerHTML = `
+    <div class="export-card">
+      <div class="ico">📄</div>
+      <strong>PDF</strong>
+      <p>Opens your browser's print dialog — choose "Save as PDF" to produce a clean, USPTO-ready PDF.</p>
+      <button class="btn" id="exportPdfBtn">Export as PDF</button>
+    </div>
+    <div class="export-card">
+      <div class="ico">📝</div>
+      <strong>Word (.docx)</strong>
+      <p>Downloads a formatted Word document you can further edit or upload directly.</p>
+      <button class="btn" id="exportDocxBtn">Export as DOCX</button>
+    </div>
+  `;
+  wrap.appendChild(exportGrid);
+
+  const txtRow = document.createElement("div");
+  txtRow.style.textAlign = "center";
+  txtRow.style.marginTop = "10px";
+  txtRow.innerHTML = `<button class="btn ghost small" id="exportTxtBtn">Also download as plain text (.txt)</button>`;
+  wrap.appendChild(txtRow);
+
+  const footer = document.createElement("div");
+  footer.className = "footer-nav";
+  const backBtn = document.createElement("button");
+  backBtn.className = "btn secondary";
+  backBtn.textContent = "← Back";
+  backBtn.addEventListener("click", ()=>{ state.currentStep=4; saveState(); render(); });
+  footer.appendChild(backBtn);
+  footer.appendChild(document.createElement("span"));
+  wrap.appendChild(footer);
+
+  wrap.querySelector("#exportPdfBtn").addEventListener("click", exportPdf);
+  wrap.querySelector("#exportDocxBtn").addEventListener("click", exportDocx);
+  wrap.querySelector("#exportTxtBtn").addEventListener("click", exportTxt);
+
+  return wrap;
+}
+
+function fileBaseName(){
+  return (state.intake.productName || "provisional-patent-application").trim().replace(/[^a-z0-9]+/gi,"_").replace(/^_+|_+$/g,"") || "provisional-patent-application";
+}
+
+function buildDocHTML(){
+  const s = state.spec;
+  let html = "";
+  html += `<h2 class="doc-title">PROVISIONAL PATENT APPLICATION<br>${escapeHtml(s.title || state.intake.productName || "")}</h2>`;
+  html += `<h3 class="doc-h">I. Title of the Invention</h3><p>${escapeHtml(s.title || state.intake.productName)}</p>`;
+  html += `<h3 class="doc-h">II. Field of the Invention</h3><p>${escapeHtml(s.field)}</p>`;
+  html += `<h3 class="doc-h">III. Brief Summary of the Invention</h3><p>${escapeHtml(s.summary)}</p>`;
+  html += `<h3 class="doc-h">IV. Brief Description of the Drawings</h3><p>${escapeHtml(s.drawings)}</p>`;
+  html += `<h3 class="doc-h">V. Detailed Description</h3><p>${escapeHtml(s.detailedDescription)}</p>`;
+  if(state.claims && state.claims.length){
+    html += `<h3 class="doc-h">VI. Claims</h3>`;
+    state.claims.forEach((c,i)=>{ html += `<p>${i+1}. ${escapeHtml(c)}</p>`; });
+  }
+  if(state.figures.length){
+    html += `<h3 class="doc-h">Drawings</h3>`;
+    state.figures.forEach(f=>{
+      html += `<div class="fig-block"><img src="${f.dataUrl}"><div class="cap">${escapeHtml(f.label)}${f.caption ? " — " + escapeHtml(f.caption) : ""}</div></div>`;
+    });
+  }
+  return html;
+}
+
+function buildDocText(){
+  const s = state.spec;
+  let out = "";
+  out += "PROVISIONAL PATENT APPLICATION\n" + (s.title || state.intake.productName) + "\n\n";
+  out += "I. TITLE OF THE INVENTION\n" + (s.title || state.intake.productName) + "\n\n";
+  out += "II. FIELD OF THE INVENTION\n" + s.field + "\n\n";
+  out += "III. BRIEF SUMMARY OF THE INVENTION\n" + s.summary + "\n\n";
+  out += "IV. BRIEF DESCRIPTION OF THE DRAWINGS\n" + s.drawings + "\n\n";
+  out += "V. DETAILED DESCRIPTION\n" + s.detailedDescription + "\n\n";
+  if(state.claims && state.claims.length){
+    out += "VI. CLAIMS\n";
+    state.claims.forEach((c,i)=>{ out += (i+1) + ". " + c + "\n\n"; });
+  }
+  if(state.figures.length){
+    out += "DRAWINGS\n";
+    state.figures.forEach(f=>{ out += f.label + (f.caption ? " — " + f.caption : "") + " [image attached separately]\n"; });
+  }
+  return out;
+}
+
+function exportPdf(){
+  const printable = document.getElementById("printableDoc");
+  printable.innerHTML = `<div class="preview-doc" style="border:none;padding:0;">${buildDocHTML()}</div>`;
+  window.print();
+}
+
+function exportTxt(){
+  const blob = new Blob([buildDocText()], { type:"text/plain;charset=utf-8" });
+  triggerDownload(blob, fileBaseName() + "_PPA.txt");
+}
+
+async function exportDocx(){
+  if(typeof window.docx === "undefined"){
+    showBanner("error", "The Word export library did not load (check your internet connection) — try 'Export as PDF' instead, or reload the page.");
+    return;
+  }
+  try{
+    const { Document, Packer, Paragraph, TextRun, HeadingLevel, ImageRun, AlignmentType } = window.docx;
+    const children = [];
+    const heading = (text)=> children.push(new Paragraph({ text, heading: HeadingLevel.HEADING_1, spacing:{ before:300, after:150 } }));
+    const body = (text)=>{
+      (text || "").split(/\n\s*\n/).forEach(para=>{
+        if(para.trim()) children.push(new Paragraph({ children:[new TextRun(para.trim())], spacing:{ after:180 } }));
+      });
+    };
+
+    children.push(new Paragraph({ text:"PROVISIONAL PATENT APPLICATION", heading: HeadingLevel.TITLE, alignment: AlignmentType.CENTER, spacing:{ after:300 } }));
+
+    heading("I. Title of the Invention");
+    body(state.spec.title || state.intake.productName);
+    heading("II. Field of the Invention");
+    body(state.spec.field);
+    heading("III. Brief Summary of the Invention");
+    body(state.spec.summary);
+    heading("IV. Brief Description of the Drawings");
+    body(state.spec.drawings);
+    heading("V. Detailed Description");
+    body(state.spec.detailedDescription);
+
+    if(state.claims && state.claims.length){
+      heading("VI. Claims");
+      state.claims.forEach((c,i)=>{
+        children.push(new Paragraph({ children:[new TextRun((i+1) + ". " + c)], spacing:{ after:180 } }));
+      });
+    }
+
+    if(state.figures.length){
+      children.push(new Paragraph({ text:"Drawings", heading: HeadingLevel.HEADING_1, pageBreakBefore:true, spacing:{ after:200 } }));
+      for(const fig of state.figures){
+        try{
+          const bytes = dataURLToUint8Array(fig.dataUrl);
+          const maxW = 480;
+          const scale = Math.min(1, maxW / fig.width);
+          children.push(new Paragraph({
+            children:[ new ImageRun({ data: bytes, transformation:{ width: Math.round(fig.width*scale), height: Math.round(fig.height*scale) } }) ],
+            alignment: AlignmentType.CENTER,
+            spacing:{ after:80 }
+          }));
+          children.push(new Paragraph({
+            children:[ new TextRun({ text: fig.label + (fig.caption ? ": " + fig.caption : ""), bold:true }) ],
+            alignment: AlignmentType.CENTER,
+            spacing:{ after:300 }
+          }));
+        }catch(imgErr){
+          console.warn("Could not embed figure", fig.label, imgErr);
+        }
+      }
+    }
+
+    const doc = new Document({ sections:[{ properties:{}, children }] });
+    const blob = await Packer.toBlob(doc);
+    triggerDownload(blob, fileBaseName() + "_PPA.docx");
+    showBanner("success", "Word document downloaded.");
+  }catch(err){
+    showBanner("error", "Could not generate Word document: " + err.message);
+  }
+}
+
+function triggerDownload(blob, filename){
+  if(typeof window.saveAs === "function"){
+    window.saveAs(blob, filename);
+    return;
+  }
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 3000);
+}
+
+/* ---------------------------------------------------------------
+   SETTINGS PANEL WIRING
+--------------------------------------------------------------- */
+function initSettings(){
+  const toggle = document.getElementById("settingsToggle");
+  const panel = document.getElementById("settingsPanel");
+  toggle.addEventListener("click", ()=> panel.classList.toggle("open"));
+
+  const keyInput = document.getElementById("apiKeyInput");
+  const modelSelect = document.getElementById("modelSelect");
+  keyInput.value = getApiKey();
+  modelSelect.value = getModel();
+
+  document.getElementById("saveKeyBtn").addEventListener("click", ()=>{
+    localStorage.setItem(API_KEY_STORAGE, keyInput.value.trim());
+    localStorage.setItem(MODEL_STORAGE, modelSelect.value);
+    showBanner("success", "Settings saved.");
+    panel.classList.remove("open");
+  });
+  document.getElementById("clearKeyBtn").addEventListener("click", ()=>{
+    localStorage.removeItem(API_KEY_STORAGE);
+    keyInput.value = "";
+    showBanner("info", "API key cleared.");
+  });
+  document.getElementById("resetAppBtn").addEventListener("click", ()=>{
+    if(confirm("This will erase all intake data, figures, embodiments, specification, and claims from this browser. Continue?")){
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    }
+  });
+}
+
+/* ---------------------------------------------------------------
+   INIT
+--------------------------------------------------------------- */
+window.addEventListener("afterprint", ()=>{
+  const printable = document.getElementById("printableDoc");
+  if(printable) printable.innerHTML = "";
+});
+
+loadState();
+initSettings();
+render();
+
+})();
+</script>
+</body>
+</html>
