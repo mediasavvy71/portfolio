@@ -84,6 +84,14 @@ body {
   flex-shrink: 0;
 }
 .brand { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.9); letter-spacing: .07em; text-transform: uppercase; }
+.top-nav { display: flex; gap: 4px; align-items: center; }
+.top-nav-item {
+  font-size: 11px; color: rgba(255,255,255,.55); cursor: pointer;
+  padding: 6px 12px; border-radius: 6px; transition: background .12s, color .12s;
+  white-space: nowrap;
+}
+.top-nav-item:hover { background: rgba(255,255,255,.1); color: rgba(255,255,255,.85); }
+.top-nav-item.active { color: #fff; font-weight: 600; background: rgba(255,255,255,.15); }
 .topbar-right { display: flex; align-items: center; gap: 10px; }
 .avatar {
   width: 28px; height: 28px; border-radius: 50%;
@@ -506,7 +514,7 @@ tr.data-row:hover td { background: rgba(0,109,119,.04); cursor: pointer; }
               <div class="task-icon">✓</div>
               <div>
                 <div class="task-text">Approve REQ-1042 — Surgical Supplies</div>
-                <div class="task-meta">R. Okafor &nbsp;·&nbsp; <span class="task-chip">Approver</span></div>
+                <div class="task-meta">M. Delgado &nbsp;·&nbsp; <span class="task-chip">Approver</span></div>
               </div>
             </div>
             <div class="task-item" onclick="nav('inv')" style="border-left:3px solid var(--red);">
@@ -589,7 +597,7 @@ tr.data-row:hover td { background: rgba(0,109,119,.04); cursor: pointer; }
               <tr class="data-row" style="background:#fffbf5;">
                 <td class="td-id">REQ-1042</td>
                 <td>Surgical supplies — sterile gloves, drapes, suture kits</td>
-                <td>R. Okafor</td><td>Clinical</td><td>Jun 23</td>
+                <td>M. Delgado</td><td>Clinical</td><td>Jun 23</td>
                 <td style="font-weight:600;">$4,210</td>
                 <td><span class="chip chip-review">⏳ Review</span></td>
                 <td><div class="row-actions">
@@ -639,7 +647,7 @@ tr.data-row:hover td { background: rgba(0,109,119,.04); cursor: pointer; }
               </tr>
               <tr class="data-row">
                 <td class="td-id">REQ-1037</td><td>Isolation gowns level 3 × 500</td>
-                <td>R. Okafor</td><td>Clinical</td><td>Jun 20</td>
+                <td>M. Delgado</td><td>Clinical</td><td>Jun 20</td>
                 <td style="font-weight:600;">$1,260</td>
                 <td><span class="chip chip-approved">✓ Approved</span></td>
                 <td><div class="row-actions">
@@ -688,7 +696,7 @@ tr.data-row:hover td { background: rgba(0,109,119,.04); cursor: pointer; }
               </tr>
               <tr class="data-row">
                 <td class="td-id">REQ-1028</td><td>PPE restock — N95 masks, face shields</td>
-                <td>R. Okafor</td><td>Clinical</td><td>Jun 12</td>
+                <td>M. Delgado</td><td>Clinical</td><td>Jun 12</td>
                 <td style="font-weight:600;">$980</td>
                 <td><span class="chip chip-rejected">✕ Rejected</span></td>
                 <td><div class="row-actions">
@@ -1129,6 +1137,13 @@ const BREADCRUMBS = {
   inv:       'Dashboard &rsaquo; Invoices to Match',
   spend:     'Dashboard &rsaquo; Spend Analysis',
 };
+const TOPNAV_IDS = {
+  dashboard: 'tnav-dashboard',
+  req:       'tnav-req',
+  po:        'tnav-po',
+  inv:       'tnav-inv',
+  spend:     'tnav-spend',
+};
 const SNAV_IDS = {
   dashboard: 'snav-dashboard',
   req:       'snav-req',
@@ -1141,11 +1156,15 @@ function nav(id) {
   // Hide all screens
   SCREENS.forEach(s => {
     document.getElementById('screen-' + s).classList.remove('active');
+    const tn = document.getElementById(TOPNAV_IDS[s]);
+    if (tn) tn.classList.remove('active');
     const sn = document.getElementById(SNAV_IDS[s]);
     if (sn) sn.classList.remove('active');
   });
   // Show target
   document.getElementById('screen-' + id).classList.add('active');
+  const tn = document.getElementById(TOPNAV_IDS[id]);
+  if (tn) tn.classList.add('active');
   const sn = document.getElementById(SNAV_IDS[id]);
   if (sn) sn.classList.add('active');
   // Update URL bar + breadcrumb
