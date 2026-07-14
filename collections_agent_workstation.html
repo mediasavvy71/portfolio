@@ -56,27 +56,25 @@ nav {
   border-bottom: 1px solid var(--border);
   padding: 0 48px;
   display: flex; align-items: center; justify-content: space-between;
-  height: 56px;
+  height: 64px;
 }
 .nav-brand {
   font-size: 12px; font-weight: 600; letter-spacing: .08em;
-  text-transform: uppercase; color: var(--navy); text-decoration: none;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
 }
-.nav-links { display: flex; gap: 20px; align-items: center; }
+.nav-links { display: flex; gap: 32px; align-items: center; }
 .nav-links a {
   font-size: 12px; font-weight: 500; color: var(--ink2);
   text-decoration: none; letter-spacing: .02em; transition: color .15s;
 }
-.nav-links a:hover { color: var(--navy); }
-.nav-pill {
-  font-size: 11px; font-weight: 600; text-decoration: none;
-  letter-spacing: .06em; border-radius: 20px;
-  padding: 5px 12px; transition: background .15s; white-space: nowrap;
+.nav-links a:hover { color: var(--teal); }
+.nav-resume {
+  font-size: 11px; font-weight: 600; letter-spacing: .06em;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+  border: 1px solid var(--border2); border-radius: 20px;
+  padding: 7px 16px; transition: background .15s, border-color .15s;
 }
-.nav-pill-teal { color: var(--teal); border: 1px solid var(--teal-mid); }
-.nav-pill-teal:hover { background: var(--teal-light); }
-.nav-pill-gold { color: var(--gold); border: 1px solid var(--gold-mid); }
-.nav-pill-gold:hover { background: var(--gold-light); }
+.nav-resume:hover { background: var(--white); border-color: var(--ink3); }
 
 /* ─── HERO ─── */
 .hero { background: var(--white); display: flex; flex-direction: column; padding: 88px 48px 0; border-bottom: 1px solid var(--border); }
@@ -413,14 +411,12 @@ footer strong { color: rgba(255,255,255,.75); }
 
 <!-- NAV -->
 <nav id="top">
-  <a class="nav-brand" href="#top">Case Study 03 &nbsp;·&nbsp; William Teppig</a>
+  <a class="nav-brand" href="index.html#top">William Teppig</a>
   <div class="nav-links">
-    <a href="#context">Context</a>
-    <a href="#discovery">Discovery</a>
-    <a href="#strategy">Strategy</a>
-    <a href="#design">Design</a>
-    <a href="#validate">Validate</a>
-    <a href="#outcomes">Outcomes</a>
+    <a href="index.html#top">Home</a>
+    <a href="index.html#work">Case Studies</a>
+    <a href="index.html#about">About</a>
+    <a class="nav-resume" href="RESUME_UX_Staff_Designer_2026.pdf" target="_blank" rel="noopener">Resume</a>
   </div>
 </nav>
 
