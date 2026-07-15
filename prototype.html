@@ -135,12 +135,12 @@ body {
 
 /* ── Main content ── */
 .main-content {
-  flex: 1; overflow-y: auto; background: var(--offwhite);
-  display: flex; flex-direction: column;
+  flex: 1; overflow: hidden; background: var(--offwhite);
+  display: flex; flex-direction: column; min-height: 0;
 }
 
 /* ── Screen visibility ── */
-.screen { display: none; flex-direction: column; flex: 1; }
+.screen { display: none; flex-direction: column; flex: 1; min-height: 0; }
 .screen.active { display: flex; }
 
 /* ── Page top bar ── */
@@ -213,7 +213,7 @@ body {
 .fdivider { width: 1px; height: 16px; background: var(--border); margin: 0 4px; }
 
 /* ── Table ── */
-.table-wrap { flex: 1; overflow-y: auto; }
+.table-wrap { flex: 1; overflow-y: auto; min-height: 0; }
 table { width: 100%; border-collapse: collapse; }
 thead tr { background: var(--surface); position: sticky; top: 0; z-index: 1; }
 th {
@@ -272,7 +272,7 @@ tr.data-row:hover td { background: rgba(0,109,119,.04); cursor: pointer; }
 .pg-btn.active { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 600; }
 
 /* ── Dashboard specific ── */
-.dash-grid { padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 1; }
+.dash-grid { padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 1; overflow-y: auto; min-height: 0; }
 .panel { background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
 .panel-head {
   padding: 10px 14px; border-bottom: 1px solid var(--border);
@@ -317,7 +317,7 @@ tr.data-row:hover td { background: rgba(0,109,119,.04); cursor: pointer; }
 .task-chip { display: inline-block; padding: 0 6px; border-radius: 3px; font-size: 8px; background: var(--teal-light); color: var(--teal); font-weight: 600; }
 
 /* ── Spend charts ── */
-.spend-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; flex: 1; }
+.spend-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; flex: 1; min-height: 0; }
 .spend-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .spend-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
 .sc-title { font-size: 11px; font-weight: 600; color: var(--ink); margin-bottom: 14px; }
