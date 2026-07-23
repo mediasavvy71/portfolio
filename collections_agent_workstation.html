@@ -109,7 +109,7 @@ nav {
 /* ─── HERO MOCKUP — Collections Workstation frame ─── */
 .hero-mockup-band { display: flex; justify-content: center; margin-bottom: -1px; }
 .hero-mockup-window {
-  width: 100%; max-width: 1120px;
+  width: 100%; max-width: 1080px;
   background: var(--white);
   border: 1px solid var(--border);
   border-bottom: none;
@@ -118,6 +118,7 @@ nav {
   box-shadow: 0 -10px 44px rgba(30,58,95,.14), 0 -2px 16px rgba(0,0,0,.07);
   font-family: var(--sans);
 }
+.hero-mockup-window img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: top; }
 @media (max-width: 900px) { .hero-mockup-band { display: none; } }
 
 .cw-scope .chrome { background: #1e1e1e; padding: 9px 16px; display: flex; align-items: center; gap: 7px; }
@@ -425,23 +426,19 @@ footer strong { color: rgba(255,255,255,.75); }
   <div class="hero-inner">
     <div class="hero-eyebrow">Case Study 03 · Financial Services · Enterprise Agent Tools</div>
     <h1>When the agent is<br>the bottleneck — <em>embedding intelligence</em><br>into a collections workstation</h1>
-    <p class="hero-sub">Delinquency agents at a major financial institution were reconstructing a customer's financial story across fragmented systems while making high-stakes decisions in real time. I led the strategy and design to reframe the problem — replacing a patchwork of tools with an embedded decisioning architecture that guides agents to the best action for every customer.</p>
+    <p class="hero-sub">Delinquency agents at a major financial institution were reconstructing a customer's financial story across fragmented systems while making high-stakes decisions in real time. I was part of a team that reframed the problem — replacing a patchwork of tools with an embedded decisioning architecture that guides agents to the best action for every customer.</p>
     <div class="hero-meta">
       <div class="hero-meta-item">
         <div class="meta-label">My Role</div>
         <div class="meta-val">Senior UX Designer</div>
       </div>
       <div class="hero-meta-item">
-        <div class="meta-label">Client</div>
-        <div class="meta-val">Bank of America</div>
-      </div>
-      <div class="hero-meta-item">
         <div class="meta-label">Domain</div>
         <div class="meta-val">Financial Services · Collections</div>
       </div>
       <div class="hero-meta-item">
-        <div class="meta-label">Platform</div>
-        <div class="meta-val">Enterprise Web Workstation</div>
+        <div class="meta-label">Scope</div>
+        <div class="meta-val">Full Workstation Redesign</div>
       </div>
       <div class="hero-meta-item">
         <div class="meta-label">Methods</div>
@@ -560,6 +557,125 @@ footer strong { color: rgba(255,255,255,.75); }
           <h4>Stakeholder & Manager Interviews</h4>
           <p>Partnered with business stakeholders and agent managers to understand the operational impact — onboarding costs, escalation rates, QA failure patterns, and compliance risk.</p>
         </div>
+      </div>
+    </div>
+
+    <!-- Personas -->
+    <div class="mt-32">
+      <div class="section-label"><span>↓</span>Proto-Personas</div>
+      <h3 style="font-family: var(--serif); font-size: 22px; font-weight:400; margin-bottom: 20px; color: var(--ink);">Four people, four very different relationships with the same system</h3>
+      <p class="text-body" style="margin-bottom: 24px;">Call listening and stakeholder interviews surfaced a critical pattern: agent tenure fundamentally changes what kind of support is needed — and every one of those needs collides with a customer who is often anxious, defensive, or simply exhausted by the process.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;">
+
+        <!-- New Agent -->
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+          <div style="height:3px;background:var(--teal)"></div>
+          <div style="padding:20px 20px 16px;">
+            <div style="width:42px;height:42px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--teal);margin-bottom:12px;">JR</div>
+            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Jordan Reyes</div>
+            <div style="font-size:10px;color:var(--teal);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">New Agent &middot; 0–6 Months Tenure</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;"><span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Still learning the system</span><span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">High attrition risk</span><span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Needs guardrails</span></div>
+          </div>
+          <div style="padding:0 20px 20px;">
+            <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">In their own words</div>
+            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:10px 12px;background:var(--teal-light);border-radius:6px;border-left:2px solid var(--teal);margin-bottom:14px;">"I'm afraid of saying the wrong thing and getting written up. I just want to know I'm doing it right in the moment, not two weeks later in a QA review."</div>
+            <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">Key pain points</div>
+            <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;">
+              <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:4px;"></div>Overwhelmed juggling disconnected systems mid-call</div>
+              <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:4px;"></div>Unsure which offer is compliant for a given situation</div>
+              <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:4px;"></div>Mistakes surface days later, not in the moment</div>
+            </div>
+            <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">Task frequency</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:110px;flex-shrink:0;">Compliance lookups</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:var(--teal);width:95%;"></div></div></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:110px;flex-shrink:0;">Supervisor escalations</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:var(--teal);width:80%;"></div></div></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:110px;flex-shrink:0;">First-call resolution</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:var(--teal);width:30%;"></div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2-5 Year Agent -->
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+          <div style="height:3px;background:var(--slate)"></div>
+          <div style="padding:20px 20px 16px;">
+            <div style="width:42px;height:42px;border-radius:50%;background:var(--slate-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--slate);margin-bottom:12px;">MW</div>
+            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Marcus Webb</div>
+            <div style="font-size:10px;color:var(--slate);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Agent &middot; 2–5 Years Experience</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;"><span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Solid on routine cases</span><span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Developing judgment</span><span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Inconsistent on edge cases</span></div>
+          </div>
+          <div style="padding:0 20px 20px;">
+            <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">In their own words</div>
+            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:10px 12px;background:var(--slate-light);border-radius:6px;border-left:2px solid var(--slate);margin-bottom:14px;">"I know the basics cold. But the second a call gets unusual, I'm digging through three tabs hoping I land on the right answer."</div>
+            <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">Key pain points</div>
+            <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;">
+              <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:var(--slate);flex-shrink:0;margin-top:4px;"></div>Confident on common scenarios, hesitant on hardship cases</div>
+              <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:var(--slate);flex-shrink:0;margin-top:4px;"></div>Leans on tribal knowledge from tenured coworkers</div>
+              <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:var(--slate);flex-shrink:0;margin-top:4px;"></div>No structured way to confirm it's the best available option</div>
+            </div>
+            <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">Task frequency</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:110px;flex-shrink:0;">Standard resolutions</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:var(--slate);width:90%;"></div></div></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:110px;flex-shrink:0;">Peer consultations</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:var(--slate);width:65%;"></div></div></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:110px;flex-shrink:0;">Edge-case escalations</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:var(--slate);width:55%;"></div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Veteran Agent -->
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+          <div style="height:3px;background:var(--gold)"></div>
+          <div style="padding:20px 20px 16px;">
+            <div style="width:42px;height:42px;border-radius:50%;background:var(--gold-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--gold);margin-bottom:12px;">DO</div>
+            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Denise Okafor</div>
+            <div style="font-size:10px;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Senior Agent &middot; 5+ Years Experience</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;"><span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Process expert</span><span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Trains new hires</span><span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Resistant to added steps</span></div>
+          </div>
+          <div style="padding:0 20px 20px;">
+            <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">In their own words</div>
+            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:10px 12px;background:var(--gold-light);border-radius:6px;border-left:2px solid var(--gold);margin-bottom:14px;">"I've got the whole decision tree in my head. I don't need the system to hold my hand — I need it to keep up with me."</div>
+            <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">Key pain points</div>
+            <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;">
+              <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:4px;"></div>Years of workarounds mask deeper system gaps from leadership</div>
+              <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:4px;"></div>Any tool that adds clicks gets bypassed entirely</div>
+              <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:4px;"></div>Tribal knowledge lives only in their head — nothing is captured</div>
+            </div>
+            <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">Task frequency</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:110px;flex-shrink:0;">Manual overrides</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:var(--gold);width:85%;"></div></div></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:110px;flex-shrink:0;">Mentoring new hires</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:var(--gold);width:70%;"></div></div></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:110px;flex-shrink:0;">New tool adoption</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:var(--gold);width:20%;"></div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delinquent Account Holder -->
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+          <div style="height:3px;background:#a32d2d"></div>
+          <div style="padding:20px 20px 16px;">
+            <div style="width:42px;height:42px;border-radius:50%;background:#fcebeb;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#a32d2d;margin-bottom:12px;">FJ</div>
+            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Fred Johnson</div>
+            <div style="font-size:10px;color:#a32d2d;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Customer &middot; 120 Days Past Due</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px;"><span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Financial hardship</span><span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Avoids calls</span><span style="font-size:9px;padding:2px 8px;border-radius:10px;font-weight:500;background:var(--surface);color:var(--ink2);">Wants a fair resolution</span></div>
+          </div>
+          <div style="padding:0 20px 20px;">
+            <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">In his own words</div>
+            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:10px 12px;background:#fcebeb;border-radius:6px;border-left:2px solid #a32d2d;margin-bottom:14px;">"I know I'm behind. I just need someone to work with me instead of reading me the same script every time I call in."</div>
+            <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">Key pain points</div>
+            <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;">
+              <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:#a32d2d;flex-shrink:0;margin-top:4px;"></div>Repeats the same account details every time he's transferred</div>
+              <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:#a32d2d;flex-shrink:0;margin-top:4px;"></div>Offered generic payment plans that don't fit his actual situation</div>
+              <div style="display:flex;align-items:flex-start;gap:7px;font-size:12px;color:var(--ink2);line-height:1.4;"><div style="width:6px;height:6px;border-radius:50%;background:#a32d2d;flex-shrink:0;margin-top:4px;"></div>Feels judged rather than helped, so he avoids future calls</div>
+            </div>
+            <div style="font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;">Engagement frequency</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:110px;flex-shrink:0;">Missed/avoided calls</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:#a32d2d;width:80%;"></div></div></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:110px;flex-shrink:0;">Repeats info given</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:#a32d2d;width:90%;"></div></div></div>
+              <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:10px;color:var(--ink2);width:110px;flex-shrink:0;">Trust in resolution</span><div style="height:4px;border-radius:2px;background:var(--border);flex:1;"><div style="height:4px;border-radius:2px;background:#a32d2d;width:25%;"></div></div></div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
