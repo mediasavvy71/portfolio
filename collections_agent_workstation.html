@@ -121,61 +121,6 @@ nav {
 .hero-mockup-window img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; object-position: top; }
 @media (max-width: 900px) { .hero-mockup-band { display: none; } }
 
-.cw-scope .chrome { background: #1e1e1e; padding: 9px 16px; display: flex; align-items: center; gap: 7px; }
-.cw-scope .dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
-.cw-scope .url-bar { flex: 1; background: rgba(255,255,255,.07); border-radius: 5px; height: 22px; margin: 0 14px; display: flex; align-items: center; padding: 0 12px; }
-.cw-scope .url-bar span { font-size: 10px; color: rgba(255,255,255,.35); letter-spacing: .01em; }
-
-.cw-scope .topbar { background: var(--white); height: 52px; padding: 0 22px; display: flex; align-items: center; gap: 22px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-.cw-scope .brand-mark { font-size: 13px; font-weight: 600; color: var(--ink); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
-.cw-scope .brand-logo { color: var(--gold); font-size: 15px; }
-.cw-scope .topbar-search-row { flex: 1; display: flex; align-items: center; gap: 10px; max-width: 320px; }
-.cw-scope .topbar-search { flex: 1; border: 1px solid var(--border2); border-radius: 6px; padding: 7px 12px; font-size: 11px; color: var(--ink3); background: var(--white); }
-.cw-scope .topbar-open-btn { border: 1px solid var(--border2); border-radius: 20px; padding: 6px 16px; font-size: 11px; font-weight: 600; color: var(--ink2); white-space: nowrap; }
-.cw-scope .topbar-user { margin-left: auto; font-size: 12px; color: var(--ink2); white-space: nowrap; }
-
-.cw-scope .app-layout { display: flex; height: 600px; }
-
-.cw-scope .sidebar { width: 84px; background: var(--white); border-right: 1px solid var(--border); padding: 14px 0; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.cw-scope .sidebar-item { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 9px 4px; font-size: 9px; color: var(--ink3); position: relative; }
-.cw-scope .sidebar-item .si-icon { font-size: 15px; }
-.cw-scope .sidebar-item.active { background: var(--navy-light); color: var(--navy); font-weight: 600; border-right: 2px solid var(--navy); }
-.cw-scope .sidebar-item.active .si-icon { color: var(--navy); }
-.cw-scope .sbadge { position: absolute; top: 3px; right: 12px; background: var(--navy); color: #fff; font-size: 8px; font-weight: 700; border-radius: 8px; padding: 1px 4px; line-height: 1.3; }
-
-.cw-scope .ai-panel { width: 264px; border-right: 1px solid var(--border); background: var(--white); display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; }
-.cw-scope .ai-panel-head { background: var(--navy); color: #fff; font-size: 12px; font-weight: 600; padding: 12px 16px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-.cw-scope .ai-dot { color: var(--gold-mid); }
-.cw-scope .ai-meta { font-size: 10px; color: var(--ink3); padding: 12px 16px 8px; line-height: 1.65; }
-.cw-scope .ai-meta strong { color: var(--ink); font-size: 12px; }
-.cw-scope .ai-meta u { color: var(--navy); text-decoration-color: var(--navy-mid); }
-.cw-scope .ai-bubble { margin: 0 16px 12px; background: var(--navy-light); border-radius: 8px; padding: 12px 14px; font-size: 11px; color: var(--ink2); line-height: 1.6; }
-.cw-scope .ai-rec { margin: 0 16px 16px; background: var(--navy-light); border-radius: 8px; padding: 12px 14px; }
-.cw-scope .ai-rec-title { font-size: 10px; font-weight: 700; color: var(--navy); letter-spacing: .04em; margin-bottom: 4px; }
-.cw-scope .ai-rec-body { font-size: 11px; color: var(--ink2); line-height: 1.5; margin-bottom: 10px; }
-.cw-scope .ai-rec-options { display: flex; gap: 16px; font-size: 11px; color: var(--ink2); align-items: center; }
-.cw-scope .radio { width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid var(--border2); display: inline-block; margin-right: 5px; vertical-align: -2px; }
-
-.cw-scope .main-content { flex: 1; overflow-y: auto; background: var(--offwhite); display: flex; flex-direction: column; min-width: 0; }
-.cw-scope .page-top { padding: 16px 22px 0; flex-shrink: 0; }
-.cw-scope .page-top h1 { font-family: var(--sans); font-size: 19px; font-weight: 700; color: var(--ink); }
-.cw-scope .tabs { display: flex; gap: 22px; padding: 14px 22px 0; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-.cw-scope .tab { font-size: 11px; font-weight: 600; color: var(--ink3); padding-bottom: 10px; }
-.cw-scope .tab.active { color: var(--navy); border-bottom: 2px solid var(--navy); }
-.cw-scope .content-scroll { padding: 18px 22px 22px; }
-.cw-scope .section-h { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 12px; }
-.cw-scope .stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 16px; }
-.cw-scope .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
-.cw-scope .stat-label { font-size: 10px; color: var(--ink3); margin-bottom: 6px; }
-.cw-scope .stat-val { font-size: 22px; font-weight: 700; color: var(--ink); }
-.cw-scope .accounts-panel { background: var(--white); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-.cw-scope .accounts-head { padding: 10px 16px; font-size: 12px; font-weight: 600; color: var(--ink); border-bottom: 1px solid var(--border); }
-.cw-scope table { width: 100%; border-collapse: collapse; }
-.cw-scope th { font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink3); padding: 8px 16px; text-align: left; background: var(--surface); }
-.cw-scope td { padding: 10px 16px; font-size: 11px; color: var(--ink); border-top: 1px solid var(--border); white-space: nowrap; }
-.cw-scope td.warn { color: #a32d2d; font-weight: 600; }
-.cw-scope .pay-link { color: var(--navy); font-weight: 600; font-size: 11px; }
-
 /* ─── IMPACT BAR ─── */
 .impact-bar { background: var(--navy); padding: 40px 48px; }
 .impact-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
@@ -735,6 +680,174 @@ footer strong { color: rgba(255,255,255,.75); }
           <p style="font-size:13px;color:var(--ink2);line-height:1.55;">Outcome quality depended entirely on which agent answered. The same customer situation produced different solutions on different calls — a compliance and equity risk, not just a UX problem.</p>
         </div>
       </div>
+    </div>
+
+    <!-- Agent Journey Map -->
+    <div class="mt-32">
+      <div class="section-label"><span>↓</span>Agent Journey Map</div>
+      <h3 style="font-family: var(--serif); font-size: 22px; font-weight:400; margin-bottom: 16px; color: var(--ink);">One call, seven stages — and one moment where satisfaction collapses</h3>
+      <p class="text-body" style="margin-bottom: 20px;">Mapping a single agent's activities, feelings, and expectations across a delinquency call surfaced exactly where the experience broke down: not at the start of the call, and not at the end — but in the gap between recognizing a hardship and finding out what the system would actually let the agent offer.</p>
+      <div style="border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; margin-bottom: 20px;">
+        <div style="overflow-x: auto;">
+          <div class="jm-scope" style="min-width: 900px;">
+<style>
+.jm-scope{
+  --jm-ink:#1a1a18; --jm-muted:#4a4a46; --jm-border:#d0d0cb; --jm-card:#ffffff; --jm-label-bg:#f2f2ef;
+  --jm-happy:#3b6d11; --jm-mid:#b07d2a; --jm-sad:#a32d2d; --jm-line:#8a8a84;
+  --jm-navy-head:#1e3a5f;   --jm-navy-bg:#e8edf5;   --jm-navy-fg:#152943;
+  --jm-teal-head:#006d77;   --jm-teal-bg:#e8f4f5;   --jm-teal-fg:#00464d;
+  --jm-gold-head:#b07d2a;   --jm-gold-bg:#fdf5e6;   --jm-gold-fg:#7a561d;
+  --jm-crimson-head:#a32d2d; --jm-crimson-bg:#fcebeb; --jm-crimson-fg:#711f1f;
+  --jm-slate-head:#3d5a6c;  --jm-slate-bg:#edf2f5;  --jm-slate-fg:#293d49;
+  font-family: var(--sans); color: var(--jm-ink); background: var(--jm-card); padding: 8px;
+}
+.jm-scope table{ width:100%; border-collapse:collapse; table-layout:fixed; }
+.jm-scope col.jm-lblcol{ width:13.5%; }
+.jm-scope col.jm-datacol{ width:12.36%; }
+.jm-scope td{ border:1px solid var(--jm-border); padding:12px 10px; vertical-align:middle; font-size:13px; line-height:1.45; }
+.jm-scope td.jm-lbl{ background:var(--jm-label-bg); color:var(--jm-navy-head); font-weight:700; text-align:left; }
+.jm-scope td.jm-head{ color:#fff; font-weight:700; text-align:center; font-size:15px; padding:14px 10px; }
+.jm-scope td.jm-persona{ text-align:left; background:#fff; }
+.jm-scope .jm-persona-row{ display:flex; align-items:center; gap:8px; }
+.jm-scope .jm-chip{ flex:0 0 auto; width:26px; height:26px; border-radius:50%; color:#fff; font-weight:700; font-size:11px; display:flex; align-items:center; justify-content:center;}
+.jm-scope .jm-persona-name{ font-weight:700; color:var(--jm-ink);}
+.jm-scope .jm-persona-role{ font-size:11.5px; color:var(--jm-muted);}
+.jm-scope td.jm-activity{ font-weight:600; text-align:center; background:#fff; }
+.jm-scope td.jm-icon-cell{ text-align:center; background:#fff; }
+.jm-scope td.jm-icon-cell .jm-badge{ width:56px; height:56px; margin:0 auto; border-radius:12px; background:#f4f6f8; display:flex; align-items:center; justify-content:center; }
+.jm-scope td.jm-icon-cell svg{ width:38px; height:38px; }
+.jm-scope td.jm-exp{ text-align:center; background:#fff; color:var(--jm-muted); }
+.jm-scope td.jm-expect{ font-weight:600; text-align:center; background:#fff; }
+.jm-scope .jm-sat-cell{ padding:0; background:#fff; }
+.jm-scope .jm-sat-svg{ width:100%; aspect-ratio:700/190; height:auto; display:block; }
+.jm-scope .jm-band-label{ font-size:11px; fill:#7f8c99; font-family:inherit; font-weight:600; }
+</style>
+<table>
+<colgroup>
+  <col class="jm-lblcol"><col class="jm-datacol"><col class="jm-datacol"><col class="jm-datacol"><col class="jm-datacol"><col class="jm-datacol"><col class="jm-datacol"><col class="jm-datacol">
+</colgroup>
+
+<tr>
+  <td class="jm-lbl">Stages of<br>Journey</td>
+  <td colspan="2" class="jm-head" style="background:var(--jm-navy-head)">Intake &amp; Discovery</td>
+  <td colspan="2" class="jm-head" style="background:var(--jm-teal-head)">Hardship &amp; Eligibility</td>
+  <td class="jm-head" style="background:var(--jm-gold-head)">Solutioning</td>
+  <td class="jm-head" style="background:var(--jm-crimson-head)">Objection Handling</td>
+  <td class="jm-head" style="background:var(--jm-slate-head)">Resolution</td>
+</tr>
+
+<tr>
+  <td class="jm-lbl">Persona</td>
+  <td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-navy-head)">A</div><div><div class="jm-persona-name">Agent</div><div class="jm-persona-role">Verifies &amp; opens account</div></div></div></td>
+  <td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-navy-head)">A</div><div><div class="jm-persona-name">Agent</div><div class="jm-persona-role">Gathers circumstances</div></div></div></td>
+  <td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-teal-head)">A</div><div><div class="jm-persona-name">Agent</div><div class="jm-persona-role">Assesses hardship</div></div></div></td>
+  <td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-teal-head)">A</div><div><div class="jm-persona-name">Agent</div><div class="jm-persona-role">Waits on eligibility</div></div></div></td>
+  <td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-gold-head)">A</div><div><div class="jm-persona-name">Agent</div><div class="jm-persona-role">Presents options</div></div></div></td>
+  <td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-crimson-head)">A</div><div><div class="jm-persona-name">Agent</div><div class="jm-persona-role">Handles pushback</div></div></div></td>
+  <td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-slate-head)">A</div><div><div class="jm-persona-name">Agent</div><div class="jm-persona-role">Schedules &amp; documents</div></div></div></td>
+</tr>
+
+<tr>
+  <td class="jm-lbl">Activities</td>
+  <td class="jm-activity">Verifies caller identity and opens the account record</td>
+  <td class="jm-activity">Asks what's behind the missed payments</td>
+  <td class="jm-activity">Judges whether the situation qualifies as hardship</td>
+  <td class="jm-activity">Waits while eligibility is checked across programs</td>
+  <td class="jm-activity">Walks the customer through the surfaced options</td>
+  <td class="jm-activity">Re-explains terms the customer doesn't trust yet</td>
+  <td class="jm-activity">Schedules the payment and logs the outcome</td>
+</tr>
+
+<tr>
+  <td class="jm-lbl">Feelings</td>
+
+  <td class="jm-icon-cell"><div class="jm-badge">
+    <svg viewBox="0 0 40 40"><rect x="9" y="6" width="22" height="29" rx="2.5" fill="#fff" stroke="var(--jm-navy-head)" stroke-width="2"/><rect x="15" y="3" width="10" height="6" rx="1.5" fill="var(--jm-navy-head)"/><line x1="13" y1="18" x2="27" y2="18" stroke="#7391b3" stroke-width="2.4"/><line x1="13" y1="24" x2="27" y2="24" stroke="#7391b3" stroke-width="2.4"/><path d="M13 29 l3 3 l6 -7" fill="none" stroke="var(--jm-happy)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div></td>
+
+  <td class="jm-icon-cell"><div class="jm-badge">
+    <svg viewBox="0 0 40 40"><circle cx="17" cy="17" r="10.5" fill="var(--jm-navy-bg)" stroke="var(--jm-navy-head)" stroke-width="2.6"/><line x1="25" y1="25" x2="34" y2="34" stroke="var(--jm-navy-head)" stroke-width="3.4" stroke-linecap="round"/><text x="17" y="21" text-anchor="middle" font-size="10" fill="var(--jm-navy-head)" font-weight="700">?</text></svg>
+  </div></td>
+
+  <td class="jm-icon-cell"><div class="jm-badge">
+    <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="var(--jm-teal-bg)" stroke="var(--jm-teal-head)" stroke-width="0"/><polygon points="20,7 11,22 29,22" fill="var(--jm-mid)"/><rect x="17" y="20" width="6" height="12" rx="1" fill="var(--jm-teal-head)"/></svg>
+  </div></td>
+
+  <td class="jm-icon-cell"><div class="jm-badge">
+    <svg viewBox="0 0 40 40"><rect x="5" y="6" width="30" height="28" rx="2" fill="#fff" stroke="var(--jm-teal-head)" stroke-width="2"/><rect x="10" y="22" width="4.5" height="8" fill="var(--jm-sad)"/><rect x="17.5" y="14" width="4.5" height="16" fill="var(--jm-teal-head)"/><rect x="25" y="18" width="4.5" height="12" fill="var(--jm-happy)"/></svg>
+  </div></td>
+
+  <td class="jm-icon-cell"><div class="jm-badge">
+    <svg viewBox="0 0 40 40"><rect x="4" y="16" width="18" height="12" rx="1.5" fill="var(--jm-gold-head)"/><path d="M22 20 H29 L34 25 V28 H22 Z" fill="#d8b877"/><rect x="24" y="22" width="6" height="4" fill="#fdf5e6"/><circle cx="12" cy="30" r="3" fill="#2c2c2a"/><circle cx="12" cy="30" r="1.3" fill="#cfd6da"/><circle cx="28.5" cy="30" r="3" fill="#2c2c2a"/><circle cx="28.5" cy="30" r="1.3" fill="#cfd6da"/></svg>
+  </div></td>
+
+  <td class="jm-icon-cell"><div class="jm-badge">
+    <svg viewBox="0 0 40 40"><polygon points="6,17 15,17 18,22 22,22 25,17 34,17 34,31 6,31" fill="var(--jm-crimson-bg)" stroke="var(--jm-crimson-head)" stroke-width="2"/><path d="M13 24 l0 -1 M20 24 l0 -1 M27 24 l0 -1" fill="none" stroke="var(--jm-crimson-head)" stroke-width="2.2" stroke-linecap="round"/><path d="M12 27 Q20 23 28 27" fill="none" stroke="var(--jm-crimson-head)" stroke-width="2.2" stroke-linecap="round"/></svg>
+  </div></td>
+
+  <td class="jm-icon-cell"><div class="jm-badge">
+    <svg viewBox="0 0 40 40"><rect x="4" y="9" width="32" height="22" rx="3" fill="var(--jm-slate-bg)" stroke="var(--jm-slate-head)" stroke-width="2"/><rect x="4" y="14" width="32" height="5" fill="var(--jm-slate-head)"/><path d="M11 25 l3 3 l7 -7" fill="none" stroke="var(--jm-happy)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div></td>
+</tr>
+
+<tr>
+  <td class="jm-lbl">Satisfaction</td>
+  <td colspan="7" class="jm-sat-cell">
+    <svg class="jm-sat-svg" viewBox="0 0 700 190">
+      <line x1="0" y1="34" x2="700" y2="34" stroke="#d7dee4" stroke-width="1" stroke-dasharray="4 4"/>
+      <line x1="0" y1="95" x2="700" y2="95" stroke="#d7dee4" stroke-width="1" stroke-dasharray="4 4"/>
+      <line x1="0" y1="156" x2="700" y2="156" stroke="#d7dee4" stroke-width="1" stroke-dasharray="4 4"/>
+      <text x="6" y="24" class="jm-band-label">Very Happy</text>
+      <text x="55" y="74" text-anchor="middle" class="jm-band-label">Overall Satisfied</text>
+      <text x="6" y="148" class="jm-band-label">Unhappy</text>
+
+      <polyline points="55,95 155,95 255,140 355,156 455,95 555,95 655,34"
+                fill="none" stroke="var(--jm-line)" stroke-width="2"/>
+
+      <g transform="translate(55,95)"><circle r="13" fill="#fff" stroke="var(--jm-mid)" stroke-width="2.4"/><circle cx="-4.5" cy="-3" r="1.6" fill="var(--jm-mid)"/><circle cx="4.5" cy="-3" r="1.6" fill="var(--jm-mid)"/><path d="M -5 4 Q 0 8 5 4" fill="none" stroke="var(--jm-mid)" stroke-width="2" stroke-linecap="round"/></g>
+
+      <g transform="translate(155,95)"><circle r="13" fill="#fff" stroke="var(--jm-mid)" stroke-width="2.4"/><circle cx="-4.5" cy="-3" r="1.6" fill="var(--jm-mid)"/><circle cx="4.5" cy="-3" r="1.6" fill="var(--jm-mid)"/><path d="M -5 4 Q 0 8 5 4" fill="none" stroke="var(--jm-mid)" stroke-width="2" stroke-linecap="round"/></g>
+
+      <g transform="translate(255,140)"><circle r="13" fill="#fff" stroke="var(--jm-sad)" stroke-width="2.4"/><circle cx="-4.5" cy="-3" r="1.6" fill="var(--jm-sad)"/><circle cx="4.5" cy="-3" r="1.6" fill="var(--jm-sad)"/><path d="M -5 6 Q 0 2 5 6" fill="none" stroke="var(--jm-sad)" stroke-width="2" stroke-linecap="round"/></g>
+
+      <g transform="translate(355,156)"><circle r="13" fill="#fff" stroke="var(--jm-sad)" stroke-width="2.4"/><circle cx="-4.5" cy="-3" r="1.6" fill="var(--jm-sad)"/><circle cx="4.5" cy="-3" r="1.6" fill="var(--jm-sad)"/><path d="M -5 6 Q 0 2 5 6" fill="none" stroke="var(--jm-sad)" stroke-width="2" stroke-linecap="round"/></g>
+
+      <g transform="translate(455,95)"><circle r="13" fill="#fff" stroke="var(--jm-mid)" stroke-width="2.4"/><circle cx="-4.5" cy="-3" r="1.6" fill="var(--jm-mid)"/><circle cx="4.5" cy="-3" r="1.6" fill="var(--jm-mid)"/><path d="M -5 4 Q 0 8 5 4" fill="none" stroke="var(--jm-mid)" stroke-width="2" stroke-linecap="round"/></g>
+
+      <g transform="translate(555,95)"><circle r="13" fill="#fff" stroke="var(--jm-mid)" stroke-width="2.4"/><circle cx="-4.5" cy="-3" r="1.6" fill="var(--jm-mid)"/><circle cx="4.5" cy="-3" r="1.6" fill="var(--jm-mid)"/><path d="M -5 4 Q 0 8 5 4" fill="none" stroke="var(--jm-mid)" stroke-width="2" stroke-linecap="round"/></g>
+
+      <g transform="translate(655,34)"><circle r="13" fill="#fff" stroke="var(--jm-happy)" stroke-width="2.4"/><circle cx="-4.5" cy="-3" r="1.6" fill="var(--jm-happy)"/><circle cx="4.5" cy="-3" r="1.6" fill="var(--jm-happy)"/><path d="M -5 4 Q 0 9 5 4" fill="none" stroke="var(--jm-happy)" stroke-width="2" stroke-linecap="round"/></g>
+    </svg>
+  </td>
+</tr>
+
+<tr>
+  <td class="jm-lbl">Experiences</td>
+  <td class="jm-exp">Same checks every time, but the call starts smoothly</td>
+  <td class="jm-exp">Nothing structures what to ask — it's all in the agent's head</td>
+  <td class="jm-exp">No consistent way to confirm hardship; judgment varies by agent</td>
+  <td class="jm-exp">Up to 7 system switches just to check eligibility across programs</td>
+  <td class="jm-exp">Options come from memory or a binder, not a live source of truth</td>
+  <td class="jm-exp">Defending an option the system never confirmed puts the agent on the spot</td>
+  <td class="jm-exp">Payment is scheduled, but nothing captures why this option was chosen</td>
+</tr>
+
+<tr>
+  <td class="jm-lbl">What Success<br>Looks Like</td>
+  <td class="jm-expect">Customer feels recognized, not interrogated</td>
+  <td class="jm-expect">Customer feels heard, not rushed through a script</td>
+  <td class="jm-expect">An honest, defensible read on the customer's situation</td>
+  <td class="jm-expect">Eligibility surfaced instantly, without leaving the call</td>
+  <td class="jm-expect">Customer understands why this option fits their situation</td>
+  <td class="jm-expect">Agent can explain the "why" with confidence, not a guess</td>
+  <td class="jm-expect">A clear, documented plan both sides trust</td>
+</tr>
+
+</table>
+          </div>
+        </div>
+      </div>
+      <p class="text-body" style="font-size:13px;color:var(--ink3);">The dip lands squarely on <strong>Hardship &amp; Eligibility</strong> — the exact seam this project targeted. Once eligibility is embedded directly into the workflow, satisfaction recovers through Solutioning and holds even through pushback, because the agent is now defending a system-verified answer instead of a personal guess.</p>
     </div>
   </div>
 </section>
