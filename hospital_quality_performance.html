@@ -134,6 +134,11 @@ nav {
 .section { padding: 80px 48px; border-bottom: 1px solid var(--border); }
 .section:nth-child(even) { background: var(--white); }
 .section:nth-child(odd)  { background: var(--offwhite); }
+/* Explicit backgrounds (order-independent) so inserting new blocks elsewhere on the page never flips these */
+#context   { background: var(--white); }
+#discovery { background: var(--offwhite); }
+#design    { background: var(--white); }
+#outcomes  { background: var(--offwhite); }
 .section-inner { max-width: 1080px; margin: 0 auto; }
 
 .section-label {
@@ -392,8 +397,9 @@ footer strong { color: rgba(255,255,255,.75); }
 <section class="hero">
   <div class="hero-content">
     <div class="hero-eyebrow">Case Study 02 · Healthcare Quality · Cross-Platform UX</div>
-    <h1>Turning quality data<br>into <em>actionable insights</em> — a unified<br>intelligence platform for healthcare</h1>
-    <p class="hero-sub">Healthcare organizations collect quality measures across five disconnected systems — but can't act on them in time. I led UX strategy and design to unify a fragmented data ecosystem into a role-driven, cross-platform performance intelligence experience.</p>
+    <h1>Turning quality data<br>into <em>actionable decisions</em></h1>
+    <p class="hero-sub">Hospitals are evaluated on publicly reported quality measures that influence CMS Star Ratings, reimbursement, and patient trust. Yet quality leaders were managing performance across five disconnected systems using reports that were months out of date.</p>
+    <p class="hero-sub">I led the UX strategy and design of a unified quality intelligence platform that helped healthcare organizations monitor performance, identify quality gaps, compare results against benchmarks, and take action before issues affected future ratings.</p>
     <div class="hero-meta">
       <div class="hero-meta-item">
         <div class="meta-label">My Role</div>
@@ -453,13 +459,10 @@ footer strong { color: rgba(255,255,255,.75); }
   </div>
 </div>
 
-<!-- CONTEXT -->
-<section class="section" id="context">
+<!-- MY CONTRIBUTIONS -->
+<div style="background:var(--offwhite);padding:56px 48px;border-bottom:1px solid var(--border);">
   <div class="section-inner">
-    <div class="section-label"><span>1</span>Context & Problem Space</div>
-    <h2 class="section-title">Quality data collected everywhere — actionable nowhere</h2>
-
-    <div class="role-callout">
+    <div class="role-callout" style="margin-bottom:0;">
       <h3>My Contributions</h3>
       <ul>
         <li>Led cross-functional discovery across clinical SMEs, quality analysts, and medical directors — mapping a fragmented data ecosystem spanning 5 reporting formats and organizational levels</li>
@@ -468,11 +471,27 @@ footer strong { color: rgba(255,255,255,.75); }
         <li>Produced user flows, storyboards, wireframes, and high-fidelity mockups; championed design patterns for data-dense clinical environments</li>
       </ul>
     </div>
+  </div>
+</div>
+
+<!-- CONTEXT -->
+<section class="section" id="context">
+  <div class="section-inner">
+    <div class="section-label"><span>1</span>Context & Problem Space</div>
+    <h2 class="section-title">Hospitals couldn't manage what they couldn't see</h2>
 
     <div class="two-col">
       <div>
-        <p class="text-body">Healthcare organizations are assessed on quality measures across dozens of clinical categories — mortality, safety of care, readmissions, patient experience. The data exists, but it's collected and stored across multiple systems in multiple formats. By the time it reaches the people who need to act on it, it's often six months old.</p>
-        <p class="text-body mt-24">Quality analysts, medical directors, and department heads had no unified view of their performance. They couldn't identify where they were falling short, compare themselves against peers, or know which corrective actions to prioritize — in time to make a difference.</p>
+        <p class="text-body">CMS evaluates hospitals across four major quality domains — Mortality, Readmissions, Safety of Care, and Patient Experience. Improvements in these areas affect publicly reported Star Ratings, but those ratings often reflect care delivered years earlier. Organizations must continuously monitor performance long before results appear in public reporting.</p>
+        <p class="text-body mt-24">During discovery we found that hospitals were trying to manage these measures using information scattered across multiple reporting systems, spreadsheets, and manual processes. Quality analysts spent more time assembling reports than understanding why performance was changing.</p>
+        <p class="text-body mt-24">Without a single view of organizational performance, leaders struggled to answer basic questions:</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:12px;">
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:15px;color:var(--ink2);line-height:1.5;"><span style="color:var(--gold);font-weight:600;flex-shrink:0;">→</span>Where are we underperforming?</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:15px;color:var(--ink2);line-height:1.5;"><span style="color:var(--gold);font-weight:600;flex-shrink:0;">→</span>Which hospitals or departments need attention?</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:15px;color:var(--ink2);line-height:1.5;"><span style="color:var(--gold);font-weight:600;flex-shrink:0;">→</span>Which measures are driving the problem?</li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:15px;color:var(--ink2);line-height:1.5;"><span style="color:var(--gold);font-weight:600;flex-shrink:0;">→</span>What should we do next?</li>
+        </ul>
+        <p class="text-body mt-24">The result was a reactive process that focused on reporting historical performance rather than improving future outcomes.</p>
       </div>
       <div class="gap-col" style="display:flex;flex-direction:column;gap:16px;">
         <div class="problem-card">
@@ -522,32 +541,26 @@ footer strong { color: rgba(255,255,255,.75); }
     <div class="section-label"><span>2</span>Discovery & Systems Mapping</div>
     <h2 class="section-title">A cross-functional research effort to map the full quality data ecosystem</h2>
 
-    <div class="two-col">
-      <div>
-        <p class="text-body">Our UX team conducted formative research by interviewing and observing primary stakeholders across their daily workflows. I collaborated with Clinical Subject Matter Experts to map the quality data process end-to-end — understanding how a quality analyst actually does their job, what data they access, where they get stuck, and what decisions they need to make.</p>
-        <p class="text-body mt-24">A critical finding emerged early: <strong>organization size fundamentally shapes the quality analyst role.</strong> In smaller facilities, one analyst handles every phase of the quality cycle — from pulling raw measures to presenting board-level reports. In larger systems, these responsibilities are distributed across specialized roles. This insight directly drove our persona architecture and the role-based navigation system we designed.</p>
+    <div>
+      <p class="text-body">Our UX team conducted formative research by interviewing and observing primary stakeholders across their daily workflows. I collaborated with Clinical Subject Matter Experts to map the quality data process end-to-end — understanding how a quality analyst actually does their job, what data they access, where they get stuck, and what decisions they need to make.</p>
+      <p class="text-body mt-24">A critical finding emerged early: <strong>organization size fundamentally shapes the quality analyst role.</strong> In smaller facilities, one analyst handles every phase of the quality cycle — from pulling raw measures to presenting board-level reports. In larger systems, these responsibilities are distributed across specialized roles. This insight directly drove our persona architecture and the role-based navigation system we designed.</p>
+    </div>
+
+    <div class="three-col mt-24">
+      <div class="insight-card">
+        <div class="insight-icon">🏥</div>
+        <h4>Org Size Shapes Everything</h4>
+        <p>Smaller organizations have one analyst handling the full quality cycle. Larger systems distribute work across 4–6 specialized roles. A single UX pattern couldn't serve both without role-based customization.</p>
       </div>
-      <div style="display:flex;flex-direction:column;gap:16px;">
-        <div class="insight-card">
-          <div class="insight-icon">🏥</div>
-          <h4>Org Size Shapes Everything</h4>
-          <p>Smaller organizations have one analyst handling the full quality cycle. Larger systems distribute work across 4–6 specialized roles. A single UX pattern couldn't serve both without role-based customization.</p>
-        </div>
-        <div class="insight-card">
-          <div class="insight-icon">📊</div>
-          <h4>Volume Overwhelm is Universal</h4>
-          <p>Regardless of org size, every quality analyst cited data volume as their primary challenge. They spend more time assembling data than analyzing it — the system should do the assembly.</p>
-        </div>
-        <div class="insight-card">
-          <div class="insight-icon">🔗</div>
-          <h4>Five Systems, No Single Source</h4>
-          <p>Quality data flowed through CMS, internal QI platforms, departmental spreadsheets, state reporting tools, and EHR exports. None of them talked to each other.</p>
-        </div>
-        <div class="insight-card">
-          <div class="insight-icon">🎯</div>
-          <h4>Action is the Missing Link</h4>
-          <p>Users could eventually identify a performance gap — but the path from "we're underperforming on readmissions" to "here's what we do about it" was entirely outside the system.</p>
-        </div>
+      <div class="insight-card">
+        <div class="insight-icon">📊</div>
+        <h4>Volume Overwhelm is Universal</h4>
+        <p>Regardless of org size, every quality analyst cited data volume as their primary challenge. They spend more time assembling data than analyzing it — the system should do the assembly.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-icon">🔗</div>
+        <h4>Five Systems, No Single Source</h4>
+        <p>Quality data flowed through CMS, internal QI platforms, departmental spreadsheets, state reporting tools, and EHR exports. None of them talked to each other.</p>
       </div>
     </div>
 
@@ -590,22 +603,6 @@ footer strong { color: rgba(255,255,255,.75); }
         </div>
 
         <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
-          <div style="height:3px;background:#185fa5;"></div>
-          <div style="padding:20px 18px;">
-            <div style="width:40px;height:40px;border-radius:50%;background:#e6f1fb;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#185fa5;margin-bottom:10px;">J</div>
-            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Juan</div>
-            <div style="font-size:10px;color:#185fa5;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Chief Medical Officer</div>
-            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:#e6f1fb;border-radius:6px;border-left:2px solid #185fa5;margin-bottom:12px;">"I need physicians to understand exactly what's expected of them — and a way to raise the bar through peer competition."</div>
-            <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Key struggles</div>
-            <div style="display:flex;flex-direction:column;gap:4px;">
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Available solutions aren't centralized — no single streamlined workflow</div>
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Inconsistent charting formats and difficulty inferring data into action plans</div>
-              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Not proactive in finding more information; wants to work from a tablet</div>
-            </div>
-          </div>
-        </div>
-
-        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
           <div style="height:3px;background:#854f0b;"></div>
           <div style="padding:20px 18px;">
             <div style="width:40px;height:40px;border-radius:50%;background:#faeeda;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#854f0b;margin-bottom:10px;">R</div>
@@ -621,6 +618,33 @@ footer strong { color: rgba(255,255,255,.75); }
           </div>
         </div>
 
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+          <div style="height:3px;background:#185fa5;"></div>
+          <div style="padding:20px 18px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:#e6f1fb;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#185fa5;margin-bottom:10px;">J</div>
+            <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Juan</div>
+            <div style="font-size:10px;color:#185fa5;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Chief Medical Officer</div>
+            <div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:#e6f1fb;border-radius:6px;border-left:2px solid #185fa5;margin-bottom:12px;">"I need physicians to understand exactly what's expected of them — and a way to raise the bar through peer competition."</div>
+            <div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Key struggles</div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Available solutions aren't centralized — no single streamlined workflow</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Inconsistent charting formats and difficulty inferring data into action plans</div>
+              <div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Not proactive in finding more information; wants to work from a tablet</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- User Flow -->
+    <div class="mt-32">
+      <div class="section-label"><span>↓</span>User Flow</div>
+      <h3 style="font-family:var(--serif);font-size:22px;font-weight:400;margin-bottom:8px;color:var(--ink);">How the organization should work — from raw measures to executive action</h3>
+      <p class="text-sm mb-24">The reporting cascade mapped during discovery: the quality analyst surfaces performance from the dashboard, the director of quality routes it up to the CMO and down to department managers, and the loop closes with a CMO-directed action plan.</p>
+
+      <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-sm);">
+        <img src="user_flow_diagram.png" alt="User flow diagram showing the quality reporting cascade: Linda (Quality Data Analyst) reviews the Quality Dashboard and sends Monthly/Yearly Quality and Departmental reports to Romona (Director of Quality), who routes an Organizational Quality Report up to Juan (Chief Medical Officer) and a Departmental Quality Report down to Randy (Dept Manager/Physician), who creates an Action Plan; Juan reviews the report and provides feedback to department managers, closing the loop." style="display:block;width:100%;height:auto;">
       </div>
     </div>
   </div>
@@ -792,45 +816,11 @@ footer strong { color: rgba(255,255,255,.75); }
   </div>
 </section>
 
-<!-- VALIDATE -->
-<section class="section" id="validate">
-  <div class="section-inner">
-    <div class="section-label"><span>4</span>Validate</div>
-    <h2 class="section-title">Closing the loop with clinical SMEs and stakeholder feedback</h2>
-
-    <div class="two-col">
-      <div>
-        <p class="text-body">After producing high-fidelity mockups, we returned to the clinical SMEs and quality analysts who participated in discovery to validate key design decisions. Sessions focused on three questions: Does the hierarchy match how you actually think about your data? Can you find a performance gap within the first two interactions? Does the corrective action recommendation feel trustworthy and actionable?</p>
-        <p class="text-body mt-24">Feedback was used to refine the drill-down navigation pattern, simplify the measure category overview cards, and strengthen the contrast between "on target," "watch," and "critical" performance states — a direct response to accessibility feedback from users working on smaller monitors in clinical environments.</p>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:16px;">
-        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px 24px;box-shadow:var(--shadow-sm);">
-          <div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">What we validated</div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">✓</span>Org → Facility → Measure hierarchy matched mental model of quality analysts</div>
-            <div style="display:flex;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">✓</span>Performance gap identifiable within 2 clicks from dashboard landing</div>
-            <div style="display:flex;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">✓</span>Corrective action recommendations felt relevant and trustworthy to clinical directors</div>
-            <div style="display:flex;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">✓</span>Color + icon system legible on clinical workstation monitors at standard viewing distance</div>
-          </div>
-        </div>
-        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px 24px;box-shadow:var(--shadow-sm);">
-          <div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">What we refined</div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div style="display:flex;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--ink3);font-weight:700;flex-shrink:0;">↻</span>Simplified measure category card to show rank order + trend instead of raw score</div>
-            <div style="display:flex;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--ink3);font-weight:700;flex-shrink:0;">↻</span>Strengthened contrast ratio on performance states — increased to 5.2:1 for critical indicators</div>
-            <div style="display:flex;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--ink3);font-weight:700;flex-shrink:0;">↻</span>Added icon reinforcement to performance states so color is never the sole indicator</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- OUTCOMES -->
 <section class="section" id="outcomes">
   <div class="section-inner">
-    <div class="section-label"><span>5</span>Outcomes & Impact</div>
-    <h2 class="section-title">From siloed data to a platform the business could take to market</h2>
+    <div class="section-label"><span>4</span>Outcomes & Impact</div>
+    <h2 class="section-title">Near real-time KPI visibility turned reactive reporting into faster corrective action</h2>
 
     <div class="two-col">
       <div class="result-list">
@@ -849,20 +839,6 @@ footer strong { color: rgba(255,255,255,.75); }
           </div>
         </div>
         <div class="result-item">
-          <div class="result-icon">🎯</div>
-          <div>
-            <h4>Corrective Action Integrated Into the Platform</h4>
-            <p>For the first time, the path from identifying a performance gap to initiating a corrective action plan existed within a single experience — eliminating the spreadsheet and email-based workaround that had been standard practice.</p>
-          </div>
-        </div>
-        <div class="result-item">
-          <div class="result-icon">♿</div>
-          <div>
-            <h4>Accessible Performance Indicator System</h4>
-            <p>The WCAG AA-compliant color + icon system for performance states was adopted as a standard for data visualization across the product suite — ensuring legibility for colorblind users and those working in variable lighting conditions.</p>
-          </div>
-        </div>
-        <div class="result-item">
           <div class="result-icon">📈</div>
           <div>
             <h4>Business Confidence to Go to Market</h4>
@@ -878,26 +854,7 @@ footer strong { color: rgba(255,255,255,.75); }
             <div style="display:flex;gap:10px;font-size:14px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Systems thinking: designing an IA that unified 5 data sources into a single navigable model</div>
             <div style="display:flex;gap:10px;font-size:14px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Cross-functional collaboration with clinical SMEs, product, and engineering across discovery and validation</div>
             <div style="display:flex;gap:10px;font-size:14px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Healthcare provider tool design for time-pressured, data-dense clinical environments</div>
-            <div style="display:flex;gap:10px;font-size:14px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Accessibility-first design: WCAG AA compliance, icon reinforcement, contrast system</div>
-            <div style="display:flex;gap:10px;font-size:14px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Design system contribution: reusable measure category card and performance indicator patterns</div>
             <div style="display:flex;gap:10px;font-size:14px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Closing the feedback loop: Discover → Design → Validate → Measure</div>
-          </div>
-        </div>
-
-        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:24px;">
-          <div style="font-size:11px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;">Deliverables</div>
-          <div style="display:flex;flex-wrap:wrap;gap:8px;">
-            <span class="chip">Stakeholder Interview Guide</span>
-            <span class="chip">Workflow Observation Notes</span>
-            <span class="chip">Ecosystem Map (5 systems)</span>
-            <span class="chip">Qualitative Personas × 4</span>
-            <span class="chip">User Flow Diagram</span>
-            <span class="chip">Information Architecture</span>
-            <span class="chip">Lo-Fi Wireframes</span>
-            <span class="chip">Hi-Fi Dashboard Mockup</span>
-            <span class="chip">Corrective Action Pattern</span>
-            <span class="chip">Performance Color System</span>
-            <span class="chip">Accessibility Guidelines</span>
           </div>
         </div>
       </div>
