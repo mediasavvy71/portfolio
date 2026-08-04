@@ -89,7 +89,7 @@ nav {
 }
 .hero-meta-item:last-child { border-right: none; }
 .meta-label {
-  font-size: 10px; font-weight: 600; letter-spacing: .08em;
+  font-size: 11px; font-weight: 600; letter-spacing: .08em;
   text-transform: uppercase; color: var(--ink3); margin-bottom: 6px;
 }
 .meta-val { font-size: 14px; font-weight: 500; color: var(--ink); }
@@ -100,40 +100,6 @@ nav {
 .impact-stat:last-child { border-right: none; }
 .impact-num { font-family: var(--serif); font-size: 48px; color: #fff; line-height: 1; margin-bottom: 6px; }
 .impact-desc { font-size: 13px; color: rgba(255,255,255,.8); line-height: 1.5; }
-.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--purple); margin-bottom: 18px; }
-.eyebrow::before { content: ''; width: 22px; height: 3px; background: var(--purple); border-radius: 2px; }
-
-.tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
-.tag { font-size: 11.5px; font-weight: 600; letter-spacing: .03em; color: var(--purple); border: 1px solid var(--purple-mid); background: var(--white); border-radius: 20px; padding: 6px 14px; }
-
-.hero-stats { display: flex; gap: 44px; margin-bottom: 8px; }
-.hero-stat-num { font-family: var(--serif); font-size: 32px; line-height: 1; color: var(--purple); margin-bottom: 6px; }
-.hero-stat-label { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--ink3); }
-h1 { font-family: var(--serif); font-weight: 400; line-height: 1.15; font-size: clamp(30px, 4.4vw, 46px); color: var(--ink); margin-bottom: 20px; }
-.dek { font-size: 18px; color: var(--ink2); max-width: 620px; line-height: 1.65; margin-bottom: 40px; }
-
-.meta { display: flex; flex-wrap: wrap; gap: 32px; padding: 24px 0 0; border-top: 1px solid var(--border); margin-top: 28px; }
-.meta div { min-width: 130px; }
-.meta .label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink3); margin-bottom: 5px; font-weight: 600; }
-.meta .value { font-size: 14px; font-weight: 600; color: var(--ink); }
-
-.hero-visual { margin-top: 40px; }
-.hero-mock { max-width: 640px; width: 100%; margin: 0 auto; background: var(--white); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid rgba(0,0,0,.04); }
-.hm-chrome { background: #1c1c1c; padding: 9px 14px; display: flex; align-items: center; gap: 6px; }
-.hm-dot { width: 9px; height: 9px; border-radius: 50%; }
-.hm-url { flex: 1; background: rgba(255,255,255,.08); border-radius: 4px; height: 18px; margin-left: 10px; }
-.hm-topbar { height: 38px; background: var(--purple); display: flex; align-items: center; padding: 0 18px; }
-.hm-topbar-label { font-size: 10.5px; font-weight: 700; letter-spacing: .06em; color: rgba(255,255,255,.92); }
-.hm-body { background: var(--offwhite); padding: 22px; display: flex; gap: 18px; }
-.hm-side { width: 26%; display: flex; flex-direction: column; gap: 10px; }
-.hm-side-block { height: 11px; border-radius: 3px; background: var(--purple-mid); opacity: .55; }
-.hm-side-block:first-child { width: 70%; }
-.hm-main { flex: 1; display: flex; flex-direction: column; gap: 13px; }
-.hm-row { height: 38px; border-radius: 7px; background: var(--white); border: 1px solid var(--border); }
-.hm-row.wide { height: 68px; }
-.hm-chip-row { display: flex; gap: 8px; }
-.hm-chip { height: 25px; border-radius: 12px; background: var(--purple-light); border: 1px solid var(--purple-mid); flex: 1; }
-
 h2 { border-left: 4px solid var(--purple); padding-left: 16px; }
 h3::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--purple); margin-right: 9px; vertical-align: middle; }
 .card h4::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: currentColor; margin-right: 7px; vertical-align: middle; }
@@ -151,7 +117,7 @@ li { margin-bottom: 9px; color: #2b2b2b; font-size: 15.5px; }
 
 .callout {
   background: var(--purple-light); border-left: 3px solid var(--purple);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 20px 24px; margin: 24px 0; font-size: 15px; color: #4a2f61;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 20px 24px; margin: 24px 0; font-size: 15.5px; color: #4a2f61;
 }
 .callout strong { color: var(--ink); }
 
@@ -199,18 +165,30 @@ li { margin-bottom: 9px; color: #2b2b2b; font-size: 15.5px; }
   .lightbox-next { right: 4px; }
 }
 
-.spec-table { width: 100%; border-collapse: collapse; margin: 22px 0 8px; font-size: 13.5px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
-.spec-table th, .spec-table td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border); }
-.spec-table th { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink3); font-weight: 600; background: var(--offwhite); }
-.spec-table tr:last-child td { border-bottom: none; }
-.spec-table td:first-child { font-weight: 600; color: var(--ink); }
-
 .status-tag {
-  display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+  display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em;
   background: var(--purple-light); color: var(--purple); padding: 5px 12px; border-radius: 20px; margin-bottom: 12px;
 }
 
 hr.rule { border: none; border-top: 1px solid var(--border); margin: 60px 0; }
+
+.case-nav { background: var(--white); border-top: 1px solid var(--border); padding: 48px; }
+.case-nav-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.case-nav-card {
+  border: 1px solid var(--border); border-radius: var(--radius-md); padding: 28px 32px;
+  text-decoration: none; display: block; background: var(--offwhite);
+  box-shadow: var(--shadow-sm); transition: box-shadow .15s;
+}
+.case-nav-card:hover { box-shadow: var(--shadow-md); }
+.case-nav-card.next { text-align: right; }
+.case-nav-label { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 8px; }
+.case-nav-title { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--ink); line-height: 1.25; margin-bottom: 8px; }
+.case-nav-meta { font-size: 12px; font-weight: 500; color: var(--ink3); }
+
+@media (max-width: 640px) {
+  .case-nav-inner { grid-template-columns: 1fr; }
+  .case-nav-card.next { text-align: left; }
+}
 
 footer { padding: 32px 48px; text-align: center; border-top: 1px solid var(--border); }
 footer p { font-size: 12.5px; color: var(--ink3); }
@@ -407,17 +385,7 @@ footer p { font-size: 12.5px; color: var(--ink3); }
       <li><strong>Multi-entity firm structures.</strong> Parent Organizations, DBA/Child Organizations, and individual Rep IDs each needed a coherent place in the branding model — including third-party downstream dependencies, like statement logos that get submitted to a print vendor (Broadridge) once approved.</li>
     </ul>
 
-    <p>Because the underlying requirements genuinely differ by channel — a printed statement logo needs 300dpi CMYK TIFF art; an Account View logo is a 40×44px PNG — the repository doesn't force one spec onto every channel. It centralizes <em>where</em> logos live and <em>how</em> they're managed, while keeping each channel's real technical constraints visible at the point of upload:</p>
-
-    <table class="spec-table">
-      <tr><th>Channel</th><th>Format</th><th>Dimensions</th><th>Other requirements</th></tr>
-      <tr><td>Statement Logo</td><td>TIFF</td><td>3&quot; W × 0.5&quot; H</td><td>300dpi, CMYK</td></tr>
-      <tr><td>Letter Logo</td><td>TIFF</td><td>3&quot; W × 0.5&quot; H</td><td>300dpi, CMYK</td></tr>
-      <tr><td>Forms: Print Logo</td><td>JPEG</td><td>2&quot; W × 0.375&quot; H</td><td>2MB file size limit</td></tr>
-      <tr><td>Forms: Digital Notification Logo</td><td>JPEG</td><td>2&quot; W × 0.375&quot; H</td><td>2MB file size limit</td></tr>
-      <tr><td>Client Reporting Logo</td><td>JPEG, PNG, or GIF</td><td>—</td><td>2MB file size limit</td></tr>
-      <tr><td>Account View Logo</td><td>PNG or JPEG</td><td>40 × 44px</td><td>—</td></tr>
-    </table>
+    <p>Because the underlying requirements genuinely differ by channel — a printed statement logo needs 300dpi CMYK TIFF art; an Account View logo is a 40×44px PNG — the repository doesn't force one spec onto every channel. It centralizes <em>where</em> logos live and <em>how</em> they're managed, while keeping each channel's real technical constraints visible at the point of upload.</p>
 
     <h2>Status &amp; Next Steps</h2>
     <span class="status-tag">In-flight program</span>
@@ -432,17 +400,17 @@ footer p { font-size: 12.5px; color: var(--ink3); }
 </section>
 
 <!-- CASE STUDY NAV -->
-<div style="background:#fff;border-top:1px solid #e4e4e0;padding:48px;">
-  <div style="max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:24px;">
-    <a href="collections_agent_workstation.html" style="border:1px solid #e4e4e0;border-radius:12px;padding:28px 32px;text-decoration:none;display:block;transition:box-shadow .15s,transform .15s;box-shadow:0 1px 3px rgba(0,0,0,.06);background:#f8f8f6;">
-      <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#8a8a84;margin-bottom:8px;">← Previous Case Study</div>
-      <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px;font-weight:400;color:#1a1a18;margin-bottom:8px;line-height:1.25;">When the agent is the bottleneck — an embedded decisioning workstation for collections agents</div>
-      <div style="font-size:12px;color:#8a8a84;">Case Study 03 &nbsp;·&nbsp; Financial Services · Collections &nbsp;·&nbsp; Embedded Decisioning UX</div>
+<div class="case-nav">
+  <div class="case-nav-inner">
+    <a class="case-nav-card" href="collections_agent_workstation.html">
+      <div class="case-nav-label">&larr; Previous Case Study</div>
+      <div class="case-nav-title">When the agent is the bottleneck — an embedded decisioning workstation for collections agents</div>
+      <div class="case-nav-meta">Case Study 03 &nbsp;&middot;&nbsp; Financial Services &middot; Collections &nbsp;&middot;&nbsp; Embedded Decisioning UX</div>
     </a>
-    <a href="supply_chain_hero_variant.html" style="border:1px solid #e4e4e0;border-radius:12px;padding:28px 32px;text-decoration:none;display:block;transition:box-shadow .15s,transform .15s;box-shadow:0 1px 3px rgba(0,0,0,.06);background:#f8f8f6;">
-      <div style="font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#8a8a84;margin-bottom:8px;text-align:right;">Next → Case Study</div>
-      <div style="font-family:'DM Serif Display',Georgia,serif;font-size:20px;font-weight:400;color:#1a1a18;margin-bottom:8px;line-height:1.25;text-align:right;">From acquisition sprawl to cohesive platform — UX strategy for a healthcare ERP competitor</div>
-      <div style="font-size:12px;color:#8a8a84;text-align:right;">Case Study 01 &nbsp;·&nbsp; Healthcare · Procure to Pay &nbsp;·&nbsp; Enterprise UX</div>
+    <a class="case-nav-card next" href="supply_chain_hero_variant.html">
+      <div class="case-nav-label">Next Case Study &rarr;</div>
+      <div class="case-nav-title">From acquisition sprawl to cohesive platform — UX strategy for a healthcare ERP competitor</div>
+      <div class="case-nav-meta">Case Study 01 &nbsp;&middot;&nbsp; Healthcare &middot; Procure to Pay &nbsp;&middot;&nbsp; Enterprise UX</div>
     </a>
   </div>
 </div>
