@@ -222,6 +222,62 @@ a{color:var(--teal)}
 .did{font-family:var(--mono);font-size:.68rem;color:var(--navy);background:var(--navy-light);border-radius:4px;padding:1px 6px;font-weight:500}
 .basis{font-size:.7rem;color:var(--ink3);border:1px solid var(--border2);border-radius:999px;padding:1px 8px}
 
+/* account detail pages */
+.ctx-pane .acct[data-act]{cursor:pointer;transition:border-color .15s}
+.ctx-pane .acct[data-act]:hover{border-color:var(--navy-mid)}
+.ctx-pane .acct.active{border-color:var(--navy);box-shadow:0 0 0 1px var(--navy)}
+.acct .more{font-size:.72rem;color:var(--teal-ink);font-weight:600;justify-self:end}
+.acct-view{display:grid;gap:14px}
+.ah{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.ah h3{font-size:1.4rem}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.kpi{border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;display:grid;gap:2px;background:var(--bg)}
+.kpi span{font-size:.72rem;color:var(--ink3)}
+.kpi b{font-size:.95rem;font-weight:600;font-variant-numeric:tabular-nums}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);overflow-x:auto}
+.tab{font:inherit;font-size:.84rem;background:none;border:0;border-bottom:2px solid transparent;padding:8px 12px;color:var(--ink3);cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);font-weight:600;border-bottom-color:var(--navy)}
+.tabbody{display:grid;gap:10px;min-height:180px}
+.acct-kv{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px;row-gap:8px;display:grid}
+.acct-kv div{border-bottom:1px dashed var(--border);padding-bottom:6px}
+.tl{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.tl li{display:grid;grid-template-columns:70px minmax(0,1fr);gap:10px;font-size:.84rem}
+.phist{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px}
+.pm{display:grid;gap:2px;text-align:center}
+.pm b{display:grid;place-items:center;height:30px;border-radius:4px;font-size:.72rem;font-weight:600}
+.pm span{font-size:.68rem;color:var(--ink3)}
+.pm.ok b{background:var(--good-light);color:var(--good)}
+.pm.d30 b{background:var(--gold-light);color:var(--gold)}
+.pm.d60 b{background:#f6e2c4;color:#8a5a14}
+.pm.d90 b,.pm.d120 b{background:var(--bad-light);color:var(--bad)}
+.pm.d120 b{outline:1px solid var(--bad)}
+.bars6{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.bars6 .b{display:grid;grid-template-rows:auto 130px auto;justify-items:center;gap:4px}
+.bars6 .bar{height:130px;width:70%;display:flex;align-items:flex-end;border-bottom:1px solid var(--border2)}
+.bars6 i{display:block;width:100%;background:var(--navy-mid);border-radius:3px 3px 0 0}
+.bars6 i.low{background:var(--gold)}
+.bars6 .bv{font-size:.72rem;color:var(--ink2)}
+.bars6 .bm{font-size:.72rem;color:var(--ink3)}
+table.mini{min-width:0;width:100%;font-size:.82rem;border-collapse:collapse}
+table.mini td{padding:7px 8px;border-bottom:1px solid var(--border)}
+table.mini td:first-child{font-weight:400;width:70px}
+.flags{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.flag{display:flex;gap:10px;border:1px solid var(--border);border-radius:var(--r-sm);padding:9px 11px;font-size:.82rem;align-items:flex-start}
+.flag b{font-weight:600}
+.flag:last-child:nth-child(odd){grid-column:1/-1}
+.flag .fi{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:.72rem;font-weight:700}
+.flag.ok .fi{background:var(--good-light);color:var(--good)}
+.flag.warn .fi{background:var(--bad-light);color:var(--bad)}
+.flag.info .fi{background:var(--navy-light);color:var(--navy)}
+.acct-foot{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.guide{background:var(--gold-light);border-radius:var(--r-md);padding:12px 14px;font-size:.84rem}
+.guide b,.insight b{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}
+.guide b{color:var(--gold)}
+.guide ul{margin:6px 0 0;padding-left:18px;display:grid;gap:4px;color:var(--ink2)}
+.insight{background:var(--teal-light);border-radius:var(--r-md);padding:12px 14px;font-size:.84rem;display:grid;gap:6px;align-content:start}
+.insight b{color:var(--teal-ink)}
+@media (max-width:760px){.kpis,.acct-kv,.flags{grid-template-columns:repeat(2,minmax(0,1fr))}.phist{grid-template-columns:repeat(6,minmax(0,1fr))}.flags,.acct-kv{grid-template-columns:1fr}}
+
 /* tables, grids */
 .scroll{overflow-x:auto;border:1px solid var(--border);border-radius:var(--r-md);background:var(--white)}
 table{border-collapse:collapse;width:100%;min-width:880px;font-size:.86rem}
@@ -393,7 +449,7 @@ body{padding:0;overflow:hidden;font-size:14px}
 <script>
 (function(){
   const STAGES=['Connect & Verify','Hardship & Eligibility','Solutioning','Objection Handling','Resolution'];
-  const S={stage:0,lat:true,reason:null,party:null,canPay:null,change:null,dur:'',income:'2,850',housing:'1,240',option:null,objection:null,dialed:false,rec:false,dob:null,ssn:null,mm:false,disc:{},scheduled:false,ended:false,secs:0,noteAccepted:false,cards:{},shown:{},approved:{},audit:[]};
+  const S={stage:0,lat:true,reason:null,party:null,canPay:null,change:null,dur:'',income:'2,850',housing:'1,240',option:null,objection:null,dialed:false,rec:false,dob:null,ssn:null,mm:false,disc:{},scheduled:false,view:null,tab:'ov',ended:false,secs:0,noteAccepted:false,cards:{},shown:{},approved:{},audit:[]};
   let clock=18*3600+14*60+20;
   const $=s=>document.querySelector(s);
   const ws=$('#ws'),main=$('#mainPane'),rail=$('#rail'),stepper=$('#stepper'),auditEl=$('#audit');
@@ -670,12 +726,67 @@ body{padding:0;overflow:hidden;font-size:14px}
     return [m,r];
   }
 
+
+  /* ---------- account detail pages ---------- */
+  const MONTHS=['Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep'];
+  const ACCTS={
+    cc:{name:'Credit card ••4417',product:'Rewards Visa · opened March 2014 · primary cardholder',status:['bad','120 days past due'],src:'Card servicing system',
+      kpis:[['Balance','$6,842.19'],['Amount to bring current','$1,422.00'],['Credit limit','$7,500 · purchases blocked'],['Projected charge-off','Nov 27, 2026 · 180 DPD']],
+      overview:[['Past due amount','$1,236.00'],['Current minimum due','$186.00'],['Payment due date','Oct 7, 2026'],['Purchase APR','29.99% variable'],['Last payment','$186.00 on May 30, 2026'],['Interest charged, last cycle','$164.22'],['Late fees, last 12 months','$128.00 (4 × $32)'],['Delinquency bucket','Cycle 5 · 120–149 days'],['Autopay','Off'],['Statements','Electronic · e-consent Mar 11, 2024']],
+      hist:['ok','ok','ok','ok','ok','ok','ok','ok','30','60','90','120'],
+      events:[['Sep 2','Payment Plan offered at $412/mo · declined (first payment too high)'],['Aug 14','Inbound call · transferred twice · no resolution'],['Jul 5','Purchases blocked at 60 days past due'],['Jun 7','First missed payment']],
+      contacts:[['Sep 28','Outbound · auto-dialer','Connected · this call'],['Sep 26','Outbound · auto-dialer','No answer'],['Sep 24','Outbound · auto-dialer','Voicemail · limited-content message'],['Sep 22','Outbound · auto-dialer','No answer'],['Sep 2','Outbound · agent','Right party · plan declined'],['Aug 14','Inbound','Transferred twice · unresolved']],
+      letters:[['Sep 3','Hardship options','Email'],['Aug 5','90-day delinquency notice','Mail'],['Jul 5','Purchases blocked notice','Mail'],['Jun 12','Past-due reminder','Email']],
+      flags:[['Open dispute','None','ok'],['Cease-communication request','None','ok'],['Bankruptcy','None · checked Sep 28','ok'],['Attorney representation','None','ok'],['SCRA','Not on active duty · DMDC Sep 28','ok'],['Deceased','No','ok'],['Complaints, last 24 months','None','ok'],['Credit reporting','Reported 120 days past due · Sep cycle','warn'],['Re-age eligibility','Eligible after 3 consecutive program payments · limit once in 12 months, twice in 5 years (FFIEC)','info']],
+      practices:['Discuss this account only after right-party verification.','Use the engine\'s amount to bring current, not the full balance, when discussing options.','State the charge-off date as a fact. Never use it as a threat or imply action the bank doesn\'t intend to take.','Don\'t promise changes to credit reporting. Reporting has to stay accurate.'],
+      ai:['Missed payments began in June, the same month checking deposits fell 38%.',['PAYMENT-HIST ••4417','DEP-TREND ••0932']]},
+    loan:{name:'Personal loan ••2280',product:'Fixed-rate installment loan · opened March 2025 · debt consolidation',status:['good','Current'],src:'Loan servicing system',
+      kpis:[['Balance','$9,310.44'],['Monthly payment','$264.00 · autopay'],['Next payment','Oct 15, 2026'],['Rate','11.49% fixed']],
+      overview:[['Original amount','$12,000.00'],['Term','48 months · 30 remaining'],['Autopay account','Checking ••0932'],['Last payment','$264.00 on Sep 15, 2026 · on time'],['10-day payoff amount','$9,402.18'],['Payments late, last 12 months','0']],
+      hist:Array(12).fill('ok'),
+      events:[['Sep 15','Autopay $264.00 · paid'],['Aug 15','Autopay $264.00 · paid'],['Mar 2025','Loan funded · $12,000.00']],
+      flags:[['Delinquency','None','ok'],['Hardship or modification','None','ok'],['Credit reporting','Current','ok'],['Cross-default','None · not affected by the card delinquency','ok']],
+      practices:['This account is current. Don\'t ask for payment or describe it as delinquent.','Its $264 payment is already part of the affordability calculation.','If the customer wants to change autopay, transfer to loan servicing. Don\'t change it from a collections call.'],
+      ai:['The Oct 15 autopay of $264 draws from checking. With the $148 program payment on Oct 5, about $200 would remain before the next payroll deposit.',['AUTOPAY ••2280','BALANCE ••0932']]},
+    chk:{name:'Checking ••0932',product:'Everyday checking · opened 2014 · payroll direct deposit',status:['good','Open · good standing'],src:'Deposit system',
+      kpis:[['Available balance','$612.40'],['Avg monthly deposits, last 3 mo','$2,850'],['Avg before June','$4,600'],['Overdrafts, last 12 months','0']],
+      overview:[['Direct deposit','Payroll, biweekly · reduced since June'],['Overdraft coverage','Not opted in (Reg E)'],['Scheduled debits','Loan autopay $264.00 on Oct 15'],['Federal benefit deposits','None detected'],['Holds or levies','None']],
+      deposits:[['Apr',4650],['May',4550],['Jun',3100],['Jul',2850],['Aug',2850],['Sep',2850]],
+      flags:[['Setoff','Not permitted for credit card debt (Reg Z §1026.12(d))','info'],['Garnishment or levy','None','ok'],['Benefit protection','No federal benefit deposits · would be protected under 31 CFR Part 212','ok'],['Account restrictions','None','ok']],
+      practices:['Use deposit trends to understand affordability, not to question what the customer tells you.','Don\'t mention specific transactions or the employer unless the customer brings them up.','Funds here can\'t be taken to pay the credit card. Don\'t suggest otherwise.'],
+      ai:['Payroll deposits dropped from about $2,150 to $1,425 per check in June, consistent with reduced hours.',['DEP-TREND ••0932','NOTE 2026-09-02']]}
+  };
+  const TABS={cc:[['ov','Overview'],['hist','History'],['contact','Contacts & letters'],['flags','Flags & compliance']],loan:[['ov','Overview'],['hist','History'],['flags','Flags & compliance']],chk:[['ov','Overview'],['hist','Deposits'],['flags','Flags & compliance']]};
+  const kvRows=a=>`<div class="kv acct-kv">${a.map(([k,v])=>`<div><span>${k}</span><span>${v}</span></div>`).join('')}</div>`;
+  function acctView(){
+    const A=ACCTS[S.view],tab=S.tab;
+    let body='';
+    if(tab==='ov')body=kvRows(A.overview)+(A.events?`<div class="pane-h" style="margin-top:6px">Recent account events</div><ol class="tl">${A.events.map(([d,t])=>`<li><span class="src">${d}</span><span>${t}</span></li>`).join('')}</ol>`:'');
+    if(tab==='hist'&&A.hist)body=`<div class="pane-h">12-month payment history</div><div class="phist">${A.hist.map((h,i)=>`<div class="pm ${h==='ok'?'ok':'d'+h}"><b>${h==='ok'?'✓':h}</b><span>${MONTHS[i]}</span></div>`).join('')}</div><p class="src">✓ paid on time · numbers show days past due at statement</p>`;
+    if(tab==='hist'&&A.deposits){const mx=5000;body=`<div class="pane-h">Monthly deposits · last 6 months</div><div class="bars6">${A.deposits.map(([mo,v],i)=>`<div class="b"><span class="bv num">$${v.toLocaleString()}</span><span class="bar"><i style="height:${v/mx*100}%" class="${i>=2?'low':''}"></i></span><span class="bm">${mo}</span></div>`).join('')}</div><p class="src">June onward: −38% against the prior average · payroll only, no transfers</p>`;}
+    if(tab==='contact')body=`<div class="pane-h">Contact attempts · last 7 days: 4 of 7</div><table class="mini"><tbody>${A.contacts.map(r=>`<tr><td class="src">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table><div class="pane-h" style="margin-top:6px">Letters and notices</div><table class="mini"><tbody>${A.letters.map(r=>`<tr><td class="src">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table>`;
+    if(tab==='flags')body=`<div class="flags">${A.flags.map(([k,v,st])=>`<div class="flag ${st}"><span class="fi">${st==='ok'?'✓':st==='warn'?'!':'i'}</span><span><b>${k}</b><br>${v}</span></div>`).join('')}</div>`;
+    return `<div class="acct-view">
+      <div class="nav-row"><button class="btn sm ghost" data-act="closeAcct">← Back to call · ${STAGES[S.stage]}</button><span class="src">Viewing is logged for audit</span></div>
+      <div class="ah"><div><h3>${A.name}</h3><p class="muted" style="font-size:.84rem">${A.product}</p></div><span class="tag ${A.status[0]}"><span class="dot"></span>${A.status[1]}</span></div>
+      <div class="kpis">${A.kpis.map(([k,v])=>`<div class="kpi"><span>${k}</span><b>${v}</b></div>`).join('')}</div>
+      <div class="tabs" role="tablist">${TABS[S.view].map(([k,l])=>`<button class="tab" role="tab" aria-selected="${tab===k}" data-act="tab" data-val="${k}">${l}</button>`).join('')}</div>
+      <div class="tabbody">${body}</div>
+      <div class="acct-foot">
+        <div class="guide"><b>Agent guidance</b><ul>${A.practices.map(p=>`<li>${p}</li>`).join('')}</ul></div>
+        ${S.lat?`<div class="insight"><b>AI insight</b><p>${A.ai[0]}</p>${cites(A.ai[1])}</div>`:''}
+      </div>
+      <p class="src">Source: ${A.src} · as of 09/28 18:14 · read-only view</p>
+    </div>`;
+  }
+
   const R=[stage0,stage1,stage2,stage3,stage4];
   function render(){
     ws.classList.toggle('off',!S.lat);ws.classList.toggle('waiting',!S.dialed);ws.classList.toggle('unverified',S.dialed&&!(S.party==='rp'&&S.dob==='ok'&&S.ssn==='ok'));
     stepper.innerHTML=STAGES.map((s,i)=>`<button type="button" class="step ${i<S.stage?'done':''} ${i===S.stage?'on':''}" data-act="go" data-val="${i}" ${i===S.stage?'aria-current="step"':''} ${S.dialed?'':'disabled'}><span class="n">${i<S.stage?'✓':i+1}</span>${s}</button>`).join('');
     const [m,r]=R[S.stage]();
-    main.innerHTML=m;
+    main.innerHTML=S.view?acctView():m;
+    document.querySelectorAll('.ctx-pane .acct').forEach(el=>el.classList.toggle('active',el.dataset.val===S.view));
     rail.innerHTML=`<div class="rail-brand"><b>AI SUPPORT</b><span class="src">${S.dialed?'Context for: '+STAGES[S.stage]:'Waiting for connect'}</span></div>`+r;
   }
 
@@ -685,11 +796,14 @@ body{padding:0;overflow:hidden;font-size:14px}
     switch(a){
       case 'dial':dial();break;
       case 'reset':reset();return;
-      case 'next':
+      case 'acct':S.view=v;S.tab='ov';log('agent','Viewed account details: '+ACCTS[v].name);break;
+      case 'closeAcct':S.view=null;break;
+      case 'tab':S.tab=v;break;
+      case 'next':S.view=null;
         if(S.stage===1)log('engine','Eligibility evaluated: 3 of 4 programs eligible · rules v4.12');
         S.stage=Math.min(4,S.stage+1);break;
-      case 'prev':S.stage=Math.max(0,S.stage-1);break;
-      case 'go':S.stage=+v;break;
+      case 'prev':S.view=null;S.stage=Math.max(0,S.stage-1);break;
+      case 'go':S.view=null;S.stage=+v;break;
       case 'rec':S.rec=true;log('engine','Disclosure read: DISC-REC-01 Call recording · v3');break;
       case 'factor':{const [k,r]=v.split(':');S[k]=r==='reset'?null:r;const lb=k==='dob'?'Date of birth':'Last 4 of SSN';
         if(r==='ok')log('agent',lb+': matches record');else if(r==='fail')log('engine',lb+': no match · account details stay locked');
@@ -748,6 +862,7 @@ body{padding:0;overflow:hidden;font-size:14px}
     if(e.metaKey||e.ctrlKey||e.altKey)return;
     const tg=e.target.tagName;if(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT')return;
     const k=e.key.toLowerCase();let el=null;
+    if(e.key==='Escape'&&S.view){S.view=null;render();return}
     if(k==='c')el=document.querySelector('[data-act=dial]');
     else if(k==='a')el=document.querySelector('.lat.primary:not(.resolved) .lat-actions .btn.teal');
     else if(k==='n'||e.key==='ArrowRight')el=document.querySelector('.main-pane [data-act=next]:not(:disabled)');
@@ -756,6 +871,8 @@ body{padding:0;overflow:hidden;font-size:14px}
     else if(k==='?'){$('#keys').hidden=!$('#keys').hidden;return}
     if(el){e.preventDefault();el.click();}
   });
+  ['cc','loan','chk'].forEach((k,i)=>{const el=document.querySelectorAll('.ctx-pane .acct')[i];if(!el)return;el.dataset.act='acct';el.dataset.val=k;el.setAttribute('role','button');el.tabIndex=0;el.setAttribute('aria-label','View details for '+ACCTS[k].name);el.insertAdjacentHTML('beforeend','<span class="more">View details ›</span>');
+    el.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();el.click()}});});
   reset();
 })();
 </script>
