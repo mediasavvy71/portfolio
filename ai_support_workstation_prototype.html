@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Collections Workstation Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: case-study column (portfolio system) with one full-bleed interactive workstation in the middle.
+   Tokens follow William Teppig's portfolio: DM Serif Display / Inter, teal + navy + gold on off-white.
+   Role colors: navy = deterministic Decision Engine (authoritative), teal = AI Support context (advisory, cited). */
+:root{
+  --bg:#f8f8f6; --white:#ffffff; --surface:#f2f2ef; --border:#e4e4e0; --border2:#d0d0cb;
+  --ink:#1a1a18; --ink2:#4a4a46; --ink3:#7c7c76;
+  --teal:#006d77; --teal-light:#e8f4f5; --teal-ink:#00545c;
+  --navy:#1e3a5f; --navy-light:#e8edf5; --navy-mid:#9fb3cc;
+  --gold:#9a6b1f; --gold-light:#fdf5e6;
+  --good:#2f7a4a; --good-light:#e9f4ed; --bad:#a3392f; --bad-light:#fbecea;
+  --serif:'DM Serif Display',Georgia,serif; --sans:'Inter',-apple-system,'Segoe UI',sans-serif; --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --on:#ffffff; --r-sm:6px; --r-md:12px; --r-lg:20px;
+  --shadow-md:0 4px 16px rgba(0,0,0,.07),0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.09),0 2px 8px rgba(0,0,0,.05);
+  color-scheme:light;
+}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;margin:0;padding-inline:20px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto}
+.narrow{max-width:720px}
+h1,h2,h3{font-family:var(--serif);font-weight:400;text-wrap:balance;margin:0;letter-spacing:-.005em}
+h1{font-size:clamp(2.3rem,5.4vw,3.6rem);line-height:1.05}
+h2{font-size:clamp(1.7rem,3.4vw,2.3rem);line-height:1.15}
+h3{font-size:1.3rem;line-height:1.25}
+p{margin:0}
+.eyebrow{font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+.lede{font-size:1.15rem;color:var(--ink2);max-width:62ch}
+.muted{color:var(--ink3)}
+.mono{font-family:var(--mono);font-size:.78em}
+section{padding-block:72px;border-top:1px solid var(--border)}
+section:first-of-type{border-top:0}
+.sec-head{display:grid;gap:14px;margin-bottom:36px;max-width:760px}
+.sec-num{font-family:var(--mono);font-size:.75rem;color:var(--ink3)}
+a{color:var(--teal)}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:4px}
+
+/* hero */
+.hero{padding-block:64px 48px;display:grid;gap:22px}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:.85rem;color:var(--ink3)}
+.thesis{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:stretch;margin-top:18px}
+.thesis .col{background:var(--white);border:1px solid var(--border);border-radius:var(--r-md);padding:20px 22px;display:grid;gap:8px;align-content:start}
+.thesis .arrow{align-self:center;font-family:var(--serif);font-size:2rem;color:var(--ink3)}
+.thesis .col b{font-weight:600}
+.thesis .col.now{border-color:var(--teal);box-shadow:var(--shadow-md)}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:.7rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;width:max-content}
+.tag.det{background:var(--navy-light);color:var(--navy)}
+.tag.ctx{background:var(--teal-light);color:var(--teal-ink)}
+.tag.gold{background:var(--gold-light);color:var(--gold)}
+.tag.good{background:var(--good-light);color:var(--good)}
+.tag.bad{background:var(--bad-light);color:var(--bad)}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block}
+
+/* two-layer principle */
+.layers{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.layer{border-radius:var(--r-md);padding:24px;display:grid;gap:12px;align-content:start;background:var(--white);border:1px solid var(--border)}
+.layer.det{border-top:3px solid var(--navy)}
+.layer.ctx{border-top:3px solid var(--teal)}
+.layer ul{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--ink2);font-size:.95rem}
+.layer .never{font-size:.88rem;color:var(--ink2);background:var(--surface);border-radius:var(--r-sm);padding:10px 12px}
+
+/* ===== workstation prototype ===== */
+.proto-band{background:var(--surface);margin-inline:-20px;padding:56px 20px;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.proto-intro{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:end;margin-bottom:22px}
+.switch{display:inline-flex;align-items:center;gap:10px;font-size:.85rem;font-weight:500;cursor:pointer;background:var(--white);border:1px solid var(--border2);border-radius:999px;padding:6px 12px 6px 6px;color:var(--ink)}
+.switch .knob{width:36px;height:20px;border-radius:999px;background:var(--border2);position:relative;transition:background .2s}
+.switch .knob::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--white);transition:transform .2s}
+.switch[aria-pressed="true"] .knob{background:var(--teal)}
+.switch[aria-pressed="true"] .knob::after{transform:translateX(16px)}
+
+.ws{max-width:1240px;margin:0 auto;background:var(--white);border:1px solid var(--border2);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);overflow:hidden;font-size:14px;line-height:1.5}
+.ws-top{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--bg)}
+.ws-top .who{display:flex;gap:12px;align-items:center}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--navy-light);color:var(--navy);display:grid;place-items:center;font-weight:600;font-size:.8rem;flex:none}
+.ws-top .name{font-weight:600}
+.ws-top .sub{font-size:.78rem;color:var(--ink3)}
+.call{display:flex;gap:14px;align-items:center;font-size:.78rem;color:var(--ink2);flex-wrap:wrap}
+.live{display:inline-flex;align-items:center;gap:6px;color:var(--good);font-weight:600}
+.live .dot{animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){.live .dot{animation:none}*{transition:none!important}}
+
+.stepper{display:flex;overflow-x:auto;border-bottom:1px solid var(--border);background:var(--white)}
+.step{flex:1 0 auto;display:flex;gap:8px;align-items:center;padding:12px 16px;border:0;background:none;font:inherit;font-size:.82rem;color:var(--ink3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.step .n{width:20px;height:20px;border-radius:50%;border:1px solid var(--border2);display:grid;place-items:center;font-size:.7rem;font-weight:600}
+.step.done{color:var(--ink2)}
+.step.done .n{background:var(--navy-light);border-color:var(--navy-light);color:var(--navy)}
+.step.on{color:var(--ink);font-weight:600;border-bottom-color:var(--teal)}
+.step.on .n{background:var(--teal);border-color:var(--teal);color:var(--on)}
+
+.ws-grid{display:grid;grid-template-columns:260px minmax(0,1fr) 340px;min-height:620px}
+.ws.off .ws-grid{grid-template-columns:260px minmax(0,1fr)}
+.ws.off .rail{display:none}
+.pane{padding:18px;min-width:0}
+.ctx-pane{border-right:1px solid var(--border);background:var(--bg);display:grid;gap:16px;align-content:start}
+.pane-h{font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.kv{display:grid;gap:6px}
+.kv div{display:flex;justify-content:space-between;gap:10px;font-size:.82rem}
+.kv span:first-child{color:var(--ink3)}
+.kv span:last-child{font-variant-numeric:tabular-nums;text-align:right}
+.acct{border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;background:var(--white);display:grid;gap:4px}
+.acct.focus{border-color:var(--navy-mid)}
+.acct .row{display:flex;justify-content:space-between;gap:8px;font-size:.8rem}
+.acct .t{font-weight:600;font-size:.82rem}
+.num{font-variant-numeric:tabular-nums}
+.meter{height:6px;border-radius:99px;background:var(--surface);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--gold)}
+.src{font-family:var(--mono);font-size:.68rem;color:var(--ink3)}
+
+.main-pane{display:grid;gap:16px;align-content:start}
+.stage-title{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.stage-title h3{font-size:1.35rem}
+.block{border:1px solid var(--border);border-radius:var(--r-md);padding:14px 16px;display:grid;gap:10px}
+.block.det{border-left:3px solid var(--navy)}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.86rem}
+.check .ic{flex:none;width:18px;height:18px;border-radius:50%;background:var(--good-light);color:var(--good);display:grid;place-items:center;font-size:.7rem;font-weight:700;margin-top:1px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--border2);background:var(--white);color:var(--ink);border-radius:999px;padding:6px 12px;font:inherit;font-size:.82rem;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:var(--on)}
+.chip.suggested{border-color:var(--teal);border-style:dashed}
+.fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.field{display:grid;gap:4px;font-size:.78rem;color:var(--ink3)}
+.field input,.field select,textarea{font:inherit;font-size:.86rem;color:var(--ink);background:var(--white);border:1px solid var(--border2);border-radius:var(--r-sm);padding:7px 9px;width:100%}
+.opts{display:grid;gap:10px}
+.opt{border:1px solid var(--border);border-radius:var(--r-md);padding:12px 14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;cursor:pointer;background:var(--white);text-align:left;font:inherit;color:inherit;width:100%}
+.opt:hover{border-color:var(--border2)}
+.opt[aria-pressed="true"]{border-color:var(--navy);box-shadow:0 0 0 1px var(--navy)}
+.opt .t{font-weight:600}
+.opt .amt{font-family:var(--serif);font-size:1.35rem;text-align:right;font-variant-numeric:tabular-nums}
+.opt .d{font-size:.8rem;color:var(--ink2)}
+.opt .aff{font-size:.75rem;color:var(--ink3);text-align:right}
+.opt.ineligible{opacity:.62;cursor:default;background:var(--surface)}
+.opt .rank{grid-column:1/-1;display:none}
+.ws:not(.off) .opt .rank{display:flex}
+.nav-row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.btn{font:inherit;font-size:.84rem;font-weight:600;border-radius:var(--r-sm);padding:8px 14px;cursor:pointer;border:1px solid var(--border2);background:var(--white);color:var(--ink)}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:var(--on)}
+.btn.teal{background:var(--teal);border-color:var(--teal);color:var(--on)}
+.btn.ghost{background:none;border-color:transparent;color:var(--ink2)}
+.btn.sm{padding:5px 10px;font-size:.76rem}
+.btn:disabled{opacity:.5;cursor:default}
+
+/* AI Support rail */
+.rail{border-left:1px solid var(--border);background:linear-gradient(180deg,var(--teal-light),var(--white) 220px);display:grid;gap:14px;align-content:start}
+.rail-brand{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.rail-brand b{font-family:var(--mono);font-size:.78rem;letter-spacing:.14em;color:var(--teal-ink)}
+.lat{background:var(--white);border:1px solid var(--border);border-radius:var(--r-md);padding:13px 14px;display:grid;gap:9px;box-shadow:var(--shadow-md)}
+.lat.primary{border-color:var(--teal)}
+.lat-h{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.lat-h .k{font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-ink)}
+.lat h4{margin:0;font-size:.95rem;font-weight:600;line-height:1.35}
+.lat p{font-size:.84rem;color:var(--ink2)}
+.why{display:grid;gap:5px;font-size:.8rem;color:var(--ink2);margin:0;padding-left:16px}
+.cites{display:flex;flex-wrap:wrap;gap:6px}
+.cite{font-family:var(--mono);font-size:.66rem;border:1px solid var(--border2);border-radius:4px;padding:2px 6px;color:var(--ink2);background:var(--bg)}
+.cite.stale{border-color:var(--gold);color:var(--gold)}
+.conf{flex:none;white-space:nowrap;display:flex;align-items:center;gap:8px;font-size:.74rem;color:var(--ink3)}
+.bars{display:inline-flex;gap:2px}
+.bars i{width:5px;height:10px;border-radius:1px;background:var(--border2)}
+.bars i.on{background:var(--teal)}
+.lat-actions{display:flex;gap:6px;flex-wrap:wrap}
+.guard{font-size:.76rem;color:var(--ink2);background:var(--gold-light);border-radius:var(--r-sm);padding:8px 10px;display:flex;gap:8px}
+.guard b{color:var(--gold)}
+.quote{font-size:.86rem;border-left:2px solid var(--teal);padding:4px 0 4px 10px;color:var(--ink)}
+.dismiss{display:grid;gap:6px}
+.lat.resolved{box-shadow:none;opacity:.75}
+.lat .state{font-size:.74rem;font-weight:600}
+
+.audit{border-top:1px solid var(--border);background:var(--bg);padding:12px 18px;display:grid;gap:8px}
+.audit ol{list-style:none;margin:0;padding:0;display:grid;gap:4px;max-height:132px;overflow:auto}
+.audit li{display:grid;grid-template-columns:62px 90px minmax(0,1fr);gap:10px;font-size:.76rem;align-items:baseline}
+.audit li .who{font-weight:600;font-size:.7rem;letter-spacing:.04em;text-transform:uppercase}
+.who.agent{color:var(--ink)} .who.engine{color:var(--navy)} .who.ai{color:var(--teal-ink)}
+
+/* auto-dial waiting state */
+.wait{max-width:600px;margin:36px auto;display:grid;gap:14px}
+.wait h3{font-size:1.7rem}
+.wait p{color:var(--ink2)}
+.wait-kv{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 14px}
+.wait-kv div span:last-child{max-width:60%}
+.who-wait{display:none;color:var(--ink3);font-weight:500}
+.ws.waiting .who .avatar,.ws.waiting .who>div:not(.who-wait){display:none}
+.ws.waiting .who-wait{display:block}
+.ws.waiting .ctx-pane>*{display:none}
+.ws.waiting .ctx-pane::before{content:"The customer record opens when a call connects.";color:var(--ink3);font-size:.84rem}
+.ws.waiting .step{cursor:default}
+.ws.just-connected .rail .lat.primary{animation:pop .7s ease-out}
+@keyframes pop{0%{transform:translateY(-6px);box-shadow:0 0 0 4px var(--teal-light)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.ws.just-connected .rail .lat.primary{animation:none}}
+
+/* verification steps */
+.vstep{gap:8px}
+.vh{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.vn{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--navy);color:var(--on);font-size:.7rem;margin-right:8px;vertical-align:1px}
+.vstep.done{background:var(--bg)}
+.vstep.done .quote,.vstep.done .factors{display:none}
+.vstep.done .vn{background:var(--good)}
+.factors{display:grid;gap:8px}
+.factor{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border:1px solid var(--border);border-radius:var(--r-sm);padding:8px 10px;font-size:.84rem}
+.factor b{font-weight:600}
+.ws.unverified .ctx-pane>*{display:none}
+.ws.unverified .ctx-pane::before{content:"Account details unlock after right-party verification.";color:var(--ink3);font-size:.84rem}
+
+/* disclosures */
+.discs{gap:10px}
+.disc{border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;display:grid;gap:8px;background:var(--white)}
+.disc.done{background:var(--bg)}
+.disc.done .quote{display:none}
+.dh{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.86rem}
+.dh b{font-weight:600}
+.dh .tag{margin-left:auto}
+.did{font-family:var(--mono);font-size:.68rem;color:var(--navy);background:var(--navy-light);border-radius:4px;padding:1px 6px;font-weight:500}
+.basis{font-size:.7rem;color:var(--ink3);border:1px solid var(--border2);border-radius:999px;padding:1px 8px}
+
+/* tables, grids */
+.scroll{overflow-x:auto;border:1px solid var(--border);border-radius:var(--r-md);background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:880px;font-size:.86rem}
+th,td{text-align:left;vertical-align:top;padding:14px 16px;border-bottom:1px solid var(--border)}
+th{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);font-weight:600;background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600;white-space:nowrap}
+td ul{margin:0;padding-left:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:28px 40px}
+.bp{display:grid;gap:6px}
+.bp h4{margin:0;font-size:1rem;font-weight:600}
+.bp p{font-size:.93rem;color:var(--ink2)}
+.bp-group{display:grid;gap:22px;align-content:start}
+.bp-group>h3{padding-bottom:10px;border-bottom:1px solid var(--border2)}
+.callout{background:var(--white);border:1px solid var(--border);border-radius:var(--r-md);padding:18px 20px;display:grid;gap:6px;font-size:.92rem;color:var(--ink2)}
+.callout b{color:var(--ink)}
+.personas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.persona{background:var(--white);border:1px solid var(--border);border-radius:var(--r-md);padding:20px;display:grid;gap:10px;align-content:start}
+.persona .ph{display:flex;gap:10px;align-items:center}
+.persona p{font-size:.9rem;color:var(--ink2)}
+.persona .before{font-size:.82rem;color:var(--ink3);font-style:italic}
+.road{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;counter-reset:s}
+.road .st{padding:20px 18px;border-left:1px solid var(--border2);display:grid;gap:10px;align-content:start}
+.road .st:first-child{border-left:0;padding-left:0}
+.road .st .lv{font-family:var(--mono);font-size:.72rem;color:var(--teal)}
+.road .st p{font-size:.88rem;color:var(--ink2)}
+.gate{font-size:.8rem;background:var(--white);border:1px solid var(--border);border-radius:var(--r-sm);padding:8px 10px;color:var(--ink2)}
+.gate b{display:block;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:2px}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.mlist{display:grid;gap:0;background:var(--white);border:1px solid var(--border);border-radius:var(--r-md)}
+.mlist div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);font-size:.88rem}
+.mlist div:last-child{border-bottom:0}
+.mlist .tv{font-family:var(--mono);font-size:.78rem;color:var(--ink2);text-align:right}
+.mlist h4{margin:0;padding:14px 16px 10px;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);border-bottom:1px solid var(--border)}
+.qs{display:grid;gap:10px;counter-reset:q;padding:0;margin:0;list-style:none}
+.qs li{counter-increment:q;display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;font-size:.95rem;color:var(--ink2)}
+.qs li::before{content:counter(q,decimal-leading-zero);font-family:var(--mono);font-size:.75rem;color:var(--teal);padding-top:3px}
+.qs b{color:var(--ink)}
+.diagram{overflow-x:auto;background:var(--white);border:1px solid var(--border);border-radius:var(--r-md);padding:12px}
+.diagram svg{display:block;min-width:820px;width:100%;height:auto}
+footer{padding-block:40px 64px;border-top:1px solid var(--border);font-size:.82rem;color:var(--ink3);display:grid;gap:10px}
+footer a{color:var(--ink2)}
+
+@media (max-width:1100px){
+  .ws-grid{grid-template-columns:240px minmax(0,1fr)}
+  .rail{grid-column:1/-1;border-left:0;border-top:1px solid var(--border);grid-template-columns:repeat(auto-fit,minmax(280px,1fr));background:var(--teal-light)}
+  .rail-brand{grid-column:1/-1}
+}
+@media (max-width:760px){
+  body{padding-inline:16px}
+  .proto-band{margin-inline:-16px;padding-inline:12px}
+  .thesis{grid-template-columns:1fr}.thesis .arrow{transform:rotate(90deg);justify-self:center}
+  .layers,.grid2,.personas,.metrics{grid-template-columns:1fr}
+  .road{grid-template-columns:1fr}.road .st{border-left:0;border-top:1px solid var(--border2);padding-left:0}.road .st:first-child{border-top:0}
+  .ws-grid,.ws.off .ws-grid{grid-template-columns:1fr}
+  .ctx-pane{border-right:0;border-bottom:1px solid var(--border)}
+  .fields{grid-template-columns:1fr}
+  .audit li{grid-template-columns:58px minmax(0,1fr)}.audit li .who{display:none}
+  section{padding-block:52px}
+}
+
+/* ===== desktop app shell ===== */
+[hidden]{display:none!important}
+html,body{height:100%}
+body{padding:0;overflow:hidden;font-size:14px}
+.app{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr)}
+.appbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 18px;background:var(--navy-light);border-bottom:1px solid var(--border2)}
+.brand{display:flex;align-items:baseline;gap:12px}
+.brand h1{font-size:1.25rem;line-height:1}
+.appbar .right{display:flex;align-items:center;gap:14px;font-size:.8rem;color:var(--ink2);flex-wrap:wrap;justify-content:flex-end}
+.status{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--good)}
+.ws{max-width:none;margin:0;width:100%;min-width:0;border:0;border-radius:0;box-shadow:none;height:100%;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto}
+.ws-grid{min-height:0}
+.ws-grid>.pane{overflow:auto}
+.live{color:var(--ink3)} .live.on{color:var(--good)}
+.live:not(.on) .dot{animation:none}
+.audit ol{max-height:112px}
+.audit-h{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.kbd{font-family:var(--mono);font-size:.68rem;border:1px solid var(--border2);border-bottom-width:2px;border-radius:4px;padding:0 5px;color:var(--ink2);background:var(--white)}
+.keys{position:fixed;right:18px;bottom:170px;background:var(--white);border:1px solid var(--border2);border-radius:var(--r-md);box-shadow:var(--shadow-lg);padding:14px 16px;display:grid;gap:8px;font-size:.82rem;z-index:5;min-width:240px}
+.keys div{display:flex;justify-content:space-between;gap:16px}
+.narrow-note{display:none}
+@media (max-width:1100px){
+  body{overflow:auto}.app,.ws{height:auto}.ws-grid>.pane{overflow:visible}
+  .narrow-note{display:block;padding:8px 18px;font-size:.78rem;background:var(--gold-light);color:var(--ink2)}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="appbar">
+    <div class="brand"><h1>Collections Workstation</h1><span class="tag ctx">AI-supported · concept</span></div>
+    <div class="right">
+      <span>Dialer campaign: Hardship follow-up · 38 in tonight's list</span>
+      <span class="status"><span class="dot"></span><span id="agentStatus">M. Webb · Available</span></span>
+      <button class="switch" id="latToggle" aria-pressed="true" type="button" title="Toggle AI support (L)"><span class="knob" aria-hidden="true"></span>AI support</button>
+      <button class="btn sm" data-act="reset" type="button">Restart call</button>
+    </div>
+  </header>
+  <div class="ws" id="ws">
+    <div class="narrow-note">Designed for desktop screens 1280px and wider. Panels stack on smaller windows.</div>
+    <div class="ws-top">
+      <div class="who">
+        <div class="who-wait">No active call</div>
+        <div class="avatar" aria-hidden="true">FJ</div>
+        <div><div class="name">Fred Johnson</div><div class="sub">Customer since 2014 · Mobile ••5521 (call consent on file) · Prefers email</div></div>
+      </div>
+      <div class="call">
+        <span class="live" id="callState"></span>
+        <span id="attHdr"></span><span id="tzHdr">Customer local 6:14 pm ET</span>
+      </div>
+    </div>
+    <nav class="stepper" id="stepper" aria-label="Call stages"></nav>
+    <div class="ws-grid">
+      <aside class="pane ctx-pane" aria-label="Unified customer context">
+        <div class="pane-h">Unified customer context</div>
+        <div class="kv">
+          <div><span>Total liabilities</span><span>$16,152.19</span></div>
+          <div><span>Amount to bring current</span><span>$1,422.00</span></div>
+          <div><span>Monthly obligations to bank</span><span>$450.00</span></div>
+          <div><span>Prior hardship (24 mo)</span><span>None</span></div>
+        </div>
+        <div class="acct focus">
+          <div class="row"><span class="t">Credit card ••4417</span><span class="tag bad">120 DPD</span></div>
+          <div class="row"><span class="muted">Balance</span><span class="num">$6,842.19</span></div>
+          <div class="row"><span class="muted">Past due + min</span><span class="num">$1,236 + $186</span></div>
+          <div class="row"><span class="muted">APR</span><span class="num">29.99%</span></div>
+        </div>
+        <div class="acct">
+          <div class="row"><span class="t">Personal loan ••2280</span><span class="tag good">Current</span></div>
+          <div class="row"><span class="muted">Balance · Payment</span><span class="num">$9,310 · $264/mo</span></div>
+        </div>
+        <div class="acct">
+          <div class="row"><span class="t">Checking ••0932</span><span class="tag good">Open</span></div>
+          <div class="row"><span class="muted">Deposits vs. 6-mo avg</span><span class="num">−38% since Jun</span></div>
+        </div>
+        <div class="kv">
+          <div class="pane-h" style="margin-bottom:2px">Contact limits</div>
+          <div><span>Call attempts, last 7 days</span><span>4 of 7</span></div>
+          <div class="meter" role="img" aria-label="4 of 7 attempts used, including this call"><i style="width:57%"></i></div>
+          <div><span>Calling window (local)</span><span>8 am–9 pm</span></div>
+          <div><span>Last conversation</span><span>Sep 2</span></div>
+        </div>
+        <p class="src">Facts from systems of record · as of 09/28 18:14</p>
+      </aside>
+      <main class="pane main-pane" id="mainPane" aria-live="polite"></main>
+      <aside class="pane rail" id="rail" aria-label="AI support context"></aside>
+    </div>
+    <div class="audit">
+      <div class="audit-h"><div class="pane-h" style="gap:14px"><span>Decision record</span><span class="src" id="auditCount"></span></div>
+        <span class="src">Keys: <span class="kbd">C</span> connect · <span class="kbd">A</span> accept · <span class="kbd">N</span> next · <span class="kbd">B</span> back · <span class="kbd">L</span> AI support · <span class="kbd">?</span> help</span></div>
+      <ol id="audit"></ol>
+    </div>
+  </div>
+  <div class="keys" id="keys" hidden>
+    <b>Keyboard shortcuts</b>
+    <div><span>Simulate connected call</span><span class="kbd">C</span></div>
+    <div><span>Accept primary AI suggestion</span><span class="kbd">A</span></div>
+    <div><span>Next stage</span><span class="kbd">N</span></div>
+    <div><span>Previous stage</span><span class="kbd">B</span></div>
+    <div><span>Toggle AI support</span><span class="kbd">L</span></div>
+    <p class="src">Illustrative prototype. Customer, figures, policy IDs and AI support outputs are fictional.</p>
+  </div>
+</div>
+<script>window.WS_KEYS=true</script>
+
+
+<script>
+(function(){
+  const STAGES=['Connect & Verify','Hardship & Eligibility','Solutioning','Objection Handling','Resolution'];
+  const S={stage:0,lat:true,reason:null,party:null,canPay:null,change:null,dur:'',income:'2,850',housing:'1,240',option:null,objection:null,dialed:false,rec:false,dob:null,ssn:null,mm:false,disc:{},scheduled:false,ended:false,secs:0,noteAccepted:false,cards:{},shown:{},approved:{},audit:[]};
+  let clock=18*3600+14*60+20;
+  const $=s=>document.querySelector(s);
+  const ws=$('#ws'),main=$('#mainPane'),rail=$('#rail'),stepper=$('#stepper'),auditEl=$('#audit');
+
+  function t(){clock+=7+Math.floor(Math.random()*25);const h=Math.floor(clock/3600),m=Math.floor(clock%3600/60),s=clock%60;return [h,m,s].map(n=>String(n).padStart(2,'0')).join(':')}
+  function log(who,msg){S.audit.unshift({t:t(),who,msg});renderAudit()}
+  function renderAudit(){
+    auditEl.innerHTML=S.audit.map(a=>`<li><span class="src">${a.t}</span><span class="who ${a.who}">${a.who==='ai'?'AI':a.who==='engine'?'Engine':'Agent'}</span><span>${a.msg}</span></li>`).join('');
+    $('#auditCount').textContent=S.audit.length+' events · exportable to QA and audit';
+  }
+  const chip=(grp,val,label,on,sug)=>`<button type="button" class="chip${sug&&S.lat?' suggested':''}" data-act="${grp}" data-val="${val}" aria-pressed="${on}">${label}${sug&&S.lat&&!on?' · suggested':''}</button>`;
+  const cites=a=>`<div class="cites">${a.map(c=>`<span class="cite${c.startsWith('!')?' stale':''}">${c.replace(/^!/,'')}</span>`).join('')}</div>`;
+  const conf=(n,of,label)=>`<div class="conf"><span class="bars">${Array.from({length:of},(_,i)=>`<i class="${i<n?'on':''}"></i>`).join('')}</span>${label}</div>`;
+
+  const TITLES={};
+  function card(id,{kind,title,body,why,quote,src,c,guard,actions,primary}){
+    const st=S.cards[id];TITLES[id]=title;
+    if(!S.shown[id]&&S.lat){S.shown[id]=1;setTimeout(()=>log('ai',`Showed "${title}" · ${src.length} source${src.length>1?'s':''}`),0)}
+    const stateLine=st==='accepted'?`<span class="state" style="color:var(--good)">✓ Accepted by agent</span>`:st&&st.startsWith('dismissed')?`<span class="state" style="color:var(--ink3)">Dismissed · ${st.split(':')[1]}</span>`:'';
+    let act='';
+    if(!st){
+      act=st===undefined&&S.cards[id+'_d']?
+        `<div class="dismiss"><span class="src">Why dismiss? One tap trains review.</span><div class="lat-actions">${['Not relevant','Already covered','Looks wrong'].map(r=>`<button class="btn sm" data-act="dismissWhy" data-id="${id}" data-val="${r}">${r}</button>`).join('')}</div></div>`
+        :`<div class="lat-actions">${(actions||[]).map(a=>`<button class="btn sm ${a.cls||''}" data-act="${a.act}" data-id="${id}" data-val="${a.val||''}">${a.label}</button>`).join('')}<button class="btn sm ghost" data-act="dismiss" data-id="${id}">Dismiss</button></div>`;
+    }
+    return `<article class="lat${primary?' primary':''}${st?' resolved':''}">
+      <div class="lat-h"><span class="k">${kind}</span>${c||''}</div>
+      <h4>${title}</h4>
+      ${body?`<p>${body}</p>`:''}
+      ${quote?`<p class="quote">${quote}</p>`:''}
+      ${why?`<ul class="why">${why.map(w=>`<li>${w}</li>`).join('')}</ul>`:''}
+      ${guard?`<div class="guard"><b>Guardrail</b><span>${guard}</span></div>`:''}
+      ${cites(src)}
+      ${stateLine}${act}
+    </article>`;
+  }
+
+  /* ---------- stages ---------- */
+  const PARTY={
+    other:{q:'"No problem. Could you let Fred know Marcus from the bank called? Our number is 800-555-0142. Thank you."',n:'Don\'t mention the account, the debt or the reason for the call.'},
+    wrong:{q:'"I\'m sorry to have bothered you. I\'ll update our records."',n:'The engine marks ••5521 as a wrong number and removes it from the dialer list.'}
+  };
+  function waiting(){
+    return [`
+      <div class="wait">
+        <span class="tag det"><span class="dot"></span>Available</span>
+        <h3>Waiting for the next connected call</h3>
+        <p>The dialer places calls from the bank's delinquency rules and routes live answers to the next available agent. There's no preview: the customer's record opens when the call connects.</p>
+        <div class="kv wait-kv">
+          <div><span>Campaign</span><span>Hardship follow-up · rule COL-DR-12</span></div>
+          <div><span>Selection</span><span>120+ days past due · no active arrangement · no conversation in 7+ days</span></div>
+          <div><span>Tonight's dial list</span><span>38 accounts · 5 agents available</span></div>
+          <div><span>Average wait for a live answer</span><span>0:42</span></div>
+        </div>
+        <div class="nav-row"><span class="src">Prototype control · shortcut C</span><button class="btn primary" data-act="dial">Simulate connected call</button></div>
+      </div>`,
+      `<article class="lat"><div class="lat-h"><span class="k">Standing by</span></div><p>When a call connects, AI support shows a brief you can read in about five seconds, before you say hello.</p></article>`];
+  }
+  function stage0(){
+    if(!S.dialed)return waiting();
+    const rp=S.party==='rp';
+    const ver=S.dob==='ok'&&S.ssn==='ok',failed=S.dob==='fail'||S.ssn==='fail';
+    const factor=(k,l,n)=>`<div class="factor"><span><b>${l}</b><br><span class="src">${n}</span></span>${S[k]==='ok'?'<span class="tag good">Match</span>':S[k]==='fail'?'<span style="display:flex;gap:6px;align-items:center"><span class="tag bad">No match</span><button class="btn sm ghost" data-act="factor" data-val="'+k+':reset">Re-ask</button></span>':'<span class="lat-actions"><button class="btn sm" data-act="factor" data-val="'+k+':ok">Matches</button><button class="btn sm ghost" data-act="factor" data-val="'+k+':fail">No match</button></span>'}</div>`;
+    const m=`
+      <div class="stage-title"><h3>Connect &amp; Verify</h3><span class="tag det"><span class="dot"></span>Auto-dialed · live answer</span></div>
+      <div class="block det">
+        <div class="check"><span class="ic">✓</span><span>Placed by delinquency rule COL-DR-12: 120+ days past due, no active arrangement, no conversation in 7+ days</span></div>
+        <div class="check"><span class="ic">✓</span><span>Dialer checks passed: 6:14 pm customer time, attempt 4 of 7 this week, no cease-contact, attorney, bankruptcy or dispute flags, call consent for ••5521</span></div>
+        <div class="check"><span class="ic">✓</span><span>State-specific disclosures checked for the customer's state of residence · none additional required</span></div>
+        <div class="check"><span class="ic">✓</span><span>Live voice detected · routed to you</span></div>
+      </div>
+      <div class="block">
+        <b>Greet and confirm who answered</b>
+        <p class="quote">"Hi, this is Marcus calling from the bank. May I speak with Fred Johnson?"</p>
+        <div class="chips">${chip('party','rp','Fred Johnson',S.party==='rp')}${chip('party','other','Someone else',S.party==='other')}${chip('party','wrong','Wrong number',S.party==='wrong')}</div>
+        ${S.party&&!rp?`<p class="quote">${PARTY[S.party].q}</p><p class="muted" style="font-size:.82rem">${PARTY[S.party].n} The prototype continues on the right-party path.</p>`:''}
+      </div>
+      ${rp?`<div class="block vstep ${S.rec?'done':''}">
+        <div class="vh"><b><span class="vn">1</span>Call-recording disclosure <span class="did">DISC-REC-01</span></b>${S.rec?'<span class="tag good">Delivered</span>':'<span class="tag gold">Required</span>'}</div>
+        <p class="quote">"Before we continue, this call may be monitored or recorded."</p>
+        ${S.rec?'':'<div class="nav-row"><span class="src">Read as written</span><button class="btn sm primary" data-act="rec">Mark delivered</button></div>'}
+      </div>
+      ${S.rec?`<div class="block vstep ${ver?'done':''}">
+        <div class="vh"><b><span class="vn">2</span>Right-party verification</b>${ver?'<span class="tag good">Verified · 2 of 2</span>':failed?'<span class="tag bad">Failed</span>':'<span class="tag gold">2 factors required</span>'}</div>
+        <p class="quote">"To protect your privacy, I need to verify a few details. Can you confirm your date of birth and the last four digits of your Social Security number?"</p>
+        <div class="factors">${factor('dob','Date of birth','Compare to record · ••/••/1978')}${factor('ssn','Last 4 of SSN','Compare to record · masked')}</div>
+        ${failed?'<div class="guard"><b>Stop</b><span>Verification failed. Don\'t discuss the account or confirm that a debt exists. Ask the customer to call back at 800-555-0142, then end the call.</span></div>':''}
+      </div>`:''}
+      ${ver?`<div class="block vstep ${S.mm?'done':''}">
+        <div class="vh"><b><span class="vn">3</span>Mini-Miranda <span class="did">DISC-MM-01</span></b>${S.mm?'<span class="tag good">Delivered · acknowledged</span>':'<span class="tag gold">Required</span>'}</div>
+        <p class="quote">"This is Marcus Webb with the bank. This is an attempt to collect a debt, and any information obtained will be used for that purpose."</p>
+        ${S.mm?'':'<div class="nav-row"><span class="src">Read as written · acknowledgment is recorded</span><button class="btn sm primary" data-act="mm">Delivered and acknowledged</button></div>'}
+      </div>`:''}
+      ${S.mm?`<div class="block">
+        <b>How does Fred respond to the reason for the call?</b>
+        <div class="chips">${chip('reason','hardship','Says he can\'t pay right now',S.reason==='hardship',S.cards.reason==='accepted')}${chip('reason','intent','Promises to pay',S.reason==='intent')}${chip('reason','dispute','Disputes the balance',S.reason==='dispute')}${chip('reason','later','Asks for a callback',S.reason==='later')}</div>
+        ${S.lat&&S.cards.brief==='accepted'?`<p class="muted" style="font-size:.82rem">Opening: "Mr. Johnson, I'm following up on our September 2nd conversation. I'd like to see if there's an option that works better for you."</p>`:''}
+      </div>`:''}`:''}
+      <div class="nav-row"><span></span><button class="btn primary" data-act="next" ${rp&&ver&&S.mm&&S.reason?'':'disabled'}>Continue to Hardship &amp; Eligibility</button></div>`;
+    const r=card('brief',{primary:1,kind:'Connect brief',title:'Follow-up on the plan he turned down Sep 2',
+        why:['Declined $412/mo plan: the first payment was too high','Hours cut at work. Don\'t re-ask employment.','Don\'t quote amounts until eligibility runs'],
+        src:['NOTE 2026-09-02','OFFER-HIST ••4417','CALL 2026-08-14'],c:conf(3,3,'3 sources agree'),
+        guard:'Appears at connect because auto-dialed calls give no preview time. Account detail beyond this brief unlocks after right-party verification.',
+        actions:[{act:'accept',label:'Use opening',cls:'teal'}]})
+      +card('reason',{kind:'Inference · confirm on the call',title:'Likely response: hardship, reduced income',
+        why:['Checking deposits down 38% against the 6-month average since June','Reduced hours mentioned on Sep 2','No payment since the Sep 2 call'],
+        src:['DEP-TREND ••0932','NOTE 2026-09-02','PAYMENTS ••4417'],c:conf(3,3,'3 signals'),
+        guard:'A suggestion only. The agent records Fred\'s response after he gives it.',
+        actions:[{act:'accept',label:'Mark as suggested',cls:'teal'}]});
+    return [m,r];
+  }
+
+
+  /* ---------- disclosure library (engine-selected, read verbatim) ---------- */
+  const SCHED={hp:['$148.00','12 months'],pp:['$412.00','6 months'],rp:['$95.00','3 months']};
+  const DISC={
+    FIN01:{id:'DISC-FIN-01',t:'Use of financial information',basis:'Privacy · GLBA',s:()=>'"I\'m going to ask about your income and expenses. We\'ll use what you share only to review the payment options available to you, and it\'s protected under our privacy policy."'},
+    HP01:{id:'DISC-HP-01',t:'Program terms',basis:'Program policy · UDAAP',s:()=>'"Your APR will go from 29.99% to 9.99% for 12 months, and late fees will be waived while you\'re enrolled. Your payment will be $148 a month. After three on-time payments, your account will be brought current."'},
+    HP02:{id:'DISC-HP-02',t:'Account restriction',basis:'Program policy',s:()=>'"While you\'re in the program, your card will be closed to new purchases."'},
+    HP03:{id:'DISC-HP-03',t:'If a payment is missed',basis:'Program policy · UDAAP',s:()=>'"If a program payment is missed, you may be removed from the program, and your standard APR and fees would apply again."'},
+    PP01:{id:'DISC-PP-01',t:'Plan terms',basis:'Program policy · UDAAP',s:()=>'"You\'ll pay $412 a month for 6 months. Your APR stays at 29.99%, and interest continues to accrue during the plan."'},
+    PP02:{id:'DISC-PP-02',t:'If a payment is missed',basis:'Program policy · UDAAP',s:()=>'"If a plan payment is missed, the plan may be canceled, and the full past-due amount would be due."'},
+    RP01:{id:'DISC-RP-01',t:'Account stays past due',basis:'UDAAP · clear and accurate',s:()=>'"Paying $95 a month for the next 3 months lowers your payment, but your account will stay past due, and interest and late fees will continue."'},
+    CR01:{id:'DISC-CR-01',t:'Credit reporting',basis:'FCRA accuracy · policy',s:()=>'"We\'ll keep reporting your account to the credit bureaus each month, including your payments under this arrangement. I can\'t tell you how it will affect your credit score."'},
+    PAY01:{id:'DISC-PAY-01',t:'Recurring payment authorization',basis:'Reg E · Nacha',confirm:1,s:o=>`"You're authorizing us to withdraw ${SCHED[o][0]} from your checking account ending in 0932 on October 5, 2026, and on the 5th of each month after that for ${SCHED[o][1]}. You can cancel any payment by calling us at least 3 business days before it's scheduled. Do you authorize these payments?"`},
+    PAY02:{id:'DISC-PAY-02',t:'No fee to pay by phone',basis:'Reg F · UDAAP',s:()=>'"There\'s no fee for making these payments by phone."'},
+    PAY03:{id:'DISC-PAY-03',t:'Written confirmation',basis:'Reg E · E-SIGN',s:()=>'"We\'ll email a copy of this authorization and your program terms to the address on file within one business day. You can also ask us to mail a copy."'}
+  };
+  const OPT_DISC={hp:['HP01','HP02','HP03','CR01'],pp:['PP01','PP02','CR01'],rp:['RP01','CR01']};
+  const discDone=keys=>keys.every(k=>S.disc[k]==='yes');
+  function discItem(k){
+    const d=DISC[k],st=S.disc[k],o=S.option||'hp';
+    const status=st==='yes'?`<span class="tag good">${d.confirm?'Authorized':'Read'}</span>`:st==='no'?'<span class="tag bad">Declined</span>':'';
+    const acts=st==='yes'?'':st==='no'?`<div class="guard"><b>Stop</b><span>Don't schedule. Offer another payment method or date, or a callback.</span></div><div class="lat-actions" style="justify-content:flex-end"><button class="btn sm ghost" data-act="disc" data-val="${k}:reset">Re-ask</button></div>`
+      :`<div class="lat-actions" style="justify-content:flex-end">${d.confirm?`<button class="btn sm primary" data-act="disc" data-val="${k}:yes">Customer said yes</button><button class="btn sm ghost" data-act="disc" data-val="${k}:no">Customer declined</button>`:`<button class="btn sm primary" data-act="disc" data-val="${k}:yes">Read as written</button>`}</div>`;
+    return `<div class="disc ${st==='yes'?'done':''}"><div class="dh"><span class="did">${d.id}</span><b>${d.t}</b><span class="basis">${d.basis}</span>${status}</div><p class="quote">${d.s(o)}</p>${acts}</div>`;
+  }
+  function discGroup(keys,when){
+    const n=keys.filter(k=>S.disc[k]==='yes').length;
+    return `<div class="block det discs"><div class="vh"><b>Required disclosures · ${when}</b><span class="src">${n} of ${keys.length} · engine-selected · read verbatim</span></div>${keys.map(discItem).join('')}</div>`;
+  }
+  const DISC_GUARD='<div class="guard"><b>Disclosures</b><span>Selected by the engine for this customer, stage and option. Read verbatim from the disclosure library and logged with their version. AI support may remind, but never writes or paraphrases a disclosure.</span></div>';
+
+  function stage1(){
+    const cats=[['debt','High debt level'],['income','Reduced income'],['expense','Unexpected expense'],['oversight','Oversight'],['unable','Unable to obtain']];
+    const m=`
+      <div class="stage-title"><h3>Hardship &amp; Eligibility</h3><span class="src">Guided questions · SOP-HS-11</span></div>
+      <div class="block det">
+        <div class="check"><span class="ic">✓</span><span>SCRA: not on active military duty (DMDC check 09/28)</span></div>
+        <div class="check"><span class="ic">✓</span><span>No bankruptcy filing or attorney representation on record</span></div>
+      </div>
+      <div class="block">
+        <b>Can the customer bring the account current today? <span class="num muted">($1,422.00)</span></b>
+        <div class="chips">${chip('canPay','yes','Yes',S.canPay==='yes')}${chip('canPay','no','No',S.canPay==='no')}</div>
+      </div>
+      ${S.canPay==='no'?`<div class="block">
+        <b>What changed in the customer's situation?</b>
+        <div class="chips">${cats.map(([v,l])=>chip('change',v,l,S.change===v,v==='income'&&S.lat)).join('')}</div>
+      </div>`:''}
+      ${S.change?discGroup(['FIN01'],'before asking about income'):''}
+      ${S.change&&S.disc.FIN01==='yes'?`<div class="block">
+        <b>Size the hardship</b>
+        <div class="fields">
+          <label class="field" for="dur">Expected duration<select id="dur" data-act="dur"><option value="">Select</option>${['Under 3 months','3–6 months','6–12 months','More than 12 months','Unknown'].map(o=>`<option ${S.dur===o?'selected':''}>${o}</option>`).join('')}</select></label>
+          <label class="field" for="inc">Net monthly income<input id="inc" inputmode="decimal" value="$${S.income}" data-act="inc"></label>
+          <label class="field" for="hou">Monthly housing<input id="hou" inputmode="decimal" value="$${S.housing}" data-act="hou"></label>
+        </div>
+      </div>`:''}
+      <div class="nav-row"><button class="btn ghost" data-act="prev">Back</button><button class="btn primary" data-act="next" ${S.change&&S.dur&&S.disc.FIN01==='yes'?'':'disabled'}>Run eligibility</button></div>`;
+    const r=card('heard',{primary:1,kind:'Heard in conversation · 02:41',title:'Suggests: Reduced income, 3–6 months',
+        quote:'"They cut my hours at the plant back in June. Supervisor says the new line opens after the holidays."',
+        why:['Maps to category "Reduced income" (SOP-HS-11 §2)','"After the holidays" suggests 3–6 months'],
+        src:['TRANSCRIPT live 02:41','SOP-HS-11 §2'],c:conf(2,2,'Transcript + policy'),
+        actions:[{act:'applyHeard',label:'Apply to form',cls:'teal'}]})
+      +card('ask',{kind:'Ask next · from senior-agent practice',title:'Ask when full hours are expected back',
+        body:'Hardship Program enrollment needs an expected duration. An "unknown" answer routes to a 3-month review, so a date gets Fred a longer, steadier term.',
+        src:['SME-DO-031 · validated 2026-06-18','SOP-HS-11 §3'],c:conf(2,2,'Policy-owner validated'),
+        actions:[{act:'accept',label:'Asked',cls:'teal'}]})
+      +`<div class="guard"><b>Data</b><span>If health or family details come up, record the category only. Detail stays out of notes and out of any model input.</span></div>`;
+    return [m,r];
+  }
+
+  const OPTS=[
+    {id:'hp',t:'Hardship Program',amt:'$148',d:'APR 29.99% → 9.99% for 12 months · fees waived · current after 3 on-time payments',aff:'11% of remaining income',rank:'#1 fit · lowest payment that cures delinquency'},
+    {id:'pp',t:'Payment Plan',amt:'$412',d:'6-month catch-up schedule · APR unchanged',aff:'31% of remaining income',rank:'#2 · declined at this amount on Sep 2'},
+    {id:'rp',t:'Reduced Payment',amt:'$95',d:'3 months at reduced minimum · does not bring account current',aff:'7% of remaining income',rank:'#3 · affordable, but delinquency continues'},
+  ];
+  function stage2(){
+    const m=`
+      <div class="stage-title"><h3>Solutioning</h3><span class="tag det"><span class="dot"></span>Engine evaluated 4 programs · rules v4.12</span></div>
+      <p class="muted" style="font-size:.82rem">Remaining monthly income after housing and existing loan payment: <b class="num" style="color:var(--ink)">$1,346</b> (calculated by Decision Engine)</p>
+      <div class="opts">
+        ${OPTS.map(o=>`<button type="button" class="opt" data-act="option" data-val="${o.id}" aria-pressed="${S.option===o.id}">
+          <span><span class="t">${o.t}</span><br><span class="d">${o.d}</span></span>
+          <span><span class="amt">${o.amt}</span><span class="aff" style="display:block">/mo · ${o.aff}</span></span>
+          <span class="rank"><span class="tag ${o.id==='hp'?'ctx':'gold'}" style="text-transform:none;letter-spacing:0;font-weight:500">${o.rank}</span></span>
+        </button>`).join('')}
+        <div class="opt ineligible"><span><span class="t">Settlement</span><br><span class="d">Not eligible · requires 150+ days past due (POL-COL-7.3)</span></span><span class="aff">—</span></div>
+      </div>
+      ${S.option?discGroup(OPT_DISC[S.option],'read before the customer accepts'):''}
+      <div class="nav-row"><button class="btn ghost" data-act="prev">Back</button><button class="btn primary" data-act="next" ${S.option&&discDone(OPT_DISC[S.option])?'':'disabled'}>Customer accepts · continue</button></div>`;
+    const r=card('best',{primary:1,kind:'Next-best action · ranks engine results',title:'Lead with the Hardship Program',
+        why:['$148 is 11% of what remains after housing and the loan, against 31% for the payment plan','Fred declined a $412 first payment on Sep 2','Reduced hours for 3–6 months fit inside the 12-month term','Account returns to current after 3 on-time payments'],
+        src:['ENGINE v4.12','POL-COL-4.2 §5','NOTE 2026-09-02'],c:conf(4,4,'4 of 4 reasons agree'),
+        guard:'Ranks only the options the engine returned. Every amount above comes from the engine.',
+        actions:[{act:'pickHP',label:'Select Hardship Program',cls:'teal'}]})
+      +card('whynot',{kind:'Why not',title:'Settlement isn\'t available yet',body:'Policy requires 150+ days past due. Fred is at 120. Don\'t raise it on this call.',src:['POL-COL-7.3','ENGINE v4.12'],
+        actions:[{act:'accept',label:'Got it'}]})+DISC_GUARD;
+    return [m,r];
+  }
+
+  const OBJ={
+    credit:{label:'Worried about credit impact',title:'Approved response: credit impact',quote:'"I can\'t predict how your score will change. What I can tell you is that each on-time program payment is recorded, and that\'s the most direct way to get this account back in good standing."',
+      why:['Consistent with credit-reporting disclosure DISC-CR-01, already read in Solutioning'],src:['KB-OBJ-07 · approved 2026-07-15','DISC-CR-01 v3'],guard:'Don\'t predict score changes or promise how the account will be reported.'},
+    high:{label:'First payment still too high',title:'Approved response: payment amount',quote:'"$148 is the lowest payment that brings the account current. There is a $95 option, but it only lasts three months and the account stays past due. I want you to have the full picture before you choose."',
+      why:['Reduced Payment is engine-eligible, so it can be offered','If Fred switches, the engine adds DISC-RP-01: the account stays past due','Explain the trade-off. Don\'t steer.'],src:['KB-OBJ-03 · approved 2026-05-02','ENGINE v4.12'],guard:'Present both options accurately. The customer chooses.'},
+    spouse:{label:'Wants to talk to spouse first',title:'Hold the offer and book a callback',quote:'"That makes sense. I can hold this program for you for five business days. When is a good time for me to call you back?"',
+      why:['Offer can be held 5 business days (POL-COL-4.2 §8)','A callback time Fred asks for is recorded as his consent, so it doesn\'t count toward the 7-call limit'],src:['POL-COL-4.2 §8','REG F §1006.14(b)(3)'],guard:'The engine validates the callback time against the calling window and logs Fred\'s consent.'}
+  };
+  function stage3(){
+    const sel=OPTS.find(o=>o.id===S.option)||OPTS[0];
+    const m=`
+      <div class="stage-title"><h3>Objection Handling</h3><span class="src">Presenting: ${sel.t} · ${sel.amt}/mo</span></div>
+      <div class="block">
+        <b>What is the customer's concern?</b>
+        <div class="chips">${Object.entries(OBJ).map(([k,o])=>chip('objection',k,o.label,S.objection===k)).join('')}${chip('objection','none','No objection',S.objection==='none')}</div>
+      </div>
+      <div class="block det">
+        <div class="check"><span class="ic">✓</span><span>Program disclosures read in Solutioning: ${OPT_DISC[sel.id].map(k=>DISC[k].id).join(', ')}</span></div>
+        <div class="check"><span class="ic">·</span><span>Payment authorization disclosures come next, before scheduling</span></div>
+      </div>
+      <div class="nav-row"><button class="btn ghost" data-act="prev">Back</button><button class="btn primary" data-act="next" ${S.objection?'':'disabled'}>Customer agrees · Resolve</button></div>`;
+    let r;
+    if(!S.objection||S.objection==='none'){
+      r=`<article class="lat"><div class="lat-h"><span class="k">Waiting for context</span></div><p>Select the customer's concern. AI support retrieves the approved response and any disclosure it requires.</p></article>`;
+    }else{
+      const o=OBJ[S.objection];
+      r=card('obj_'+S.objection,{primary:1,kind:'Approved language · read as written',title:o.title,quote:o.quote,why:o.why,src:o.src,guard:o.guard,c:conf(1,1,'Compliance-approved'),actions:[{act:'accept',label:'Used',cls:'teal'}]});
+    }
+    return [m,r];
+  }
+
+  const DRAFT='Outbound attempt 4/7, right party reached 6:14 pm ET. Hardship: reduced income (hours cut Jun 2026), expected 3–6 months. Net income $2,850; housing $1,240. Declined $412 plan on 9/2. Enrolled in Hardship Program, $148/mo, 12 months. Disclosures read: DISC-REC-01, DISC-MM-01, DISC-FIN-01, DISC-HP-01–03, DISC-CR-01, DISC-PAY-01–03. Recurring payment authorized by phone (recorded). First payment 10/5 from checking ••0932. Confirmation PX-88213.';
+  function stage4(){
+    const sel=OPTS.find(o=>o.id===S.option)||OPTS[0];
+    const note=S.lat?DRAFT:'';
+    const m=`
+      <div class="stage-title"><h3>Resolution</h3>${S.scheduled?'<span class="tag good"><span class="dot"></span>Scheduled</span>':''}</div>
+      <div class="block det">
+        <div class="kv">
+          <div><span>Program</span><span>${sel.t}</span></div>
+          <div><span>Monthly payment</span><span>${sel.amt}.00</span></div>
+          <div><span>First payment</span><span>Mon, Oct 5, 2026 · Checking ••0932</span></div>
+          <div><span>Term</span><span>${SCHED[sel.id][1]}</span></div>
+          ${S.scheduled?'<div><span>Confirmation</span><span class="mono">PX-88213</span></div>':''}
+        </div>
+      </div>
+      ${discGroup(['PAY01','PAY02','PAY03'],'read before scheduling')}
+      <div class="nav-row"><span class="src">Amounts and dates set by Decision Engine</span><button class="btn primary" data-act="schedule" ${S.scheduled||!discDone(['PAY01','PAY02','PAY03'])?'disabled':''}>${S.scheduled?'Payment scheduled':'Schedule payment'}</button></div>
+      <div class="block">
+        <label for="note"><b>Interaction note</b> ${S.lat?'<span class="tag ctx" style="margin-left:6px">Drafted by AI · review</span>':''}</label>
+        <textarea id="note" rows="5" placeholder="Document the reason, the option chosen and why.">${note}</textarea>
+      </div>
+      <div class="nav-row"><button class="btn ghost" data-act="prev">Back</button><button class="btn primary" data-act="finish" ${S.scheduled?'':'disabled'}>Save and end call</button></div>`;
+    const acts=[['email','Email enrollment confirmation','E-consent on file · sends 8 am–9 pm local'],['pause','Pause outbound dialing on ••4417 while enrolled','Removes account from tonight\'s and future call lists'],['task','Create 30-day check-in task','Assigned to account queue']];
+    const r0=card('note',{primary:1,kind:'Draft · agent reviews',title:'Interaction note drafted from the call',body:'Structured to the reportable categories. Edit anything before saving.',src:['CALL 2026-09-28','ENGINE decision #88213'],actions:[{act:'accept',label:'Accept draft',cls:'teal'}]})
+      +`<article class="lat"><div class="lat-h"><span class="k">Proposed follow-ups · each needs approval</span></div>
+        ${acts.map(([k,l,s])=>`<div style="display:flex;justify-content:space-between;gap:10px;align-items:center;border-top:1px solid var(--border);padding-top:8px"><span style="font-size:.84rem"><b style="font-weight:600">${l}</b><br><span class="src">${s}</span></span>${S.approved[k]?'<span class="state" style="color:var(--good);font-size:.74rem;font-weight:600">✓ Approved</span>':`<button class="btn sm teal" data-act="approve" data-val="${k}" data-label="${l}">Approve</button>`}</div>`).join('')}
+        <div class="guard"><b>Guardrail</b><span>Actions come from an allow-listed catalog. Nothing runs without an approval here.</span></div>
+      </article>`;
+    const pend=['PAY01','PAY02','PAY03'].filter(k=>S.disc[k]!=='yes').length;
+    const rem=pend&&!S.scheduled?`<article class="lat primary"><div class="lat-h"><span class="k">Reminder</span></div><h4>${pend} disclosure${pend>1?'s':''} to read before scheduling</h4><p>Read the payment authorization first and get Fred's clear yes. The call is recorded as proof of authorization, and written confirmation follows by email.</p></article>`:'';
+    const r=rem+r0+DISC_GUARD;
+    return [m,r];
+  }
+
+  const R=[stage0,stage1,stage2,stage3,stage4];
+  function render(){
+    ws.classList.toggle('off',!S.lat);ws.classList.toggle('waiting',!S.dialed);ws.classList.toggle('unverified',S.dialed&&!(S.party==='rp'&&S.dob==='ok'&&S.ssn==='ok'));
+    stepper.innerHTML=STAGES.map((s,i)=>`<button type="button" class="step ${i<S.stage?'done':''} ${i===S.stage?'on':''}" data-act="go" data-val="${i}" ${i===S.stage?'aria-current="step"':''} ${S.dialed?'':'disabled'}><span class="n">${i<S.stage?'✓':i+1}</span>${s}</button>`).join('');
+    const [m,r]=R[S.stage]();
+    main.innerHTML=m;
+    rail.innerHTML=`<div class="rail-brand"><b>AI SUPPORT</b><span class="src">${S.dialed?'Context for: '+STAGES[S.stage]:'Waiting for connect'}</span></div>`+r;
+  }
+
+  document.addEventListener('click',e=>{
+    const b=e.target.closest('[data-act]');if(!b)return;
+    const a=b.dataset.act,v=b.dataset.val,id=b.dataset.id;
+    switch(a){
+      case 'dial':dial();break;
+      case 'reset':reset();return;
+      case 'next':
+        if(S.stage===1)log('engine','Eligibility evaluated: 3 of 4 programs eligible · rules v4.12');
+        S.stage=Math.min(4,S.stage+1);break;
+      case 'prev':S.stage=Math.max(0,S.stage-1);break;
+      case 'go':S.stage=+v;break;
+      case 'rec':S.rec=true;log('engine','Disclosure read: DISC-REC-01 Call recording · v3');break;
+      case 'factor':{const [k,r]=v.split(':');S[k]=r==='reset'?null:r;const lb=k==='dob'?'Date of birth':'Last 4 of SSN';
+        if(r==='ok')log('agent',lb+': matches record');else if(r==='fail')log('engine',lb+': no match · account details stay locked');
+        if(S.dob==='ok'&&S.ssn==='ok')log('engine','Right party verified · 2 of 2 factors · account unlocked');break;}
+      case 'mm':S.mm=true;log('engine','Disclosure read: DISC-MM-01 Mini-Miranda · acknowledgment recorded');break;
+      case 'party':S.party=v;if(v==='rp'){log('agent','Fred Johnson confirmed by name · verification required')}else log('agent',(v==='wrong'?'Wrong number · ••5521 removed from dialer list':'Third party answered · callback number left, no account detail')+' (prototype)');break;
+      case 'reason':S.reason=v;log('agent','Customer response: '+b.textContent.replace(' · suggested',''));break;
+      case 'canPay':S.canPay=v;log('agent','Can bring current today: '+(v==='yes'?'Yes':'No'));break;
+      case 'change':S.change=v;log('agent','Hardship category: '+b.textContent.replace(' · suggested',''));break;
+      case 'option':S.option=v;log('agent','Selected '+OPTS.find(o=>o.id===v).t+(v!=='hp'&&S.lat?' (differs from AI #1 — captured for review)':''));break;
+      case 'objection':S.objection=v;log('agent','Objection: '+b.textContent);break;
+      case 'accept':S.cards[id]='accepted';log('agent','Accepted AI suggestion: '+TITLES[id]);break;
+      case 'applyHeard':S.cards[id]='accepted';S.canPay=S.canPay||'no';S.change='income';S.dur='3–6 months';log('agent','Applied suggestion: Reduced income, 3–6 months');break;
+      case 'pickHP':S.cards[id]='accepted';S.option='hp';log('agent','Accepted AI #1: Hardship Program');break;
+      case 'dismiss':S.cards[id+'_d']=1;break;
+      case 'dismissWhy':S.cards[id]='dismissed:'+v;log('agent',`Dismissed AI suggestion: ${TITLES[id]} (${v}) → knowledge review queue`);break;
+      case 'schedule':S.scheduled=true;log('engine','Payment scheduled: '+SCHED[S.option||'hp'][0]+' on 10/05/2026 · ••0932 · confirmation PX-88213');log('engine','Written confirmation queued to email on file (E-SIGN consent)');break;
+      case 'disc':{const [k,r]=v.split(':');S.disc[k]=r==='reset'?undefined:r;const d=DISC[k];if(r==='yes')log(d.confirm?'agent':'engine',d.confirm?d.id+' '+d.t+': customer authorized (recorded)':'Disclosure read: '+d.id+' '+d.t+' · v3');else if(r==='no')log('agent',d.id+': customer declined · payment not scheduled');break;}
+      case 'approve':S.approved[v]=1;log('agent','Approved action: '+b.dataset.label);log('ai','Executed: '+b.dataset.label);break;
+      case 'finish':S.ended=true;clearInterval(timer);log('agent','Call ended · decision record sealed');callState();b.disabled=true;b.textContent='Saved';return;
+      default:return;
+    }
+    render();
+  });
+  document.addEventListener('change',e=>{
+    const el=e.target;if(!ws.contains(el))return;
+    if(el.dataset.act==='dur'){S.dur=el.value;log('agent','Expected duration: '+el.value);render()}
+  });
+  document.addEventListener('input',e=>{
+    const el=e.target;if(el.dataset.act==='inc')S.income=el.value.replace(/[^0-9,]/g,'');if(el.dataset.act==='hou')S.housing=el.value.replace(/[^0-9,]/g,'');
+  });
+  $('#latToggle').addEventListener('click',function(){
+    S.lat=!S.lat;this.setAttribute('aria-pressed',S.lat);render();
+  });
+
+  let timer=null;
+  function callState(){
+    const el=$('#callState'),mm=String(Math.floor(S.secs/60)).padStart(2,'0'),ss=String(S.secs%60).padStart(2,'0');
+    el.className='live'+(S.dialed&&!S.ended?' on':'');
+    el.innerHTML=S.ended?'Wrap-up saved · '+mm+':'+ss:S.dialed?'<span class="dot"></span>Connected · '+mm+':'+ss:'<span class="dot"></span>Available · waiting';
+    const h=$('#attHdr');if(h)h.textContent=S.dialed?'Auto-dialed · Attempt 4 of 7':'';const tz=$('#tzHdr');if(tz)tz.hidden=!S.dialed;const as=$('#agentStatus');if(as)as.textContent='M. Webb · '+(S.dialed&&!S.ended?'On call':S.ended?'Wrap-up':'Available');
+  }
+  function dial(){
+    if(S.dialed)return;S.dialed=true;log('engine','Dialer placed call to mobile ••5521 · rule COL-DR-12 · attempt 4 of 7');log('engine','Live answer detected · routed to M. Webb');ws.classList.add('just-connected');setTimeout(()=>ws.classList.remove('just-connected'),1500);render();
+    timer=setInterval(()=>{S.secs++;callState()},1000);callState();
+  }
+  const INIT=JSON.stringify(S);
+  function reset(){
+    clearInterval(timer);Object.assign(S,JSON.parse(INIT));clock=18*3600+13*60+50;
+    for(const k in TITLES)delete TITLES[k];
+    S.audit=[{t:'18:13:41',who:'agent',msg:'M. Webb set to Available · campaign Hardship follow-up'}];
+    $('#latToggle').setAttribute('aria-pressed','true');renderAudit();callState();render();
+  }
+  document.addEventListener('keydown',e=>{
+    if(!window.WS_KEYS)return;
+    if(e.metaKey||e.ctrlKey||e.altKey)return;
+    const tg=e.target.tagName;if(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT')return;
+    const k=e.key.toLowerCase();let el=null;
+    if(k==='c')el=document.querySelector('[data-act=dial]');
+    else if(k==='a')el=document.querySelector('.lat.primary:not(.resolved) .lat-actions .btn.teal');
+    else if(k==='n'||e.key==='ArrowRight')el=document.querySelector('.main-pane [data-act=next]:not(:disabled)');
+    else if(k==='b'||e.key==='ArrowLeft')el=document.querySelector('.main-pane [data-act=prev]');
+    else if(k==='l')el=$('#latToggle');
+    else if(k==='?'){$('#keys').hidden=!$('#keys').hidden;return}
+    if(el){e.preventDefault();el.click();}
+  });
+  reset();
+})();
+</script>
+
+</body>
+</html>
