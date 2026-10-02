@@ -1,0 +1,944 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Introducing Design Operations</title>
+<meta name="description" content="A practical 12-month path from strong individual product areas to one connected platform experience.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400..700&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+:root{--chrome:#0b171c;--chrome-text:#c9d6d6;--accent:#f59e6b}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--chrome);color:var(--chrome-text);font-family:'IBM Plex Sans',Arial,sans-serif;overflow:hidden}
+#viewport{position:fixed;inset:60px 0 56px 0;display:flex;align-items:center;justify-content:center}
+#deck{position:relative;width:1920px;height:1080px;transform-origin:center center;flex:none;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+#deck>section{position:absolute;top:0;left:0;width:1920px;height:1080px;overflow:hidden;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility 0s linear .35s}
+#deck>section.active{opacity:1;visibility:visible;transition:opacity .35s ease}
+section *{margin:0;box-sizing:border-box}
+section h1{font-size:96px;font-weight:600;line-height:1.1}
+section h2{font-size:64px;font-weight:600;line-height:1.15}
+section h3{font-size:44px;font-weight:600;line-height:1.2}
+section p{font-size:32px;line-height:1.4}
+section ul,section ol{padding-left:1.25em}
+section table{border-collapse:collapse}
+section th,section td{padding:.35em .6em;text-align:left;vertical-align:top;border-bottom:1px solid rgba(19,38,46,.14)}
+section th{font-weight:600}
+section hr{border:none;height:0;width:100%}
+section aside{display:none}
+section svg{display:block;flex:none}
+x-shape,x-icon{display:block;flex:none;position:relative}
+x-shape svg,x-icon svg{position:absolute;inset:0;width:100%;height:100%}
+x-connector{display:none}
+#bar{position:fixed;left:0;right:0;bottom:0;height:56px;display:flex;align-items:center;gap:12px;padding:0 16px;background:var(--chrome);border-top:1px solid #1d3540;font-size:15px}
+#bar button{background:transparent;color:var(--chrome-text);border:1px solid #2c4955;border-radius:8px;height:36px;min-width:40px;padding:0 12px;font:inherit;cursor:pointer}
+#bar button:hover{border-color:var(--accent);color:#fff}
+#bar .title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#count{font-variant-numeric:tabular-nums;min-width:64px;text-align:center}
+#progress{position:fixed;left:0;bottom:56px;height:3px;background:var(--accent);transition:width .3s ease}
+#notes{position:fixed;left:50%;bottom:72px;transform:translateX(-50%);width:min(900px,calc(100% - 32px));max-height:30vh;overflow:auto;background:#13262e;border:1px solid #2c4955;border-radius:12px;padding:16px 20px;font-size:16px;line-height:1.5;color:#e7eeee;display:none}
+#notes.show{display:block}
+#notes b{color:var(--accent);display:block;margin-bottom:6px;font-size:13px;letter-spacing:1px;text-transform:uppercase}
+#closeBtn{position:fixed;top:12px;right:12px;z-index:10;display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px 0 12px;border-radius:999px;background:rgba(19,38,46,.85);border:1px solid #2c4955;color:var(--chrome-text);text-decoration:none;font-size:15px;backdrop-filter:blur(6px)}
+#closeBtn:hover,#closeBtn:focus-visible{border-color:var(--accent);color:#fff;outline:none}
+#closeBtn svg{width:18px;height:18px}
+@media (max-width:600px){#bar .title,#bar .hint{display:none}}
+@media print{
+  @page{size:1920px 1080px;margin:0}
+  html,body{overflow:visible;height:auto;background:#fff}
+  #bar,#progress,#notes,#closeBtn{display:none!important}
+  #viewport{position:static;display:block}
+  #deck{transform:none!important;box-shadow:none;width:auto;height:auto}
+  #deck>section{position:relative;opacity:1;visibility:visible;page-break-after:always;break-after:page}
+}
+</style>
+</head>
+<body>
+<a id="closeBtn" href="index.html" aria-label="Close presentation and return to the main page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>Close</a>
+<main id="viewport" aria-live="polite">
+<div id="deck">
+<section id="cover" data-transition="fade" style="display:flex; flex-direction:column; gap:48px; justify-content:space-between; padding:128px; background:#13262e">
+  <svg xmlns="http://www.w3.org/2000/svg" aria-label="Twenty dots in a grid, converging into one connected pattern" viewBox="0 0 400 320" style="position:absolute; top:128px; right:128px; width:400px; height:320px"><g stroke="#3C5560" stroke-width="2"><line x1="40" y1="40" x2="360" y2="40"/><line x1="40" y1="120" x2="360" y2="120"/><line x1="40" y1="200" x2="360" y2="200"/><line x1="40" y1="280" x2="360" y2="280"/><line x1="40" y1="40" x2="40" y2="280"/><line x1="120" y1="40" x2="120" y2="280"/><line x1="200" y1="40" x2="200" y2="280"/><line x1="280" y1="40" x2="280" y2="280"/><line x1="360" y1="40" x2="360" y2="280"/></g><g fill="#6FA7AB"><circle cx="40" cy="40" r="14"/><circle cx="120" cy="40" r="14"/><circle cx="200" cy="40" r="14"/><circle cx="280" cy="40" r="14"/><circle cx="360" cy="40" r="14"/><circle cx="40" cy="120" r="14"/><circle cx="120" cy="120" r="14"/><circle cx="280" cy="120" r="14"/><circle cx="360" cy="120" r="14"/><circle cx="40" cy="200" r="14"/><circle cx="120" cy="200" r="14"/><circle cx="280" cy="200" r="14"/><circle cx="360" cy="200" r="14"/><circle cx="40" cy="280" r="14"/><circle cx="120" cy="280" r="14"/><circle cx="200" cy="280" r="14"/><circle cx="280" cy="280" r="14"/><circle cx="360" cy="280" r="14"/></g><g fill="#F59E6B"><circle cx="200" cy="120" r="14"/><circle cx="200" cy="200" r="14"/></g></svg>
+  <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#f59e6b">UX Design Architecture · Proposal to leadership</p>
+  <div style="width:1180px; display:flex; flex-direction:column; gap:40px">
+    <h1 style="font-family:'Source Serif 4', Georgia, serif; font-size:120px; font-weight:500; line-height:1.05; color:#f5f2ec">Introducing Design Operations</h1>
+    <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; line-height:1.45; color:#bfd3d3">A practical 12-month path from strong individual product areas to one connected platform experience.</p>
+  </div>
+  <div style="display:flex; flex-direction:row; align-items:end; justify-content:space-between">
+    <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; color:#bfd3d3">[Bill Teppig] · Principal UX Designer</p>
+    <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; color:#bfd3d3">[03/28/24]</p>
+  </div>
+  <aside>Open by naming the goal, not the discipline: one coherent customer experience across every product area. The dots: twenty designers on a grid. Today each dot is strong on its own; the job is the connective tissue between them.</aside>
+</section>
+<section id="outcomes" data-transition="fade" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Business outcomes</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">What the business gets from DesignOps</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;border-top:6px solid #2E6F73;padding:32px;border-radius:16px">
+<x-icon name="Lightning" style="color:#2E6F73;width:48px;height:48px"></x-icon>
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Faster time to market</h3>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">Reused patterns and research cut redundant design and rework, so teams ship sooner.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;border-top:6px solid #2E6F73;padding:32px;border-radius:16px">
+<x-icon name="Tool" style="color:#2E6F73;width:48px;height:48px"></x-icon>
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Lower delivery cost</h3>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">Less duplicated research, fewer one-off components, less design-to-dev rework.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;border-top:6px solid #2E6F73;padding:32px;border-radius:16px">
+<x-icon name="ThumbsUp" style="color:#2E6F73;width:48px;height:48px"></x-icon>
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Stronger retention</h3>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">A coherent experience across products lowers friction for customers who use more than one.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;border-top:6px solid #2E6F73;padding:32px;border-radius:16px">
+<x-icon name="Chat" style="color:#2E6F73;width:48px;height:48px"></x-icon>
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Lower support load</h3>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">Consistent, validated workflows mean fewer confused users and fewer tickets.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;border-top:6px solid #2E6F73;padding:32px;border-radius:16px">
+<x-icon name="Trust" style="color:#2E6F73;width:48px;height:48px"></x-icon>
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Reduced risk</h3>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">Accessibility and quality built into the process, not caught after release.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#13262E;border-top:6px solid #F59E6B;padding:32px;border-radius:16px">
+<x-icon name="Activity" style="color:#F59E6B;width:48px;height:48px"></x-icon>
+<h3 style="font-size:32px;font-weight:600;line-height:1.25;color:#F5F2EC">Visible UX ROI</h3>
+<p style="font-size:24px;line-height:1.45;color:#BFD3D3">Leadership sees design impact in business terms and knows where to invest next.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Why</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">02</p>
+<aside>Lead with outcomes the business already cares about: speed, cost, retention, support load, risk and visibility. Each one ties back to a later part of the plan: shared patterns and research reuse drive speed and cost; a coherent cross-product experience drives retention and lower support load; the Definition of UX Quality reduces risk; the quarterly UX Impact Review makes ROI visible. Baseline these during the audit so later gains can be shown with real numbers.</aside>
+</section>
+<section id="challenge" data-transition="fade" style="background:#A93A0B;color:#FBF1E8;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:48px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#FBD9C2">The challenge</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.15;color:#FBF1E8">The risk isn't twenty designers working differently. It's twenty designers optimizing their own areas with no mechanism for one coherent customer experience.</h2>
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="font-size:24px;color:#FBD9C2">Customers buy and use these as one connected platform:</p>
+<div style="display:flex;gap:16px;flex-wrap:wrap">
+<p style="font-size:32px;font-weight:500;padding:14px 32px;border:2px solid #FBF1E8;border-radius:999px">Product A</p>
+<p style="font-size:32px;font-weight:500;padding:14px 32px;border:2px solid #FBF1E8;border-radius:999px">Product B</p>
+<p style="font-size:32px;font-weight:500;padding:14px 32px;border:2px solid #FBF1E8;border-radius:999px">Product C</p>
+<p style="font-size:32px;font-weight:500;padding:14px 32px;border:2px solid #FBF1E8;border-radius:999px">Product D</p>
+<p style="font-size:32px;font-weight:500;padding:14px 32px;border:2px solid #FBF1E8;border-radius:999px">Product E</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#FBD9C2">Introducing DesignOps · Why</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#FBD9C2;text-align:right">03</p>
+<aside>The organizational risk is not inconsistency between people. It is that each product area is optimized locally while customers buy and experience a connected platform.</aside>
+</section>
+<section id="framing" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Positioning</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">Lead with the problem, not the label</h2>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:3;display:flex;flex-direction:column;gap:20px;background:#13262E;padding:48px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#F59E6B">How to frame it for UX leadership</p>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:32px;line-height:1.4;color:#F5F2EC">“We have strong designers producing good outcomes within their individual areas. Our opportunity is to make those outcomes repeatable, discoverable, measurable and connected across the whole product experience.”</p>
+</div>
+<div style="flex:2;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:48px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">What designers hear in “operations”</h3>
+<ul style="font-size:24px;line-height:1.6;color:#5F6A73;text-decoration:line-through">
+<li>More Jira tickets</li>
+<li>More templates</li>
+<li>More governance meetings</li>
+<li>More approvals</li>
+</ul>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:24px">
+<p style="flex:1;font-size:32px;font-weight:600;line-height:1.3;background:#E3EEED;padding:24px 32px;border-radius:16px">Less operational friction</p>
+<x-shape kind="arrow-right" style="width:64px;height:32px;background:#B23C0C"></x-shape>
+<p style="flex:1;font-size:32px;font-weight:600;line-height:1.3;background:#E3EEED;padding:24px 32px;border-radius:16px">More time designing</p>
+<x-shape kind="arrow-right" style="width:64px;height:32px;background:#B23C0C"></x-shape>
+<p style="flex:1;font-size:32px;font-weight:600;line-height:1.3;background:#E3EEED;padding:24px 32px;border-radius:16px">Better cross-product experiences</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Why</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">04</p>
+<aside>Don't open by announcing "DesignOps." Designers often hear "operations" and picture tickets, templates, meetings and approvals. Frame it as removing friction so designers spend more time designing, and the payoff is a more connected cross-product experience.</aside>
+</section>
+<section id="definition" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">What DesignOps is</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">People, process and craft, at scale</h2>
+</div>
+<p style="font-size:32px;line-height:1.45;color:#4A5660;width:1400px">NN/g defines DesignOps as orchestrating people, processes and craft to amplify design's value and impact at scale, and recommends starting with internal research rather than imposed process.</p>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#2E6F73">NN/g · 01</p>
+<h3 style="font-size:32px;font-weight:600;line-height:1.3">How we work together</h3>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#2E6F73">NN/g · 02</p>
+<h3 style="font-size:32px;font-weight:600;line-height:1.3">How we get work done</h3>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#2E6F73">NN/g · 03</p>
+<h3 style="font-size:32px;font-weight:600;line-height:1.3">How our work creates impact</h3>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#13262E;padding:36px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#F59E6B">Platforms add · 04</p>
+<h3 style="font-size:32px;font-weight:600;line-height:1.3;color:#F5F2EC">How do our products feel like one connected platform?</h3>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1300px;font-size:24px;color:#5F6A73">Source: Nielsen Norman Group, DesignOps 101 / study guide</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">05</p>
+<aside>NN/g organizes DesignOps around three questions: how we work together, how we get work done, and how our work creates impact. For a multi-product platform company, add a fourth: how do all of our product experiences feel like one connected platform rather than products designed by separate teams? Source: nngroup.com/articles/design-ops-study-guide.</aside>
+</section>
+<section id="roadmap" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">The roadmap</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">Six phases over twelve months</h2>
+</div>
+<div style="display:grid;grid-template-columns:repeat(6, 1fr);gap:16px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px;border-radius:16px">
+<div style="height:8px;background:#2E6F73;border-radius:4px"></div>
+<p style="font-size:24px;font-weight:600;color:#2E6F73">Phase 1</p>
+<h3 style="font-size:32px;font-weight:600;line-height:1.2">Diagnose the system</h3>
+<p style="font-size:24px;color:#5F6A73">Weeks 1–4</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5660">Audit how the 20 designers actually work.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px;border-radius:16px">
+<div style="height:8px;background:#2E6F73;border-radius:4px"></div>
+<p style="font-size:24px;font-weight:600;color:#2E6F73">Phase 2</p>
+<h3 style="font-size:32px;font-weight:600;line-height:1.2">Create the charter</h3>
+<p style="font-size:24px;color:#5F6A73">Weeks 4–6</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5660">Pick three problems. Define scope.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#13262E;padding:28px;border-radius:16px">
+<div style="height:8px;background:#F59E6B;border-radius:4px"></div>
+<p style="font-size:24px;font-weight:600;color:#F59E6B">Phase 3 · Focus</p>
+<h3 style="font-size:32px;font-weight:600;line-height:1.2;color:#F5F2EC">Build the UX operating system</h3>
+<p style="font-size:24px;color:#BFD3D3">Months 2–4</p>
+<p style="font-size:24px;line-height:1.4;color:#BFD3D3">Lifecycle, intake, research, critique, guilds.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px;border-radius:16px">
+<div style="height:8px;background:#2E6F73;border-radius:4px"></div>
+<p style="font-size:24px;font-weight:600;color:#2E6F73">Phase 4</p>
+<h3 style="font-size:32px;font-weight:600;line-height:1.2">Govern lightly</h3>
+<p style="font-size:24px;color:#5F6A73">Months 3–5</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5660">Decision levels and a shared quality bar.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px;border-radius:16px">
+<div style="height:8px;background:#2E6F73;border-radius:4px"></div>
+<p style="font-size:24px;font-weight:600;color:#2E6F73">Phase 5</p>
+<h3 style="font-size:32px;font-weight:600;line-height:1.2">Make impact visible</h3>
+<p style="font-size:24px;color:#5F6A73">Months 4–6</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5660">A quarterly UX Impact Review.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px;border-radius:16px">
+<div style="height:8px;background:#2E6F73;border-radius:4px"></div>
+<p style="font-size:24px;font-weight:600;color:#2E6F73">Phase 6</p>
+<h3 style="font-size:32px;font-weight:600;line-height:1.2">Formalize DesignOps</h3>
+<p style="font-size:24px;color:#5F6A73">Months 6–12</p>
+<p style="font-size:24px;line-height:1.4;color:#4A5660">Dedicated roles once value is proven.</p>
+</div>
+</div>
+<p style="font-size:32px;line-height:1.4;color:#4A5660">Most of the effort goes into Phase 3: the shared operating system.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Roadmap</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">06</p>
+<aside>Phases overlap deliberately. Diagnose and charter in the first six weeks; spend the bulk of the effort building the operating system; then layer in governance, impact reporting and, only once value is proven, dedicated roles.</aside>
+</section>
+<section id="audit" data-section="Phases 1–2: diagnose the UX system and charter DesignOps" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 1 · Weeks 1–4 · Diagnose</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">Run a UX operating-model audit</h2>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:32px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25;color:#2E6F73">How work flows</h3>
+<ul style="font-size:24px;line-height:1.45;color:#4A5660">
+<li>How does work reach you?</li>
+<li>Who determines priorities?</li>
+<li>How do you collaborate with PM and Engineering?</li>
+<li>Who decides something is ready for engineering?</li>
+</ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:32px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25;color:#2E6F73">How knowledge flows</h3>
+<ul style="font-size:24px;line-height:1.45;color:#4A5660">
+<li>When does research happen?</li>
+<li>Where do research findings live?</li>
+<li>Where do designs live?</li>
+<li>How do you know another team hasn't already solved this?</li>
+</ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:32px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25;color:#2E6F73">How quality is judged</h3>
+<ul style="font-size:24px;line-height:1.45;color:#4A5660">
+<li>How are designs reviewed?</li>
+<li>How is accessibility validated?</li>
+<li>How do you use the design system?</li>
+<li>What takes time but adds little UX value?</li>
+<li>How do you know whether what you shipped worked?</li>
+</ul>
+</div>
+</div>
+<p style="font-size:24px;line-height:1.45;color:#13262E;background:#E3EEED;padding:24px 32px;border-radius:16px">Also interview Product, Engineering, Customer Success, subject-matter experts and UX leadership. <b>Look for systemic friction, not complaints about individuals.</b></p>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 1</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">07</p>
+<aside>Interview every designer, or at minimum a representative from every product area, and ask everyone the same questions so answers are comparable. This follows NN/g's DesignOps planning pattern: survey, interviews, map the design process, identify waste and value, prioritize opportunities. Source: NN/g DesignOps Planning Workbook.</aside>
+</section>
+<section id="ecosystem" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 1 · Map the ecosystem</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">Strong verticals, weak horizontals</h2>
+</div>
+<x-connector x1="303" y1="416" x2="1003" y2="416" head="none" style="color:#13262E;border-width:3px"></x-connector>
+<x-connector x1="653" y1="392" x2="653" y2="440" head="none" style="color:#13262E;border-width:3px"></x-connector>
+<x-connector x1="303" y1="416" x2="303" y2="440" head="none" style="color:#13262E;border-width:3px"></x-connector>
+<x-connector x1="1003" y1="416" x2="1003" y2="440" head="none" style="color:#13262E;border-width:3px"></x-connector>
+<x-connector x1="303" y1="512" x2="303" y2="560" head="none" style="color:#13262E;border-width:8px"></x-connector>
+<x-connector x1="653" y1="512" x2="653" y2="560" head="none" style="color:#13262E;border-width:8px"></x-connector>
+<x-connector x1="1003" y1="512" x2="1003" y2="560" head="none" style="color:#13262E;border-width:8px"></x-connector>
+<x-connector x1="303" y1="632" x2="303" y2="680" head="none" style="color:#13262E;border-width:8px"></x-connector>
+<x-connector x1="653" y1="632" x2="653" y2="680" head="none" style="color:#13262E;border-width:8px"></x-connector>
+<x-connector x1="1003" y1="632" x2="1003" y2="680" head="none" style="color:#13262E;border-width:8px"></x-connector>
+<x-connector x1="303" y1="752" x2="303" y2="800" head="none" style="color:#13262E;border-width:8px"></x-connector>
+<x-connector x1="653" y1="752" x2="653" y2="800" head="none" style="color:#13262E;border-width:8px"></x-connector>
+<x-connector x1="1003" y1="752" x2="1003" y2="800" head="none" style="color:#13262E;border-width:8px"></x-connector>
+<x-connector x1="443" y1="596" x2="513" y2="596" head="none" style="color:#B23C0C;border-width:4px;border-style:dashed"></x-connector>
+<x-connector x1="793" y1="596" x2="863" y2="596" head="none" style="color:#B23C0C;border-width:4px;border-style:dashed"></x-connector>
+<div style="position:absolute;left:403px;top:320px;width:500px;height:72px;display:flex;align-items:center;justify-content:center;background:#13262E;border-radius:12px"><p style="font-size:32px;font-weight:600;color:#F5F2EC">UX leadership</p></div>
+<div style="position:absolute;left:163px;top:440px;width:280px;height:72px;display:flex;align-items:center;justify-content:center;background:#2E6F73;border-radius:12px"><p style="font-size:32px;font-weight:600;color:#F5F2EC">Product A</p></div>
+<div style="position:absolute;left:513px;top:440px;width:280px;height:72px;display:flex;align-items:center;justify-content:center;background:#2E6F73;border-radius:12px"><p style="font-size:32px;font-weight:600;color:#F5F2EC">Product B</p></div>
+<div style="position:absolute;left:863px;top:440px;width:280px;height:72px;display:flex;align-items:center;justify-content:center;background:#2E6F73;border-radius:12px"><p style="font-size:32px;font-weight:600;color:#F5F2EC">Product C</p></div>
+<div style="position:absolute;left:163px;top:560px;width:280px;height:72px;display:flex;align-items:center;justify-content:center;background:#FBFAF7;border:2px solid #13262E;border-radius:12px"><p style="font-size:32px">Designers</p></div>
+<div style="position:absolute;left:513px;top:560px;width:280px;height:72px;display:flex;align-items:center;justify-content:center;background:#FBFAF7;border:2px solid #13262E;border-radius:12px"><p style="font-size:32px">Designers</p></div>
+<div style="position:absolute;left:863px;top:560px;width:280px;height:72px;display:flex;align-items:center;justify-content:center;background:#FBFAF7;border:2px solid #13262E;border-radius:12px"><p style="font-size:32px">Designers</p></div>
+<div style="position:absolute;left:163px;top:680px;width:280px;height:72px;display:flex;align-items:center;justify-content:center;background:#FBFAF7;border:2px solid #13262E;border-radius:12px"><p style="font-size:32px">PM / Eng</p></div>
+<div style="position:absolute;left:513px;top:680px;width:280px;height:72px;display:flex;align-items:center;justify-content:center;background:#FBFAF7;border:2px solid #13262E;border-radius:12px"><p style="font-size:32px">PM / Eng</p></div>
+<div style="position:absolute;left:863px;top:680px;width:280px;height:72px;display:flex;align-items:center;justify-content:center;background:#FBFAF7;border:2px solid #13262E;border-radius:12px"><p style="font-size:32px">PM / Eng</p></div>
+<div style="position:absolute;left:163px;top:800px;width:280px;height:72px;display:flex;align-items:center;justify-content:center;border:2px dashed #5F6A73;border-radius:12px"><p style="font-size:32px;color:#5F6A73">Research?</p></div>
+<div style="position:absolute;left:513px;top:800px;width:280px;height:72px;display:flex;align-items:center;justify-content:center;border:2px dashed #5F6A73;border-radius:12px"><p style="font-size:32px;color:#5F6A73">Research?</p></div>
+<div style="position:absolute;left:863px;top:800px;width:280px;height:72px;display:flex;align-items:center;justify-content:center;border:2px dashed #5F6A73;border-radius:12px"><p style="font-size:32px;color:#5F6A73">Research?</p></div>
+<div style="position:absolute;left:1240px;top:320px;width:552px;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Shared capabilities?</h3>
+<ul style="font-size:24px;line-height:1.5;color:#4A5660">
+<li>Design system</li>
+<li>Research repository</li>
+<li>Accessibility</li>
+<li>UX metrics</li>
+<li>Content standards</li>
+<li>Design reviews</li>
+<li>Customer insights</li>
+</ul>
+<hr style="border-top:1px solid #DDD5C6">
+<p style="font-size:24px;line-height:1.4;color:#13262E"><b>Thick line:</b> strong vertical links, Designer to PM to Engineering.</p>
+<p style="font-size:24px;line-height:1.4;color:#B23C0C"><b>Dashed line:</b> weak horizontal links, designer to designer.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1000px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 1</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">08</p>
+<aside>Create one visualization of the 20 designers and their ecosystem. Expect strong vertical connections (designer, PM, engineering within a product) and weak horizontal ones (designer to designer across products). That horizontal gap is the silo problem DesignOps should attack. Product columns are illustrative; the real map comes from the audit.</aside>
+</section>
+<section id="baseline" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 1 · Establish a baseline</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">Measure the system, not the teams</h2>
+</div>
+<div style="display:flex;gap:48px;align-items:start">
+<table style="width:1120px;font-size:24px;color:#13262E">
+<tr style="background:#13262E"><th style="width:24%;color:#F5F2EC">Dimension</th><th style="width:60%;color:#F5F2EC">Baseline question</th><th style="width:16%;color:#F5F2EC">Today</th></tr>
+<tr><td>Research</td><td>Can designers discover previous research?</td><td>[__]</td></tr>
+<tr style="background:#EDE8DE"><td>Design system</td><td>What % of product UI uses shared components?</td><td>[__]</td></tr>
+<tr><td>Workflow</td><td>Is there a common UX lifecycle?</td><td>[__]</td></tr>
+<tr style="background:#EDE8DE"><td>Quality</td><td>Are there shared quality criteria?</td><td>[__]</td></tr>
+<tr><td>Accessibility</td><td>Is accessibility built into design reviews?</td><td>[__]</td></tr>
+<tr style="background:#EDE8DE"><td>Collaboration</td><td>How often do designers critique across teams?</td><td>[__]</td></tr>
+<tr><td>Knowledge</td><td>Can designers find another team's work?</td><td>[__]</td></tr>
+<tr style="background:#EDE8DE"><td>Outcomes</td><td>Are UX outcomes measured after release?</td><td>[__]</td></tr>
+</table>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Rate each one</h3>
+<p style="font-size:24px;font-weight:600;color:#F5F2EC;background:#2E6F73;padding:12px 20px;border-radius:10px">Consistent</p>
+<p style="font-size:24px;font-weight:600;color:#B23C0C;border:2px solid #B23C0C;padding:10px 18px;border-radius:10px">Inconsistent</p>
+<p style="font-size:24px;font-weight:600;color:#5F6A73;border:2px dashed #5F6A73;padding:10px 18px;border-radius:10px">Missing</p>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">No maturity score. This rates the system, never a team.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 1</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">09</p>
+<aside>Turn the qualitative audit into a measurable baseline across eight dimensions. Avoid a maturity score that ranks teams; a three-level rating keeps the conversation on the system. Fill the Today column from audit results.</aside>
+</section>
+<section id="friction" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 2 · Weeks 4–6 · Prioritize</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">Pick the three highest-friction problems</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Research fragmentation</h3>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">Several teams independently researching the same user workflow.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Pattern fragmentation</h3>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">Products solve tables, filtering, navigation, reporting and permissions differently.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Workflow fragmentation</h3>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">Every designer has a different working relationship with PM and Engineering.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">UX visibility</h3>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">Leadership sees outputs, like Figma files, but not UX outcomes.</p>
+</div>
+</div>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">Likely candidates; the final three come from audit evidence. NN/g cautions against implementing the whole DesignOps menu at once.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 2</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">10</p>
+<aside>Now the conversation runs on evidence rather than opinion. Don't try to fix everything: choose roughly three problems. The right DesignOps activities depend on the organization's highest-value problems. Source: NN/g DesignOps FAQ.</aside>
+</section>
+<section id="charter" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 2 · One-page charter</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">A charter, not a UX police force</h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#13262E;padding:36px 48px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#F59E6B">Mission</p>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:32px;line-height:1.4;color:#F5F2EC">Enable designers to spend more time solving customer problems and less time recreating processes, knowledge and solutions.</p>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:3;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25;color:#2E6F73">DesignOps owns</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<p style="font-size:24px">Ways of working</p>
+<p style="font-size:24px">Research operations</p>
+<p style="font-size:24px">Design system operations</p>
+<p style="font-size:24px">Knowledge management</p>
+<p style="font-size:24px">Design quality</p>
+<p style="font-size:24px">UX measurement</p>
+<p style="font-size:24px">Tooling</p>
+<p style="font-size:24px">UX communications</p>
+<p style="font-size:24px">Career and craft enablement</p>
+</div>
+</div>
+<div style="flex:2;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25;color:#B23C0C">Does not own</h3>
+<ul style="font-size:24px;line-height:1.4;color:#4A5660">
+<li>Product strategy</li>
+<li>Individual design decisions</li>
+<li>Designer performance management</li>
+<li>PM prioritization</li>
+<li>Engineering architecture</li>
+</ul>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 2</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">11</p>
+<aside>Keep the charter to one page. The "does not own" list matters as much as the "owns" list: it is what keeps DesignOps from becoming the UX police.</aside>
+</section>
+<section id="lifecycle" data-section="Phase 3: build the UX operating system" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 3 · Months 2–4 · Operating system</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">One lightweight UX lifecycle</h2>
+</div>
+<div style="display:grid;grid-template-columns:repeat(6, 1fr);gap:16px">
+<div style="display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;border-top:8px solid #2E6F73;padding:28px 24px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#2E6F73">01</p>
+<h3 style="font-size:32px;font-weight:600">Understand</h3>
+<p style="font-size:24px;line-height:1.4;color:#4A5660">Research, analytics, customer evidence</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;border-top:8px solid #2E6F73;padding:28px 24px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#2E6F73">02</p>
+<h3 style="font-size:32px;font-weight:600">Frame</h3>
+<p style="font-size:24px;line-height:1.4;color:#4A5660">Problem statement and intended outcome</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;border-top:8px solid #2E6F73;padding:28px 24px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#2E6F73">03</p>
+<h3 style="font-size:32px;font-weight:600">Explore</h3>
+<p style="font-size:24px;line-height:1.4;color:#4A5660">Flows and concepts</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;border-top:8px solid #2E6F73;padding:28px 24px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#2E6F73">04</p>
+<h3 style="font-size:32px;font-weight:600">Validate</h3>
+<p style="font-size:24px;line-height:1.4;color:#4A5660">Evidence supporting the direction</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;border-top:8px solid #2E6F73;padding:28px 24px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#2E6F73">05</p>
+<h3 style="font-size:32px;font-weight:600">Deliver</h3>
+<p style="font-size:24px;line-height:1.4;color:#4A5660">Design system, accessibility, engineering collaboration</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#13262E;border-top:8px solid #F59E6B;padding:28px 24px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;color:#F59E6B">06</p>
+<h3 style="font-size:32px;font-weight:600;color:#F5F2EC">Measure</h3>
+<p style="font-size:24px;line-height:1.4;color:#BFD3D3">Post-release UX and product signals</p>
+</div>
+</div>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:44px;line-height:1.3;color:#13262E;width:1500px">Expected artifacts, not bureaucratic gates. Product leadership can finally see what “UX work” means across every team.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 3</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">12</p>
+<aside>Not a giant process: six stages anyone can remember. Each stage has expected artifacts, not mandatory ones. Measure is highlighted because it is the stage most teams skip.</aside>
+</section>
+<section id="portfolio" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 3 · UX intake</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">Twenty backlogs become one portfolio</h2>
+</div>
+<div style="display:flex;gap:48px;align-items:center">
+<div style="width:600px;display:flex;flex-direction:column;gap:24px;align-items:start">
+<div style="display:flex;align-items:center;gap:32px">
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:120px;font-weight:600;line-height:1;color:#5F6A73">20</p>
+<p style="font-size:32px;line-height:1.3;color:#4A5660">individual designer backlogs</p>
+</div>
+<x-shape kind="arrow-down" style="width:48px;height:80px;background:#2E6F73"></x-shape>
+<div style="display:flex;align-items:center;gap:32px">
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:120px;font-weight:600;line-height:1;color:#B23C0C">1</p>
+<p style="font-size:32px;line-height:1.3;color:#13262E"><b>shared UX portfolio</b> leadership can see</p>
+</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px;background:#FBFAF7;border:1px solid #DDD5C6;padding:40px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Every significant initiative records</h3>
+<div style="display:flex;flex-wrap:wrap;gap:12px">
+<p style="font-size:24px;background:#E3EEED;padding:8px 20px;border-radius:999px">Problem</p>
+<p style="font-size:24px;background:#E3EEED;padding:8px 20px;border-radius:999px">Product area</p>
+<p style="font-size:24px;background:#E3EEED;padding:8px 20px;border-radius:999px">Designer</p>
+<p style="font-size:24px;background:#E3EEED;padding:8px 20px;border-radius:999px">PM</p>
+<p style="font-size:24px;background:#E3EEED;padding:8px 20px;border-radius:999px">Engineering lead</p>
+<p style="font-size:24px;background:#E3EEED;padding:8px 20px;border-radius:999px">Customer / user</p>
+<p style="font-size:24px;background:#E3EEED;padding:8px 20px;border-radius:999px">Business objective</p>
+<p style="font-size:24px;background:#E3EEED;padding:8px 20px;border-radius:999px">UX objective</p>
+<p style="font-size:24px;background:#E3EEED;padding:8px 20px;border-radius:999px">Research required?</p>
+<p style="font-size:24px;background:#E3EEED;padding:8px 20px;border-radius:999px">Dependencies</p>
+<p style="font-size:24px;background:#E3EEED;padding:8px 20px;border-radius:999px">Status</p>
+<p style="font-size:24px;background:#E3EEED;padding:8px 20px;border-radius:999px">Target release</p>
+<p style="font-size:24px;background:#F9E1D3;padding:8px 20px;border-radius:999px">Outcome metric</p>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 3</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">13</p>
+<aside>Making demand visible is one of the highest-leverage DesignOps changes. A shared portfolio replaces twenty private backlogs, exposes overlaps and dependencies, and ties every initiative to an outcome metric.</aside>
+</section>
+<section id="research" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 3 · Research repository</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">Studies feed reusable knowledge</h2>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25;color:#2E6F73">Users</h3>
+<ul style="font-size:24px;line-height:1.5;color:#4A5660">
+<li>Administrator</li>
+<li>End user</li>
+<li>Manager</li>
+<li>Executive</li>
+<li>[Your key personas]</li>
+</ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25;color:#2E6F73">Themes</h3>
+<ul style="font-size:24px;line-height:1.5;color:#4A5660">
+<li>Onboarding</li>
+<li>Permissions</li>
+<li>Reporting</li>
+<li>Search and navigation</li>
+<li>[Your core workflows]</li>
+</ul>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25;color:#2E6F73">Knowledge chain</h3>
+<div style="display:flex;flex-direction:column">
+<p style="font-size:24px;padding:10px 20px;border:2px solid #13262E;border-radius:10px 10px 0 0">1 · Studies</p>
+<p style="font-size:24px;padding:10px 20px;border:2px solid #13262E;border-top:none">2 · Insights</p>
+<p style="font-size:24px;padding:10px 20px;border:2px solid #13262E;border-top:none">3 · Evidence</p>
+<p style="font-size:24px;padding:10px 20px;border:2px solid #13262E;border-top:none;border-radius:0 0 10px 10px">4 · Recommendations</p>
+</div>
+</div>
+</div>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:32px;line-height:1.4;color:#F5F2EC;background:#13262E;padding:28px 40px;border-radius:16px">Every study produces tagged insights, not a 40-slide research deck.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 3</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">14</p>
+<aside>Insights about users should become organizational knowledge, not project artifacts. Structure the repository by user, by theme and by the chain from study to recommendation, and tag every insight so the next team can find it. Replace the bracketed placeholders with your own personas and workflows.</aside>
+</section>
+<section id="critique" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 3 · Cross-team critique</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">Weekly critique breaks silos fastest</h2>
+</div>
+<div style="display:flex;gap:48px">
+<div style="flex:1;display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;gap:48px">
+<div style="display:flex;flex-direction:column;gap:4px"><p style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#2E6F73">60</p><p style="font-size:24px;color:#4A5660">minutes, weekly</p></div>
+<div style="display:flex;flex-direction:column;gap:4px"><p style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#2E6F73">3</p><p style="font-size:24px;color:#4A5660">presenters</p></div>
+<div style="display:flex;flex-direction:column;gap:4px"><p style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:600;line-height:1.1;color:#2E6F73">~15</p><p style="font-size:24px;color:#4A5660">minutes each</p></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#13262E;padding:36px 40px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#F59E6B">The rule</p>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:44px;line-height:1.25;color:#F5F2EC">Critique the problem and experience, not pixels.</p>
+</div>
+<p style="font-size:24px;color:#4A5660">Rotate facilitators every session.</p>
+</div>
+<div style="width:600px;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:40px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Presenters bring</h3>
+<ol style="font-size:24px;line-height:1.5;color:#4A5660">
+<li>User</li>
+<li>Problem</li>
+<li>Constraints</li>
+<li>Evidence</li>
+<li>Current hypothesis</li>
+<li>Specific feedback requested</li>
+</ol>
+<hr style="border-top:1px solid #DDD5C6">
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:32px;font-style:italic;line-height:1.35;color:#B23C0C">“Wait, we solved that same workflow last quarter.”</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 3</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">15</p>
+<aside>Cross-team critique is one of the fastest ways to break silos. Within a few months designers start discovering duplicated work, and that moment of recognition is exactly the organizational learning we want.</aside>
+</section>
+<section id="guilds" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 3 · UX guilds</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">Overlay guilds instead of reorganizing</h2>
+</div>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<x-icon name="Search" style="color:#2E6F73;width:56px;height:56px"></x-icon>
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">UX Research Guild</h3>
+<p style="font-size:24px;font-weight:600;color:#B23C0C">3–5 designers · 1 steward</p>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">Research standards, insight tagging, study reuse.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<x-icon name="Settings" style="color:#2E6F73;width:56px;height:56px"></x-icon>
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Design System Guild</h3>
+<p style="font-size:24px;font-weight:600;color:#B23C0C">3–5 designers · 1 steward</p>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">Patterns, contributions and adoption across products.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<x-icon name="Verified" style="color:#2E6F73;width:56px;height:56px"></x-icon>
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Accessibility Guild</h3>
+<p style="font-size:24px;font-weight:600;color:#B23C0C">3–5 designers · 1 steward</p>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">Accessibility criteria built into reviews and handoff.</p>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;background:#FBFAF7;border:1px solid #DDD5C6;padding:36px;border-radius:16px">
+<x-icon name="Chart" style="color:#2E6F73;width:56px;height:56px"></x-icon>
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">UX Measurement Guild</h3>
+<p style="font-size:24px;font-weight:600;color:#B23C0C">3–5 designers · 1 steward</p>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">Outcome metrics and the quarterly impact review.</p>
+</div>
+</div>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:32px;line-height:1.4;color:#13262E">Guilds sit across today's structure and distribute DesignOps, so it never depends on one Principal Designer.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 3</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">16</p>
+<aside>Don't reorganize the department yet. Overlay communities of practice across the existing product teams. With twenty designers, four guilds of three to five people each, with one steward per guild, covers the main shared capabilities.</aside>
+</section>
+<section id="designsystem" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 3 · Design system ops</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">From component library to system</h2>
+</div>
+<div style="display:flex;gap:32px">
+<div style="flex:1;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;gap:24px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px 32px;border-radius:16px">
+<h3 style="width:260px;font-size:32px;font-weight:600;line-height:1.2">Foundations</h3>
+<div style="flex:1;display:flex;flex-wrap:wrap;gap:10px">
+<p style="font-size:24px;background:#E3EEED;padding:6px 18px;border-radius:999px">Typography</p>
+<p style="font-size:24px;background:#E3EEED;padding:6px 18px;border-radius:999px">Color</p>
+<p style="font-size:24px;background:#E3EEED;padding:6px 18px;border-radius:999px">Spacing</p>
+<p style="font-size:24px;background:#E3EEED;padding:6px 18px;border-radius:999px">Accessibility</p>
+</div>
+</div>
+<div style="display:flex;gap:24px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px 32px;border-radius:16px">
+<h3 style="width:260px;font-size:32px;font-weight:600;line-height:1.2">Components</h3>
+<div style="flex:1;display:flex;flex-wrap:wrap;gap:10px">
+<p style="font-size:24px;background:#E3EEED;padding:6px 18px;border-radius:999px">Buttons</p>
+<p style="font-size:24px;background:#E3EEED;padding:6px 18px;border-radius:999px">Inputs</p>
+<p style="font-size:24px;background:#E3EEED;padding:6px 18px;border-radius:999px">Tables</p>
+<p style="font-size:24px;background:#E3EEED;padding:6px 18px;border-radius:999px">Navigation</p>
+<p style="font-size:24px;background:#E3EEED;padding:6px 18px;border-radius:999px">Modals</p>
+</div>
+</div>
+<div style="display:flex;gap:24px;align-items:center;background:#13262E;padding:28px 32px;border-radius:16px">
+<div style="width:260px;display:flex;flex-direction:column;gap:6px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.2;color:#F5F2EC">Experience patterns</h3>
+<p style="font-size:24px;color:#F59E6B">Biggest value</p>
+</div>
+<div style="flex:1;display:flex;flex-wrap:wrap;gap:10px">
+<p style="font-size:24px;color:#F5F2EC;border:2px solid #F59E6B;padding:4px 16px;border-radius:999px">Search</p>
+<p style="font-size:24px;color:#F5F2EC;border:2px solid #F59E6B;padding:4px 16px;border-radius:999px">Filtering</p>
+<p style="font-size:24px;color:#F5F2EC;border:2px solid #F59E6B;padding:4px 16px;border-radius:999px">Reporting</p>
+<p style="font-size:24px;color:#F5F2EC;border:2px solid #F59E6B;padding:4px 16px;border-radius:999px">Assignments</p>
+<p style="font-size:24px;color:#F5F2EC;border:2px solid #F59E6B;padding:4px 16px;border-radius:999px">Permissions</p>
+<p style="font-size:24px;color:#F5F2EC;border:2px solid #F59E6B;padding:4px 16px;border-radius:999px">Notifications</p>
+<p style="font-size:24px;color:#F5F2EC;border:2px solid #F59E6B;padding:4px 16px;border-radius:999px">Bulk actions</p>
+</div>
+</div>
+</div>
+<div style="width:460px;display:flex;flex-direction:column;gap:24px;background:#FBFAF7;border:1px solid #DDD5C6;padding:40px;border-radius:16px">
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:32px;line-height:1.35;color:#5F6A73">A shared button saves <b>minutes</b>.</p>
+<hr style="border-top:2px solid #DDD5C6">
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:32px;line-height:1.35;color:#13262E">A shared model for bulk-assigning work to 5,000 users saves <span style="color:#B23C0C"><b>weeks</b></span>, and makes the platform feel coherent.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 3</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">17</p>
+<aside>Design systems often stall as component libraries. Define three layers. For a mature SaaS platform, the experience-pattern layer delivers the most value: shared models for complex, cross-product workflows save teams weeks and make the customer experience coherent.</aside>
+</section>
+<section id="governance" data-section="Phases 4–6: govern lightly, make impact visible, formalize" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 4 · Months 3–5 · Govern lightly</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">Three levels of decisions</h2>
+</div>
+<div style="display:flex;flex-direction:column">
+<div style="display:grid;grid-template-columns:120px 520px 1fr 300px;gap:24px;align-items:center;padding:24px 0;border-top:2px solid #13262E">
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:44px;font-weight:600;color:#2E6F73">1</p>
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Team decision</h3>
+<p style="font-size:24px;line-height:1.4;color:#4A5660">Designer + PM + Engineering. Most work stays here.</p>
+<div style="height:24px;background:#2E6F73;border-radius:12px"></div>
+</div>
+<div style="display:grid;grid-template-columns:120px 520px 1fr 300px;gap:24px;align-items:center;padding:24px 0;border-top:1px solid #DDD5C6">
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:44px;font-weight:600;color:#2E6F73">2</p>
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Shared-pattern decision</h3>
+<p style="font-size:24px;line-height:1.4;color:#4A5660">Design system / guild. When something affects multiple products.</p>
+<div style="width:150px;height:24px;background:#6FA7AB;border-radius:12px"></div>
+</div>
+<div style="display:grid;grid-template-columns:120px 520px 1fr 300px;gap:24px;align-items:center;padding:24px 0;border-top:1px solid #DDD5C6;border-bottom:1px solid #DDD5C6">
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:44px;font-weight:600;color:#2E6F73">3</p>
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Experience-level decision</h3>
+<p style="font-size:24px;line-height:1.4;color:#4A5660">Principal / design leadership. When cross-product behavior changes.</p>
+<div style="width:60px;height:24px;background:#B9D3D4;border-radius:12px"></div>
+</div>
+</div>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:44px;line-height:1.25;color:#F59E6B;background:#13262E;padding:32px 48px;border-radius:16px">Centralize standards. <span style="color:#F5F2EC">Decentralize execution.</span></p>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 4</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">18</p>
+<aside>Avoid central approval for everything. Bars on the right show relative volume: most decisions stay with the team; fewer reach the guilds; only a few need design leadership. The operating principle: centralize standards, decentralize execution.</aside>
+</section>
+<section id="quality" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 4 · Definition of UX quality</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">A shared bar before major releases</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+<div style="display:flex;gap:16px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:24px 28px;border-radius:14px"><x-icon name="CheckCircle" style="color:#2E6F73;width:40px;height:40px"></x-icon><p style="font-size:24px;line-height:1.35">User problem clearly defined</p></div>
+<div style="display:flex;gap:16px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:24px 28px;border-radius:14px"><x-icon name="CheckCircle" style="color:#2E6F73;width:40px;height:40px"></x-icon><p style="font-size:24px;line-height:1.35">Appropriate research or evidence considered</p></div>
+<div style="display:flex;gap:16px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:24px 28px;border-radius:14px"><x-icon name="CheckCircle" style="color:#2E6F73;width:40px;height:40px"></x-icon><p style="font-size:24px;line-height:1.35">Existing patterns evaluated</p></div>
+<div style="display:flex;gap:16px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:24px 28px;border-radius:14px"><x-icon name="CheckCircle" style="color:#2E6F73;width:40px;height:40px"></x-icon><p style="font-size:24px;line-height:1.35">Design system used</p></div>
+<div style="display:flex;gap:16px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:24px 28px;border-radius:14px"><x-icon name="CheckCircle" style="color:#2E6F73;width:40px;height:40px"></x-icon><p style="font-size:24px;line-height:1.35">Accessibility reviewed</p></div>
+<div style="display:flex;gap:16px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:24px 28px;border-radius:14px"><x-icon name="CheckCircle" style="color:#2E6F73;width:40px;height:40px"></x-icon><p style="font-size:24px;line-height:1.35">Content reviewed</p></div>
+<div style="display:flex;gap:16px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:24px 28px;border-radius:14px"><x-icon name="CheckCircle" style="color:#2E6F73;width:40px;height:40px"></x-icon><p style="font-size:24px;line-height:1.35">Edge and error states designed</p></div>
+<div style="display:flex;gap:16px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:24px 28px;border-radius:14px"><x-icon name="CheckCircle" style="color:#2E6F73;width:40px;height:40px"></x-icon><p style="font-size:24px;line-height:1.35">Analytics and measurement defined</p></div>
+<div style="display:flex;gap:16px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:24px 28px;border-radius:14px"><x-icon name="CheckCircle" style="color:#2E6F73;width:40px;height:40px"></x-icon><p style="font-size:24px;line-height:1.35">Validation performed where appropriate</p></div>
+</div>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:44px;line-height:1.25;color:#13262E">Not every box needs a meeting. <span style="color:#B23C0C">The checklist sets expectations.</span></p>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 4</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">19</p>
+<aside>A Definition of UX Quality is a lightweight, shared bar for major experiences before they ship. It is a set of organizational expectations, not a series of review meetings.</aside>
+</section>
+<section id="impact" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 5 · Months 4–6 · Impact</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">Report impact, not output</h2>
+</div>
+<div style="display:flex;gap:32px">
+<div style="width:440px;display:flex;flex-direction:column;gap:20px;background:#13262E;padding:40px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#F59E6B">Stop reporting</p>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:44px;line-height:1.25;color:#BFD3D3;text-decoration:line-through">“UX completed 37 projects.”</p>
+<p style="font-size:24px;line-height:1.45;color:#F5F2EC">Run a quarterly <b>UX Impact Review</b> instead. Exact measures depend on the product.</p>
+</div>
+<div style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:20px">
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px 32px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;color:#2E6F73">Customer</h3>
+<ul style="font-size:24px;line-height:1.45;color:#4A5660"><li>Faster task completion</li><li>Fewer support tickets</li><li>Higher usability</li></ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px 32px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;color:#2E6F73">Product</h3>
+<ul style="font-size:24px;line-height:1.45;color:#4A5660"><li>Higher adoption</li><li>Higher engagement</li><li>Higher completion</li></ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px 32px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;color:#2E6F73">Delivery</h3>
+<ul style="font-size:24px;line-height:1.45;color:#4A5660"><li>Less design-to-dev rework</li><li>More design-system adoption</li><li>Less duplicated research</li></ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px 32px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;color:#2E6F73">Organization</h3>
+<ul style="font-size:24px;line-height:1.45;color:#4A5660"><li>More research reuse</li><li>More cross-team collaboration</li><li>More UX visibility</li></ul>
+</div>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 5</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">20</p>
+<aside>This is the part many DesignOps programs miss. Report outcomes across four lenses: customer, product, delivery and organization. DesignOps research commonly cites standardization, designer enablement, scaling design's reach, productivity, collaboration and quality as major sources of value. Source: NN/g, DesignOps definitions.</aside>
+</section>
+<section id="formalize" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Phase 6 · Months 6–12 · Formalize</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">Prove value, then add headcount</h2>
+</div>
+<x-connector x1="639" y1="430" x2="639" y2="490" head="none" style="color:#13262E;border-width:3px"></x-connector>
+<x-connector x1="639" y1="578" x2="639" y2="660" head="none" style="color:#13262E;border-width:3px"></x-connector>
+<x-connector x1="308" y1="620" x2="970" y2="620" head="none" style="color:#13262E;border-width:3px"></x-connector>
+<x-connector x1="308" y1="620" x2="308" y2="660" head="none" style="color:#13262E;border-width:3px"></x-connector>
+<x-connector x1="970" y1="620" x2="970" y2="660" head="none" style="color:#13262E;border-width:3px"></x-connector>
+<div style="position:absolute;left:339px;top:320px;width:600px;height:110px;display:flex;align-items:center;justify-content:center;background:#13262E;border-radius:12px;padding:16px"><p style="font-size:32px;font-weight:600;line-height:1.2;color:#F5F2EC;text-align:center">Principal UX · DesignOps sponsor</p></div>
+<div style="position:absolute;left:439px;top:490px;width:400px;height:88px;display:flex;align-items:center;justify-content:center;background:#2E6F73;border-radius:12px"><p style="font-size:32px;font-weight:600;color:#F5F2EC">DesignOps Lead</p></div>
+<div style="position:absolute;left:158px;top:660px;width:300px;height:110px;display:flex;align-items:center;justify-content:center;background:#FBFAF7;border:2px dashed #13262E;border-radius:12px;padding:16px"><p style="font-size:32px;line-height:1.2;text-align:center">ResearchOps steward</p></div>
+<div style="position:absolute;left:489px;top:660px;width:300px;height:110px;display:flex;align-items:center;justify-content:center;background:#FBFAF7;border:2px dashed #13262E;border-radius:12px;padding:16px"><p style="font-size:32px;line-height:1.2;text-align:center">Design system steward</p></div>
+<div style="position:absolute;left:820px;top:660px;width:300px;height:110px;display:flex;align-items:center;justify-content:center;background:#FBFAF7;border:2px dashed #13262E;border-radius:12px;padding:16px"><p style="font-size:32px;line-height:1.2;text-align:center">UX guild leads</p></div>
+<p style="position:absolute;left:158px;top:800px;width:962px;font-size:24px;color:#5F6A73;text-align:center">Dashed boxes: partial allocations to start, not full-time roles.</p>
+<div style="position:absolute;left:1240px;top:320px;width:552px;display:flex;flex-direction:column;gap:20px;background:#FBFAF7;border:1px solid #DDD5C6;padding:40px;border-radius:16px">
+<h3 style="font-size:32px;font-weight:600;line-height:1.25">Start small</h3>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">For 20 designers, not a five-person DesignOps department on day one.</p>
+<p style="font-size:24px;line-height:1.45;color:#4A5660">Stewards begin as partial allocations alongside design work.</p>
+<p style="font-size:24px;line-height:1.45;color:#13262E"><b>Make the DesignOps role permanent once the model shows value.</b></p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1000px;font-size:24px;color:#5F6A73">Introducing DesignOps · Phase 6</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">21</p>
+<aside>Only after proving value would I argue for dedicated headcount. Start with a sponsor, a DesignOps lead and stewards on partial allocation; make the role permanent once the model demonstrates value.</aside>
+</section>
+<section id="ninety" data-section="Execution: the first 90 days and the Principal's role" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">Execution</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">The first 90 days</h2>
+</div>
+<table style="width:1664px;font-size:24px;color:#13262E">
+<tr style="background:#13262E"><th style="width:16%;color:#F5F2EC">Time</th><th style="width:46%;color:#F5F2EC">Principal-level action</th><th style="width:38%;color:#F5F2EC">Deliverable</th></tr>
+<tr><td>Weeks 1–2</td><td>Interview designers and stakeholders</td><td>UX friction map</td></tr>
+<tr style="background:#EDE8DE"><td>Weeks 2–3</td><td>Map workflows, tools and research</td><td>Current-state ecosystem</td></tr>
+<tr><td>Week 4</td><td>Identify systemic problems</td><td>DesignOps opportunity map</td></tr>
+<tr style="background:#EDE8DE"><td>Week 5</td><td>Align UX leadership</td><td>DesignOps charter</td></tr>
+<tr><td>Week 6</td><td>Launch UX portfolio</td><td>Visibility across 20 designers</td></tr>
+<tr style="background:#EDE8DE"><td>Week 7</td><td>Launch critique</td><td>Cross-team learning</td></tr>
+<tr><td>Week 8</td><td>Establish guilds</td><td>Distributed ownership</td></tr>
+<tr style="background:#EDE8DE"><td>Weeks 9–10</td><td>Standardize UX lifecycle</td><td>Shared ways of working</td></tr>
+<tr><td>Weeks 10–11</td><td>Establish research repository</td><td>Reusable customer knowledge</td></tr>
+<tr style="background:#F9E1D3"><td>Week 12</td><td>Present baseline and early wins</td><td>Executive DesignOps readout</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Execution</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">22</p>
+<aside>This is the plan I would actually execute. Each step produces a tangible deliverable, ending with an executive readout at week 12 that pairs the baseline with early wins.</aside>
+</section>
+<section id="role" style="background:#F5F2EC;color:#13262E;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:48px">
+<div style="display:flex;flex-direction:column;gap:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#B23C0C">The Principal's role</p>
+<h2 style="font-family:'Source Serif 4', Georgia, serif;font-size:72px;font-weight:500;line-height:1.1;color:#13262E">Architect the system, then hand it off</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+<div style="display:flex;gap:20px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px 32px;border-radius:16px"><p style="font-family:'Source Serif 4', Georgia, serif;font-size:44px;font-weight:600;color:#2E6F73">1</p><h3 style="font-size:32px;font-weight:600;line-height:1.2">Discover the friction</h3></div>
+<div style="display:flex;gap:20px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px 32px;border-radius:16px"><p style="font-family:'Source Serif 4', Georgia, serif;font-size:44px;font-weight:600;color:#2E6F73">2</p><h3 style="font-size:32px;font-weight:600;line-height:1.2">Create the operating model</h3></div>
+<div style="display:flex;gap:20px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px 32px;border-radius:16px"><p style="font-family:'Source Serif 4', Georgia, serif;font-size:44px;font-weight:600;color:#2E6F73">3</p><h3 style="font-size:32px;font-weight:600;line-height:1.2">Establish shared practices</h3></div>
+<div style="display:flex;gap:20px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px 32px;border-radius:16px"><p style="font-family:'Source Serif 4', Georgia, serif;font-size:44px;font-weight:600;color:#2E6F73">4</p><h3 style="font-size:32px;font-weight:600;line-height:1.2">Distribute ownership</h3></div>
+<div style="display:flex;gap:20px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px 32px;border-radius:16px"><p style="font-family:'Source Serif 4', Georgia, serif;font-size:44px;font-weight:600;color:#2E6F73">5</p><h3 style="font-size:32px;font-weight:600;line-height:1.2">Demonstrate impact</h3></div>
+<div style="display:flex;gap:20px;align-items:center;background:#FBFAF7;border:1px solid #DDD5C6;padding:28px 32px;border-radius:16px"><p style="font-family:'Source Serif 4', Georgia, serif;font-size:44px;font-weight:600;color:#2E6F73">6</p><h3 style="font-size:32px;font-weight:600;line-height:1.2">Institutionalize it</h3></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#13262E;padding:36px 48px;border-radius:16px">
+<p style="font-size:24px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#F59E6B">The trap to avoid</p>
+<p style="font-family:'Source Serif 4', Georgia, serif;font-size:32px;line-height:1.4;color:#F5F2EC">If I personally keep every template, critique, repository, research request and design-system decision, I've created a new silo: me.</p>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1200px;font-size:24px;color:#5F6A73">Introducing DesignOps · Execution</p>
+<p style="position:absolute;right:128px;bottom:64px;width:200px;font-size:24px;color:#5F6A73;text-align:right">23</p>
+<aside>The Principal Designer should not become the permanent DesignOps manager. The job is to architect the system, distribute ownership through guilds and stewards, prove impact, and institutionalize it.</aside>
+</section>
+<section id="close" data-transition="fade" style="display:flex; flex-direction:column; gap:40px; justify-content:space-between; padding:128px 128px 160px; background:#13262e">
+  <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:#f59e6b">After 90 days, leadership can answer</p>
+  <h2 style="font-family:'Source Serif 4', Georgia, serif; font-size:72px; font-weight:500; line-height:1.15; color:#f5f2ec">What is UX learning? Where are we duplicating effort? Which customer problems are we solving across products? What measurable impact is UX creating?</h2>
+  <div style="display:flex; flex-direction:column; gap:20px">
+    <x-shape kind="line" style="height:2px; flex:0 0 auto; background:#3c5560"></x-shape>
+    <p style="font-family:'IBM Plex Sans', Arial, sans-serif; font-size:32px; line-height:1.4; color:#bfd3d3">And the final: do all of our products feel like one connected platform, rather than products designed by separate teams?</p>
+  </div>
+  <p style="position:absolute; bottom:64px; left:128px; width:1200px; font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; color:#bfd3d3">Introducing DesignOps</p>
+  <p style="position:absolute; right:128px; bottom:64px; width:200px; font-family:'IBM Plex Sans', Arial, sans-serif; font-size:24px; text-align:right; color:#bfd3d3">24</p>
+  <aside>Close on the questions leadership probably can't answer today, and on the final question that matters most for a multi-product platform.</aside>
+</section>
+</div>
+</main>
+<div id="progress"></div>
+<div id="notes" role="region" aria-label="Speaker notes"></div>
+<nav id="bar" aria-label="Slide controls">
+<button id="prev" aria-label="Previous slide">&#8592;</button>
+<span id="count"></span>
+<button id="next" aria-label="Next slide">&#8594;</button>
+<span class="title">Introducing Design Operations</span>
+<span class="hint">Arrow keys to navigate · N notes · F fullscreen · Esc close</span>
+<button id="notesBtn">Notes</button>
+<button id="fsBtn">Fullscreen</button>
+</nav>
+<script>
+(function(){
+var NS='http://www.w3.org/2000/svg';
+function el(tag,attrs){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);return e;}
+var ICONS={
+ Search:'<circle cx="11" cy="11" r="7.5"/><path d="M21 21l-4.6-4.6"/>',
+ Settings:'<circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
+ Verified:'<path d="M12 21.5s8-3.8 8-10V5.2L12 2.5 4 5.2v6.3c0 6.2 8 10 8 10z"/><path d="M8.8 12l2.2 2.2 4.3-4.4"/>',
+ Chart:'<path d="M3.5 3.5v17h17"/><path d="M8 16.5v-5M12.5 16.5v-9M17 16.5v-7"/>',
+ CheckCircle:'<circle cx="12" cy="12" r="9.5"/><path d="M8.3 12.2l2.5 2.5 4.9-5"/>',
+ Check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+ Lightning:'<path d="M13 2.5L4.5 13.5h6.5l-1 8 8.5-11h-6.5z"/>',
+ Tool:'<path d="M14.7 6.3a4 4 0 005.3 5.3l-8.6 8.6a2 2 0 01-2.8-2.8l8.6-8.6a4 4 0 01-2.5-2.5z"/><path d="M14.7 6.3l2.5-2.5a4 4 0 012.8 2.8l-2.5 2.5"/>',
+ ThumbsUp:'<path d="M7 10.5v10H3.5v-10z"/><path d="M7 10.5l4-8a2.5 2.5 0 012.5 2.5v3.5h5.3a2 2 0 012 2.3l-1.4 8a2 2 0 01-2 1.7H7"/>',
+ Chat:'<path d="M20.5 12a8.5 8.5 0 01-12.4 7.5L3.5 20.5l1.1-4.4A8.5 8.5 0 1120.5 12z"/>',
+ Trust:'<path d="M12 21.5s8-3.8 8-10V5.2L12 2.5 4 5.2v6.3c0 6.2 8 10 8 10z"/>',
+ Activity:'<path d="M21.5 12h-4l-3 8.5-5-17-3 8.5h-4"/>',
+ Users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M16 4.6a3.5 3.5 0 010 6.8M18 14.3c2.2.7 3.5 2.8 3.5 5.7"/>',
+ Lightbulb:'<path d="M9 18h6M10 21.5h4"/><path d="M12 2.5a6.5 6.5 0 00-3.8 11.8c.6.5.8 1.1.8 1.7h6c0-.6.2-1.2.8-1.7A6.5 6.5 0 0012 2.5z"/>'
+};
+function drawShapes(root){
+ root.querySelectorAll('x-shape').forEach(function(s){
+  var k=s.getAttribute('kind')||'rect';
+  if(k==='line'||k==='rect'||k==='rounded')return;
+  var fill=getComputedStyle(s).backgroundColor;s.style.background='transparent';
+  var svg=el('svg',{viewBox:'0 0 100 100',preserveAspectRatio:'none','aria-hidden':'true'});
+  var pts={'arrow-right':'0,30 60,30 60,0 100,50 60,100 60,70 0,70','arrow-left':'100,30 40,30 40,0 0,50 40,100 40,70 100,70','arrow-down':'30,0 70,0 70,60 100,60 50,100 0,60 30,60','arrow-up':'30,100 70,100 70,40 100,40 50,0 0,40 30,40','diamond':'50,0 100,50 50,100 0,50'}[k];
+  if(pts)svg.appendChild(el('polygon',{points:pts,fill:fill}));
+  else if(k==='ellipse')svg.appendChild(el('ellipse',{cx:50,cy:50,rx:50,ry:50,fill:fill}));
+  s.appendChild(svg);
+ });
+ root.querySelectorAll('x-icon').forEach(function(i){
+  var n=i.getAttribute('name');var w=parseFloat(i.style.width)||48,h=parseFloat(i.style.height)||w;
+  i.style.width=w+'px';i.style.height=h+'px';
+  i.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(ICONS[n]||'<circle cx="12" cy="12" r="9"/>')+'</svg>';
+ });
+}
+function drawConnectors(sec){
+ var cs=[].slice.call(sec.querySelectorAll(':scope > x-connector[x1]'));
+ if(!cs.length)return;
+ var svg=el('svg',{viewBox:'0 0 1920 1080',width:1920,height:1080,'aria-hidden':'true'});
+ svg.style.cssText='position:absolute;left:0;top:0;width:1920px;height:1080px;pointer-events:none';
+ var defs=el('defs',{});svg.appendChild(defs);
+ cs.forEach(function(c,idx){
+  var st=c.style,col=st.color||'#13262E',w=parseFloat(st.borderWidth)||2,dash=st.borderStyle;
+  var line=el('line',{x1:c.getAttribute('x1'),y1:c.getAttribute('y1'),x2:c.getAttribute('x2'),y2:c.getAttribute('y2'),stroke:col,'stroke-width':w});
+  if(dash==='dashed')line.setAttribute('stroke-dasharray',(w*3)+' '+(w*2));
+  if(dash==='dotted'){line.setAttribute('stroke-dasharray','0 '+(w*2));line.setAttribute('stroke-linecap','round');}
+  var head=c.getAttribute('head')||'end';
+  if(head!=='none'){var id='ah'+Math.random().toString(36).slice(2);
+   var m=el('marker',{id:id,viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:4,markerHeight:4,orient:'auto-start-reverse'});
+   m.appendChild(el('path',{d:'M0,0 L10,5 L0,10 z',fill:col}));defs.appendChild(m);
+   line.setAttribute('marker-end','url(#'+id+')');if(head==='both')line.setAttribute('marker-start','url(#'+id+')');}
+  svg.appendChild(line);
+ });
+ sec.insertBefore(svg,cs[0]);
+ cs.forEach(function(c){c.remove();});
+}
+var deck=document.getElementById('deck'),secs=[].slice.call(deck.children);
+secs.forEach(function(s){drawShapes(s);drawConnectors(s);});
+var cur=0,notes=document.getElementById('notes'),count=document.getElementById('count'),prog=document.getElementById('progress');
+function fit(){var vp=document.getElementById('viewport');var s=Math.min(vp.clientWidth/1920,vp.clientHeight/1080)*0.96;deck.style.transform='scale('+s+')';}
+function show(i){cur=Math.max(0,Math.min(secs.length-1,i));secs.forEach(function(s,j){s.classList.toggle('active',j===cur);s.setAttribute('aria-hidden',j===cur?'false':'true');});
+ count.textContent=(cur+1)+' / '+secs.length;prog.style.width=((cur+1)/secs.length*100)+'%';
+ var a=secs[cur].querySelector('aside');notes.innerHTML='<b>Speaker notes</b>'+(a?a.innerHTML:'No notes for this slide.');
+ if(location.hash!=='#'+(cur+1))history.replaceState(null,'','#'+(cur+1));}
+document.getElementById('prev').onclick=function(){show(cur-1);};
+document.getElementById('next').onclick=function(){show(cur+1);};
+document.getElementById('notesBtn').onclick=function(){notes.classList.toggle('show');};
+document.getElementById('fsBtn').onclick=function(){if(!document.fullscreenElement)document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();else document.exitFullscreen();};
+document.addEventListener('keydown',function(e){
+ if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].indexOf(e.key)>=0){e.preventDefault();show(cur+1);}
+ else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].indexOf(e.key)>=0){e.preventDefault();show(cur-1);}
+ else if(e.key==='Home')show(0);else if(e.key==='End')show(secs.length-1);
+ else if(e.key==='n'||e.key==='N')notes.classList.toggle('show');
+ else if(e.key==='Escape'&&!document.fullscreenElement)document.getElementById('closeBtn').click();
+ else if(e.key==='f'||e.key==='F')document.getElementById('fsBtn').click();
+});
+var tx=null;document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',function(e){if(tx===null)return;var dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)show(cur+(dx<0?1:-1));tx=null;});
+window.addEventListener('resize',fit);window.addEventListener('hashchange',function(){var n=parseInt(location.hash.slice(1),10);if(n)show(n-1);});
+fit();var n0=parseInt(location.hash.slice(1),10);show(n0?n0-1:0);
+})();
+</script>
+</body>
+</html>
