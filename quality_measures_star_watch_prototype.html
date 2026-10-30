@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star Watch Prototype | Quality Measures Reporter and Ratings</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --white:      #ffffff;
+  --offwhite:   #f8f8f6;
+  --surface:    #eef1f2;
+  --border:     #e0e3e4;
+  --border2:    #ccd2d4;
+  --ink:        #1a1a18;
+  --ink2:       #4a4a46;
+  --ink3:       #8a8a84;
+  --teal:       #006d77;
+  --teal-light: #e8f4f5;
+  --teal-mid:   #b2d8dc;
+  --teal-d:     #00555e;
+  --amber:      #b5621e;
+  --amber-light:#fdf0e6;
+  --gold:       #c99a2e;
+  --green:      #2f7d32;
+  --green-light:#eaf3de;
+  --red:        #a32d2d;
+  --red-light:  #fcebeb;
+  --magenta:    #a0329e;
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  18px;
+  --sans:       'Inter', -apple-system, sans-serif;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 16px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg:  0 12px 40px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.06);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:var(--sans); background:var(--surface); color:var(--ink);
+  line-height:1.5; -webkit-font-smoothing:antialiased; padding:32px; min-height:100vh;
+}
+
+/* ─── outer frame (browser chrome) ─── */
+.proto-frame{
+  max-width:1360px; margin:0 auto; background:var(--white);
+  border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-lg);
+  border:1px solid var(--border2);
+}
+.chrome{ background:#1e1e1e; padding:10px 18px; display:flex; align-items:center; gap:8px; }
+.dot{ width:11px; height:11px; border-radius:50%; }
+.url-bar{
+  flex:1; background:rgba(255,255,255,.07); border-radius:6px; height:24px;
+  margin:0 16px; display:flex; align-items:center; padding:0 14px;
+}
+.url-bar span{ font-size:11px; color:rgba(255,255,255,.35); letter-spacing:.01em; }
+.proto-tag{
+  font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  color:rgba(255,255,255,.3); white-space:nowrap;
+}
+
+/* ─── app topbar (matches Supply Chain variant teal) ─── */
+.app-topbar{
+  background:var(--teal); height:52px; padding:0 24px;
+  display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
+}
+.app-brand{ display:flex; align-items:center; gap:10px; }
+.app-brand-mark{
+  width:22px; height:22px; background:linear-gradient(135deg,var(--teal-mid),var(--teal));
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+.app-brand-text{ font-size:13px; font-weight:700; letter-spacing:.06em; color:#fff; text-transform:uppercase; }
+.app-nav{ display:flex; align-items:center; gap:4px; }
+.app-nav-item{
+  font-size:12px; font-weight:600; padding:8px 16px; border-radius:7px; cursor:default;
+  color:rgba(255,255,255,.55); transition:background .12s,color .12s;
+}
+.app-nav-item.on{ color:rgba(255,255,255,.92); }
+.app-nav-item.active{ background:rgba(255,255,255,.15); color:#fff; }
+.app-topbar-right{ display:flex; align-items:center; gap:14px; }
+.app-avatar{
+  width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,.18);
+  display:flex; align-items:center; justify-content:center; color:#fff; font-size:15px;
+}
+.app-caret{ color:rgba(255,255,255,.5); font-size:10px; }
+
+/* ─── breadcrumb ─── */
+.crumb-bar{ background:var(--white); border-bottom:1px solid var(--border); padding:10px 24px; }
+.crumb-bar span{ font-size:12px; color:var(--ink3); }
+.crumb-bar a{ font-size:12px; color:var(--teal); text-decoration:none; cursor:pointer; font-weight:500; }
+.crumb-bar a:hover{ text-decoration:underline; }
+
+/* ─── page header ─── */
+.page-header{
+  background:var(--white); border-bottom:1px solid var(--border);
+  padding:18px 24px 20px; display:flex; align-items:flex-start; justify-content:space-between; gap:24px; flex-wrap:wrap;
+}
+.ph-left h1{ font-size:22px; font-weight:600; color:var(--ink); margin-bottom:6px; }
+.ph-left .stars{ font-size:13px; color:var(--ink2); }
+.ph-left .stars .star-fill{ color:var(--gold); }
+.ph-left .stars .star-empty{ color:var(--border2); }
+.ph-filters{ display:flex; gap:10px; flex-wrap:wrap; }
+.pf-item{
+  border:1px solid var(--border2); border-radius:var(--radius-sm); background:var(--offwhite);
+  padding:7px 32px 7px 12px; position:relative; min-width:130px;
+}
+.pf-label{ font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink3); margin-bottom:2px; }
+.pf-val{ font-size:12px; font-weight:600; color:var(--teal); }
+.pf-item::after{
+  content:'▾'; position:absolute; right:10px; top:50%; transform:translateY(-50%);
+  color:var(--ink3); font-size:10px;
+}
+
+/* ─── main ─── */
+.main{ background:var(--surface); min-height:640px; }
+.screen{ display:none; padding:22px 24px 40px; }
+.screen.active{ display:block; }
+.section-h{ font-size:15px; font-weight:600; color:var(--ink); margin-bottom:14px; }
+
+/* ─── category cards (overview) ─── */
+.cat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.cat-card{
+  background:var(--white); border:1px solid var(--border); border-radius:var(--radius-md);
+  padding:20px 22px 22px; box-shadow:var(--shadow-sm); cursor:pointer; transition:box-shadow .15s,transform .15s;
+}
+.cat-card:hover{ box-shadow:var(--shadow-md); transform:translateY(-1px); }
+.cat-card.disabled{ cursor:default; }
+.cat-card.disabled:hover{ box-shadow:var(--shadow-sm); transform:none; }
+.cat-title{ font-size:13px; font-weight:700; letter-spacing:.04em; color:var(--teal); text-transform:uppercase; margin-bottom:8px; }
+.cat-meta{ font-size:11.5px; color:var(--ink3); border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:8px; }
+.cat-stats{ display:flex; gap:36px; margin-top:14px; }
+.cs-num{ font-size:19px; font-weight:700; color:var(--ink); }
+.cs-num.muted{ color:var(--ink3); font-weight:600; }
+.cs-underline{ height:2px; width:100%; margin:6px 0 6px; border-radius:2px; }
+.cs-underline.teal{ background:var(--teal); }
+.cs-underline.gold{ background:none; border-top:2px dashed var(--gold); }
+.cs-label{ font-size:10.5px; color:var(--ink2); line-height:1.35; }
+.cat-note{ margin-top:14px; font-size:11px; color:var(--ink3); font-style:italic; border-top:1px dashed var(--border); padding-top:10px; }
+
+/* ─── big panel (category / measure detail) ─── */
+.panel{ background:var(--white); border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:var(--shadow-sm); padding:22px 24px 24px; margin-bottom:22px; }
+.panel-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:16px; margin-bottom:4px; }
+.panel-title{ font-size:14px; font-weight:700; letter-spacing:.03em; color:var(--teal); text-transform:uppercase; display:flex; align-items:center; gap:8px; }
+.panel-title .m-icon{ font-size:14px; }
+.panel-sub{ font-size:11.5px; color:var(--ink3); margin:6px 0 2px; }
+.proj-toggle{ display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--ink2); cursor:pointer; user-select:none; white-space:nowrap; }
+.proj-toggle input{ width:14px; height:14px; accent-color:var(--teal); cursor:pointer; }
+
+/* chart svg text */
+.chart-wrap{ position:relative; }
+.chart-wrap svg text{ font-family:var(--sans); }
+.tooltip-box{
+  position:absolute; background:var(--ink); color:#fff; border-radius:8px; padding:10px 12px;
+  font-size:10.5px; line-height:1.7; box-shadow:var(--shadow-lg); pointer-events:none;
+  opacity:0; transition:opacity .12s; z-index:5; white-space:nowrap;
+}
+.tooltip-box.show{ opacity:1; }
+.tooltip-box .tt-title{ font-weight:700; margin-bottom:4px; font-size:11px; }
+.tt-dot{ display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:6px; }
+
+/* stat row under chart */
+.stat-row{ display:grid; margin-top:16px; border-top:1px solid var(--border); }
+.stat-row.n5{ grid-template-columns:repeat(5,1fr); }
+.stat-row.n2{ grid-template-columns:repeat(2,1fr); }
+.stat-cell{ text-align:center; padding:14px 8px 4px; }
+.stat-num{ font-size:19px; font-weight:700; color:var(--ink); }
+.stat-line{ height:2px; width:56px; margin:8px auto 8px; border-radius:2px; }
+.stat-line.solid-teal{ background:var(--teal); }
+.stat-line.dot-magenta{ border-top:2px dotted var(--magenta); }
+.stat-line.solid-gold{ background:var(--gold); }
+.stat-line.dash-gold{ border-top:2px dashed var(--gold); }
+.stat-line.none{ background:transparent; }
+.stat-label{ font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink3); font-weight:700; }
+.footnote{ text-align:right; font-size:10px; color:var(--ink3); font-style:italic; padding:6px 4px 0; }
+
+/* legend */
+.legend{ display:flex; gap:22px; align-items:center; margin:2px 0 14px; flex-wrap:wrap; }
+.legend-item{ display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--ink2); }
+
+/* table */
+.tbl-wrap{ background:var(--white); border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-sm); }
+table{ width:100%; border-collapse:collapse; }
+thead tr{ background:var(--offwhite); }
+th{ font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--ink3); padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); white-space:nowrap; }
+td{ font-size:12px; color:var(--ink2); padding:11px 14px; border-bottom:1px solid var(--border); vertical-align:middle; white-space:nowrap; }
+tr:last-child td{ border-bottom:none; }
+tr.row-link:hover td{ background:var(--teal-light); cursor:pointer; }
+tr.row-link.no-link:hover td{ background:transparent; cursor:default; }
+.m-name{ color:var(--teal); font-weight:500; white-space:normal; }
+.m-icon-cell{ display:flex; align-items:center; gap:8px; }
+.icon-pass{ color:var(--green); }
+.icon-fail{ color:var(--red); }
+.icon-na{ color:var(--ink3); }
+.dim{ color:var(--ink3); }
+
+@media (max-width:900px){
+  .cat-grid{ grid-template-columns:1fr; }
+  .stat-row.n5{ grid-template-columns:repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+
+<div class="proto-frame">
+  <!-- Browser chrome -->
+  <div class="chrome">
+    <div class="dot" style="background:#ff5f57;"></div>
+    <div class="dot" style="background:#febc2e;"></div>
+    <div class="dot" style="background:#28c840;"></div>
+    <div class="url-bar"><span id="url-display">premierconnect.com/starwatch</span></div>
+    <div class="proto-tag">Interactive Prototype</div>
+  </div>
+
+  <!-- App topbar -->
+  <div class="app-topbar">
+    <div class="app-brand">
+      <div class="app-brand-mark"></div>
+      <div class="app-brand-text">Quality Measures Reporter and Ratings</div>
+    </div>
+    <div class="app-nav">
+      <div class="app-nav-item">Quality Measures Reporter</div>
+      <div class="app-nav-item on">Pay for Performance</div>
+      <div class="app-nav-item active">Star Watch</div>
+    </div>
+    <div class="app-topbar-right">
+      <div class="app-avatar">👤</div>
+      <div class="app-caret">▾</div>
+    </div>
+  </div>
+
+  <!-- Breadcrumb -->
+  <div class="crumb-bar">
+    <a onclick="goTo('overview')">PremierConnect</a><span> / </span><a onclick="goTo('overview')">Star Watch</a><span id="crumb-extra"></span>
+  </div>
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="ph-left">
+      <h1>Premier General (S19175) | Q4 2019</h1>
+      <div class="stars">Q4 2018 CMS Star Rating <span class="star-fill">★★★</span><span class="star-empty">★★</span></div>
+    </div>
+    <div class="ph-filters" id="ph-filters"><!-- populated by JS --></div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+
+    <!-- ══════════ SCREEN 1: OVERVIEW ══════════ -->
+    <div class="screen active" id="screen-overview">
+      <div class="section-h">Measure Category Performance</div>
+      <div class="cat-grid">
+
+        <div class="cat-card" onclick="goTo('category','mortality')">
+          <div class="cat-title">Mortality</div>
+          <div class="cat-meta">Weight : 22%&nbsp;&nbsp;|&nbsp;&nbsp;Measure Category Score: X.XX &nbsp;(Q4 2018 score X.XX)</div>
+          <div class="chart-wrap" id="chart-ov-mortality" style="height:150px;"></div>
+          <div class="cat-stats">
+            <div><div class="cs-num">1 of 7</div><div class="cs-underline teal"></div><div class="cs-label">Measures Exceeding<br>Premier Average</div></div>
+            <div><div class="cs-num muted">-- of 7</div><div class="cs-underline gold"></div><div class="cs-label">Measures Exceeding<br>CMS Average</div></div>
+          </div>
+        </div>
+
+        <div class="cat-card" onclick="goTo('category','readmission')">
+          <div class="cat-title">Readmission</div>
+          <div class="cat-meta">Weight : 22%&nbsp;&nbsp;|&nbsp;&nbsp;Measure Category Score: X.XX &nbsp;(Q4 2018 score X.XX)</div>
+          <div class="chart-wrap" id="chart-ov-readmission" style="height:150px;"></div>
+          <div class="cat-stats">
+            <div><div class="cs-num">1 of 4</div><div class="cs-underline teal"></div><div class="cs-label">Measures Exceeding<br>Premier Average</div></div>
+            <div><div class="cs-num muted">-- of 8</div><div class="cs-underline gold"></div><div class="cs-label">Measures Exceeding<br>CMS Average</div></div>
+          </div>
+        </div>
+
+        <div class="cat-card" onclick="goTo('category','safety')">
+          <div class="cat-title">Safety of Care</div>
+          <div class="cat-meta">Weight : 22%&nbsp;&nbsp;|&nbsp;&nbsp;Measure Category Score: X.XX &nbsp;(Q4 2018 score X.XX)</div>
+          <div class="chart-wrap" id="chart-ov-safety" style="height:150px;"></div>
+          <div class="cat-stats">
+            <div><div class="cs-num">4 of 8</div><div class="cs-underline teal"></div><div class="cs-label">Measures Exceeding<br>Premier Average</div></div>
+            <div><div class="cs-num muted">-- of 8</div><div class="cs-underline gold"></div><div class="cs-label">Measures Exceeding<br>CMS Average</div></div>
+          </div>
+        </div>
+
+        <div class="cat-card" onclick="goTo('category','experience')">
+          <div class="cat-title">Patient Experience</div>
+          <div class="cat-meta">Weight : 22%&nbsp;&nbsp;|&nbsp;&nbsp;Measure Category Score: X.XX &nbsp;(Q4 2018 score X.XX)</div>
+          <div class="chart-wrap" id="chart-ov-experience" style="height:150px;"></div>
+          <div class="cat-stats">
+            <div><div class="cs-num muted">-- of 10</div><div class="cs-underline teal"></div><div class="cs-label">Measures Exceeding<br>Premier Average</div></div>
+            <div><div class="cs-num muted">-- of 10</div><div class="cs-underline gold"></div><div class="cs-label">Measures Exceeding<br>CMS Average</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════ SCREEN 2: CATEGORY DETAIL ══════════ -->
+    <div class="screen" id="screen-category">
+      <div class="panel">
+        <div class="panel-top">
+          <div class="panel-title" id="cat-detail-title">MORTALITY</div>
+        </div>
+        <div class="panel-sub" id="cat-detail-meta">Weight : 22%  |  Measure Category Score: X.XX  (Q4 2018 score X.XX)</div>
+        <div class="chart-wrap" id="chart-cat-big" style="height:300px;margin-top:8px;"></div>
+        <div class="stat-row n2" id="cat-detail-stats"></div>
+      </div>
+
+      <div id="cat-detail-table-wrap"></div>
+    </div>
+
+    <!-- ══════════ SCREEN 3/4: MEASURE DETAIL ══════════ -->
+    <div class="screen" id="screen-measure">
+      <div class="panel">
+        <div class="panel-top">
+          <div class="panel-title"><span class="m-icon icon-fail">⊗</span> Acute Myocardial Infarction (AMI) 30-Day Mortality Rate</div>
+          <label class="proj-toggle"><input type="checkbox" id="proj-checkbox" onchange="toggleProjection()"> Show Projection</label>
+        </div>
+        <div class="panel-sub">CATEGORY: MORTALITY &nbsp;|&nbsp; Lower Rate is better</div>
+        <div class="panel-sub">Performance Period: Q1 2016 - Q4 2018</div>
+        <div class="chart-wrap" style="height:300px;margin-top:8px;">
+          <div id="chart-measure"></div>
+          <div class="tooltip-box" id="measure-tooltip">
+            <div class="tt-title">Q3 2019</div>
+            <div><span class="tt-dot" style="background:#2fb0bd;"></span>Premier Rate: 14.25%</div>
+            <div><span class="tt-dot" style="background:var(--gold);"></span>Est. CMS Rate: 15.0%</div>
+            <div><span class="tt-dot" style="background:var(--magenta);"></span>Premier Avg: 12.5%</div>
+            <div>CI Range: &nbsp;14.0% - 16.0%</div>
+          </div>
+        </div>
+        <div class="stat-row n5">
+          <div class="stat-cell"><div class="stat-num">16.1%</div><div class="stat-line solid-teal"></div><div class="stat-label">Premier Facility Rate</div></div>
+          <div class="stat-cell"><div class="stat-num">7.7%</div><div class="stat-line dot-magenta"></div><div class="stat-label">Premier Average</div></div>
+          <div class="stat-cell" id="cms-stat-cell"><div class="stat-num">--</div><div class="stat-line none"></div><div class="stat-label">CMS Facility Rate</div></div>
+          <div class="stat-cell"><div class="stat-num">6</div><div class="stat-line none"></div><div class="stat-label">Premier Percentile</div></div>
+          <div class="stat-cell"><div class="stat-num">330</div><div class="stat-line none"></div><div class="stat-label">Eligible Discharges</div></div>
+        </div>
+        <div class="footnote">* CMS Star Rating Release Date</div>
+      </div>
+
+      <div class="section-h">Service Line Performance for Acute Myocardial Infarction (AMI) 30-Day Mortality Rate</div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Service Line (MSDRG Business Line)</th><th>Eligible Discharges</th><th>Observed Deaths</th><th>Observed Rate</th><th>Expected Deaths</th><th>Expected Rate</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="m-name" style="cursor:default;">Cardiology</td><td>321</td><td>47</td><td>14.6%</td><td>41.3</td><td>12.9%</td></tr>
+            <tr><td class="m-name" style="cursor:default;">General Surgery</td><td>6</td><td>6</td><td>100.0%</td><td>4.9</td><td>81.7%</td></tr>
+            <tr><td class="m-name" style="cursor:default;">Vascular Surgery</td><td>3</td><td>0</td><td>0.0%</td><td>0.2</td><td>6.7%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const QLABELS  = ['Q1 2018','Q2 2018','Q3 2018','Q4 2018','Q1 2019','Q2 2019','Q3 2019','Q4 2019'];
+
+/* ─────────────────────────────────────────────
+   Generic SVG line-chart renderer
+───────────────────────────────────────────── */
+function renderChart(containerId, opts){
+  const el = document.getElementById(containerId);
+  const width = el.clientWidth || opts.width || 560;
+  const height = opts.height || el.clientHeight || 170;
+  const mL = opts.marginLeft!==undefined?opts.marginLeft:34;
+  const mR = opts.marginRight!==undefined?opts.marginRight:14;
+  const mT = opts.marginTop!==undefined?opts.marginTop:14;
+  const mB = opts.marginBottom!==undefined?opts.marginBottom:26;
+  const plotW = width - mL - mR;
+  const plotH = height - mT - mB;
+  const n = QLABELS.length;
+  const xStep = plotW/(n-1);
+  const yMin = opts.yMin || 0;
+  const yMax = opts.yMax;
+  function X(i){ return mL + i*xStep; }
+  function Y(v){ return mT + plotH - ((v-yMin)/(yMax-yMin))*plotH; }
+
+  let svg = `<svg width="100%" height="${height}" viewBox="0 0 ${width} ${height}" style="overflow:visible;">`;
+
+  /* gridlines + y ticks */
+  (opts.yTicks||[]).forEach(t=>{
+    const val = (typeof t==='object') ? t.v : t;
+    const label = (typeof t==='object') ? t.label : t;
+    const y = Y(val);
+    svg += `<line x1="${mL}" y1="${y}" x2="${mL+plotW}" y2="${y}" stroke="#e8eaea" stroke-width="1"/>`;
+    svg += `<text x="${mL-8}" y="${y+3}" font-size="9.5" fill="#8a8a84" text-anchor="end">${label}</text>`;
+  });
+
+  /* x labels */
+  QLABELS.forEach((lab,i)=>{
+    svg += `<text x="${X(i)}" y="${height-6}" font-size="9" fill="#8a8a84" text-anchor="middle">${i===3&&opts.starMark?'*'+lab:lab}</text>`;
+  });
+
+  /* confidence band (drawn first, under lines) */
+  if(opts.band && opts.band.show){
+    const idxs = opts.band.indices;
+    let top = '', bot = '';
+    idxs.forEach((i,k)=>{ top += `${X(i)},${Y(opts.band.high[k])} `; });
+    for(let k=idxs.length-1;k>=0;k--){ bot += `${X(idxs[k])},${Y(opts.band.low[k])} `; }
+    svg += `<polygon points="${top}${bot}" fill="${opts.band.color||'#b2d8dc'}" opacity="0.35"/>`;
+  }
+
+  /* series */
+  (opts.series||[]).forEach(s=>{
+    if(s.show===false) return;
+    let pts = '';
+    s.indices.forEach((i,k)=>{ if(s.values[k]!==null) pts += `${X(i)},${Y(s.values[k])} `; });
+    svg += `<polyline points="${pts.trim()}" fill="none" stroke="${s.color}" stroke-width="${s.width||2}" ${s.dash?`stroke-dasharray="${s.dash}"`:''} stroke-linecap="round" stroke-linejoin="round"/>`;
+    if(s.dots!==false){
+      s.indices.forEach((i,k)=>{
+        if(s.values[k]===null) return;
+        svg += `<circle cx="${X(i)}" cy="${Y(s.values[k])}" r="${s.dotR||3}" fill="${s.color}"/>`;
+      });
+    }
+  });
+
+  /* hover target for tooltip */
+  if(opts.hoverPoint){
+    const hp = opts.hoverPoint;
+    svg += `<circle class="hover-target" cx="${X(hp.index)}" cy="${Y(hp.value)}" r="9" fill="transparent" style="cursor:pointer;" data-hx="${X(hp.index)}" data-hy="${Y(hp.value)}"/>`;
+  }
+
+  svg += `</svg>`;
+  el.innerHTML = svg;
+
+  /* wire up hover tooltip */
+  if(opts.hoverPoint && opts.tooltipId){
+    const target = el.querySelector('.hover-target');
+    const tip = document.getElementById(opts.tooltipId);
+    if(target && tip){
+      target.addEventListener('mouseenter', ()=>{
+        const hx = parseFloat(target.getAttribute('data-hx'));
+        const hy = parseFloat(target.getAttribute('data-hy'));
+        tip.style.left = (hx+14)+'px';
+        tip.style.top  = (hy-70)+'px';
+        tip.classList.add('show');
+      });
+      target.addEventListener('mouseleave', ()=> tip.classList.remove('show'));
+    }
+  }
+}
+
+/* ─────────────────────────────────────────────
+   Data
+───────────────────────────────────────────── */
+const ALL_IDX = [0,1,2,3,4,5,6,7];
+
+const DATA = {
+  mortality: {
+    premier:   [2,2,0.3,1,1,1,1,1],
+    cmsAvg:    [1,1,1,1,1,1,1,1],
+    yMax:4, yTicks:[0,2,4]
+  },
+  readmission: {
+    premier:   [0,0,0,0,0,0,0,0],
+    cmsAvg:    [5,3.3,3.2,3.1,1,0.3,0.3,0.3],
+    yMax:5, yTicks:[0,5]
+  },
+  safety: {
+    premier:   [1,1.3,3,3,2,3,3,4],
+    cmsAvg:    [0.3,1,3,2.2,1.8,2.3,2.6,3],
+    yMax:5, yTicks:[0,5]
+  },
+  experience: {
+    premier:   null,
+    cmsAvg:    [5.2,5.1,5,4.3,5.6,5.5,5.4,5.4],
+    yMax:6, yTicks:[5]
+  }
+};
+
+const AMI = {
+  premier:  [8.3,10.3,10.1,11.3,11.8,13.0,14.25,16.1],
+  average:  [8.4,9.7,10.9,11.4,11.8,12.1,12.5,7.7],
+  cmsHist:  [13.8,14.05,14.0,14.0,null,null,null,null],
+  proj:     [14.0,14.3,14.8,15.0,15.5],       // indices 3..7
+  bandLow:  [13.8,13.7,13.9,14.0,14.0],
+  bandHigh: [14.2,14.7,15.3,16.0,17.3],
+  yMax:16, yTicks:[{v:8,label:'8.0%'},{v:10,label:'10.0%'},{v:12,label:'12.0%'},{v:14,label:'14.0%'},{v:16,label:'16.0%'}]
+};
+
+/* ─────────────────────────────────────────────
+   Category table data (mortality only, verbatim)
+───────────────────────────────────────────── */
+const MORTALITY_MEASURES = [
+  {name:'Death Among Surgical Patients with Serious Treatable Complications (PSI-4)', icon:'fail', lc:'0.71', pctl:'3', pfr:'333.33', pavg:'136.75', cfr:'--', cavg:'--', link:false},
+  {name:'Acute Myocardial Infarction (AMI) 30-Day Mortality Rate', icon:'fail', lc:'0.51', pctl:'6', pfr:'16.1%', pavg:'7.7%', cfr:'--', cavg:'--', link:true},
+  {name:'Heart Failure (HF) 30-Day Mortality Rate', icon:'fail', lc:'0.68', pctl:'6', pfr:'5.3%', pavg:'2.8%', cfr:'--', cavg:'--', link:false},
+  {name:'Pneumonia (PN) 30-Day Mortality Rate', icon:'fail', lc:'0.66', pctl:'9', pfr:'8.5%', pavg:'5.2%', cfr:'--', cavg:'--', link:false},
+  {name:'Chronic Obstructive Pulmonary Disease (COPD) 30-Day Mortality Rate', icon:'fail', lc:'0.28', pctl:'11', pfr:'4.4%', pavg:'2.5%', cfr:'--', cavg:'--', link:false},
+  {name:'Acute Ischemic Stroke (STK) 30-Day Mortality Rate', icon:'pass', lc:'0.48', pctl:'45', pfr:'3.5%', pavg:'3.9%', cfr:'--', cavg:'--', link:false},
+  {name:'Coronary Artery Bypass Graft (CABG) 30-Day Mortality Rate', icon:'na', lc:'--', pctl:'--', pfr:'--', pavg:'2.8%', cfr:'--', cavg:'--', link:false},
+];
+
+const CAT_META = {
+  mortality:   {title:'Mortality',          p1:'1 of 7', p2:'-- of 7'},
+  readmission: {title:'Readmission',        p1:'1 of 4', p2:'-- of 8'},
+  safety:      {title:'Safety of Care',     p1:'4 of 8', p2:'-- of 8'},
+  experience:  {title:'Patient Experience', p1:'-- of 10', p2:'-- of 10'}
+};
+
+/* ─────────────────────────────────────────────
+   Navigation
+───────────────────────────────────────────── */
+let currentCategory = 'mortality';
+
+function goTo(screen, category){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+screen).classList.add('active');
+  if(category) currentCategory = category;
+
+  const crumb = document.getElementById('crumb-extra');
+  const urlDisplay = document.getElementById('url-display');
+  const filters = document.getElementById('ph-filters');
+
+  if(screen==='overview'){
+    crumb.innerHTML = '';
+    urlDisplay.textContent = 'premierconnect.com/starwatch';
+    filters.innerHTML = filterHTML(['Health System','Premier Health System'],['CCN','Premier General'],['Time Interval','Q4 2019'],['Comparator','Average']);
+    setTimeout(drawOverviewCharts,0);
+  }
+  if(screen==='category'){
+    crumb.innerHTML = ' / <a onclick="goTo(\'category\',\''+currentCategory+'\')">Measure Category Detail</a>';
+    urlDisplay.textContent = 'premierconnect.com/starwatch/category/'+currentCategory;
+    filters.innerHTML = filterHTML(['Time Interval','Q4 2019'],['Comparator','Average'],['Measure Category Performance', CAT_META[currentCategory].title.toUpperCase()]);
+    renderCategoryScreen(currentCategory);
+  }
+  if(screen==='measure'){
+    crumb.innerHTML = ' / <a onclick="goTo(\'category\',\''+currentCategory+'\')">Measure Category Detail</a> / <span>Measure Detail</span>';
+    urlDisplay.textContent = 'premierconnect.com/starwatch/measure/ami-30day-mortality';
+    filters.innerHTML = filterHTML(['Time Interval','Q4 2019'],['Comparator','Average'],['Measure','Acute Myocardial Infarction (AMI)']);
+    setTimeout(drawMeasureChart,0);
+  }
+}
+
+function filterHTML(...pairs){
+  return pairs.map(p=>`<div class="pf-item"><div class="pf-label">${p[0]}</div><div class="pf-val">${p[1]}</div></div>`).join('');
+}
+
+/* ─────────────────────────────────────────────
+   Overview charts
+───────────────────────────────────────────── */
+function drawOverviewCharts(){
+  Object.keys(DATA).forEach(key=>{
+    const d = DATA[key];
+    const series = [];
+    if(d.premier) series.push({indices:ALL_IDX, values:d.premier, color:'#006d77', width:2.4});
+    series.push({indices:ALL_IDX, values:d.cmsAvg, color:'#c99a2e', width:2, dash:'5,4', dots:false});
+    renderChart('chart-ov-'+key, {yMax:d.yMax, yTicks:d.yTicks, series, height:150});
+  });
+}
+
+/* ─────────────────────────────────────────────
+   Category detail screen
+───────────────────────────────────────────── */
+function renderCategoryScreen(key){
+  const meta = CAT_META[key];
+  document.getElementById('cat-detail-title').textContent = meta.title.toUpperCase();
+  const p1Style = meta.p1.startsWith('--') ? 'style="color:var(--ink3);"' : '';
+  document.getElementById('cat-detail-stats').innerHTML = `
+    <div class="stat-cell"><div class="stat-num" ${p1Style}>${meta.p1}</div><div class="stat-line solid-teal"></div><div class="stat-label">Measures Exceeding<br>Premier Average</div></div>
+    <div class="stat-cell"><div class="stat-num" style="color:var(--ink3);">${meta.p2}</div><div class="stat-line gold" style="border-top:2px dashed var(--gold);background:none;"></div><div class="stat-label">Measures Exceeding<br>CMS Average</div></div>
+  `;
+
+  const d = DATA[key];
+  const series = [];
+  if(d.premier) series.push({indices:ALL_IDX, values:d.premier, color:'#006d77', width:2.6});
+  series.push({indices:ALL_IDX, values:d.cmsAvg, color:'#c99a2e', width:2, dash:'6,5', dots:false});
+  setTimeout(()=>renderChart('chart-cat-big', {yMax:d.yMax, yTicks:d.yTicks, series, height:300}),0);
+
+  const tableWrap = document.getElementById('cat-detail-table-wrap');
+  if(key==='mortality'){
+    let rows = MORTALITY_MEASURES.map(m=>{
+      const iconMap = {pass:'<span class="icon-pass">✓</span>', fail:'<span class="icon-fail">⊗</span>', na:'<span class="icon-na">⊘</span>'};
+      const nameCell = m.link
+        ? `<span class="m-name" onclick="goTo('measure')">${m.name}</span>`
+        : `<span class="m-name" style="cursor:default;">${m.name}</span>`;
+      return `<tr class="row-link ${m.link?'':'no-link'}" ${m.link?`onclick="goTo('measure')"`:''}>
+        <td><div class="m-icon-cell">${iconMap[m.icon]} ${nameCell}</div></td>
+        <td>${m.lc}</td><td>${m.pctl}</td><td>${m.pfr}</td><td>${m.pavg}</td><td class="dim">${m.cfr}</td><td class="dim">${m.cavg}</td>
+      </tr>`;
+    }).join('');
+    tableWrap.innerHTML = `
+      <div class="section-h" style="margin-top:4px;">${meta.title.toUpperCase()} Measures</div>
+      <div class="legend">
+        <div class="legend-item"><span class="icon-pass">✓</span> Exceeds Target</div>
+        <div class="legend-item"><span class="icon-fail">⊗</span> Fails to meet Target</div>
+        <div class="legend-item"><span class="icon-na">⊘</span> Does not qualify</div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>Measure</th><th>Loading Coefficient</th><th>Premier Percentile</th><th>Premier Facility Rate</th><th>Premier Average</th><th>CMS Facility Rate</th><th>CMS Average</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`;
+  } else {
+    tableWrap.innerHTML = `
+      <div class="section-h" style="margin-top:4px;">${meta.title.toUpperCase()} Measures</div>
+      <div class="tbl-wrap" style="padding:32px; text-align:center; color:var(--ink3); font-size:12.5px;">
+        Full measure-level detail for ${meta.title} follows the same pattern demonstrated in the Mortality category; this prototype focuses that flow on the Mortality → AMI path shown in the source screens.
+      </div>`;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   Measure detail screen (AMI)
+───────────────────────────────────────────── */
+function drawMeasureChart(){
+  const showProj = document.getElementById('proj-checkbox').checked;
+  const series = [
+    {indices:ALL_IDX, values:AMI.premier, color:'#2fb0bd', width:2.4, dash:'6,4'},
+    {indices:ALL_IDX, values:AMI.average, color:'#a0329e', width:2, dash:'2,3'},
+    {indices:[0,1,2,3], values:AMI.cmsHist.slice(0,4), color:'#c99a2e', width:2.6}
+  ];
+  let band = null, hoverPoint = null;
+  if(showProj){
+    series.push({indices:[3,4,5,6,7], values:AMI.proj, color:'#c99a2e', width:2.2, dash:'5,4'});
+    band = {show:true, indices:[3,4,5,6,7], low:AMI.bandLow, high:AMI.bandHigh, color:'#b2d8dc'};
+    hoverPoint = {index:6, value:AMI.proj[3]};
+  }
+  renderChart('chart-measure', {yMax:AMI.yMax, yTicks:AMI.yTicks, series, band, hoverPoint, tooltipId:'measure-tooltip', height:300, starMark:true});
+
+  const cell = document.getElementById('cms-stat-cell');
+  if(showProj){
+    cell.innerHTML = `<div class="stat-num">15.5%</div><div class="stat-line dash-gold"></div><div class="stat-label">Estimated Facility<br>CMS Rate</div>`;
+  } else {
+    cell.innerHTML = `<div class="stat-num">--</div><div class="stat-line none"></div><div class="stat-label">CMS Facility Rate</div>`;
+  }
+}
+
+function toggleProjection(){ drawMeasureChart(); }
+
+/* ─────────────────────────────────────────────
+   Init
+───────────────────────────────────────────── */
+window.addEventListener('load', ()=>{
+  goTo('overview');
+});
+window.addEventListener('resize', ()=>{
+  const active = document.querySelector('.screen.active').id;
+  if(active==='screen-overview') drawOverviewCharts();
+  if(active==='screen-category') renderCategoryScreen(currentCategory);
+  if(active==='screen-measure') drawMeasureChart();
+});
+</script>
+</body>
+</html>
