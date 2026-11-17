@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype A — Event Command Center · Holiday Hoops Classic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0F172A;--muted:#475569;--line:#E2E8F0;--bg:#F4F5F7;--accent:#1E40AF;--accentBg:#EFF6FF;--warn:#C2410C;--warnBg:#FFEDD5;--crit:#B91C1C;--critBg:#FEE2E2;--ok:#15803D;--okBg:#DCFCE7}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;font-size:14px}
+h1,h2,h3,.disp{font-family:"Space Grotesk",Inter,system-ui,sans-serif;margin:0}
+button{font-family:inherit;font-size:13px;cursor:pointer;border-radius:8px;min-height:40px;padding:8px 14px;border:1px solid #CBD5E1;background:#fff;color:var(--ink);font-weight:500}
+button:hover{background:#F8FAFC}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+button.primary:hover{background:#1E3A8A}
+button.ghost{border-color:transparent;background:transparent}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #93C5FD;outline-offset:2px}
+input,select,textarea{font-family:inherit;font-size:13px;border:1px solid #CBD5E1;border-radius:8px;padding:9px 10px;min-height:40px;color:var(--ink);background:#fff}
+.top{background:#0F172A;color:#F8FAFC;display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:12px 24px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand small{display:block;color:#CBD5E1;font-size:12px}
+.tabs{display:flex;gap:4px;background:#1E293B;padding:4px;border-radius:10px;margin-left:auto}
+.tabs a{color:#CBD5E1;text-decoration:none;padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px}
+.tabs a.on{background:#F8FAFC;color:#0F172A;font-weight:600}
+.badge{background:#DC2626;color:#fff;border-radius:999px;font-size:11px;padding:1px 7px;font-weight:700}
+.clock{text-align:right}.clock b{font-family:"Space Grotesk";font-size:20px;display:block}.clock span{font-size:11px;color:#CBD5E1}
+.wrap{padding:20px 24px 40px;max-width:1500px;margin:0 auto}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+.stat .l{font-size:12px;color:var(--muted);font-weight:500}.stat .v{font-family:"Space Grotesk";font-size:24px;font-weight:600}.stat .s{font-size:12px;color:var(--muted)}
+.stat.crit{background:#FEF2F2;border-color:#FECACA}.stat.crit .v,.stat.crit .l,.stat.crit .s{color:#991B1B}
+.cols{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px}
+.phead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.board{overflow-x:auto;padding:10px 18px 16px}
+.grid{min-width:1020px;display:grid;grid-template-columns:150px repeat(6,minmax(0,1fr));gap:8px}
+.slot{font-size:12px;font-weight:600;color:var(--muted);padding:6px 2px;border-bottom:2px solid var(--line)}
+.slot.now{color:var(--accent);border-color:var(--accent)}
+.court{padding:6px 2px;display:flex;flex-direction:column;justify-content:center;gap:2px}
+.court b{font-size:13px}.court span{font-size:11px;color:var(--muted)}
+.chip{align-self:flex-start;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-top:3px}
+.chip.ok{background:var(--okBg);color:#166534}.chip.late{background:var(--warnBg);color:#9A3412}.chip.closed{background:var(--critBg);color:#991B1B}.chip.new{background:#DBEAFE;color:#1E3A8A}
+.tile{text-align:left;border-radius:8px;padding:7px 9px;min-height:68px;display:flex;flex-direction:column;gap:1px;border:1px solid var(--line);background:#fff;width:100%;font-weight:400}
+.tile .t{display:flex;justify-content:space-between;font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+.tile .n{font-size:12.5px;font-weight:600;color:var(--ink)}
+.tile.final{background:#F1F5F9}
+.tile.live{background:#DBEAFE;border:1.5px solid var(--accent)}.tile.live .t span:last-child{color:var(--accent)}
+.tile.late{background:var(--warnBg);border:1.5px solid var(--warn)}.tile.late .t span:last-child{color:#9A3412}
+.tile.next{border:1.5px solid #64748B}
+.tile.blocked{background:var(--critBg);border:1.5px dashed var(--crit)}.tile.blocked .t span:last-child{color:#991B1B}
+.tile.moved{background:#EFF6FF;border:1.5px solid #60A5FA}
+.tile.empty{background:repeating-linear-gradient(135deg,#F8FAFC 0 6px,#F1F5F9 6px 12px);cursor:default}
+.tile.flash{animation:flash 1.6s ease-out}
+@keyframes flash{0%{box-shadow:0 0 0 4px #FDE047}100%{box-shadow:0 0 0 0 transparent}}
+.legend{display:flex;gap:12px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.alerts{flex:1 1 340px;min-width:0;display:flex;flex-direction:column;gap:12px}
+.alert{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.alert.crit{border:1.5px solid var(--crit)}.alert.warn{border-color:#FDBA74}
+.alert h3{font-family:Inter;font-size:15px;font-weight:600}
+.alert p{margin:0;font-size:13px;color:var(--muted);line-height:1.45}
+.pill{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;letter-spacing:.04em}
+.pill.crit{background:var(--critBg);color:#991B1B}.pill.warn{background:var(--warnBg);color:#9A3412}.pill.info{background:#F1F5F9;color:#334155}.pill.ok{background:var(--okBg);color:#166534}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hint{background:#F8FAFC;border-radius:8px;padding:9px 11px;font-size:12.5px;line-height:1.5}
+.empty-state{background:#fff;border:1px dashed #CBD5E1;border-radius:14px;padding:20px;text-align:center;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.03em;padding:8px 12px;border-bottom:1px solid var(--line)}
+td{padding:9px 12px;border-bottom:1px solid #F1F5F9;vertical-align:top}
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal{background:#fff;border-radius:16px;max-width:760px;width:100%;max-height:90vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal .mh{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.modal .mb{padding:18px 22px;display:flex;flex-direction:column;gap:14px}
+.modal .mf{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.kpis div{background:#fff;padding:10px 12px}.kpis small{display:block;color:var(--muted);font-size:11.5px}.kpis b{font-family:"Space Grotesk";font-size:20px}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:380px;max-width:100%;background:#fff;box-shadow:-12px 0 40px rgba(0,0,0,.15);z-index:40;display:flex;flex-direction:column}
+.drawer .mh{padding:18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start}
+.drawer .mb{padding:18px;display:flex;flex-direction:column;gap:12px;overflow:auto}
+.kv{display:grid;grid-template-columns:110px 1fr;gap:6px 10px;font-size:13px}.kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:500}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0F172A;color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;z-index:60;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{border-radius:999px;min-height:36px;font-size:12.5px}
+.seg button[aria-pressed=true]{background:var(--accentBg);border-color:var(--accent);color:var(--accent);font-weight:600}
+.phone{width:390px;max-width:100%;height:780px;border:10px solid #0F172A;border-radius:44px;background:#F8FAFC;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 50px rgba(0,0,0,.18)}
+.phone .ph{background:#0F172A;color:#fff;padding:16px 18px 12px}
+.phone .ph small{color:#CBD5E1}
+.phone .pb{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.phone .pt{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);background:#fff}
+.phone .pt button{border:0;border-radius:0;min-height:58px;font-size:12px;color:var(--muted)}
+.phone .pt button.on{color:var(--accent);font-weight:700;box-shadow:inset 0 3px 0 var(--accent)}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+.score{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0}
+.score b{font-family:"Space Grotesk";font-size:28px;min-width:48px;text-align:center}
+.score .btns{display:flex;gap:4px}.score .btns button{min-width:44px;min-height:44px;padding:0}
+label.block{display:flex;flex-direction:column;gap:5px;font-size:12.5px;font-weight:600}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.note{font-size:12px;color:var(--muted)}
+@media (max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.tabs{margin-left:0}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#3B82F6"/><path d="M9 22 L16 9 L23 22" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div><div class="disp" style="font-size:17px;font-weight:600">Holiday Hoops Classic 2026</div><small>Day 2 of 3 · Sat, Dec 28 · Live mode</small></div>
+  </div>
+  <nav class="tabs" aria-label="Views" id="tabs"></nav>
+  <div class="clock"><b>1:42 PM</b><span>Prototype · fictional data</span></div>
+</header>
+<main class="wrap" id="app"></main>
+<div id="layer"></div>
+
+<script>
+// ---------- Data ----------
+const SLOTS=['11:15','12:30','1:45','3:00','4:15','5:30'];
+const DIVS={BG:'GOLD',BS:'SILVER',G:'GIRLS'};
+const VENUE={'Court 1':'Harmon Fieldhouse','Court 2':'Harmon Fieldhouse','Court 3':'Harmon Fieldhouse','Court 4':'Harmon Fieldhouse','Main Gym':'Westbrook HS','Aux Gym':'Westbrook HS'};
+const RAW={
+ 'Court 1':['final|BG|Eastlake|Kingsford|58|51','final|BG|Cedar Falls|Oak Crest|49|46','next|BG|Summit Valley|Kingsford','sched|G|Pine Hollow|Summit Valley','sched|BS|Pine Hollow|Northgate','sched|BG|Cedar Falls|Bayside Prep'],
+ 'Court 2':['final|BG|Summit Valley|Riverbend|63|60|OT','live|G|Summit Valley|Eastlake|38|41','late|BS|Mount Harmon|Northgate|||2:10','late|BG|Cedar Falls|Granite Hill|||3:25','late|BS|Lakeshore|Mount Harmon|||4:35','sched|BG|Oak Crest|Granite Hill'],
+ 'Court 3':['final|BS|Pine Hollow|Mount Harmon|54|50','final|BG|Granite Hill|Bayside Prep|47|44','next|G|Ridgeview|Granite Hill','sched|BG|Oak Crest|Bayside Prep','sched|G|Ridgeview|Oak Crest','sched|G|Pine Hollow|Eastlake'],
+ 'Main Gym':['final|G|Ridgeview|Cedar Falls|52|40','final|BS|Westbrook|Fairmont|45|43','next|G|Oak Crest|Cedar Falls','sched|BS|Westbrook|Ridgeview','sched|G|Granite Hill|Cedar Falls','sched|G|Westbrook|Summit Valley'],
+ 'Aux Gym':['final|BS|Lakeshore|Northgate|58|52','final|BS|Ridgeview|Hillcrest|61|55','blocked|BS|Pine Hollow|Lakeshore','blocked|G|Westbrook|Eastlake','blocked|BG|Riverbend|Kingsford','blocked|BS|Fairmont|Hillcrest']
+};
+const CONTACTS={'BS|Pine Hollow':26,'BS|Lakeshore':25,'G|Westbrook':29,'G|Eastlake':27,'BG|Riverbend':24,'BG|Kingsford':28,'BS|Fairmont':27,'BS|Hillcrest':28};
+const contactsFor=k=>CONTACTS[k]||26;
+let games=[],id=0;
+for(const c in RAW){RAW[c].forEach((s,i)=>{const [state,div,home,away,hs,as,x]=s.split('|');games.push({id:'g'+(++id),court:c,slot:i,div,home,away,state,hs:hs?+hs:null,as:as?+as:null,est:state==='late'?x:null,ot:x==='OT',time:SLOTS[i]})})}
+const S={view:'board',courts:['Court 1','Court 2','Court 3','Main Gym','Aux Gym'],court4:false,ct2:'late',
+ alerts:[
+  {id:'aux',level:'crit',title:'Westbrook Aux Gym closed — roof leak over the court',time:'1:31 PM',teams:8,body:'Reported by Marcus Ortiz (site staff) with photo. 4 games left today: 1:45, 3:00, 4:15, 5:30. The 1:45 teams are warming up on site.',resolved:false},
+  {id:'ct2',level:'warn',title:'Harmon Court 2 is 25 minutes behind',time:'1:38 PM',teams:6,body:'Summit Valley vs Riverbend went to overtime at 11:15. The next 3 games slide. Trimming halftime to 5 min catches Court 2 up by 5:30.',resolved:false},
+  {id:'ph',level:'info',title:'Pine Hollow (Girls) not checked in',time:'1:40 PM',teams:1,body:'Plays Summit Valley at 3:00 on Court 1. Coach Reyes texted a bus ETA of 2:20 PM.',resolved:false}
+ ],
+ sent:[{time:'12:05 PM',to:'All teams · 24 teams',channels:'SMS, App push',msg:'Concessions at Harmon now open until 8 PM. Parking lot B is full — use lot C.',count:612}],
+ checked:new Set(),staffVenue:'Westbrook HS',staffTab:'checkin',staffGame:null,drawer:null,modal:null,toast:null,bc:{aud:'all',channels:{SMS:true,'App push':true,Email:false},msg:''}
+};
+const teamKey=(div,n)=>div+'|'+n;
+const allTeams=[...new Set(games.flatMap(g=>[teamKey(g.div,g.home),teamKey(g.div,g.away)]))].sort();
+allTeams.forEach(t=>{if(t!=='G|Pine Hollow')S.checked.add(t)});
+
+// ---------- Helpers ----------
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function toast(t){S.toast=t;renderLayer();clearTimeout(toast._t);toast._t=setTimeout(()=>{S.toast=null;renderLayer()},3200)}
+function go(v){S.view=v;S.drawer=null;location.hash=v;render()}
+const openAlerts=()=>S.alerts.filter(a=>!a.resolved);
+function tileLabel(g){
+  if(g.state==='final')return 'Final'+(g.ot?' · OT':'');
+  if(g.state==='live')return 'Live · Q4';
+  if(g.state==='late')return 'Est. '+g.est;
+  if(g.state==='next')return 'Warm-up';
+  if(g.state==='blocked')return 'Needs court';
+  if(g.state==='moved')return 'Moved '+g.time;
+  return g.time;
+}
+function teamLine(g,side){const n=side==='h'?g.home:g.away;const s=side==='h'?g.hs:g.as;return esc(n)+(s!=null&&(g.state==='final'||g.state==='live')?' '+s:'')}
+function courtStatus(c){
+  if(c==='Aux Gym')return['Closed','closed'];
+  if(c==='Court 4')return['New · 2:00 PM','new'];
+  if(c==='Court 2')return S.ct2==='late'?['+25 min','late']:['Catching up','late'];
+  return['On time','ok'];
+}
+
+// ---------- Views ----------
+function renderTabs(){
+  const n=openAlerts().length;
+  const t=[['board','Live board'],['alerts','Alerts'+(n?` <span class="badge">${n}</span>`:'')],['broadcast','Broadcast'],['staff','Staff phone view']];
+  $('#tabs').innerHTML=t.map(([k,l])=>`<a href="#${k}" class="${S.view===k?'on':''}" data-go="${k}" ${S.view===k?'aria-current="page"':''}>${l}</a>`).join('');
+}
+function stats(){
+  const fin=games.filter(g=>g.state==='final').length,live=games.filter(g=>g.state==='live').length;
+  const n=openAlerts().length,crit=openAlerts().filter(a=>a.level==='crit').length;
+  return `<section class="stats" aria-label="Today at a glance">
+   <div class="stat"><div class="l">Games today</div><div class="v">${games.length}</div><div class="s">${fin} final · ${live} live · ${games.length-fin-live} to play</div></div>
+   <div class="stat"><div class="l">Courts behind schedule</div><div class="v" style="color:var(--warn)">${S.ct2==='late'?'1':'1'} <span style="font-size:14px;font-weight:500">· Court 2, ${S.ct2==='late'?'+25':'+10'} min</span></div><div class="s">${S.ct2==='late'?'3 later games affected':'Halftimes trimmed · on time by 5:30'}</div></div>
+   <div class="stat"><div class="l">Team check-in</div><div class="v">${S.checked.size} <span style="font-size:14px;font-weight:500;color:var(--muted)">of ${allTeams.length} playing today</span></div><div class="s">${S.checked.size<allTeams.length?allTeams.filter(t=>!S.checked.has(t)).map(t=>t.split('|')[1]+' ('+(t[0]==='G'?'Girls':'Boys')+')').join(', ')+' not in yet':'Everyone is here'}</div></div>
+   <div class="stat ${crit?'crit':''}"><div class="l">Needs action</div><div class="v">${n} alert${n===1?'':'s'}</div><div class="s">${crit?crit+' critical':'Nothing critical'}</div></div>
+  </section>`;
+}
+function boardView(){
+  const rows=S.courts.map(c=>{
+    const [st,cls]=courtStatus(c);
+    const tiles=SLOTS.map((s,i)=>{
+      const g=games.find(x=>x.court===c&&x.slot===i);
+      if(!g)return `<div class="tile empty" aria-label="${c} ${s} empty"></div>`;
+      return `<button class="tile ${g.state}${g.flash?' flash':''}" data-game="${g.id}" aria-label="${esc(g.home)} vs ${esc(g.away)}, ${c}, ${tileLabel(g)}"><span class="t"><span>${DIVS[g.div]}</span><span>${tileLabel(g)}</span></span><span class="n">${teamLine(g,'h')}</span><span class="n">${teamLine(g,'a')}</span></button>`;
+    }).join('');
+    return `<div class="court"><b>${c}</b><span>${VENUE[c]}</span><span class="chip ${cls}">${st}</span></div>${tiles}`;
+  }).join('');
+  games.forEach(g=>g.flash=false);
+  return stats()+`<div class="cols">
+   <section class="panel" style="flex:999 1 760px;min-width:0">
+    <div class="phead"><div class="row"><h1 style="font-size:19px">Live board</h1><span class="note">Click any game for details</span></div>
+     <div class="legend"><span><i style="background:#DBEAFE;border:1.5px solid #1E40AF"></i>Live</span><span><i style="background:#FFEDD5;border:1.5px solid #C2410C"></i>Late</span><span><i style="background:#FEE2E2;border:1.5px dashed #B91C1C"></i>Needs court</span><span><i style="background:#EFF6FF;border:1.5px solid #60A5FA"></i>Moved</span><span><i style="background:#F1F5F9;border:1px solid #CBD5E1"></i>Final</span></div></div>
+    <div class="board"><div class="grid"><div></div>${SLOTS.map((s,i)=>`<div class="slot ${i===2?'now':''}">${s}${i===2?' · next':''}</div>`).join('')}${rows}</div></div>
+   </section>
+   <aside class="alerts" aria-label="Alerts"><div class="row" style="justify-content:space-between"><h2 style="font-size:17px">Alerts</h2><span class="note">Ranked by teams affected</span></div>${alertCards(true)}</aside>
+  </div>`;
+}
+function alertCards(onlyOpen){
+  const list=(onlyOpen?openAlerts():S.alerts).slice().sort((a,b)=>(a.resolved-b.resolved)||(b.teams-a.teams));
+  if(!list.length)return `<div class="empty-state"><b style="color:var(--ok)">All clear.</b><br>No open alerts. New problems from site staff appear here.</div>`;
+  return list.map(a=>{
+    const lvl=a.resolved?'ok':a.level;
+    const label=a.resolved?'RESOLVED':(a.level==='crit'?'CRITICAL':a.level==='warn'?'RUNNING LATE':'HEADS UP')+' · '+a.teams+' TEAM'+(a.teams>1?'S':'');
+    let actions='';
+    if(!a.resolved){
+      if(a.id==='aux')actions=`<div class="hint"><b>Fastest fix found:</b> Harmon Court 4 is free from 2:00 PM. Moving all 4 games there pushes each 15 min. 12-min drive for the 1:45 teams.</div><div class="row"><button class="primary" data-act="previewMove">Preview move to Court 4</button><button data-act="otherOptions">Other options</button></div>`;
+      else if(a.id==='ct2')actions=`<div class="row"><button data-act="trim">Trim halftimes on Ct 2</button><button data-act="notifyCt2">Notify 6 teams</button></div>`;
+      else if(a.id==='ph')actions=`<div class="row"><button data-act="msgCoach">Message coach</button><button data-act="arrived">Mark arrived</button></div>`;
+      else actions=`<div class="row"><button data-act="resolve" data-id="${a.id}">Mark resolved</button></div>`;
+    }else actions=`<div class="note">${esc(a.resolution||'Resolved')}</div>`;
+    return `<article class="alert ${a.resolved?'':a.level}"><div class="row" style="justify-content:space-between"><span class="pill ${lvl}">${label}</span><span class="note">${a.time}</span></div><h3>${esc(a.title)}</h3><p>${esc(a.body)}</p>${actions}</article>`;
+  }).join('');
+}
+function alertsView(){
+  return `<div class="row" style="justify-content:space-between;margin-bottom:14px"><h1 style="font-size:22px">Alerts</h1><span class="note">${openAlerts().length} open · ${S.alerts.length-openAlerts().length} resolved today</span></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px">${alertCards(false)}</div>
+  <p class="note" style="margin-top:16px">Tip: report a problem from the Staff phone view and it lands here instantly.</p>`;
+}
+const AUD={
+ all:{label:'All teams',teams:()=>allTeams},
+ harmon:{label:'Harmon Fieldhouse',teams:()=>teamsWhere(g=>VENUE[g.court]==='Harmon Fieldhouse')},
+ westbrook:{label:'Westbrook HS',teams:()=>teamsWhere(g=>VENUE[g.court]==='Westbrook HS')},
+ aux:{label:'Aux Gym teams (8)',teams:()=>Object.keys(CONTACTS)},
+ ct2:{label:'Court 2 late games (6)',teams:()=>teamsWhere(g=>g.court==='Court 2'&&g.slot>=2&&g.slot<=4)},
+ G:{label:'Girls division',teams:()=>allTeams.filter(t=>t.startsWith('G|'))},
+ BG:{label:'Boys Gold',teams:()=>allTeams.filter(t=>t.startsWith('BG|'))},
+ BS:{label:'Boys Silver',teams:()=>allTeams.filter(t=>t.startsWith('BS|'))}
+};
+function teamsWhere(f){return [...new Set(games.filter(g=>f(g)&&g.state!=='final').flatMap(g=>[teamKey(g.div,g.home),teamKey(g.div,g.away)]))]}
+function audCount(k){const t=AUD[k].teams();return {teams:t.length,contacts:t.reduce((a,x)=>a+contactsFor(x),0)}}
+function broadcastView(){
+  const c=audCount(S.bc.aud);
+  const tpl=[['Weather / delay','Heads up: games at your venue are running about 20 minutes behind. Please stay close to your court.'],['Court change','Your next game has moved to a new court. Check the app for the exact court and time.'],['Parking','Lot B is full. Please use lot C across the street; a shuttle runs every 10 minutes.']];
+  return `<div class="cols">
+   <section class="panel" style="flex:2 1 520px;min-width:0">
+    <div class="phead"><h1 style="font-size:19px">New broadcast</h1><span class="note">Reaches only the people in the audience you pick</span></div>
+    <div style="padding:18px;display:flex;flex-direction:column;gap:16px">
+     <div><div style="font-size:12.5px;font-weight:600;margin-bottom:6px">Audience</div><div class="seg" role="group" aria-label="Audience">${Object.keys(AUD).map(k=>`<button aria-pressed="${S.bc.aud===k}" data-aud="${k}">${AUD[k].label}</button>`).join('')}</div>
+     <p class="note" style="margin:8px 0 0"><b style="color:var(--ink)">${c.teams} teams · ${c.contacts} contacts</b> (coaches, players and guardians who opted in)</p></div>
+     <label class="block">Message<textarea id="bcmsg" rows="4" maxlength="320" placeholder="Write a short, specific message…">${esc(S.bc.msg)}</textarea></label>
+     <div class="row note"><span>Templates:</span>${tpl.map((t,i)=>`<button class="ghost" style="color:var(--accent);min-height:32px;padding:4px 8px" data-tpl="${i}">${t[0]}</button>`).join('')}</div>
+     <div><div style="font-size:12.5px;font-weight:600;margin-bottom:6px">Channels</div><div class="seg">${Object.keys(S.bc.channels).map(ch=>`<button aria-pressed="${S.bc.channels[ch]}" data-ch="${ch}">${ch}</button>`).join('')}</div></div>
+     <div class="row"><button class="primary" data-act="send">Send to ${c.contacts} contacts</button><span class="note" id="bcnote"></span></div>
+    </div>
+   </section>
+   <section class="panel" style="flex:3 1 520px;min-width:0">
+    <div class="phead"><h2 style="font-size:17px">Sent today</h2><span class="note">${S.sent.length} broadcasts</span></div>
+    <div style="overflow-x:auto"><table><thead><tr><th>TIME</th><th>AUDIENCE</th><th>MESSAGE</th><th>REACH</th></tr></thead><tbody>
+    ${S.sent.slice().reverse().map(m=>`<tr><td style="white-space:nowrap">${m.time}</td><td>${esc(m.to)}<div class="note">${m.channels}</div></td><td>${esc(m.msg)}</td><td>${m.count}</td></tr>`).join('')}
+    </tbody></table></div>
+   </section></div>`;
+}
+function staffView(){
+  const venueGames=games.filter(g=>VENUE[g.court]===S.staffVenue);
+  const vTeams=[...new Set(venueGames.filter(g=>g.state!=='final').flatMap(g=>[teamKey(g.div,g.home),teamKey(g.div,g.away)]))].sort((a,b)=>S.checked.has(a)-S.checked.has(b));
+  let body='';
+  if(S.staffTab==='checkin'){
+    body=`<div class="note">${vTeams.filter(t=>S.checked.has(t)).length} of ${vTeams.length} teams with games here are checked in</div>`+vTeams.map(t=>{const [d,n]=t.split('|');const on=S.checked.has(t);return `<div class="card row" style="justify-content:space-between"><div><b>${esc(n)}</b><div class="note">${({BG:'boys gold',BS:'boys silver',G:'girls'})[d]}</div></div><button class="${on?'':'primary'}" data-check="${t}" style="min-height:44px">${on?'✓ Checked in':'Check in'}</button></div>`}).join('');
+  }else if(S.staffTab==='scores'){
+    const playable=venueGames.filter(g=>['live','next','late'].includes(g.state)||(g.state==='moved'));
+    const g=games.find(x=>x.id===S.staffGame)||playable[0];
+    if(g)S.staffGame=g.id;
+    body=`<label class="block">Game<select id="staffgame">${playable.map(x=>`<option value="${x.id}" ${g&&x.id===g.id?'selected':''}>${x.court} · ${x.state==='late'?'est. '+x.est:x.time} · ${esc(x.home)} vs ${esc(x.away)}</option>`).join('')}</select></label>`;
+    if(g){
+      if(g.state!=='live'){body+=`<div class="card"><b>${esc(g.home)} vs ${esc(g.away)}</b><div class="note">${({BG:'boys gold',BS:'boys silver',G:'girls'})[g.div]} · ${g.court}</div><div style="margin-top:10px"><button class="primary" data-start="${g.id}" style="width:100%;min-height:48px">Start game (tip-off)</button></div></div>`}
+      else body+=`<div class="card">${['h','a'].map(sd=>`<div class="score"><div><b style="font-size:15px;font-family:Inter">${esc(sd==='h'?g.home:g.away)}</b></div><b>${sd==='h'?g.hs:g.as}</b><div class="btns">${[1,2,3].map(p=>`<button data-pts="${g.id}|${sd}|${p}" aria-label="Add ${p} for ${esc(sd==='h'?g.home:g.away)}">+${p}</button>`).join('')}</div></div>`).join('')}<div class="row" style="margin-top:6px"><button data-undo-pts="${g.id}">Undo last</button><button class="primary" data-final="${g.id}" style="flex:1">Final</button></div></div><p class="note">Scores update the director's live board immediately.</p>`;
+    }else body+='<div class="empty-state">No games to score at this venue right now.</div>';
+  }else{
+    const courts=Object.keys(VENUE).filter(c=>VENUE[c]===S.staffVenue&&S.courts.includes(c));
+    body=`<label class="block">What's wrong?<select id="rtype"><option>Floor / facility problem</option><option>Injury — trainer needed</option><option>Team not here</option><option>Scoreboard / clock down</option><option>Crowd or safety issue</option></select></label>
+     <label class="block">Where<select id="rcourt">${courts.map(c=>`<option>${c}</option>`).join('')}</select></label>
+     <label class="block">Details<textarea id="rnote" rows="3" placeholder="e.g. Shot clock dead on the home side"></textarea></label>
+     <button class="primary" data-act="report" style="min-height:48px">Send to director</button><p class="note">The director gets this as an alert on the board.</p>`;
+  }
+  return `<div class="cols" style="justify-content:center;gap:40px">
+   <div style="flex:0 1 420px;display:flex;flex-direction:column;gap:12px">
+    <h1 style="font-size:22px">Staff phone view</h1>
+    <p class="note" style="font-size:14px;line-height:1.5;margin:0">What site staff like Marcus Ortiz see: only their venue, one task at a time, big touch targets. Actions here update the director's board and alerts.</p>
+    <label class="block">Venue (switch staff member)<select id="svenue"><option ${S.staffVenue==='Westbrook HS'?'selected':''}>Westbrook HS</option><option ${S.staffVenue==='Harmon Fieldhouse'?'selected':''}>Harmon Fieldhouse</option></select></label>
+    <div class="hint">Try it: check in Pine Hollow at Harmon, start a game and add points, or report a problem — then open the Live board.</div>
+   </div>
+   <div class="phone" role="region" aria-label="Phone mockup">
+    <div class="ph"><div style="font-weight:700">${S.staffVenue}</div><small>${S.staffVenue==='Westbrook HS'?'Marcus Ortiz':'Tasha Bell'} · Site staff · 1:42 PM</small></div>
+    <div class="pb">${body}</div>
+    <div class="pt">${[['checkin','Check-in'],['scores','Scores'],['report','Report']].map(([k,l])=>`<button class="${S.staffTab===k?'on':''}" data-stab="${k}">${l}</button>`).join('')}</div>
+   </div></div>`;
+}
+
+// ---------- Overlays ----------
+const MOVES=[{slot:2,to:'2:00'},{slot:3,to:'3:15'},{slot:4,to:'4:30'},{slot:5,to:'5:45'}];
+function renderLayer(){
+  let h='';
+  if(S.drawer){
+    const g=games.find(x=>x.id===S.drawer);
+    let act='';
+    if(g.state==='blocked')act=`<button class="primary" data-act="previewMove">Find a new court</button>`;
+    else if(g.state==='live')act=`<button data-act="toStaff" data-g="${g.id}">Open score entry</button>`;
+    else if(g.state!=='final')act=`<button data-act="msgTeams" data-g="${g.id}">Message both teams</button>`;
+    const h1=contactsFor(teamKey(g.div,g.home)),a1=contactsFor(teamKey(g.div,g.away));
+    h+=`<div class="drawer" role="dialog" aria-label="Game details"><div class="mh"><div><div class="note">${({BG:'Boys Gold',BS:'Boys Silver',G:'Girls'})[g.div]}</div><h2 style="font-size:19px">${esc(g.home)} vs ${esc(g.away)}</h2></div><button class="ghost" data-close aria-label="Close">✕</button></div>
+     <div class="mb"><dl class="kv"><dt>Status</dt><dd>${tileLabel(g)}</dd><dt>Court</dt><dd>${g.court} · ${VENUE[g.court]}</dd><dt>Scheduled</dt><dd>${g.state==='moved'?g.time+' (was '+g.orig+')':SLOTS[g.slot]}</dd>${g.hs!=null?`<dt>Score</dt><dd>${g.hs} – ${g.as}</dd>`:''}<dt>Check-in</dt><dd>${[g.home,g.away].map(n=>esc(n)+(S.checked.has(teamKey(g.div,n))?' ✓':' — not in')).join('<br>')}</dd><dt>Contacts</dt><dd>${h1+a1} people</dd></dl>
+     <div class="row">${act}</div></div></div>`;
+  }
+  if(S.modal==='move'){
+    const moving=games.filter(g=>g.court==='Aux Gym'&&g.state==='blocked');
+    h+=`<div class="modal-bg"><div class="modal" role="dialog" aria-modal="true" aria-label="Preview move"><div class="mh"><h2 style="font-size:19px">Preview: move Aux Gym games to Harmon Court 4</h2><button class="ghost" data-close aria-label="Close">✕</button></div>
+     <div class="mb"><div class="kpis"><div><small>Games moved</small><b>${moving.length}</b></div><div><small>Time shift</small><b>+15 min</b></div><div><small>Teams to notify</small><b>8</b></div><div><small>Rules broken</small><b style="color:var(--ok)">0</b></div></div>
+     <table><thead><tr><th>GAME</th><th>FROM</th><th>TO</th></tr></thead><tbody>${moving.map(g=>{const m=MOVES.find(x=>x.slot===g.slot);return `<tr><td><b>${esc(g.home)} vs ${esc(g.away)}</b><div class="note">${({BG:'boys gold',BS:'boys silver',G:'girls'})[g.div]}</div></td><td><s style="color:var(--muted)">Aux Gym · ${SLOTS[g.slot]}</s></td><td><b>Court 4 · ${m.to}</b></td></tr>`}).join('')}</tbody></table>
+     <div class="hint">Also happens: portable scoreboard to Court 4 · Ref Crew 3 moves to Harmon · Kingsford's rest before the 6:45 semifinal drops to 60 min (at the minimum).</div>
+     <label class="block">Message to the 8 teams (214 contacts)<textarea id="movemsg" rows="3">Aux Gym is closed. Your game moves to Harmon Fieldhouse Court 4, 15 minutes later than planned. Check the app for your new time.</textarea></label></div>
+     <div class="mf"><button data-close>Cancel</button><button class="primary" data-act="applyMove">Apply and notify 8 teams</button></div></div></div>`;
+  }
+  if(S.modal==='options'){
+    h+=`<div class="modal-bg"><div class="modal" role="dialog" aria-modal="true" aria-label="Other options"><div class="mh"><h2 style="font-size:19px">Other ways to re-home the Aux Gym games</h2><button class="ghost" data-close aria-label="Close">✕</button></div>
+     <div class="mb"><div class="card"><b>Evening slots on existing courts</b><p class="note">4 games at 8:00 PM on Courts 1–3 and Main Gym. Latest end 9:15 PM.</p><span class="pill crit">Breaks: no tip after 8:00 PM</span></div>
+     <div class="card"><b>Move to Sunday 8:00 AM</b><p class="note">Today stays as is. Kingsford and Lakeshore would need an extra hotel night.</p><span class="pill warn">Cost: 2 extra hotel nights</span></div></div>
+     <div class="mf"><button data-close>Close</button><button class="primary" data-act="previewMove">Back to Court 4 plan</button></div></div></div>`;
+  }
+  if(S.modal==='coach'){
+    h+=`<div class="modal-bg"><div class="modal" style="max-width:520px" role="dialog" aria-modal="true" aria-label="Message coach"><div class="mh"><h2 style="font-size:18px">Message Coach Reyes · Pine Hollow (Girls)</h2><button class="ghost" data-close aria-label="Close">✕</button></div>
+     <div class="mb"><textarea id="coachmsg" rows="4">Hi Coach — thanks for the heads up. Your 3:00 tip vs Summit Valley is on Court 1 at Harmon Fieldhouse. Please check in at the front desk when you arrive. — Dana</textarea></div>
+     <div class="mf"><button data-close>Cancel</button><button class="primary" data-act="sendCoach">Send SMS</button></div></div></div>`;
+  }
+  if(S.toast)h+=`<div class="toast" role="status">${esc(S.toast)}</div>`;
+  $('#layer').innerHTML=h;
+}
+function render(){
+  renderTabs();
+  const v={board:boardView,alerts:alertsView,broadcast:broadcastView,staff:staffView}[S.view]||boardView;
+  $('#app').innerHTML=v();
+  renderLayer();
+}
+
+// ---------- Actions ----------
+function logSent(to,msg,count,channels){S.sent.push({time:'1:4'+Math.min(9,2+S.sent.length)+' PM',to,channels:channels||'SMS, App push',msg,count})}
+function resolve(id,txt){const a=S.alerts.find(x=>x.id===id);if(a){a.resolved=true;a.resolution=txt}}
+const ACT={
+ previewMove(){S.drawer=null;S.modal='move';renderLayer()},
+ otherOptions(){S.modal='options';renderLayer()},
+ applyMove(){
+  const msg=($('#movemsg')||{}).value||'';
+  if(!S.court4){S.court4=true;S.courts.splice(3,0,'Court 4')}
+  games.filter(g=>g.court==='Aux Gym'&&g.state==='blocked').forEach(g=>{const m=MOVES.find(x=>x.slot===g.slot);g.orig='Aux Gym '+SLOTS[g.slot];g.court='Court 4';g.time=m.to;g.state='moved';g.flash=true});
+  resolve('aux','Moved 4 games to Harmon Court 4 (+15 min). 214 contacts notified at 1:44 PM.');
+  logSent('Aux Gym teams · 8 teams',msg,214);
+  S.modal=null;render();toast('4 games moved to Court 4 · 214 contacts notified');
+ },
+ trim(){
+  games.filter(g=>g.court==='Court 2'&&g.state==='late').forEach((g,i)=>{g.est=['2:05','3:15','4:20'][i];g.flash=true});
+  S.ct2='trim';resolve('ct2','Halftimes trimmed to 5 min on Court 2. Back on time by 5:30.');render();toast('Court 2 halftimes trimmed · new estimates on the board');
+ },
+ notifyCt2(){logSent('Court 2 late games · 6 teams','Court 2 is running about 25 minutes behind. Check the app for your estimated tip time.',158);render();toast('6 teams notified (158 contacts)')},
+ msgCoach(){S.modal='coach';renderLayer()},
+ sendCoach(){logSent('Coach Reyes · Pine Hollow (Girls)',$('#coachmsg').value,1,'SMS');S.modal=null;render();toast('Message sent to Coach Reyes')},
+ arrived(){S.checked.add('G|Pine Hollow');resolve('ph','Checked in at 1:45 PM.');render();toast('Pine Hollow (Girls) checked in')},
+ resolve(el){resolve(el.dataset.id,'Resolved by Dana');render()},
+ send(){
+  const msg=$('#bcmsg').value.trim();if(!msg){$('#bcnote').textContent='Write a message first.';return}
+  const ch=Object.keys(S.bc.channels).filter(k=>S.bc.channels[k]);if(!ch.length){$('#bcnote').textContent='Pick at least one channel.';return}
+  const c=audCount(S.bc.aud);logSent(AUD[S.bc.aud].label+' · '+c.teams+' teams',msg,c.contacts,ch.join(', '));S.bc.msg='';render();toast('Sent to '+c.contacts+' contacts');
+ },
+ report(){
+  const t=$('#rtype').value,c=$('#rcourt').value,n=$('#rnote').value.trim();
+  S.alerts.push({id:'r'+Date.now(),level:t.startsWith('Injury')||t.startsWith('Crowd')?'crit':'warn',title:t+' — '+c,time:'1:43 PM',teams:2,body:(n||'No details given')+' · Reported by '+(S.staffVenue==='Westbrook HS'?'Marcus Ortiz':'Tasha Bell')+' from the staff app.',resolved:false});
+  $('#rnote').value='';renderTabs();toast('Sent to director · now on the Alerts board');
+ },
+ toStaff(el){S.staffVenue=VENUE[games.find(x=>x.id===el.dataset.g).court];S.staffTab='scores';S.staffGame=el.dataset.g;go('staff')},
+ msgTeams(el){const g=games.find(x=>x.id===el.dataset.g);S.bc.msg=`Reminder: ${g.home} vs ${g.away} is on ${g.court} at ${VENUE[g.court]}.`;go('broadcast')}
+};
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,a');if(!t)return;
+  if(t.dataset.go){e.preventDefault();go(t.dataset.go);return}
+  if(t.hasAttribute('data-close')){S.drawer=null;S.modal=null;renderLayer();return}
+  if(t.dataset.act){ACT[t.dataset.act](t);return}
+  if(t.dataset.game){S.drawer=t.dataset.game;renderLayer();return}
+  if(t.dataset.aud){S.bc.msg=$('#bcmsg').value;S.bc.aud=t.dataset.aud;render();return}
+  if(t.dataset.ch){S.bc.msg=$('#bcmsg').value;S.bc.channels[t.dataset.ch]=!S.bc.channels[t.dataset.ch];render();return}
+  if(t.dataset.tpl){const tp=[['','Heads up: games at your venue are running about 20 minutes behind. Please stay close to your court.'],['','Your next game has moved to a new court. Check the app for the exact court and time.'],['','Lot B is full. Please use lot C across the street; a shuttle runs every 10 minutes.']];S.bc.msg=tp[+t.dataset.tpl][1];render();return}
+  if(t.dataset.stab){S.staffTab=t.dataset.stab;render();return}
+  if(t.dataset.check){const k=t.dataset.check;S.checked.has(k)?S.checked.delete(k):S.checked.add(k);if(k==='G|Pine Hollow'&&S.checked.has(k))resolve('ph','Checked in by site staff.');render();if(S.checked.has(k))toast(k.split('|')[1]+' checked in');return}
+  if(t.dataset.start){const g=games.find(x=>x.id===t.dataset.start);g.state='live';g.hs=0;g.as=0;g.hist=[];g.flash=true;render();toast('Tip-off recorded · board updated');return}
+  if(t.dataset.pts){const [gid,sd,p]=t.dataset.pts.split('|');const g=games.find(x=>x.id===gid);g.hist=g.hist||[];g.hist.push([sd,+p]);sd==='h'?g.hs+=+p:g.as+=+p;render();return}
+  if(t.dataset.undoPts){const g=games.find(x=>x.id===t.dataset.undoPts);const l=(g.hist||[]).pop();if(l){l[0]==='h'?g.hs-=l[1]:g.as-=l[1]}render();return}
+  if(t.dataset.final){const g=games.find(x=>x.id===t.dataset.final);g.state='final';S.staffGame=null;render();toast(`Final: ${g.home} ${g.hs} – ${g.away} ${g.as}`);return}
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='svenue'){S.staffVenue=e.target.value;S.staffGame=null;render()}
+  if(e.target.id==='staffgame'){S.staffGame=e.target.value;render()}
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&(S.modal||S.drawer)){S.modal=null;S.drawer=null;renderLayer()}});
+window.addEventListener('hashchange',()=>{const v=location.hash.slice(1);if(v&&v!==S.view&&['board','alerts','broadcast','staff'].includes(v)){S.view=v;render()}});
+const h0=location.hash.slice(1);if(['board','alerts','broadcast','staff'].includes(h0))S.view=h0;
+render();
+</script>
+</body>
+</html>

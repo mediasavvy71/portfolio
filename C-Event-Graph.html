@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototype C — Event Graph · Holiday Hoops Classic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0F172A;--muted:#475569;--line:#E2E8F0;--bg:#F4F5F7;--accent:#1E40AF;--accentBg:#EFF6FF;--warn:#C2410C;--ok:#15803D;--crit:#B91C1C}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;font-size:14px}
+h1,h2,h3,.disp{font-family:"Space Grotesk",Inter,system-ui,sans-serif;margin:0}
+button{font-family:inherit;font-size:13px;cursor:pointer;border-radius:10px;min-height:40px;padding:8px 14px;border:1px solid #CBD5E1;background:#fff;color:var(--ink);font-weight:500}
+button:hover{background:#F8FAFC}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+button.primary:hover{background:#1E3A8A}
+button:disabled{opacity:.45;cursor:not-allowed}
+button.ghost{border-color:transparent;background:transparent}
+button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,.blk:focus-visible{outline:3px solid #93C5FD;outline-offset:2px}
+select,input{font-family:inherit;font-size:13px;border:1px solid #CBD5E1;border-radius:8px;padding:8px 10px;min-height:40px;background:#fff;color:var(--ink)}
+.top{background:#fff;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px;padding:10px 24px;position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:12px}
+.brand small{display:block;color:var(--muted);font-size:12px}
+nav.tabs{display:flex;gap:4px}
+nav.tabs a{text-decoration:none;color:var(--muted);font-size:13px;font-weight:500;padding:10px 12px;border-radius:8px;display:flex;gap:6px;align-items:center}
+nav.tabs a.on{color:var(--accent);background:var(--accentBg);font-weight:600}
+.count{background:#F59E0B;color:#111;border-radius:999px;font-size:11px;font-weight:700;padding:1px 7px}
+.draftbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 24px;background:#fff;border-bottom:1px solid var(--line)}
+.draftbar .tag{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;letter-spacing:.04em}
+.tag.draft{background:#FEF3C7;color:#92400E}.tag.live{background:#DCFCE7;color:#166534}
+.edit{display:flex;align-items:center;gap:8px;background:#F8FAFC;border:1px solid var(--line);border-radius:999px;padding:4px 6px 4px 6px;font-size:12.5px}
+.edit .n{width:22px;height:22px;border-radius:11px;background:#0F172A;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.edit.auto{border-style:dashed}
+.edit button{min-height:28px;padding:2px 8px;border-radius:999px;font-size:12px}
+.wrap{max-width:1500px;margin:0 auto;padding:20px 24px 40px}
+.cols{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px}
+.phead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line)}
+.tl{padding:12px 18px 18px;overflow-x:auto}
+.tlin{min-width:900px;display:grid;grid-template-columns:130px 1fr;row-gap:10px;column-gap:12px;align-items:center}
+.axis{position:relative;height:20px;font-size:11.5px;color:var(--muted)}
+.axis span{position:absolute;transform:translateX(-50%)}
+.lname b{display:block;font-size:13px}.lname span{font-size:11px;color:var(--muted)}
+.lane{position:relative;height:70px;background:#F8FAFC;border-radius:8px;background-image:repeating-linear-gradient(90deg,transparent 0,transparent calc(100%/9 - 1px),#E2E8F0 calc(100%/9 - 1px),#E2E8F0 calc(100%/9))}
+.lane.closed{background:repeating-linear-gradient(135deg,#FEF2F2 0 6px,#FEE2E2 6px 12px)}
+.lane.c4off{background:#fff;border:1.5px dashed #93C5FD}
+.lane.c4on{background-color:#F5F9FF;border:1.5px solid #93C5FD}
+.lane.hover-ok{box-shadow:inset 0 0 0 2px #60A5FA}
+.lane.hover-bad{box-shadow:inset 0 0 0 2px #F87171}
+.now{position:absolute;top:-4px;bottom:-4px;width:2px;background:#DC2626;z-index:3}
+.blk{position:absolute;top:5px;bottom:5px;border-radius:7px;padding:4px 7px;font-size:11.5px;line-height:1.3;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;border:1px solid #CBD5E1;background:#fff;text-align:left;min-height:0;font-weight:500;cursor:grab;touch-action:none;user-select:none}
+.blk small{display:block;color:var(--muted);font-size:10px;overflow:hidden;text-overflow:ellipsis}.blk .tn{display:block;overflow:hidden;text-overflow:ellipsis;font-weight:600;font-size:11.5px}
+.blk.final{background:#F1F5F9;color:var(--muted);cursor:default}
+.blk.live{background:#DBEAFE;border:1.5px solid var(--accent);cursor:default}
+.blk.late{background:#FFEDD5;border:1.5px solid var(--warn)}
+.blk.blocked{background:#FEE2E2;border:1.5px dashed var(--crit);color:#7F1D1D}
+.blk.moved{background:#DBEAFE;border:1.5px solid #3B82F6}
+.blk.lock{background:#EEF2FF;border:1px solid #A5B4FC;cursor:default}
+.blk.sel{box-shadow:0 0 0 3px #FDE047}
+.blk.ghostsrc{opacity:.35}
+.ghost{position:absolute;top:5px;bottom:5px;border-radius:7px;border:2px solid #2563EB;background:rgba(37,99,235,.15);pointer-events:none;z-index:4;font-size:11px;padding:3px 6px;color:#1E3A8A;font-weight:600;white-space:nowrap;overflow:hidden}
+.ghost.bad{border-color:#DC2626;background:rgba(220,38,38,.12);color:#991B1B}
+.floattip{position:fixed;z-index:30;background:#0F172A;color:#fff;border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.45;pointer-events:none;max-width:280px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.floattip .bad{color:#FCA5A5}.floattip .lim{color:#FCD34D}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.rip{flex:1 1 360px;min-width:0;position:sticky;top:130px}
+.rsec{padding:12px 18px;border-top:1px solid #F1F5F9;display:flex;flex-direction:column;gap:6px}
+.rsec h3{font-family:Inter;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.04em;display:flex;justify-content:space-between}
+.rsec p{margin:0;font-size:13px;line-height:1.45}
+.rsec .lim{background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:8px 10px;font-size:13px;color:#78350F}
+.rsec .bad{background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;padding:8px 10px;font-size:13px;color:#7F1D1D}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{background:#F1F5F9;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600}
+.empty{padding:22px 18px;color:var(--muted);font-size:13px;line-height:1.5}
+.detail{padding:16px 18px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);background:#FAFBFC}
+.kv{display:grid;grid-template-columns:110px 1fr;gap:6px 10px;font-size:13px}.kv dt{color:var(--muted)}.kv dd{margin:0;font-weight:500}
+.graph{position:relative;height:300px}
+.node{position:absolute;transform:translate(-50%,-50%);width:170px;border-radius:10px;padding:8px 10px;background:#fff;border:1px solid #CBD5E1;font-size:12px}
+.node b{display:block;font-size:13px}.node .k{font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.04em}
+.node.hot{background:#FFF7ED;border:2px solid var(--warn)}.node.hot .k{color:#9A3412}
+.node.ctr{background:var(--accent);color:#fff;border:0;text-align:center;width:200px}.node.ctr .k{color:#BFDBFE}
+.teams{display:grid;grid-template-columns:280px 1fr;gap:20px}
+.tlist{max-height:72vh;overflow:auto}
+.tlist button{display:flex;width:100%;justify-content:space-between;border:0;border-bottom:1px solid #F1F5F9;border-radius:0;text-align:left;padding:10px 14px;min-height:48px}
+.tlist button.on{background:var(--accentBg);color:var(--accent);font-weight:600}
+.tlist .dot{width:8px;height:8px;border-radius:4px;background:#F59E0B;align-self:center}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.03em;padding:8px 14px;border-bottom:1px solid var(--line)}
+td{padding:9px 14px;border-bottom:1px solid #F1F5F9;vertical-align:top}
+tr.chg td{background:#FFF7ED}
+.sms{background:#F1F5F9;border-radius:14px 14px 14px 4px;padding:10px 12px;font-size:13px;line-height:1.45}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0F172A;color:#fff;padding:12px 18px;border-radius:10px;font-size:13px;z-index:60}
+.modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.45);display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}
+.modal{background:#fff;border-radius:16px;max-width:560px;width:100%}
+.modal .mh{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.modal .mb{padding:18px 22px;display:flex;flex-direction:column;gap:12px}
+.modal .mf{padding:14px 22px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px}
+.note{font-size:12px;color:var(--muted)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media(max-width:860px){.teams{grid-template-columns:1fr}.rip{position:static}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1E40AF"/><path d="M9 22 L16 9 L23 22" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <div><div class="disp" style="font-size:16px;font-weight:600">Holiday Hoops Classic 2026</div><small>Sat, Dec 28 · 1:42 PM · prototype, fictional data</small></div></div>
+  <nav class="tabs" id="tabs" aria-label="Sections"></nav>
+</header>
+<div class="draftbar" id="draftbar"></div>
+<main class="wrap" id="app"></main>
+<div id="layer"></div>
+<script>
+// ---------- Data ----------
+const DIV={BG:'Boys Gold',BS:'Boys Silver',G:'Girls'};
+const T0=660,T1=1200,SPAN=T1-T0,DUR=75,NOW=822;
+const LANES=[['Court 1','Harmon'],['Court 2','Harmon'],['Court 3','Harmon'],['Court 4','Harmon'],['Main Gym','Westbrook'],['Aux Gym','Westbrook']];
+const VEN=Object.fromEntries(LANES);
+const fmt=m=>{let h=Math.floor(m/60),mi=m%60;const ap=h>=12?'PM':'AM';h=h>12?h-12:h;return h+':'+String(mi).padStart(2,'0')};
+const fmtAP=m=>fmt(m)+' '+(m>=720?'PM':'AM');
+const R=[
+ ['Court 1',675,'final','BG','Eastlake','Kingsford'],['Court 1',750,'final','BG','Cedar Falls','Oak Crest'],['Court 1',825,'next','BG','Summit Valley','Kingsford'],['Court 1',900,'sched','G','Pine Hollow','Summit Valley'],['Court 1',975,'sched','BS','Pine Hollow','Northgate'],['Court 1',1050,'sched','BG','Cedar Falls','Bayside Prep'],['Court 1',1125,'lock','BG','Gold semifinal','TBD'],
+ ['Court 2',675,'final','BG','Summit Valley','Riverbend'],['Court 2',775,'live','G','Summit Valley','Eastlake'],['Court 2',850,'late','BS','Mount Harmon','Northgate'],['Court 2',925,'late','BG','Cedar Falls','Granite Hill'],['Court 2',995,'late','BS','Lakeshore','Mount Harmon'],['Court 2',1070,'sched','BG','Oak Crest','Granite Hill'],
+ ['Court 3',675,'final','BS','Pine Hollow','Mount Harmon'],['Court 3',750,'final','BG','Granite Hill','Bayside Prep'],['Court 3',825,'next','G','Ridgeview','Granite Hill'],['Court 3',900,'sched','BG','Oak Crest','Bayside Prep'],['Court 3',975,'sched','G','Ridgeview','Oak Crest'],['Court 3',1050,'sched','G','Pine Hollow','Eastlake'],['Court 3',1125,'lock','G','Girls semifinal','TBD'],
+ ['Main Gym',675,'final','G','Ridgeview','Cedar Falls'],['Main Gym',750,'final','BS','Westbrook','Fairmont'],['Main Gym',825,'next','G','Oak Crest','Cedar Falls'],['Main Gym',900,'sched','BS','Westbrook','Ridgeview'],['Main Gym',975,'sched','G','Granite Hill','Cedar Falls'],['Main Gym',1050,'sched','G','Westbrook','Summit Valley'],['Main Gym',1125,'lock','BS','Silver semifinal','TBD'],
+ ['Aux Gym',675,'final','BS','Lakeshore','Northgate'],['Aux Gym',750,'final','BS','Ridgeview','Hillcrest'],['Aux Gym',825,'blocked','BS','Pine Hollow','Lakeshore'],['Aux Gym',900,'blocked','G','Westbrook','Eastlake'],['Aux Gym',975,'blocked','BG','Riverbend','Kingsford'],['Aux Gym',1050,'blocked','BS','Fairmont','Hillcrest']
+];
+let base=R.map((r,i)=>({id:'g'+i,court:r[0],start:r[1],state:r[2],div:r[3],home:r[4],away:r[5]}));
+const TICKETS={'Aux Gym':{825:11,900:14,975:12,1050:9}};
+const TEAMINFO={
+ 'BG|Kingsford':{name:'Kingsford Knights',school:'Kingsford HS',travel:{hotel:'Pinewood Suites',rooms:7,bus:'Coastal Charter',pickupLead:30},dist:'3-hr drive',coach:'Darnell Price',fee:650,passes:31,contacts:28},
+ 'BS|Lakeshore':{name:'Lakeshore Lakers',school:'Lakeshore HS',travel:{hotel:'Riverside Inn',rooms:6,bus:'School bus',pickupLead:30},dist:'2-hr drive',coach:'Monica Hale',fee:600,passes:22,contacts:25}
+};
+const contactsOf=k=>(TEAMINFO[k]&&TEAMINFO[k].contacts)||({'BS|Pine Hollow':26,'G|Westbrook':29,'G|Eastlake':27,'BG|Riverbend':24,'BS|Fairmont':27,'BS|Hillcrest':28}[k]||26);
+const S={view:'timeline',draft:{},sel:null,team:'BG|Kingsford',csNum:14,published:[],modal:null,toast:null,drag:null,tip:null};
+// draft: id -> {court,start}
+
+// ---------- Model ----------
+const cur=g=>S.draft[g.id]?{...g,...S.draft[g.id],moved:true}:g;
+const all=()=>base.map(cur);
+const tk=(g,n)=>g.div+'|'+n;
+const isTeam=n=>n!=='TBD'&&!/semifinal/.test(n);
+function court4Open(){return all().some(g=>g.court==='Court 4')}
+function check(g,court,start){
+  const out={ok:true,bad:[],lim:[]};
+  if(court==='Aux Gym'){out.ok=false;out.bad.push('Aux Gym is closed');return out}
+  if(start<NOW+15){out.ok=false;out.bad.push('Too soon — teams need 15 min to get there');}
+  if(start+DUR>T1){out.ok=false;out.bad.push('Ends after 8:00 PM building close');}
+  if(court==='Court 4'&&start<840){out.ok=false;out.bad.push('Court 4 opens at 2:00 PM');}
+  const others=all().filter(x=>x.id!==g.id);
+  if(others.some(x=>x.court===court&&start<x.start+DUR&&x.start<start+DUR)){out.ok=false;out.bad.push('Overlaps another game on '+court)}
+  [g.home,g.away].filter(isTeam).forEach(n=>{
+    const k=tk(g,n);
+    others.filter(x=>tk(x,x.home)===k||tk(x,x.away)===k).forEach(x=>{
+      const gap=x.start>=start?x.start-(start+DUR):start-(x.start+DUR);
+      const diffVen=VEN[x.court]!==VEN[court];
+      if(gap<0){out.ok=false;out.bad.push(n+' is playing then')}
+      else if(gap<60){out.ok=false;out.bad.push(n+' rest only '+gap+' min (min 60)')}
+      else if(gap===60||(diffVen&&gap<75))out.lim.push(n+' rest '+gap+' min'+(diffVen?' with a drive':''));
+    });
+  });
+  if(g.div==='BG'&&(g.home==='Riverbend'||g.home==='Kingsford')){const gap=1125-(start+DUR);if(gap<60){out.ok=false;out.bad.push('Winner rests '+gap+' min before 6:45 semi')}else if(gap<75)out.lim.push('Winner rests '+gap+' min before 6:45 semi (at limit)')}
+  return out;
+}
+function ripple(){
+  const moved=base.filter(g=>S.draft[g.id]).map(g=>({b:g,c:cur(g)}));
+  const teams=new Set();moved.forEach(m=>[m.b.home,m.b.away].filter(isTeam).forEach(n=>teams.add(tk(m.b,n))));
+  const contacts=[...teams].reduce((a,k)=>a+contactsOf(k),0);
+  const tickets=moved.reduce((a,m)=>a+((TICKETS[m.b.court]||{})[m.b.start]||0),0);
+  const auxMoved=moved.filter(m=>m.b.court==='Aux Gym').length;
+  const crossVenue=moved.filter(m=>VEN[m.b.court]!==VEN[m.c.court]).length;
+  const lims=[];moved.forEach(m=>check(m.b,m.c.court,m.c.start).lim.forEach(l=>lims.push(l)));
+  const buses=[];teams.forEach(k=>{const ti=TEAMINFO[k];if(!ti)return;const m=moved.find(x=>tk(x.b,x.b.home)===k||tk(x.b,x.b.away)===k);const fr=m.b.start-ti.travel.pickupLead-15;if(fr<=NOW)return;buses.push({k,ti,from:fr,to:m.c.start-ti.travel.pickupLead-15})});
+  return {moved,teams,contacts,tickets,auxMoved,crossVenue,lims,buses,c4:court4Open()};
+}
+function edits(){
+  const r=ripple();const e=[];
+  if(r.c4)e.push({auto:true,txt:'Open Harmon Court 4, 2:00–8:00 PM'});
+  r.moved.forEach(m=>e.push({id:m.b.id,txt:`${m.b.home}–${m.b.away}: ${m.b.court} ${fmt(m.b.start)} → ${m.c.court} ${fmt(m.c.start)}`}));
+  r.buses.filter(b=>b.from!==b.to).forEach(b=>e.push({auto:true,txt:`${b.ti.name.split(' ')[0]} bus pickup ${fmt(b.from)} → ${fmt(b.to)}`}));
+  return e;
+}
+
+// ---------- Helpers ----------
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pct=m=>((m-T0)/SPAN*100);
+function toast(t){S.toast=t;layer();clearTimeout(toast.x);toast.x=setTimeout(()=>{S.toast=null;layer()},3000)}
+function go(v){S.view=v;location.hash=v;render();window.scrollTo(0,0)}
+
+// ---------- Views ----------
+function tabs(){const n=Object.keys(S.draft).length;$('#tabs').innerHTML=[['timeline','Timeline'],['teams','Teams'],['review','Review & publish'+(n?` <span class="count">${edits().length}</span>`:'')],['sent','Sent']].map(([k,l])=>`<a href="#${k}" data-go="${k}" class="${S.view===k?'on':''}" ${S.view===k?'aria-current="page"':''}>${l}</a>`).join('')}
+function draftbar(){
+  const e=edits();
+  $('#draftbar').innerHTML=e.length?`<span class="tag draft">CHANGE SET #${S.csNum} · DRAFT</span><ol style="list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px">${e.map((x,i)=>`<li class="edit ${x.auto?'auto':''}"><span class="n">${i+1}</span>${esc(x.txt)}${x.id?` <button data-revert="${x.id}" aria-label="Undo this edit">Undo</button>`:' <span class="note">(auto)</span>'}</li>`).join('')}</ol><span style="flex:1"></span><button data-discard>Discard</button><button class="primary" data-go="review">Review ${e.length} edits</button>`
+  :`<span class="tag live">LIVE SCHEDULE</span><span class="note" style="font-size:13px">Drag a game to a new court or time. Nothing reaches teams until you publish. <b style="color:var(--ink)">Try: drag the red Aux Gym games onto Court 4.</b></span><span style="flex:1"></span><button data-autofill>Quick fix: move all Aux Gym games to Court 4</button>`;
+}
+function timelineView(){
+  const games=all();const ticks=[];for(let m=T0;m<=T1;m+=60)ticks.push(m);
+  const lanes=LANES.map(([c,v])=>{
+    const cls=c==='Aux Gym'?'closed':c==='Court 4'?(court4Open()?'c4on':'c4off'):'';
+    const blks=games.filter(g=>g.court===c).map(g=>{
+      const st=g.moved?'moved':g.state;const drag=['next','sched','late','blocked'].includes(g.state);
+      return `<div class="blk ${st} ${S.sel===g.id?'sel':''}" data-gid="${g.id}" ${drag?'data-drag="1"':''} tabindex="0" role="button" aria-label="${esc(g.home)} vs ${esc(g.away)}, ${c} ${fmt(g.start)}${drag?', draggable':''}" title="${esc(g.home)} vs ${esc(g.away)}" style="left:${pct(g.start)}%;width:${DUR/SPAN*100}%"><small>${fmt(g.start)} · ${DIV[g.div]}${g.state==='late'&&!g.moved?' · late':g.state==='blocked'&&!g.moved?' · needs court':g.moved?' · draft':''}</small><span class="tn">${esc(g.home)}</span><span class="tn">${esc(g.away)}</span></div>`;
+    }).join('');
+    const label=c==='Aux Gym'?`<b style="color:#991B1B">Aux Gym</b><span style="color:#991B1B">Closed 1:31 PM</span>`:c==='Court 4'?`<b style="color:var(--accent)">Court 4</b><span>${court4Open()?'Opened in draft':'Practice court · free from 2:00'}</span>`:`<b>${c}</b><span>${v}</span>`;
+    return `<div class="lname">${label}</div><div class="lane ${cls}" data-lane="${c}">${c==='Court 4'&&!court4Open()?'<span style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:12px;color:#1E40AF">Drop a game here to open Court 4</span>':''}<div class="now" style="left:${pct(NOW)}%" aria-hidden="true"></div>${blks}</div>`;
+  }).join('');
+  const sel=S.sel?all().find(g=>g.id===S.sel):null;
+  return `<div class="cols">
+   <section class="panel" style="flex:999 1 760px;min-width:0">
+    <div class="phead"><div><h1 style="font-size:19px">Saturday timeline</h1><div class="note">Drag games to move them · click a game for details and keyboard moves</div></div>
+    <div class="legend"><span><i style="background:#FEE2E2;border:1.5px dashed #B91C1C"></i>Needs court</span><span><i style="background:#FFEDD5;border:1.5px solid #C2410C"></i>Late</span><span><i style="background:#DBEAFE;border:1.5px solid #3B82F6"></i>Moved in draft</span><span><i style="background:#EEF2FF;border:1px solid #A5B4FC"></i>Locked</span><span><i style="background:#DC2626;width:3px"></i>Now</span></div></div>
+    <div class="tl"><div class="tlin"><div></div><div class="axis">${ticks.map(m=>`<span style="left:${pct(m)}%">${fmt(m)}</span>`).join('')}</div>${lanes}</div></div>
+    ${sel?detail(sel):''}
+   </section>
+   <aside class="panel rip" aria-label="Ripple preview">${ripplePanel(true)}</aside></div>`;
+}
+function detail(g){
+  const drag=['next','sched','late','blocked'].includes(base.find(b=>b.id===g.id).state);
+  const opts=[];for(let m=840;m<=T1-DUR;m+=15)opts.push(m);
+  const b=base.find(x=>x.id===g.id);
+  return `<div class="detail"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px"><div><div class="note">${DIV[g.div]}</div><h2 style="font-size:17px">${esc(g.home)} vs ${esc(g.away)}</h2></div><button class="ghost" data-desel aria-label="Close details">✕</button></div>
+  <dl class="kv"><dt>Now</dt><dd>${g.court} · ${fmtAP(g.start)}${g.moved?` <span class="note">(was ${b.court} ${fmt(b.start)})</span>`:''}</dd><dt>Teams</dt><dd>${[g.home,g.away].filter(isTeam).map(n=>`<a href="#teams" data-team="${tk(g,n)}">${esc(n)}</a>`).join(' · ')||'Decided by earlier games'}</dd></dl>
+  ${drag?`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end"><label style="display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600">Court<select id="mvCourt">${LANES.filter(l=>l[0]!=='Aux Gym').map(l=>`<option ${l[0]===g.court?'selected':''}>${l[0]}</option>`).join('')}</select></label><label style="display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600">Start<select id="mvTime">${opts.map(m=>`<option value="${m}" ${m===g.start?'selected':''}>${fmtAP(m)}</option>`).join('')}</select></label><button class="primary" data-kbmove="${g.id}">Move</button>${g.moved?`<button data-revert="${g.id}">Undo move</button>`:''}</div><div class="note" id="mvmsg"></div>`:'<div class="note">This game is final, live or locked and can’t be moved.</div>'}</div>`;
+}
+function ripplePanel(compact){
+  const r=ripple();
+  if(!r.moved.length)return `<div class="phead"><h2 style="font-size:17px">Ripple preview</h2></div><div class="empty">Move a game and every effect shows up here before anything is sent: rest time, courts and refs, team buses, tickets, sponsor exposure, and who gets a message.</div>`;
+  const sec=(t,n,body)=>`<div class="rsec"><h3><span>${t}</span><span>${n}</span></h3>${body}</div>`;
+  return `<div class="phead" style="flex-direction:column;align-items:flex-start;gap:8px"><h2 style="font-size:17px">Ripple preview</h2><div class="chips"><span>${r.moved.length} game${r.moved.length>1?'s':''}</span><span>${r.teams.size} teams</span>${r.buses.length?`<span>${r.buses.length} bus${r.buses.length>1?'es':''}</span>`:''}${r.tickets?`<span>${r.tickets} tickets</span>`:''}${r.auxMoved?'<span>1 sponsor</span>':''}<span>${r.contacts} contacts</span></div></div>
+  ${sec('SCHEDULE',r.moved.length,`<p>${r.moved.map(m=>`${esc(m.b.home)}–${esc(m.b.away)} → ${m.c.court} ${fmt(m.c.start)}`).join('<br>')}</p>${r.lims.map(l=>`<div class="lim"><b>At limit:</b> ${esc(l)}</div>`).join('')}`)}
+  ${sec('COURTS AND REFS',(r.c4?1:0)+(r.crossVenue?1:0),`<p>${r.c4?'Court 4 opens; portable scoreboard assigned to Marcus Ortiz. ':''}${r.crossVenue?`Ref Crew 3 drives Westbrook → Harmon (12 min) for ${r.crossVenue} game${r.crossVenue>1?'s':''}.`:''}${!r.c4&&!r.crossVenue?'No court or ref changes.':''}</p>`)}
+  ${sec('TRAVEL',r.buses.length,r.buses.length?r.buses.map(b=>`<p>${b.ti.name}: ${b.ti.travel.bus} pickup at ${b.ti.travel.hotel} ${b.from===b.to?'unchanged':fmt(b.from)+' → '+fmt(b.to)+' PM'}.</p>`).join(''):'<p>No travel changes.</p>')}
+  ${sec('TICKETS AND GATE',r.tickets,r.tickets?`<p>${r.tickets} Aux Gym single-game tickets become valid at Harmon. Gate scan lists update on publish.</p>`:'<p>No ticket changes.</p>')}
+  ${r.auxMoved?sec('SPONSORS',1,`<p>Ironwood Sports Medicine’s Aux Gym baseline banner loses ${r.auxMoved} of 12 contracted games.</p><label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" checked style="width:18px;height:18px;min-height:0;accent-color:#1E40AF"> Move the banner to Court 4</label>`):''}
+  ${sec('MESSAGES',r.teams.size,`<p>One message per affected team: ${r.contacts} contacts by SMS and app push. Nobody else is messaged.</p>`)}
+  ${compact?`<div class="rsec" style="background:#F0FDF4"><p style="color:#166534;font-weight:600">0 conflicts · ${r.lims.length} at limit</p><button class="primary" data-go="review">Review and publish</button></div>`:''}`;
+}
+function graph(){
+  const r=ripple();const m=r.moved.find(x=>x.b.home==='Riverbend')||r.moved[0];if(!m)return '';
+  const g=m.b,c=m.c;const bus=r.buses.find(b=>tk(g,g.home)===b.k||tk(g,g.away)===b.k);
+  const nodes=[
+   [17,16,'TEAM',g.home,'',false],[17,50,'TEAM',g.away,'',false],[17,84,'TICKETS',(TICKETS[g.court]||{})[g.start]?'Aux Gym gate':'Gate',((TICKETS[g.court]||{})[g.start]||0)+' tickets rerouted',!!(TICKETS[g.court]||{})[g.start]],
+   [83,16,'COURT',c.court,c.court==='Court 4'?'Opened for this draft':'',c.court!==g.court],[83,50,'OFFICIALS','Ref Crew 3',VEN[g.court]!==VEN[c.court]?'Westbrook → Harmon':'No change',VEN[g.court]!==VEN[c.court]],[83,84,'TRAVEL',bus?bus.ti.travel.hotel+' bus':'No team travel',bus?'Pickup '+fmt(bus.from)+' → '+fmt(bus.to):'Local teams',!!bus]];
+  const lim=check(g,c.court,c.start).lim;
+  nodes[0][4]=lim.find(l=>l.includes(g.home)||l.includes('Winner'))||'Rest OK';nodes[0][5]=nodes[0][4]!=='Rest OK';
+  nodes[1][4]=lim.find(l=>l.includes(g.away))||(TEAMINFO[tk(g,g.away)]?TEAMINFO[tk(g,g.away)].dist:'Local');nodes[1][5]=!!lim.find(l=>l.includes(g.away))||!!bus;
+  return `<section class="panel"><div class="phead"><h2 style="font-size:16px">What ${esc(g.home)} vs ${esc(g.away)} is connected to</h2><span class="note">Orange = changes in this draft</span></div><div class="graph">
+  <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="position:absolute;inset:0">${nodes.map(n=>`<line x1="50" y1="50" x2="${n[0]}" y2="${n[1]}" stroke="${n[5]?'#FB923C':'#CBD5E1'}" stroke-width="${n[5]?2:1.25}" vector-effect="non-scaling-stroke"/>`).join('')}</svg>
+  <div class="node ctr" style="left:50%;top:50%"><div class="k">GAME · ${DIV[g.div].toUpperCase()}</div><b>${esc(g.home)} vs ${esc(g.away)}</b>${g.court} ${fmt(g.start)} → ${c.court} ${fmt(c.start)}</div>
+  ${nodes.map(n=>`<div class="node ${n[5]?'hot':''}" style="left:${n[0]}%;top:${n[1]}%"><div class="k">${n[2]}</div><b>${esc(n[3])}</b>${esc(n[4])}</div>`).join('')}</div></section>`;
+}
+function reviewView(){
+  const r=ripple();
+  if(!r.moved.length)return `<div class="panel empty" style="text-align:center;padding:40px">No edits in the draft yet.<br><br><button class="primary" data-go="timeline">Go to the timeline</button></div>`;
+  const teams=[...r.teams];
+  return `<div style="display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:10px;margin-bottom:14px"><h1 style="font-size:22px">Review change set #${S.csNum}</h1><span class="note">${edits().length} edits · ${r.teams.size} teams · ${r.contacts} contacts</span></div>
+  <div class="cols"><div style="flex:999 1 640px;min-width:0;display:flex;flex-direction:column;gap:20px">${graph()}
+   <section class="panel"><div class="phead"><h2 style="font-size:16px">Messages that will go out</h2><span class="note">Edit before publishing</span></div><div style="padding:16px 18px;display:flex;flex-direction:column;gap:12px">${teams.map(k=>{const [d,n]=k.split('|');const m=r.moved.find(x=>tk(x.b,x.b.home)===k||tk(x.b,x.b.away)===k);const opp=m.b.home===n?m.b.away:m.b.home;return `<div><div class="note" style="margin-bottom:4px"><b style="color:var(--ink)">${esc(n)}</b> · ${DIV[d]} · ${contactsOf(k)} contacts</div><div class="sms" contenteditable="true" aria-label="Message to ${esc(n)}">Holiday Hoops: your game vs ${esc(opp)} moves to <b>${m.c.court==='Main Gym'?'Westbrook HS Main Gym':'Harmon Fieldhouse '+m.c.court}</b> at ${fmtAP(m.c.start)} (was ${m.b.court} ${fmt(m.b.start)}).</div></div>`}).join('')}</div></section></div>
+   <aside class="panel rip" style="top:130px">${ripplePanel(false)}<div class="rsec"><button class="primary" data-publish style="min-height:48px">Publish and notify ${r.teams.size} teams</button><button data-go="timeline">Back to timeline</button></div></aside></div>`;
+}
+function teamsView(){
+  const games=all();const keys=[...new Set(games.flatMap(g=>[g.home,g.away].filter(isTeam).map(n=>tk(g,n))))].sort((a,b)=>a.split('|')[1].localeCompare(b.split('|')[1]));
+  const k=S.team;const [d,n]=k.split('|');const ti=TEAMINFO[k];
+  const mine=games.filter(g=>tk(g,g.home)===k||tk(g,g.away)===k).sort((a,b)=>a.start-b.start);
+  const changed=mine.some(g=>g.moved);
+  const r=ripple();const bus=r.buses.find(b=>b.k===k);
+  return `<div class="teams"><nav class="panel tlist" aria-label="Teams">${keys.map(x=>{const ch=games.some(g=>g.moved&&(tk(g,g.home)===x||tk(g,g.away)===x));return `<button class="${x===k?'on':''}" data-team="${x}"><span>${esc(x.split('|')[1])} <span class="note">${DIV[x.split('|')[0]]}</span></span>${ch?'<span class="dot" aria-label="changed in draft"></span>':''}</button>`}).join('')}</nav>
+  <section class="panel"><div class="phead"><div style="display:flex;gap:12px;align-items:center"><div aria-hidden="true" style="width:44px;height:44px;border-radius:10px;background:#1E293B;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700">${n.split(' ').map(w=>w[0]).join('')}</div><div><h1 style="font-size:19px">${esc(ti?ti.name:n)}</h1><div class="note">${DIV[d]} · ${ti?ti.school+' · '+ti.dist:n+' HS · local'}</div></div></div>${changed?'<span class="tag draft" style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:#FEF3C7;color:#92400E">CHANGED IN DRAFT</span>':''}</div>
+  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border-bottom:1px solid var(--line)">${[['Registration',`<span style="color:var(--ok)">Paid · $${ti?ti.fee:575}</span>`],['Roster','12 of 12 verified'],['Family passes',(ti?ti.passes:18)+' sold'],['Contacts',contactsOf(k)+' opted in']].map(x=>`<div style="background:#fff;padding:12px 16px"><div class="note">${x[0]}</div><b>${x[1]}</b></div>`).join('')}</div>
+  <div style="padding:16px 18px"><h2 style="font-size:12px;font-family:Inter;color:var(--muted);letter-spacing:.04em;margin-bottom:8px">GAMES TODAY</h2><table><thead><tr><th>TIME</th><th>OPPONENT</th><th>COURT</th><th>STATUS</th></tr></thead><tbody>${mine.map(g=>{const b=base.find(x=>x.id===g.id);return `<tr class="${g.moved?'chg':''}"><td>${g.moved?`<s class="note">${fmt(b.start)}</s> `:''}<b>${fmt(g.start)}</b></td><td>${esc(g.home===n?g.away:g.home)}</td><td>${g.moved?`<s class="note">${b.court}</s> `:''}${g.court}</td><td>${g.moved?'Draft change':g.state==='final'?'Final':g.state==='blocked'?'Needs court':g.state==='late'?'Running late':g.state==='next'?'Warm-up':'Scheduled'}</td></tr>`}).join('')}${d==='BG'&&(n==='Kingsford'||n==='Riverbend')?'<tr><td><b>6:45</b></td><td>Gold semifinal</td><td>Court 1</td><td>If they win</td></tr>':''}</tbody></table></div>
+  <div style="padding:0 18px 18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px">
+   <div><h2 style="font-size:12px;font-family:Inter;color:var(--muted);letter-spacing:.04em;margin-bottom:8px">TRAVEL</h2><p style="margin:0;font-size:13px;line-height:1.6">${ti?`${ti.travel.hotel} · ${ti.travel.rooms} rooms · Dec 27–29<br>${ti.travel.bus} · next pickup ${bus&&bus.from!==bus.to?`<s class="note">${fmt(bus.from)}</s> <b>${fmt(bus.to)} PM</b>`:'45 min before each tip'}`:'Local team · no travel booked'}</p></div>
+   <div><h2 style="font-size:12px;font-family:Inter;color:var(--muted);letter-spacing:.04em;margin-bottom:8px">PEOPLE</h2><p style="margin:0;font-size:13px;line-height:1.6">Head coach ${ti?ti.coach:'on file'}<br>${contactsOf(k)} players and guardians opted in to texts</p></div></div></section></div>`;
+}
+function sentView(){
+  if(!S.published.length)return `<div class="panel empty" style="text-align:center;padding:40px">Nothing published yet today. Published change sets and their messages appear here.</div>`;
+  return `<h1 style="font-size:22px;margin-bottom:14px">Published change sets</h1>${S.published.slice().reverse().map(p=>`<section class="panel" style="margin-bottom:16px"><div class="phead"><div><h2 style="font-size:17px">Change set #${p.num}</h2><div class="note">Published ${p.at} by Dana Mitchell · ${p.edits.length} edits · ${p.contacts} contacts notified</div></div><span class="tag live" style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:#DCFCE7;color:#166534">DELIVERED</span></div><ol style="margin:0;padding:14px 18px 14px 36px;font-size:13px;line-height:1.7">${p.edits.map(e=>`<li>${esc(e)}</li>`).join('')}</ol><div style="padding:0 18px 16px" class="note">Delivered: ${p.contacts-3} · Pending: 3 (phones off) · Replies: 2 — “Thanks!” (Kingsford parent), “Is concessions open at Harmon?” (Lakeshore parent)</div></section>`).join('')}`;
+}
+function layer(){
+  let h='';
+  if(S.modal==='publish'){const r=ripple();h+=`<div class="modal-bg"><div class="modal" role="dialog" aria-modal="true" aria-label="Confirm publish"><div class="mh"><h2 style="font-size:18px">Publish change set #${S.csNum}?</h2><button class="ghost" data-close aria-label="Close">✕</button></div><div class="mb"><p style="margin:0;line-height:1.5">${edits().length} edits go live now. ${r.teams.size} teams (${r.contacts} contacts) get one message each. ${r.buses.length?'Bus companies and ':''}gate lists update automatically.</p><p class="note" style="margin:0">You can undo for 10 minutes; undo sends a correction.</p></div><div class="mf"><button data-close>Cancel</button><button class="primary" data-confirm>Publish now</button></div></div></div>`}
+  if(S.tip)h+=`<div class="floattip" style="left:${S.tip.x+16}px;top:${S.tip.y+16}px">${S.tip.html}</div>`;
+  if(S.toast)h+=`<div class="toast" role="status">${esc(S.toast)}</div>`;
+  $('#layer').innerHTML=h;
+}
+function render(){tabs();draftbar();$('#app').innerHTML=({timeline:timelineView,teams:teamsView,review:reviewView,sent:sentView}[S.view])();layer()}
+
+// ---------- Moves ----------
+function doMove(g,court,start){
+  const b=base.find(x=>x.id===g.id);
+  if(b.court===court&&b.start===start)delete S.draft[g.id];else S.draft[g.id]={court,start};
+}
+function autofill(){
+  const map={825:840,900:915,975:990,1050:1065};
+  base.filter(g=>g.court==='Aux Gym'&&g.state==='blocked').forEach(g=>{S.draft[g.id]={court:'Court 4',start:map[g.start]}});
+  render();toast('4 Aux Gym games drafted on Court 4 · see the ripple preview');
+}
+
+// ---------- Drag ----------
+document.addEventListener('pointerdown',e=>{
+  const b=e.target.closest('.blk[data-drag]');if(!b||S.view!=='timeline')return;
+  const g=all().find(x=>x.id===b.dataset.gid);
+  const rect=b.getBoundingClientRect();
+  S.drag={g,el:b,offX:e.clientX-rect.left,startX:e.clientX,startY:e.clientY,moved:false};
+  b.setPointerCapture(e.pointerId);
+});
+document.addEventListener('pointermove',e=>{
+  const d=S.drag;if(!d)return;
+  if(!d.moved&&Math.hypot(e.clientX-d.startX,e.clientY-d.startY)<5)return;
+  d.moved=true;d.el.classList.add('ghostsrc');
+  document.querySelectorAll('.ghost').forEach(x=>x.remove());document.querySelectorAll('.lane').forEach(l=>l.classList.remove('hover-ok','hover-bad'));
+  d.el.style.pointerEvents='none';const lane=document.elementFromPoint(e.clientX,e.clientY)?.closest('.lane');d.el.style.pointerEvents='';
+  if(!lane){d.target=null;S.tip=null;layer();return}
+  const lr=lane.getBoundingClientRect();
+  let m=T0+((e.clientX-d.offX-lr.left)/lr.width)*SPAN;m=Math.round(m/15)*15;m=Math.max(T0,Math.min(T1-DUR,m));
+  const court=lane.dataset.lane;const res=check(d.g,court,m);
+  d.target={court,start:m,ok:res.ok};
+  lane.classList.add(res.ok?'hover-ok':'hover-bad');
+  const gh=document.createElement('div');gh.className='ghost'+(res.ok?'':' bad');gh.style.left=pct(m)+'%';gh.style.width=DUR/SPAN*100+'%';gh.textContent=fmt(m)+' '+d.g.home+'–'+d.g.away;lane.appendChild(gh);
+  S.tip={x:e.clientX,y:e.clientY,html:`<b>${court} · ${fmtAP(m)}</b><br>${res.ok?'✓ Fits':'<span class="bad">✕ Can’t drop here</span>'}${res.bad.map(x=>`<br><span class="bad">${esc(x)}</span>`).join('')}${res.lim.map(x=>`<br><span class="lim">! ${esc(x)}</span>`).join('')}${res.ok&&court!==d.g.court&&VEN[court]!==VEN[d.g.court]?'<br>Venue change · refs and families notified':''}`};
+  layer();
+});
+document.addEventListener('pointerup',e=>{
+  const d=S.drag;if(!d)return;S.drag=null;S.tip=null;
+  if(!d.moved){S.sel=d.g.id;render();return}
+  if(d.target&&d.target.ok){doMove(d.g,d.target.court,d.target.start);S.sel=d.g.id;render();toast(`${d.g.home}–${d.g.away} → ${d.target.court} ${fmt(d.target.start)} (draft)`)}
+  else{render();if(d.target)toast('Not moved — check the reasons in red')}
+});
+
+// ---------- Clicks ----------
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,a,.blk');if(!t)return;const d=t.dataset;
+  if(d.go){e.preventDefault();go(d.go);return}
+  if(t.classList.contains('blk')&&!d.drag){S.sel=d.gid;render();return}
+  if(d.team){e.preventDefault();S.team=d.team;go('teams');return}
+  if(t.hasAttribute('data-autofill')){autofill();return}
+  if(t.hasAttribute('data-discard')){S.draft={};S.sel=null;render();toast('Draft discarded');return}
+  if(d.revert){delete S.draft[d.revert];render();toast('Edit undone');return}
+  if(t.hasAttribute('data-desel')){S.sel=null;render();return}
+  if(d.kbmove){const g=all().find(x=>x.id===d.kbmove);const c=$('#mvCourt').value,m=+$('#mvTime').value;const res=check(g,c,m);if(!res.ok){$('#mvmsg').innerHTML='<span style="color:#B91C1C">Can’t move: '+res.bad.map(esc).join('; ')+'</span>';return}doMove(g,c,m);render();toast(`${g.home}–${g.away} → ${c} ${fmt(m)} (draft)`);return}
+  if(t.hasAttribute('data-publish')){S.modal='publish';layer();return}
+  if(t.hasAttribute('data-close')){S.modal=null;layer();return}
+  if(t.hasAttribute('data-confirm')){const r=ripple();S.published.push({num:S.csNum,at:'1:4'+(6+S.published.length)+' PM',edits:edits().map(x=>x.txt),contacts:r.contacts});
+    base=all().map(g=>{const moved=g.moved;const x={...g};delete x.moved;if(moved&&x.state==='blocked')x.state='sched';return x});S.draft={};S.csNum++;S.modal=null;S.sel=null;go('sent');toast('Published · '+r.contacts+' contacts notified');return}
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){S.modal=null;S.sel=null;render()}
+  if(e.key==='Enter'&&e.target.classList&&e.target.classList.contains('blk')){S.sel=e.target.dataset.gid;render();setTimeout(()=>{const s=$('#mvCourt');if(s)s.focus()},0)}
+});
+window.addEventListener('hashchange',()=>{const v=location.hash.slice(1);if(['timeline','teams','review','sent'].includes(v)&&v!==S.view){S.view=v;render()}});
+const h0=location.hash.slice(1);if(['timeline','teams','review','sent'].includes(h0))S.view=h0;
+render();
+</script>
+</body>
+</html>
