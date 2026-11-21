@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>From database report to supply chain decision tool · William Teppig</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+:root{
+  --white:#fff;--offwhite:#f8f8f6;--surface:#f2f2ef;--border:#e4e4e0;--border2:#d0d0cb;
+  --ink:#1a1a18;--ink2:#4a4a46;--ink3:#76766f;
+  --teal:#006d77;--teal-d:#00555e;--teal-light:#e8f4f5;--teal-mid:#b2d8dc;
+  --slate:#3d5a6c;--slate-light:#edf2f5;
+  --amber:#9a520f;--amber-light:#fdf0e6;
+  --green:#3b6d11;--green-light:#eaf3de;
+  --red:#a32d2d;--red-light:#fcebeb;
+  --radius-sm:6px;--radius-md:12px;--radius-lg:20px;
+  --serif:'DM Serif Display',Georgia,serif;--sans:'Inter',-apple-system,sans-serif;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 16px rgba(0,0,0,.07),0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.09),0 2px 8px rgba(0,0,0,.05);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--offwhite);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(248,248,246,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-brand{display:inline-flex;align-items:center}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{font-size:12px;font-weight:500;color:var(--ink2);text-decoration:none;letter-spacing:.02em;transition:color .15s}
+.nav-links a:hover{color:var(--teal)}
+
+/* HERO */
+.hero{background:var(--white);padding:88px 0 0}
+.hero-content{padding:0 48px 56px;max-width:1176px;margin:0 auto}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:24px}
+.hero h1{font-family:var(--serif);font-size:clamp(36px,5vw,58px);font-weight:400;line-height:1.1;max-width:820px;margin-bottom:24px}
+.hero h1 em{color:var(--teal);font-style:italic}
+.hero-sub{font-size:17px;color:var(--ink2);max-width:640px;line-height:1.65;margin-bottom:48px}
+.hero-meta{display:flex;flex-wrap:wrap;border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;background:var(--offwhite)}
+.hero-meta-item{padding:20px 28px;flex:1;min-width:160px;border-right:1px solid var(--border)}
+.hero-meta-item:last-child{border-right:none}
+.meta-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.meta-val{font-size:14px;font-weight:500}
+
+.hero-band{max-width:1176px;margin:0 auto;padding:0 48px;line-height:0}
+.hero-shot{border:1px solid var(--border);border-bottom:none;border-radius:12px 12px 0 0;overflow:hidden;background:var(--white);box-shadow:0 -8px 40px rgba(0,109,119,.1),0 -2px 16px rgba(0,0,0,.08);cursor:zoom-in}
+.hero-shot img{display:block;width:100%;height:auto}
+/* JOURNEY MAP */
+.jm-wrap{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:48px;background:#fff;box-shadow:var(--shadow-sm)}
+.jm-wrap>.jm-scope{overflow-x:auto}
+.jm-wrap table{min-width:1020px}
+.jm-scope td.jm-persona{padding:12px 6px}
+.jm-scope .jm-persona-row{gap:6px}
+.jm-scope .jm-persona-role{font-size:11px}
+.jm-scope{
+  --jm-ink:#2c2c2a; --jm-muted:#5f5e5a; --jm-border:#bcd2e8; --jm-card:#ffffff; --jm-label-bg:#eef3f8;
+  --jm-happy:#3fa54a; --jm-mid:#f2a33d; --jm-sad:#e2483f; --jm-line:#9aa7b2;
+  --jm-green-head:#EAF3DF; --jm-green-bg:#eaf3de; --jm-green-fg:#22530f;
+  --jm-blue-head:#E7F1FB;  --jm-blue-bg:#e6f1fb;  --jm-blue-fg:#0c447c;
+  --jm-teal-head:#E2F5F2;  --jm-teal-bg:#e1f5f2;  --jm-teal-fg:#0a4d54;
+  --jm-coral-head:#FBEEE4; --jm-coral-bg:#fbeee3; --jm-coral-fg:#8a3d10;
+  --jm-amber-head:#FBF1D9; --jm-amber-bg:#fbf1d8; --jm-amber-fg:#7a5c07;
+  --jm-green-text:#2f7d32; --jm-blue-text:#1c5fa0; --jm-teal-text:#0f6e7a; --jm-coral-text:#c9591c; --jm-amber-text:#b8860b;
+  font-family: var(--sans); color: var(--jm-ink); background: var(--jm-card); padding: 8px;
+}
+.jm-scope table{ width:100%; border-collapse:collapse; table-layout:fixed; }
+.jm-scope col.jm-lblcol{ width:13.5%; }
+.jm-scope col.jm-datacol{ width:12.36%; }
+.jm-scope td{ border:1px solid var(--jm-border); padding:12px 10px; vertical-align:middle; font-size:13px; line-height:1.45; }
+.jm-scope td.jm-lbl{ background:var(--jm-label-bg); color:#2b4a63; font-weight:700; text-align:left; }
+.jm-scope td.jm-head{ color:#fff; font-weight:700; text-align:center; font-size:15px; padding:14px 10px; }
+.jm-scope td.jm-persona{ text-align:left; background:#fff; }
+.jm-scope .jm-persona-row{ display:flex; align-items:center; gap:8px; }
+.jm-scope .jm-chip{ flex:0 0 auto; width:26px; height:26px; border-radius:50%; color:#fff; font-weight:700; font-size:11px; display:flex; align-items:center; justify-content:center;}
+.jm-scope .jm-persona-name{ font-weight:700; color:var(--jm-ink);}
+.jm-scope .jm-persona-role{ font-size:11.5px; color:var(--jm-muted);}
+.jm-scope td.jm-activity{ font-weight:600; text-align:center; background:#fff; }
+.jm-scope td.jm-icon-cell{ text-align:center; background:#fff; }
+.jm-scope .jm-feeling-label{ font-size:13px; font-weight:600; }
+.jm-scope td.jm-exp{ text-align:center; background:#fff; color:var(--jm-muted); }
+.jm-scope td.jm-expect{ font-weight:600; text-align:center; background:#fff; }
+.jm-scope .jm-sat-cell{ padding:0; background:#fff; }
+.jm-scope .jm-sat-svg{ width:100%; aspect-ratio:700/190; height:auto; display:block; }
+.jm-scope .jm-band-label{ font-size:11px; fill:#7f8c99; font-family:inherit; font-weight:600; }
+/* IMPACT */
+.impact-bar{background:var(--teal);padding:44px 48px}
+.impact-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr)}
+.impact-stat{padding:0 32px;border-right:1px solid rgba(255,255,255,.2)}
+.impact-stat:first-child{padding-left:0}.impact-stat:last-child{border-right:none}
+.impact-num{font-family:var(--serif);font-size:48px;color:#fff;line-height:1;margin-bottom:8px}
+.impact-num small{font-size:28px;opacity:.7;margin:0 6px}
+.impact-desc{font-size:13px;color:rgba(255,255,255,.8);line-height:1.5}
+
+/* SECTIONS */
+.section{padding:88px 48px;border-bottom:1px solid var(--border)}
+.section.alt{background:var(--white)}
+.section-inner{max-width:1080px;margin:0 auto}
+.section-label{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin-bottom:16px}
+.section-label span{background:var(--teal-light);width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px}
+h2.section-title{font-family:var(--serif);font-size:clamp(26px,3vw,36px);font-weight:400;line-height:1.2;margin-bottom:24px;max-width:820px}
+h3.sub{font-family:var(--serif);font-size:24px;font-weight:400;margin:64px 0 12px}
+.lede{font-size:16px;color:var(--ink2);line-height:1.7;max-width:760px;margin-bottom:40px}
+.text-body{font-size:15px;color:var(--ink2);line-height:1.7}
+.note{font-size:12px;color:var(--ink3);font-style:italic;margin-top:14px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:24px;box-shadow:var(--shadow-sm)}
+.card h4{font-size:14px;font-weight:600;margin-bottom:6px}
+.card p{font-size:13px;color:var(--ink2);line-height:1.6}
+.card.top{position:relative;overflow:hidden}
+.card.top::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--teal)}
+
+.role-callout{background:var(--slate-light);border:1px solid #c8d8e4;border-radius:var(--radius-md);padding:28px 32px}
+.role-callout h3{font-size:13px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.role-callout ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.role-callout li{font-size:14px;color:var(--ink2);padding-left:22px;position:relative}
+.role-callout li::before{content:'→';color:var(--slate);font-weight:600;position:absolute;left:0}
+.contrib-band{padding:56px 48px 0;background:var(--offwhite)}
+
+.pullquote{background:var(--teal-light);border-left:4px solid var(--teal);border-radius:0 var(--radius-md) var(--radius-md) 0;padding:28px 32px;display:flex;gap:20px;align-items:flex-start}
+.pullquote img{width:48px;height:48px;border-radius:50%;flex-shrink:0}
+.pullquote blockquote{font-family:var(--serif);font-size:20px;font-style:italic;color:var(--teal);line-height:1.5;margin-bottom:10px}
+.pullquote cite{font-size:11px;font-weight:600;color:var(--ink2);letter-spacing:.06em;text-transform:uppercase;font-style:normal}
+
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:var(--radius-md);background:var(--white);overflow:hidden}
+.stat-row div{padding:22px 24px;border-right:1px solid var(--border)}
+.stat-row div:last-child{border-right:none}
+.stat-row b{display:block;font-family:var(--serif);font-weight:400;font-size:38px;line-height:1;margin-bottom:6px;color:var(--ink)}
+.stat-row b.red{color:var(--red)}
+.stat-row span{font-size:12px;color:var(--ink2)}
+
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:500;color:var(--ink2);box-shadow:var(--shadow-sm)}
+.chip b{color:var(--green);font-weight:600}
+
+/* severity */
+.sev{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.sev.critical{background:var(--red-light);color:var(--red)}
+.sev.high{background:var(--amber-light);color:var(--amber)}
+.sev.medium{background:var(--slate-light);color:var(--slate)}
+.sev.good{background:var(--green-light);color:var(--green)}
+
+/* screen eval cards */
+.eval-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.eval-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column}
+.eval-shot{aspect-ratio:16/9;overflow:hidden;background:var(--surface);border-bottom:1px solid var(--border);cursor:zoom-in;position:relative}
+.eval-shot img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block;transition:transform .3s}
+.eval-shot:hover img{transform:scale(1.02)}
+.eval-body{padding:20px 22px 22px}
+.eval-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.eval-head h4{font-size:14px;font-weight:600}
+.eval-body p{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:8px}
+.eval-body p strong{color:var(--ink);font-weight:600}
+.eval-body p.rec{margin-bottom:0;padding-top:10px;border-top:1px dashed var(--border)}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-md);background:var(--white);box-shadow:var(--shadow-sm)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);padding:14px 18px;background:var(--offwhite);border-bottom:1px solid var(--border)}
+td{padding:13px 18px;border-bottom:1px solid var(--border);color:var(--ink2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td:first-child{color:var(--ink);font-weight:500}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+td .arrow{color:var(--teal);font-weight:700;margin:0 6px}
+td .old{color:var(--ink3);text-decoration:line-through;text-decoration-color:rgba(163,45,45,.5)}
+td .new{color:var(--teal-d);font-weight:600}
+
+/* journey */
+.journey{display:flex;align-items:stretch;gap:0;margin:8px 0 12px;overflow-x:auto;padding-bottom:6px}
+.j-step{flex:1;min-width:120px;display:flex;align-items:center}
+.j-box{flex:1;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 12px;text-align:center;font-size:12px;font-weight:500;color:var(--ink2);min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.j-box.hot{border-color:#e7b4b4;background:var(--red-light);color:var(--red);font-weight:600}
+.j-box small{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.j-box.hot small{color:var(--red)}
+.j-arrow{width:22px;flex-shrink:0;text-align:center;color:var(--border2);font-size:14px}
+.journey.after .j-box{border-color:var(--teal-mid);background:var(--teal-light);color:var(--teal-d);font-weight:600}
+.journey.after .j-box small{color:var(--teal)}
+.journey-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin:28px 0 10px;display:flex;gap:10px;align-items:center}
+
+.breakdowns{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:32px}
+.bd{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 14px}
+.bd h5{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:8px;padding-bottom:8px;border-bottom:2px solid var(--red-light)}
+.bd p{font-size:12px;color:var(--ink2);line-height:1.5}
+
+.model{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:20px;position:relative}
+.model::before{content:'';position:absolute;top:27px;left:10%;right:10%;height:2px;background:var(--teal-mid)}
+.m-step{text-align:center;position:relative;padding:0 8px}
+.m-dot{width:56px;height:56px;border-radius:50%;background:var(--teal);color:#fff;font-family:var(--serif);font-size:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 0 0 6px var(--white)}
+.m-q{font-size:13px;font-weight:600;color:var(--ink);line-height:1.35;margin-bottom:4px}
+.m-a{font-size:11.5px;color:var(--ink3);line-height:1.4}
+
+/* before / after cards */
+.ba-panel{display:block;margin-bottom:28px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);overflow:hidden}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.ba-head{padding:24px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:24px;align-items:flex-start}
+.ba-step{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.ba-head h4{font-family:var(--serif);font-weight:400;font-size:22px;margin-bottom:4px}
+.ba-head p{font-size:13.5px;color:var(--ink2);max-width:620px}
+.ba-q{font-size:11px;font-weight:600;color:var(--teal);background:var(--teal-light);padding:6px 12px;border-radius:20px;white-space:nowrap}
+.ba-imgs{display:grid;grid-template-columns:1fr 1fr;background:var(--offwhite)}
+.ba-col{padding:22px 24px;display:flex;flex-direction:column;gap:12px}
+.ba-col + .ba-col{border-left:1px solid var(--border)}
+.ba-col-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.ba-col-label.b{color:var(--red)}.ba-col-label.a{color:var(--teal)}
+.ba-col-label::before{content:'';width:8px;height:8px;border-radius:50%;background:currentColor}
+.ba-shot{border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--white);box-shadow:var(--shadow-sm);aspect-ratio:4/3;cursor:zoom-in}
+.ba-shot img{display:block;width:100%;height:100%;object-fit:cover;object-position:top left}
+.ba-shot.contain img{object-fit:contain;object-position:center;background:#fff}
+.ba-col ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+.ba-col li{font-size:12.5px;color:var(--ink2);line-height:1.5;padding-left:18px;position:relative}
+.ba-col.before li::before{content:'✕';position:absolute;left:0;color:var(--red);font-size:10px;top:2px}
+.ba-col.after li::before{content:'✓';position:absolute;left:0;color:var(--teal);font-weight:700}
+.ba-foot{padding:16px 28px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:11px;color:var(--ink3)}
+.ba-foot b{font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:10px;margin-right:4px}
+.fx{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11px;color:var(--ink2)}
+
+.kpi-map{border:1px solid var(--border);border-radius:8px;background:var(--white);box-shadow:var(--shadow-sm);aspect-ratio:4/3;padding:16px;display:flex;flex-direction:column;gap:12px;overflow:hidden}
+.kpi-map img{display:block;width:100%;height:auto;border-radius:6px;cursor:zoom-in}
+.kpi-rows{display:flex;flex-direction:column;gap:6px;flex:1;justify-content:center}
+.kpi-row{display:grid;grid-template-columns:1fr 26px 1.35fr;align-items:center;font-size:12px}
+.kpi-row .k{background:var(--teal-light);border:1px solid var(--teal-mid);color:var(--teal-d);font-weight:600;border-radius:6px;padding:7px 10px;display:flex;justify-content:space-between;gap:8px}
+.kpi-row .k b{font-weight:700}
+.kpi-row .ar{text-align:center;color:var(--teal);font-weight:700}
+.kpi-row .d{color:var(--ink2);padding:7px 10px;border:1px dashed var(--border2);border-radius:6px;background:var(--offwhite)}
+
+/* scorecard */
+.score{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.score div{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:18px 20px}
+.score small{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+.score b{display:block;font-family:var(--serif);font-weight:400;font-size:34px;color:var(--teal);line-height:1.1;margin:6px 0 2px}
+.score span{font-size:12px;color:var(--ink2)}
+ol.tasks{list-style:none;counter-reset:t;display:flex;flex-direction:column;gap:8px}
+ol.tasks li{counter-increment:t;font-size:13.5px;color:var(--ink2);padding-left:34px;position:relative;line-height:1.5}
+ol.tasks li::before{content:counter(t);position:absolute;left:0;top:-1px;width:22px;height:22px;border-radius:50%;background:var(--teal-light);color:var(--teal);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+.result-list{display:flex;flex-direction:column;gap:14px}
+.result-item{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:20px 24px;box-shadow:var(--shadow-sm)}
+.result-item h4{font-size:14px;font-weight:600;margin-bottom:4px}
+.result-item p{font-size:13px;color:var(--ink2);line-height:1.55}
+
+footer{background:var(--ink);padding:48px;text-align:center}
+footer p{font-size:13px;color:rgba(255,255,255,.45)}
+footer strong{color:rgba(255,255,255,.8)}
+
+/* lightbox */
+.lb{display:none;position:fixed;inset:0;z-index:1000;background:rgba(20,20,18,.86);backdrop-filter:blur(4px);align-items:center;justify-content:center;flex-direction:column;padding:48px 72px}
+.lb.open{display:flex}
+.lb img{max-width:100%;max-height:calc(100vh - 140px);border-radius:8px;box-shadow:var(--shadow-lg);background:#fff}
+.lb-cap{color:rgba(255,255,255,.85);font-size:13px;margin-top:14px;text-align:center}
+.lb button{position:absolute;background:rgba(255,255,255,.12);border:none;color:#fff;width:44px;height:44px;border-radius:50%;font-size:24px;cursor:pointer;line-height:1}
+.lb button:hover{background:rgba(255,255,255,.22)}
+.lb-x{top:20px;right:20px}.lb-p{left:16px;top:50%}.lb-n{right:16px;top:50%}
+
+@media (max-width:900px){
+  .breakdowns,.model{grid-template-columns:1fr 1fr}
+  .model::before{display:none}
+  .stat-row,.score{grid-template-columns:1fr 1fr}
+  .stat-row div:nth-child(2){border-right:none}
+  .stat-row div:nth-child(-n+2){border-bottom:1px solid var(--border)}
+}
+@media (max-width:768px){
+  nav{padding:0 20px}.nav-links{gap:14px}
+  .hero-content,  .section,.impact-bar,.contrib-band{padding-left:20px;padding-right:20px}
+  .two-col,.three-col,.eval-grid,.ba-imgs{grid-template-columns:1fr}
+    .ba-col + .ba-col{border-left:none;border-top:1px solid var(--border)}
+  .impact-inner{grid-template-columns:1fr;gap:24px}
+  .impact-stat{border-right:none;padding-left:0}
+  .hero-meta{flex-direction:column}
+  .hero-meta-item{border-right:none;border-bottom:1px solid var(--border)}
+  .ba-head{flex-direction:column}
+  .lb{padding:56px 12px}
+}
+</style>
+<style id="cs-standard-2026">
+.glance{max-width:1176px;margin:56px auto 8px;padding:0 48px;font-family:'Inter',-apple-system,sans-serif}
+.glance-box{border:1px solid #e4e4e0;border-radius:16px;background:#f8f8f6;padding:32px 36px}
+.glance-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px}
+.glance-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#006d77}
+.glance-time{font-size:12px;color:#8a8a84}
+.glance-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.glance-item h4{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a8a84;margin:0 0 8px}
+.glance-item p{font-size:14.5px;line-height:1.6;color:#1a1a18;margin:0}
+.glance-item p.meas{font-size:12.5px;color:#4a4a46;margin-top:10px;padding-top:10px;border-top:1px solid #e4e4e0}
+.cs-todo{display:block;margin-top:10px;font-size:12px;line-height:1.5;color:#7a4a12;background:#fdf0e6;border:1px dashed #e0a160;border-radius:6px;padding:6px 10px}
+.result-list.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cs-close{background:#1a1a18;color:#fff;padding:88px 48px;font-family:'Inter',-apple-system,sans-serif}
+.cs-close-inner{max-width:1080px;margin:0 auto}
+.cs-close-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#b2d8dc;margin-bottom:18px}
+.cs-close-takeaway{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(24px,3vw,34px);line-height:1.3;color:#fff;max-width:860px;margin:0 0 18px}
+.cs-close-body{font-size:16px;line-height:1.7;color:rgba(255,255,255,.78);max-width:760px;margin:0 0 40px}
+.cs-close-next{border-top:1px solid rgba(255,255,255,.18);padding-top:28px;margin-bottom:44px}
+.cs-close-next h3{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;margin:0 0 14px;font-family:'Inter',sans-serif}
+.cs-close-next ul{margin:0;padding-left:20px}
+.cs-close-next li{font-size:15.5px;line-height:1.65;color:rgba(255,255,255,.85);margin-bottom:8px}
+.cs-close .cs-todo{display:inline-block;margin:0 0 12px}
+.cs-close-nav{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.cs-close-nav a{color:#fff;text-decoration:none;font-size:14px;font-weight:600}
+.cs-close-nav a.next{background:#fff;color:#1a1a18;border-radius:24px;padding:13px 24px}
+.cs-close-nav a.next span{color:#006d77}
+.cs-close-nav a.back{color:rgba(255,255,255,.7)}
+.cs-close-nav a:hover{opacity:.85}
+@media(max-width:900px){.glance-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.result-list.result-grid{grid-template-columns:1fr}.glance{padding:0 20px;margin-top:36px}.glance-box{padding:24px}.glance-grid{grid-template-columns:1fr;gap:20px}.cs-close{padding:64px 24px}}
+</style>
+<style id="site-nav-style">
+nav.site-nav{position:sticky;top:0;z-index:1000;background:rgba(248,248,246,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid #e4e4e0;padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:64px;margin:0;box-shadow:none;font-family:'Inter',-apple-system,sans-serif;box-sizing:border-box;width:100%}
+nav.site-nav .nav-brand{display:inline-flex;align-items:center;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#1a1a18}
+nav.site-nav .nav-links{display:flex;gap:32px;align-items:center;margin:0;padding:0}
+nav.site-nav .nav-links a{font-size:12px;font-weight:500;color:#4a4a46;text-decoration:none;letter-spacing:.02em;transition:color .15s;padding:0;border:0;background:none;line-height:1.6}
+nav.site-nav .nav-links a:hover{color:#006d77}
+nav.site-nav .nav-links a.nav-resume{font-size:12px;font-weight:500;letter-spacing:.02em;color:#4a4a46;white-space:nowrap;border:1px solid #d0d0cb;border-radius:20px;padding:7px 16px;transition:background .15s,border-color .15s}
+nav.site-nav .nav-links a.nav-resume:hover{background:#fff;border-color:#8a8a84;color:#1a1a18}
+@media (max-width:640px){
+ nav.site-nav{flex-wrap:wrap;height:auto;padding:12px 24px;gap:10px}
+ nav.site-nav .nav-links{flex-wrap:wrap;gap:12px 18px;justify-content:flex-start}
+}
+</style>
+<style id="glance-gray-bg">
+/* At a glance: visible gray card on this page */
+section.glance .glance-box{background:#f2f2ef;border-color:#e4e4e0}
+</style>
+<style id="sc-white-bg">
+/* Hero detail strip, At a glance band and Context section: white instead of the page gray */
+.hero .hero-meta{background:#fff}
+section.glance{max-width:none;margin:0;background:#fff;padding:56px max(48px,calc((100% - 1176px)/2 + 48px)) 8px}
+#context{background:#fff}
+@media(max-width:640px){section.glance{padding:36px 20px 8px}}
+</style>
+<style id="footer-email-style">
+footer .footer-email{margin-top:10px;font-size:13px}
+footer .footer-email a{color:inherit;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px;transition:opacity .15s}
+footer .footer-email a:hover{opacity:.75}
+</style>
+</head>
+<body>
+
+<nav class="site-nav" id="top" aria-label="Main">
+<a class="nav-brand" href="index.html#top"><img alt="William Teppig" src="images/f77d54b9a753.webp" style="height:28px;width:auto;display:block;"/></a>
+<div class="nav-links">
+<a href="index.html#work">Work</a>
+<a href="index.html#leadership">Leadership</a>
+<a href="index.html#process">How I Work</a>
+<a href="index.html#about">About</a>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Premier · Enterprise Healthcare</div>
+    <h1>From database report to <em>supply chain decision tool</em></h1>
+    <p class="hero-sub">Approving a requisition is a simple decision: what is being requested, what it costs, and whether it should go ahead. In Premier's legacy ERP that decision sat behind three menu levels, a 22-column report and a dialog with two separate checkboxes. I evaluated the full approval flow screen by screen, then rebuilt it around how approvers actually decide.</p>
+      </div>
+  <div class="hero-band">
+    <div class="hero-shot" data-lb="n_dashboard"><img alt="Redesigned ERP dashboard" data-img="n_hero_crop.png"/></div>
+  </div>
+</section>
+
+<div class="impact-bar" aria-label="Impact and results">
+  <div class="impact-inner">
+    <div class="impact-stat"><div class="impact-num">40%</div><div class="impact-desc">Fewer steps across primary procurement tasks</div></div>
+    <div class="impact-stat"><div class="impact-num">23%</div><div class="impact-desc">Productivity improvement</div></div>
+    <div class="impact-stat"><div class="impact-num">22<small>→</small>10</div><div class="impact-desc">Columns in the approval queue, so the requests needing action are easier to spot</div></div>
+  </div>
+</div>
+
+
+<!-- AT A GLANCE (30-second summary) -->
+<section class="glance" aria-label="At a glance"><div class="glance-box">
+<div class="glance-head"><div class="glance-label">At a glance</div></div>
+<div class="glance-grid">
+<div class="glance-item"><h4>The problem</h4><p>Approving a routine requisition in Premier's legacy ERP meant three menu levels, a 22-column queue, nine tabs and an approve/reject dialog where both boxes could be checked.</p></div>
+<div class="glance-item"><h4>My role &amp; team</h4><p>Principal UX Designer. Owned the Buyer experience: buyer interviews, the heuristic evaluation, journey mapping and redesigned screens on the Fireball Design System.</p></div>
+<div class="glance-item"><h4>Key decision</h4><p>Rebuild the flow around the five questions an approver asks, and replace the two-checkbox dialog with clearly named Approve and Reject actions on the review page.</p></div>
+<div class="glance-item"><h4>Outcome</h4><p>40% fewer steps across primary procurement tasks, a 23% productivity improvement, and an approval queue cut from 22 to 10 columns.</p></div>
+</div></div></section>
+
+<!-- 1 CONTEXT -->
+<section class="section" id="context">
+  <div class="section-inner">
+    <div class="section-label"><span>1</span>The Task</div>
+    <h2 class="section-title">One everyday decision, buried under the structure of the system</h2>
+    <p class="lede">The ERP did a lot: requisitions, procurement, approval routing, dollar limits, approver groups. The problem was not missing features. To finish a routine approval, users had to know how the ERP organised its modules, find their way through layers of menus, read dense tables, and piece together the facts they needed to decide on their own. The software made users work the way the system was built.</p>
+
+    <div class="pullquote">
+      <img alt="Maria Delgado" data-img="maria.png"/>
+      <div>
+        <blockquote>"Every morning I dig through three menus just to find my queue. Then I'm scanning twenty-some columns to work out what's urgent, and clicking through tabs to see if it's even on contract. Just show me what needs my attention."</blockquote>
+        <cite>Maria Delgado · Buyer persona · Mid-size Regional Hospital</cite>
+      </div>
+    </div>
+
+    <h3 class="sub">Evaluation scope</h3>
+    <p class="text-body" style="margin-bottom:24px;max-width:760px">I picked the requisition approval path because it is short, high-stakes and easy to test. It involves one role and one decision, and success is clear: the decision is correct, recorded and confirmed. I reviewed the six screens an approver passes through, from logging in to submitting a decision.</p>
+    <div class="stat-row">
+      <div><b>6</b><span>Screens reviewed, from dashboard to decision dialog</span></div>
+      <div><b>10</b><span>Nielsen heuristics applied to each screen</span></div>
+      <div><b class="red">5</b><span>Critical-severity findings</span></div>
+      <div><b>3</b><span>Priority redesign areas: queue, review, decision</span></div>
+    </div>
+    <p class="note">Ratings are expert judgment based on the screens, not a measured usability score. Severity was treated as provisional until validated with users.</p>
+
+    <h3 class="sub" style="margin-top:48px">What was worth keeping</h3>
+    <p class="text-body" style="margin-bottom:20px;max-width:760px">A redesign that throws out working parts loses users' trust. These strengths carried into the new design:</p>
+    <div class="chips">
+      <span class="chip"><b>✓</b> Broad functionality for complex procurement</span>
+      <span class="chip"><b>✓</b> Org &amp; department context that stays visible</span>
+      <span class="chip"><b>✓</b> Requisition numbers, status, cost and vendor all available</span>
+      <span class="chip"><b>✓</b> Several ways in: menus, index, search, quick filters</span>
+      <span class="chip"><b>✓</b> Flexible approval routing</span>
+    </div>
+  </div>
+</section>
+
+<!-- 2 EVALUATION -->
+<section class="section alt" id="evaluation">
+  <div class="section-inner">
+    <div class="section-label"><span>2</span>Heuristic Evaluation</div>
+    <h2 class="section-title">Six screens, rated by how much each one gets in the way of the decision</h2>
+    <p class="lede">I walked through each screen as an approver and recorded where it made the task harder, how severe that was, and what should change. Click any screen to enlarge it.</p>
+
+    <div class="eval-grid">
+      <article class="eval-card">
+        <div class="eval-shot" data-lb="l1_dashboard"><img alt="Legacy ERP dashboard" data-img="l1_dashboard.jpg"/></div>
+        <div class="eval-body">
+          <div class="eval-head"><h4>01 · ERP dashboard</h4><span class="sev high">High</span></div>
+          <p><strong>Finding:</strong> Shows EDI exceptions, invoice types and match exceptions as month-by-month reports, with no indication of what needs the user's attention. Large empty panels sit next to cramped navigation and tiny labels.</p>
+          <p class="rec"><strong>Recommendation:</strong> Role-based KPIs, summaries of exceptions the user can act on, and a prominent "Pending my approval" entry point.</p>
+        </div>
+      </article>
+      <article class="eval-card">
+        <div class="eval-shot" data-lb="l3_mainnav"><img alt="Legacy main navigation" data-img="l3_mainnav.jpg"/></div>
+        <div class="eval-body">
+          <div class="eval-head"><h4>02 · Main navigation</h4><span class="sev medium">Medium</span></div>
+          <p><strong>Finding:</strong> Labels such as "Work in Materials" and "Work in Accounts Payable" follow the system's internal structure. Users have to know which module holds each function.</p>
+          <p class="rec"><strong>Recommendation:</strong> Replace them with task-based labels such as Requisitions, Purchase Orders and Approvals.</p>
+        </div>
+      </article>
+      <article class="eval-card">
+        <div class="eval-shot" data-lb="l2_reqnav"><img alt="Legacy expanded requisitioning menu" data-img="l2_reqnav.jpg"/></div>
+        <div class="eval-body">
+          <div class="eval-head"><h4>03 · Requisitioning submenu</h4><span class="sev high">High</span></div>
+          <p><strong>Finding:</strong> At least 14 links mix daily tasks ("My Requisition Approval Queue") with admin settings ("Approval Dollar Limits", "Mass Approver Change"), all given the same visual weight.</p>
+          <p class="rec"><strong>Recommendation:</strong> Group links by what the user wants to do (Create, Track, Approve, Configure) and put the most-used actions first.</p>
+        </div>
+      </article>
+      <article class="eval-card">
+        <div class="eval-shot" data-lb="l4_queue"><img alt="Legacy requisition approval queue" data-img="l4_queue.jpg"/></div>
+        <div class="eval-body">
+          <div class="eval-head"><h4>04 · Approval queue</h4><span class="sev critical">Critical</span></div>
+          <p><strong>Finding:</strong> 22 data columns, including two "Out of Office" columns, Approver Buddy and Commodity Code, hide the main question: which request do I review next? The "Review Requisition" link is small and repeated on every row, and the rows are sorted by requisition number rather than urgency.</p>
+          <p class="rec"><strong>Recommendation:</strong> Put requester, description, amount, need-by date and status first. Add useful filters and make each row a clear action.</p>
+        </div>
+      </article>
+      <article class="eval-card">
+        <div class="eval-shot" data-lb="l5_details"><img alt="Legacy requisition details" data-img="l5_details.jpg"/></div>
+        <div class="eval-body">
+          <div class="eval-head"><h4>05 · Requisition details</h4><span class="sev high">High</span></div>
+          <p><strong>Finding:</strong> Nine tabs, about two dozen form fields and a 20-column line-item table. The total cost, labelled "Total Estimated Extended Cost", gets the same weight as Pick Cycle and Fund Code.</p>
+          <p class="rec"><strong>Recommendation:</strong> Start with a decision summary at the top, then line items, financial details and supporting documents.</p>
+        </div>
+      </article>
+      <article class="eval-card">
+        <div class="eval-shot" data-lb="l6_dialog"><img alt="Legacy approve or reject dialog" data-img="l6_dialog_crop.jpg" style="object-position:center"/></div>
+        <div class="eval-body">
+          <div class="eval-head"><h4>06 · Approve / reject dialog</h4><span class="sev critical">Critical</span></div>
+          <p><strong>Finding:</strong> A modal titled "Do You Want To Approve Or Reject Requisition At This Time?" offers two independent checkboxes, "Approve Now" and "Reject Now", plus a generic Submit button. Nothing on screen prevents both being checked, and the button never says which outcome it will record.</p>
+          <p class="rec"><strong>Recommendation:</strong> Make approve and reject mutually exclusive choices with buttons that name the action, and show clear success or error feedback.</p>
+        </div>
+      </article>
+    </div>
+
+    <h3 class="sub">Critical findings, ranked</h3>
+    <p class="text-body" style="margin-bottom:20px;max-width:760px">Ranked by likely effect on finishing the task, decision quality and effort.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Finding</th><th>UX impact</th><th>Severity</th></tr></thead>
+        <tbody>
+          <tr><td>Approve and reject controls are not clearly mutually exclusive</td><td>Possible wrong decisions</td><td><span class="sev critical">Critical</span></td></tr>
+          <tr><td>The approval queue has no clear information hierarchy</td><td>Slow to spot requests that need action</td><td><span class="sev critical">Critical</span></td></tr>
+          <tr><td>Information needed to approve is spread across tabs and screens</td><td>More mental effort; details easily missed</td><td><span class="sev critical">Critical</span></td></tr>
+          <tr><td>Small text, links and controls</td><td>Hard to read and to click accurately</td><td><span class="sev critical">Critical</span></td></tr>
+          <tr><td>Workflow status and decision feedback are hard to see</td><td>Users unsure whether an action went through</td><td><span class="sev critical">Critical</span></td></tr>
+          <tr><td>Navigation follows internal modules, not user tasks</td><td>Steeper learning curve</td><td><span class="sev high">High</span></td></tr>
+          <tr><td>Dense tables require a lot of scanning</td><td>More effort per review</td><td><span class="sev high">High</span></td></tr>
+          <tr><td>Dashboard doesn't highlight next actions</td><td>Less useful day to day</td><td><span class="sev high">High</span></td></tr>
+          <tr><td>Technical abbreviations and inconsistent labels</td><td>More dependence on training</td><td><span class="sev high">High</span></td></tr>
+          <tr><td>Large empty areas next to cramped data</td><td>Poor use of screen space</td><td><span class="sev medium">Medium</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="note">The screens show usability risks, not proof that users make errors. Behavioural testing is needed to find actual failure rates (see section 5).</p>
+  </div>
+</section>
+
+<!-- 3 JOURNEY -->
+<section class="section" id="journey">
+  <div class="section-inner">
+    <div class="section-label"><span>3</span>Journey Analysis</div>
+    <h2 class="section-title">Where the approval journey breaks down, and the questions approvers are actually asking</h2>
+    <p class="lede">Putting the six screens in order shows the full approval path. The friction is not evenly spread. It builds up toward the end, where the decision carries the most weight.</p>
+
+
+    <h3 class="sub" style="margin-top:8px">Approval journey map</h3>
+    <p class="text-body" style="margin-bottom:20px;max-width:760px">Mapping one requisition from start to finish shows where each person's satisfaction drops. Maria, the buyer, reviews and approves on-contract requests. Anything off contract is escalated to Taylor. Linda, the requester, waits for the outcome. Maria's satisfaction falls as soon as she leaves the dashboard and recovers only briefly when she finds the queue. Taylor receives escalations without Maria's context, and Linda never hears the result.</p>
+    <div class="jm-wrap">
+      <div class="jm-scope">
+        <table>
+          <colgroup><col style="width:13.5%"/><col style="width:10.81%"/><col style="width:10.81%"/><col style="width:10.81%"/><col style="width:10.81%"/><col style="width:10.81%"/><col style="width:10.81%"/><col style="width:10.81%"/><col style="width:10.81%"/></colgroup>
+          <tr><td class="jm-lbl">Stages of<br/>Journey</td><td class="jm-head" colspan="2" style="background:var(--jm-green-head);color:var(--jm-green-text);">Discover</td><td class="jm-head" colspan="2" style="background:var(--jm-blue-head);color:var(--jm-blue-text);">Select</td><td class="jm-head" style="background:var(--jm-teal-head);color:var(--jm-teal-text);">Evaluate</td><td class="jm-head" colspan="2" style="background:var(--jm-coral-head);color:var(--jm-coral-text);">Decide &amp; Escalate</td><td class="jm-head" style="background:var(--jm-amber-head);color:var(--jm-amber-text);">Complete</td></tr><tr><td class="jm-lbl">Persona</td><td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-green-head);color:var(--jm-green-text);">M</div><div><div class="jm-persona-name">Maria</div><div class="jm-persona-role">Buyer</div></div></div></td><td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-green-head);color:var(--jm-green-text);">M</div><div><div class="jm-persona-name">Maria</div><div class="jm-persona-role">Buyer</div></div></div></td><td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-blue-head);color:var(--jm-blue-text);">M</div><div><div class="jm-persona-name">Maria</div><div class="jm-persona-role">Buyer</div></div></div></td><td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-blue-head);color:var(--jm-blue-text);">M</div><div><div class="jm-persona-name">Maria</div><div class="jm-persona-role">Buyer</div></div></div></td><td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-teal-head);color:var(--jm-teal-text);">M</div><div><div class="jm-persona-name">Maria</div><div class="jm-persona-role">Buyer</div></div></div></td><td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-coral-head);color:var(--jm-coral-text);">M</div><div><div class="jm-persona-name">Maria</div><div class="jm-persona-role">Buyer</div></div></div></td><td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-coral-head);color:var(--jm-coral-text);">T</div><div><div class="jm-persona-name">Taylor</div><div class="jm-persona-role">Approver</div></div></div></td><td class="jm-persona"><div class="jm-persona-row"><div class="jm-chip" style="background:var(--jm-amber-head);color:var(--jm-amber-text);">L</div><div><div class="jm-persona-name">Linda</div><div class="jm-persona-role">Requisitioner</div></div></div></td></tr><tr><td class="jm-lbl">Activities</td><td class="jm-activity">Logs in to check what needs her review</td><td class="jm-activity">Drills through Work in Materials → Requisitioning</td><td class="jm-activity">Opens My Requisition Approval Queue</td><td class="jm-activity">Scans the queue for the next request to review</td><td class="jm-activity">Checks cost, items and whether they're on contract</td><td class="jm-activity">Approves on-contract requests, escalates the rest</td><td class="jm-activity">Reviews escalated off-contract requests</td><td class="jm-activity">Waits to learn whether her request was approved</td></tr><tr><td class="jm-lbl">Feelings</td><td class="jm-icon-cell"><div class="jm-feeling-label" style="color:var(--jm-green-text);">Hopeful</div></td><td class="jm-icon-cell"><div class="jm-feeling-label" style="color:var(--jm-green-text);">Lost</div></td><td class="jm-icon-cell"><div class="jm-feeling-label" style="color:var(--jm-blue-text);">Relieved</div></td><td class="jm-icon-cell"><div class="jm-feeling-label" style="color:var(--jm-blue-text);">Overwhelmed</div></td><td class="jm-icon-cell"><div class="jm-feeling-label" style="color:var(--jm-teal-text);">Frustrated</div></td><td class="jm-icon-cell"><div class="jm-feeling-label" style="color:var(--jm-coral-text);">Anxious</div></td><td class="jm-icon-cell"><div class="jm-feeling-label" style="color:var(--jm-coral-text);">Uncertain</div></td><td class="jm-icon-cell"><div class="jm-feeling-label" style="color:var(--jm-amber-text);">In the Dark</div></td></tr><tr><td class="jm-lbl">Satisfaction</td><td class="jm-sat-cell" colspan="8"><svg class="jm-sat-svg" viewBox="0 0 700 190"><line stroke="#d7dee4" stroke-dasharray="4 4" x1="0" x2="700" y1="34" y2="34"/><line stroke="#d7dee4" stroke-dasharray="4 4" x1="0" x2="700" y1="95" y2="95"/><line stroke="#d7dee4" stroke-dasharray="4 4" x1="0" x2="700" y1="156" y2="156"/><text class="jm-band-label" x="6" y="18">Very Happy</text><text class="jm-band-label" x="6" y="79">Overall Satisfied</text><text class="jm-band-label" x="6" y="140">Unhappy</text><polyline fill="none" points="43.8,95 131.2,156 218.8,95 306.2,156 393.8,156 481.2,156 568.8,156 656.2,156" stroke="var(--jm-line)" stroke-width="2"/><g transform="translate(43.8,95)"><circle fill="#fff" r="13" stroke="var(--jm-mid)" stroke-width="2.4"></circle><circle cx="-4.5" cy="-3" fill="var(--jm-mid)" r="1.6"></circle><circle cx="4.5" cy="-3" fill="var(--jm-mid)" r="1.6"></circle><path d="M -5 4 Q 0 8 5 4" fill="none" stroke="var(--jm-mid)" stroke-linecap="round" stroke-width="2"></path></g><g transform="translate(131.2,156)"><circle fill="#fff" r="13" stroke="var(--jm-sad)" stroke-width="2.4"></circle><circle cx="-4.5" cy="-3" fill="var(--jm-sad)" r="1.6"></circle><circle cx="4.5" cy="-3" fill="var(--jm-sad)" r="1.6"></circle><path d="M -5 6 Q 0 2 5 6" fill="none" stroke="var(--jm-sad)" stroke-linecap="round" stroke-width="2"></path></g><g transform="translate(218.8,95)"><circle fill="#fff" r="13" stroke="var(--jm-mid)" stroke-width="2.4"></circle><circle cx="-4.5" cy="-3" fill="var(--jm-mid)" r="1.6"></circle><circle cx="4.5" cy="-3" fill="var(--jm-mid)" r="1.6"></circle><path d="M -5 4 Q 0 8 5 4" fill="none" stroke="var(--jm-mid)" stroke-linecap="round" stroke-width="2"></path></g><g transform="translate(306.2,156)"><circle fill="#fff" r="13" stroke="var(--jm-sad)" stroke-width="2.4"></circle><circle cx="-4.5" cy="-3" fill="var(--jm-sad)" r="1.6"></circle><circle cx="4.5" cy="-3" fill="var(--jm-sad)" r="1.6"></circle><path d="M -5 6 Q 0 2 5 6" fill="none" stroke="var(--jm-sad)" stroke-linecap="round" stroke-width="2"></path></g><g transform="translate(393.8,156)"><circle fill="#fff" r="13" stroke="var(--jm-sad)" stroke-width="2.4"></circle><circle cx="-4.5" cy="-3" fill="var(--jm-sad)" r="1.6"></circle><circle cx="4.5" cy="-3" fill="var(--jm-sad)" r="1.6"></circle><path d="M -5 6 Q 0 2 5 6" fill="none" stroke="var(--jm-sad)" stroke-linecap="round" stroke-width="2"></path></g><g transform="translate(481.2,156)"><circle fill="#fff" r="13" stroke="var(--jm-sad)" stroke-width="2.4"></circle><circle cx="-4.5" cy="-3" fill="var(--jm-sad)" r="1.6"></circle><circle cx="4.5" cy="-3" fill="var(--jm-sad)" r="1.6"></circle><path d="M -5 6 Q 0 2 5 6" fill="none" stroke="var(--jm-sad)" stroke-linecap="round" stroke-width="2"></path></g><g transform="translate(568.8,156)"><circle fill="#fff" r="13" stroke="var(--jm-sad)" stroke-width="2.4"></circle><circle cx="-4.5" cy="-3" fill="var(--jm-sad)" r="1.6"></circle><circle cx="4.5" cy="-3" fill="var(--jm-sad)" r="1.6"></circle><path d="M -5 6 Q 0 2 5 6" fill="none" stroke="var(--jm-sad)" stroke-linecap="round" stroke-width="2"></path></g><g transform="translate(656.2,156)"><circle fill="#fff" r="13" stroke="var(--jm-sad)" stroke-width="2.4"></circle><circle cx="-4.5" cy="-3" fill="var(--jm-sad)" r="1.6"></circle><circle cx="4.5" cy="-3" fill="var(--jm-sad)" r="1.6"></circle><path d="M -5 6 Q 0 2 5 6" fill="none" stroke="var(--jm-sad)" stroke-linecap="round" stroke-width="2"></path></g></svg></td></tr><tr><td class="jm-lbl">Experiences</td><td class="jm-exp">Dashboard shows 2015 EDI and invoice reports, with nothing about approvals</td><td class="jm-exp">14+ submenu links mix daily tasks with admin settings</td><td class="jm-exp">Finally reaches the queue, three menu levels in</td><td class="jm-exp">22 columns, sorted by number, with identical descriptions</td><td class="jm-exp">Nine tabs, and Contract No. is buried in a 20-column line-item table</td><td class="jm-exp">Two separate checkboxes and a Submit that doesn't say what it records</td><td class="jm-exp">Arrives without Maria's context or the budget impact</td><td class="jm-exp">No confirmation, no status change, no notification</td></tr><tr><td class="jm-lbl">Customer<br/>Expectations</td><td class="jm-expect">See what needs my review as soon as I log in</td><td class="jm-expect">Approvals named the way I think about my work</td><td class="jm-expect">One obvious, always-visible way in</td><td class="jm-expect">A worklist ranked by urgency and amount</td><td class="jm-expect">Total and contract status at the top of the page</td><td class="jm-expect">Buttons that say exactly what will happen</td><td class="jm-expect">Buyer notes and budget impact shown with the request</td><td class="jm-expect">Told as soon as a decision is made</td></tr>
+        </table>
+      </div>
+    </div>
+
+
+    <div class="breakdowns" style="margin-top:0">
+      <div class="bd"><h5>Discoverability</h5><p>The way to approvals isn't obvious. Users have to know the right module and submenu.</p></div>
+      <div class="bd"><h5>Selection</h5><p>Finding the most urgent request means scanning across 22 columns.</p></div>
+      <div class="bd"><h5>Evaluation</h5><p>Users piece the decision together themselves: what, why, how much, and whether it's in policy.</p></div>
+      <div class="bd"><h5>Decision</h5><p>A technical form pattern for an action with real consequences.</p></div>
+      <div class="bd"><h5>Completion</h5><p>No visible confirmation and no updated queue after submitting.</p></div>
+    </div>
+
+    <h3 class="sub">Reframing around the approver</h3>
+    <p class="text-body" style="max-width:760px">The breakdowns lined up with five questions an approver asks, in order. Each screen in the redesign answers one of them, and nothing on that screen distracts from it.</p>
+    <div class="model">
+      <div class="m-step"><div class="m-dot">1</div><div class="m-q">What needs my attention?</div><div class="m-a">Dashboard: Approvals count</div></div>
+      <div class="m-step"><div class="m-dot">2</div><div class="m-q">What am I approving?</div><div class="m-a">Worklist: description, total, requester</div></div>
+      <div class="m-step"><div class="m-dot">3</div><div class="m-q">Is it appropriate?</div><div class="m-a">Review: summary and line items</div></div>
+      <div class="m-step"><div class="m-dot">4</div><div class="m-q">What action should I take?</div><div class="m-a">Approve or Reject buttons</div></div>
+      <div class="m-step"><div class="m-dot">5</div><div class="m-q">Was it completed?</div><div class="m-a">Status and queue update</div></div>
+    </div>
+
+    <div class="journey-label" style="margin-top:48px">Redesigned journey</div>
+    <div class="journey after">
+      <div class="j-step"><div class="j-box"><small>Attention</small>Dashboard · Approvals 11</div><div class="j-arrow">→</div></div>
+      <div class="j-step"><div class="j-box"><small>Select</small>Approvals worklist</div><div class="j-arrow">→</div></div>
+      <div class="j-step"><div class="j-box"><small>Evaluate</small>Requisition details</div><div class="j-arrow">→</div></div>
+      <div class="j-step"><div class="j-box"><small>Decide</small>Approve / Reject</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 REDESIGN -->
+<section class="section alt" id="redesign">
+  <div class="section-inner">
+    <div class="section-label"><span>4</span>Before &amp; After</div>
+    <h2 class="section-title">Each stage of the journey, redesigned to answer one question</h2>
+    <p class="lede">These redesigned screens are part of the Buyer experience I owned and were built with the Fireball Design System. Each stage below puts the legacy screen next to the new one and lists the evaluation findings the change addresses. Click any screen to enlarge it.</p>
+
+
+    <!-- 0 dashboard -->
+    <div class="ba-panel">
+      <div class="ba-head"><div><div class="ba-step">Stage 01</div><h4>From reports to a to-do list</h4><p>The legacy dashboard showed six months of EDI and invoice statistics. The new one opens on what needs action today: counts, alerts and shortcuts to start work.</p></div><span class="ba-q">What needs my attention?</span></div>
+      <div class="ba-imgs">
+        <div class="ba-col before"><div class="ba-col-label b">Before</div><div class="ba-shot" data-lb="l1_dashboard"><img alt="Legacy dashboard" data-img="l1_dashboard.jpg"/></div>
+          <ul><li>Four 2015 report tables showing historic statistics</li><li>No approval count or entry point</li><li>Release notes take up a third of the screen</li></ul></div>
+        <div class="ba-col after"><div class="ba-col-label a">After</div><div class="ba-shot" data-lb="n_dashboard"><img alt="Redesigned dashboard" data-img="n_dashboard.png"/></div>
+          <ul><li>KPI row leads with <strong>Approvals: 11</strong>, plus receiving and exceptions</li><li>Dated to-do list, with an Actions menu on each alert</li><li>Create Requisition / PO / Receive Orders kept to the side</li></ul></div>
+      </div>
+      <div class="ba-foot"><b>Addresses</b><span class="fx">Dashboard doesn't highlight next actions</span><span class="fx">Large empty areas</span><span class="fx">Visibility of system status</span></div>
+    </div>
+
+    <!-- KPIs as navigation -->
+    <div class="ba-panel">
+      <div class="ba-head"><div><div class="ba-step">Stage 02</div><h4>KPIs that work as navigation</h4><p>In the legacy ERP, the only way to find out whether anything needed attention was to open each module and look. In the redesign, the KPI row answers that question as soon as the dashboard loads, and each count is a link straight to the filtered list of items behind it.</p></div><span class="ba-q">Is there anything I need to deal with?</span></div>
+      <div class="ba-imgs">
+        <div class="ba-col before"><div class="ba-col-label b">Before · Check every module</div><div class="ba-shot contain" data-lb="l1_dashboard"><img alt="Legacy Materials Management module menu" data-img="l1_menu_crop.jpg"/></div>
+          <ul><li>No counts anywhere. Users opened Requisitioning, Receiving, Invoicing and Purchasing one at a time to check for work</li><li>Each check meant drilling into a submenu, then scanning a report, often to find nothing</li><li>Urgent items stayed hidden until someone went looking for them</li></ul></div>
+        <div class="ba-col after"><div class="ba-col-label a">After · Counts that link to the work</div>
+          <div class="kpi-map">
+            <img alt="Redesigned dashboard KPI row" data-img="n_kpis.jpg" data-lb="n_dashboard"/>
+            <div class="kpi-rows">
+              <div class="kpi-row"><span class="k">Approvals <b>11</b></span><span class="ar">→</span><span class="d">Approvals worklist, filtered to Pending</span></div>
+              <div class="kpi-row"><span class="k">Receiving <b>24</b></span><span class="ar">→</span><span class="d">Orders awaiting receipt</span></div>
+              <div class="kpi-row"><span class="k">Invoice Exceptions <b>14</b></span><span class="ar">→</span><span class="d">Invoices needing resolution</span></div>
+              <div class="kpi-row"><span class="k">PO Exceptions <b>12</b></span><span class="ar">→</span><span class="d">Purchase orders with issues</span></div>
+              <div class="kpi-row"><span class="k">On Contract Spend <b>$77K</b></span><span class="ar">→</span><span class="d">Contract spend analytics</span></div>
+            </div>
+          </div>
+          <ul><li>A non-zero count shows there is work before the user clicks anything</li><li>One click goes from the count to the exact items that need action, with no menu in between</li><li>A zero means no trip is needed, which the legacy menus could never tell you</li></ul></div>
+      </div>
+      <div class="ba-foot"><b>Addresses</b><span class="fx">Dashboard doesn't highlight next actions</span><span class="fx">Navigation follows internal modules</span><span class="fx">Visibility of system status</span><span class="fx">Recognition over recall</span></div>
+    </div>
+
+    <!-- 1 nav -->
+    <div class="ba-panel">
+      <div class="ba-head"><div><div class="ba-step">Stage 03</div><h4>From modules to tasks</h4><p>The approval queue used to be four levels down a module tree. Now it is one of six task names in the top bar.</p></div><span class="ba-q">Where do I go?</span></div>
+      <div class="ba-imgs">
+        <div class="ba-col before"><div class="ba-col-label b">Before</div><div class="ba-shot contain" data-lb="l2_reqnav"><img alt="Legacy requisitioning submenu" data-img="l2_nav_crop.jpg"/></div>
+          <ul><li>Main → Work in Materials → Requisitioning → My Requisition Approval Queue</li><li>14+ links in the submenu, with admin settings mixed into daily tasks</li><li>Labels follow the system's structure ("Work in…")</li></ul></div>
+        <div class="ba-col after"><div class="ba-col-label a">After</div><div class="ba-shot" data-lb="n_dashboard"><img alt="Redesigned top navigation" data-img="n_topnav.jpg"/></div>
+          <ul><li>Home · Requisitions · Purchase Orders · Catalog · Analytics · <strong>Approvals</strong></li><li>One click from anywhere; the Approvals KPI is a second way in</li><li>Configuration moved out of the daily path</li></ul></div>
+      </div>
+      <div class="ba-foot"><b>Addresses</b><span class="fx">Navigation follows internal modules</span><span class="fx">Recognition over recall</span><span class="fx">Match with the real world</span></div>
+    </div>
+
+    <!-- 2 queue -->
+    <div class="ba-panel">
+      <div class="ba-head"><div><div class="ba-step">Stage 04</div><h4>From database report to worklist</h4><p>The queue went from 22 columns to 10. Each row now shows what the request is, how much it costs, who asked and whether it has been escalated, with a filter under every column.</p></div><span class="ba-q">What am I approving?</span></div>
+      <div class="ba-imgs">
+        <div class="ba-col before"><div class="ba-col-label b">Before</div><div class="ba-shot" data-lb="l4_queue"><img alt="Legacy approval queue" data-img="l4_queue.jpg"/></div>
+          <ul><li>22 columns, including Approver Buddy, Commodity Code and two "Out of Office" columns</li><li>Descriptions repeat "Created from Shopping Cart ERP_NA Import"</li><li>Sorted by requisition number; small "Review Requisition" link on every row</li></ul></div>
+        <div class="ba-col after"><div class="ba-col-label a">After</div><div class="ba-shot" data-lb="n_approvals"><img alt="Redesigned approvals worklist" data-img="n_approvals.png"/></div>
+          <ul><li>10 columns, with Total, Description and Requester easy to see</li><li>Pending / approval-type filter at the top, inline filters on each column</li><li>Attachment icon and row menu for quick context</li></ul></div>
+      </div>
+      <div class="ba-foot"><b>Addresses</b><span class="fx">Queue has no clear hierarchy</span><span class="fx">Dense tables</span><span class="fx">Aesthetic &amp; minimalist design</span></div>
+    </div>
+
+    <!-- 3 details -->
+    <div class="ba-panel">
+      <div class="ba-head"><div><div class="ba-step">Stage 05</div><h4>From form to decision summary</h4><p>Nine tabs became one page. The facts needed to approve sit at the top, followed by the line items, cut from 20 columns to the five that matter for the decision.</p></div><span class="ba-q">Is it appropriate?</span></div>
+      <div class="ba-imgs">
+        <div class="ba-col before"><div class="ba-col-label b">Before</div><div class="ba-shot" data-lb="l5_details"><img alt="Legacy requisition details" data-img="l5_details.jpg"/></div>
+          <ul><li>Nine tabs and about two dozen fields with equal weight</li><li>Total hidden in "Total Estimated Extended Cost"</li><li>Line-item table needs horizontal scrolling across 20 columns</li></ul></div>
+        <div class="ba-col after"><div class="ba-col-label a">After</div><div class="ba-shot" data-lb="n_details"><img alt="Redesigned requisition details" data-img="n_details.png"/></div>
+          <ul><li>Summary first: number, status, <strong>Total Cost</strong>, Requested By</li><li>Plain-language description, organization and department</li><li>Line items: item, cost, quantity, unit and expense code only</li></ul></div>
+      </div>
+      <div class="ba-foot"><b>Addresses</b><span class="fx">Information spread across screens</span><span class="fx">Technical labels</span><span class="fx">Small text &amp; controls</span></div>
+    </div>
+
+    <!-- 4 decide -->
+    <div class="ba-panel">
+      <div class="ba-head"><div><div class="ba-step">Stage 06</div><h4>From checkboxes to explicit actions</h4><p>The riskiest pattern in the flow was removed. The decision is now made on the review page itself, with buttons that name the outcome. Two checkboxes and a generic Submit are gone.</p></div><span class="ba-q">What action should I take?</span></div>
+      <div class="ba-imgs">
+        <div class="ba-col before"><div class="ba-col-label b">Before</div><div class="ba-shot contain" data-lb="l6_dialog"><img alt="Legacy approve or reject dialog" data-img="l6_dialog_crop.jpg"/></div>
+          <ul><li>Separate modal that repeats data already on the page</li><li>"Approve Now" and "Reject Now" can both be checked</li><li>"Submit" doesn't say which outcome it will record</li></ul></div>
+        <div class="ba-col after"><div class="ba-col-label a">After</div><div class="ba-shot" data-lb="n_details"><img alt="Approve and reject actions on the requisition page" data-img="n_details.png" style="object-position:left bottom"/></div>
+          <ul><li><strong>Approve</strong> (primary) and <strong>Reject</strong> (secondary) are separate, clearly named actions</li><li>Decision made in context, with the totals and line items still in view</li><li>Cancel and Save kept apart from the decision</li></ul></div>
+      </div>
+      <div class="ba-foot"><b>Addresses</b><span class="fx">Approve/reject not mutually exclusive</span><span class="fx">Error prevention</span><span class="fx">User control &amp; freedom</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 6 VALIDATION + OUTCOMES -->
+<section class="section alt" id="outcomes">
+  <div class="section-inner">
+    <div class="section-label"><span>5</span>Validation &amp; Outcomes</div>
+    <h2 class="section-title">Measured where we could, with a plan to test the rest</h2>
+
+    <div class="two-col">
+      <div class="result-list">
+        <div class="result-item"><h4>40% fewer task steps</h4><p>Primary procurement workflows went from deep, many-click flows to short paths suited to each role, which addressed the most common complaint from research.</p></div>
+        <div class="result-item"><h4>23% productivity improvement</h4><p>Showing work up front and cutting navigation gave buyers and approvers back time each day.</p></div>
+        <div class="result-item"><h4>One visual language with Fireball</h4><p>Shared components meant the approvals worklist, review page and dashboard looked and behaved the same, which fixed the inconsistency flagged in the evaluation.</p></div>
+        <div class="result-item"><h4>Stronger demos</h4><p>Sales and demo teams reported a positive reaction from prospective clients, which supported Premier's goal of winning back market share.</p></div>
+      </div>
+      <div>
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:6px">Usability study design</h4>
+        <p class="text-body" style="font-size:14px;margin-bottom:18px">A focused qualitative study of 12–15 participants, with some overlap between roles, to confirm the severity ratings and set a baseline before the next iteration.</p>
+        <div class="tbl-wrap" style="margin-bottom:24px">
+          <table>
+            <thead><tr><th>Role</th><th>n</th><th>Focus</th></tr></thead>
+            <tbody>
+              <tr><td>Department approvers</td><td class="num">4–5</td><td>Review, approve, reject</td></tr>
+              <tr><td>Procurement specialists</td><td class="num">3–4</td><td>Queue management, exceptions</td></tr>
+              <tr><td>Requesters</td><td class="num">3–4</td><td>Tracking, understanding status</td></tr>
+              <tr><td>System administrators</td><td class="num">2</td><td>Configuration, permissions</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:12px">Core tasks</h4>
+        <ol class="tasks">
+          <li>Find a requisition waiting for your approval.</li>
+          <li>Find a requisition by its number.</li>
+          <li>Identify the requester, items, vendor and total.</li>
+          <li>Approve a requisition after reviewing it.</li>
+          <li>Reject a requisition and give a reason.</li>
+          <li>Confirm your decision was recorded.</li>
+        </ol>
+      </div>
+    </div>
+
+    <h3 class="sub" style="margin-top:56px">Proposed success targets</h3>
+    <div class="score">
+      <div><small>Task completion</small><b>95%</b><span>All six core tasks</span></div>
+      <div><small>First-attempt success</small><b>90%</b><span>No backtracking</span></div>
+      <div><small>Critical decision errors</small><b>0</b><span>Wrong approve / reject</span></div>
+      <div><small>User confidence</small><b>4 / 5</b><span>Post-task rating</span></div>
+    </div>
+    <p class="note">These targets are illustrative and should be set against a baseline from the legacy workflow. Time on task, navigation errors, assistance needed and post-task ease ratings are also recorded.</p>
+  </div>
+</section>
+
+
+<!-- STANDARD ENDING -->
+<section class="cs-close"><div class="cs-close-inner">
+<div class="cs-close-label">Reflection</div>
+<p class="cs-close-takeaway">The ERP wasn't missing features. It made people work the way the system was built.</p>
+<p class="cs-close-body">Turning a heuristic review into a ranked list of issues kept the redesign scoped and testable, and keeping measured results apart from inferred ones kept the story honest.</p>
+<div class="cs-close-next"><h3>What I'd do next</h3><ul><li>Run the 12–15 participant usability study with approvers, procurement specialists, requesters and administrators to confirm the severity ratings and set a baseline.</li><li>Measure the redesign against the proposed targets: 95% task completion, 90% first-attempt success and zero wrong approve/reject decisions.</li></ul></div>
+<div class="cs-close-nav"><a class="back" href="index.html#work">← All work</a><a class="next" href="equipp_pharmacy_quality.html">Next case study: <span>Beyond the Score: Finding the Right Patient Intervention →</span></a></div>
+</div></section>
+<footer><p><strong>From database report to supply chain decision tool</strong> · William Teppig · Premier</p>
+<p class="footer-email"><a href="mailto:wteppig@gmail.com">wteppig@gmail.com</a></p></footer>
+
+<div class="lb" id="lb" aria-hidden="true">
+  <button class="lb-x" aria-label="Close">×</button>
+  <button class="lb-p" aria-label="Previous">‹</button>
+  <img id="lb-img" alt=""/>
+  <div class="lb-cap" id="lb-cap"></div>
+  <button class="lb-n" aria-label="Next">›</button>
+</div>
+
+<script>const IMG={"l1_dashboard.jpg": "images/361110ad3179.webp", "l1_menu_crop.jpg": "images/244decd04984.webp", "l2_nav_crop.jpg": "images/cef5e5851979.webp", "l2_reqnav.jpg": "images/a5b74c86eb2d.webp", "l3_mainnav.jpg": "images/1c22616bff82.webp", "l4_queue.jpg": "images/4990b9d1977c.webp", "l5_details.jpg": "images/784d7d47d63e.webp", "l6_dialog.jpg": "images/9f0b9e0b438f.webp", "l6_dialog_crop.jpg": "images/cd708b1010ec.webp", "logo.png": "images/f77d54b9a753.webp", "maria.png": "images/feef15a18c26.webp", "n_approvals.png": "images/7f4e09acc04d.webp", "n_dashboard.png": "images/4259e4774fb6.webp", "n_details.png": "images/0ef5a1dd0376.webp", "n_hero_crop.png": "images/9be6239ea5fc.webp", "n_kpis.jpg": "images/c37331a8ac5c.webp", "n_topnav.jpg": "images/a12175fe9879.webp"};document.querySelectorAll('[data-img]').forEach(e=>e.src=IMG[e.dataset.img]);</script>
+<script>
+const SHOTS=[
+ ["l1_dashboard","Before · ERP dashboard",IMG["l1_dashboard.jpg"]],
+ ["l3_mainnav","Before · Main navigation",IMG["l3_mainnav.jpg"]],
+ ["l2_reqnav","Before · Requisitioning submenu",IMG["l2_reqnav.jpg"]],
+ ["l4_queue","Before · Requisition approval queue",IMG["l4_queue.jpg"]],
+ ["l5_details","Before · Requisition details",IMG["l5_details.jpg"]],
+ ["l6_dialog","Before · Approve / reject dialog",IMG["l6_dialog.jpg"]],
+ ["n_dashboard","After · Dashboard",IMG["n_dashboard.png"]],
+ ["n_approvals","After · Approvals worklist",IMG["n_approvals.png"]],
+ ["n_details","After · Requisition details with Approve / Reject",IMG["n_details.png"]]
+];
+const lb=document.getElementById('lb'),li=document.getElementById('lb-img'),lc=document.getElementById('lb-cap');let cur=0;
+function show(i){cur=(i+SHOTS.length)%SHOTS.length;li.src=SHOTS[cur][2];lc.textContent=SHOTS[cur][1]+'  ·  '+(cur+1)+' / '+SHOTS.length;}
+function open(key){const i=SHOTS.findIndex(s=>s[0]===key);if(i<0)return;show(i);lb.classList.add('open');lb.setAttribute('aria-hidden','false');}
+function close(){lb.classList.remove('open');lb.setAttribute('aria-hidden','true');}
+document.querySelectorAll('[data-lb]').forEach(el=>el.addEventListener('click',()=>open(el.dataset.lb)));
+lb.querySelector('.lb-x').onclick=close;
+lb.querySelector('.lb-p').onclick=e=>{e.stopPropagation();show(cur-1)};
+lb.querySelector('.lb-n').onclick=e=>{e.stopPropagation();show(cur+1)};
+lb.addEventListener('click',e=>{if(e.target===lb)close()});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='Escape')close();if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1);});
+</script>
+</body>
+</html>

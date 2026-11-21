@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>How I Lead Design | William Teppig</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --white:      #ffffff;
+  --offwhite:   #f8f8f6;
+  --surface:    #f2f2ef;
+  --border:     #e4e4e0;
+  --border2:    #d0d0cb;
+  --ink:        #1a1a18;
+  --ink2:       #4a4a46;
+  --ink3:       #8a8a84;
+  --teal:       #006d77;
+  --teal-light: #e8f4f5;
+  --teal-mid:   #b2d8dc;
+  --slate:      #3d5a6c;
+  --slate-light:#edf2f5;
+  --amber:      #b5621e;
+  --amber-light:#fdf0e6;
+  --gold:       #b07d2a;
+  --gold-light: #fdf5e6;
+  --gold-mid:   #e6c97a;
+  --navy:       #1e3a5f;
+  --navy-light: #e8edf5;
+  --navy-mid:   #9fb3cc;
+  --purple:      #5b2a86;
+  --purple-light:#f1eafa;
+  --purple-mid:  #cbb3e0;
+  --teal-d:      #00555e;
+  --green:       #3b6d11;
+  --green-light: #eaf3de;
+  --red:         #a32d2d;
+  --red-light:   #fcebeb;
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+  --serif:      'DM Serif Display', Georgia, serif;
+  --sans:       'Inter', -apple-system, sans-serif;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 16px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg:  0 12px 40px rgba(0,0,0,.09), 0 2px 8px rgba(0,0,0,.05);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--white);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+
+/* ─── NAV ─── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(248,248,246,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.nav-brand {
+  font-size: 12px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+  display: inline-flex; align-items: center;
+}
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  font-size: 12px; font-weight: 500; color: var(--ink2);
+  text-decoration: none; letter-spacing: .02em; transition: color .15s;
+}
+.nav-links a:hover { color: var(--teal); }
+.nav-resume {
+  font-size: 11px; font-weight: 600; letter-spacing: .06em;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+  border: 1px solid var(--border2); border-radius: 20px;
+  padding: 7px 16px; transition: background .15s, border-color .15s;
+}
+.nav-resume:hover { background: var(--white); border-color: var(--ink3); }
+
+/* ─── INTRO ─── */
+.intro { padding: 120px 48px 96px; border-bottom: 1px solid var(--border); }
+.intro-inner { max-width: 1080px; margin: 0 auto; }
+.intro-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 24px;
+}
+.intro-eyebrow::before { display: none; }
+.intro h1 {
+  font-family: var(--serif); font-weight: 400; line-height: 1.2;
+  font-size: clamp(28px, 3.8vw, 48px); color: var(--ink);
+  max-width: 900px; margin-bottom: 28px;
+}
+.intro h1 em { color: var(--teal); font-style: italic; }
+.intro-sub {
+  font-size: 18px; color: var(--ink2); max-width: 620px;
+  line-height: 1.65; font-weight: 400; margin-bottom: 40px;
+}
+.intro-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 600; color: var(--teal);
+  text-decoration: none; letter-spacing: .02em;
+}
+.intro-cta::after { content: '↓'; transition: transform .15s; }
+.intro-cta:hover::after { transform: translateY(3px); }
+
+/* ─── WORK SECTION ─── */
+.work { padding: 96px 48px; }
+.work-inner { max-width: 1176px; margin: 0 auto; }
+.section-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 16px;
+}
+.work h2 {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.4vw, 38px);
+  color: var(--ink); margin-bottom: 56px; max-width: 640px;
+}
+
+.feature-list { display: flex; flex-direction: column; gap: 28px; }
+
+.feature-row {
+  border-radius: var(--radius-lg);
+  padding: 48px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+  text-decoration: none;
+}
+.feature-row.reverse { grid-template-columns: 1fr 1fr; }
+.feature-row.reverse .feature-visual { order: 1; }
+.feature-row.reverse .feature-text { order: 2; }
+
+.feature-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 14px;
+}
+.feature-title {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 2.6vw, 32px);
+  line-height: 1.2; color: var(--ink); margin-bottom: 16px;
+}
+.feature-desc {
+  font-size: 15px; color: var(--ink2); line-height: 1.65;
+  max-width: 460px; margin-bottom: 24px;
+}
+.feature-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
+.feature-pill {
+  font-size: 11px; font-weight: 600; letter-spacing: .03em;
+  border-radius: 20px; padding: 6px 14px; background: var(--white);
+}
+.feature-divider { height: 1px; background: var(--border2); margin-bottom: 28px; max-width: 460px; }
+.feature-metrics { display: flex; gap: 40px; margin-bottom: 32px; }
+.feature-metric-num { font-family: var(--serif); font-size: 26px; line-height: 1; margin-bottom: 6px; color: var(--ink); }
+.feature-metric-label { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--ink3); }
+.feature-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.feature-btn-primary {
+  font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--white); text-decoration: none;
+  border-radius: 24px; padding: 14px 26px; transition: opacity .15s;
+}
+.feature-btn-primary:hover { opacity: .88; }
+
+/* visual side: mockup window */
+.feature-visual { display: flex; justify-content: center; }
+.feature-mock {
+  width: 100%; max-width: 440px; background: var(--white);
+  border-radius: var(--radius-md); overflow: hidden;
+  box-shadow: var(--shadow-lg); border: 1px solid rgba(0,0,0,.04);
+}
+.fm-chrome { background: #1c1c1c; padding: 9px 14px; display: flex; align-items: center; gap: 6px; }
+.fm-dot { width: 9px; height: 9px; border-radius: 50%; }
+.fm-url { flex: 1; background: rgba(255,255,255,.08); border-radius: 4px; height: 18px; margin-left: 10px; }
+.fm-topbar { height: 36px; display: flex; align-items: center; padding: 0 18px; }
+.fm-topbar-label { font-size: 10px; font-weight: 700; letter-spacing: .06em; color: rgba(255,255,255,.92); }
+.fm-body { background: var(--offwhite); padding: 18px; display: flex; gap: 14px; height: 200px; }
+.fm-side { width: 26%; display: flex; flex-direction: column; gap: 8px; }
+.fm-side-block { height: 9px; border-radius: 3px; background: var(--border2); }
+.fm-side-block:first-child { width: 70%; }
+.fm-main { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.fm-row { height: 34px; border-radius: 7px; background: var(--surface); border: 1px solid var(--border); }
+.fm-row.wide { flex: 1; }
+.fm-chip-row { display: flex; gap: 8px; }
+.fm-chip { height: 22px; border-radius: 12px; background: var(--border); flex: 1; }
+
+/* per-row accent colors */
+.feature-teal { background: var(--teal-light); }
+.feature-teal .feature-pill { color: var(--teal); border: 1px solid var(--teal-mid); }
+.feature-teal .feature-metric-num { color: var(--teal); }
+.feature-teal .feature-btn-primary { background: var(--teal); }
+.feature-teal .fm-topbar { background: var(--teal); }
+.feature-teal .fm-row.wide, .feature-teal .fm-chip { background: var(--teal-light); border-color: var(--teal-mid); }
+
+.feature-gold { background: var(--gold-light); }
+.feature-gold .feature-pill { color: var(--gold); border: 1px solid var(--gold-mid); }
+.feature-gold .feature-metric-num { color: var(--gold); }
+.feature-gold .feature-btn-primary { background: var(--gold); }
+.feature-gold .fm-topbar { background: var(--gold); }
+.feature-gold .fm-row.wide, .feature-gold .fm-chip { background: var(--gold-light); border-color: var(--gold-mid); }
+
+.feature-navy { background: var(--navy-light); }
+.feature-navy .feature-pill { color: var(--navy); border: 1px solid var(--navy-mid); }
+.feature-navy .feature-metric-num { color: var(--navy); }
+.feature-navy .feature-btn-primary { background: var(--navy); }
+.feature-navy .fm-topbar { background: var(--navy); }
+.feature-navy .fm-row.wide, .feature-navy .fm-chip { background: var(--navy-light); border-color: var(--navy-mid); }
+
+.feature-purple { background: var(--purple-light); }
+.feature-purple .feature-pill { color: var(--purple); border: 1px solid var(--purple-mid); }
+.feature-purple .feature-metric-num { color: var(--purple); }
+.feature-purple .feature-btn-primary { background: var(--purple); }
+.feature-purple .fm-topbar { background: var(--purple); }
+
+.feature-amber { background: var(--amber-light); }
+.feature-amber .feature-pill { color: var(--amber); border: 1px solid #e8b98a; }
+.feature-amber .feature-metric-num { color: var(--amber); }
+.feature-amber .feature-btn-primary { background: var(--amber); }
+.feature-amber .fm-topbar { background: var(--amber); }
+.feature-amber .fm-row.wide, .feature-amber .fm-chip { background: var(--amber-light); border-color: #e8b98a; }
+
+.feature-slate { background: var(--slate-light); }
+.feature-slate .feature-pill { color: var(--slate); border: 1px solid #aebfcb; }
+.feature-slate .feature-metric-num { color: var(--slate); }
+.feature-slate .feature-btn-primary { background: var(--slate); }
+.feature-slate .fm-topbar { background: var(--slate); }
+.feature-slate .fm-row.wide, .feature-slate .fm-chip { background: var(--slate-light); border-color: #aebfcb; }
+
+/* heat-map artifact visual for the ecosystem review card */
+.fm-heat { padding: 18px; background: var(--offwhite); display: flex; flex-direction: column; gap: 8px; height: 200px; justify-content: center; }
+.fm-heat-row { display: flex; gap: 8px; }
+.fm-heat-cell { flex: 1; height: 30px; border-radius: 6px; }
+.fm-heat-label { width: 70px; flex: none; display: flex; align-items: center; font-size: 9px; font-weight: 700; color: var(--ink3); letter-spacing: .03em; }
+
+/* ─── ABOUT ─── */
+.about { padding: 96px 48px; background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.about-inner { max-width: 1080px; margin: 0 auto; }
+.about-text { max-width: 720px; }
+.about h2 {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.4vw, 38px);
+  color: var(--ink); margin-bottom: 24px;
+}
+.about-text p { font-size: 15.5px; color: var(--ink2); line-height: 1.75; margin-bottom: 18px; }
+.about-text p:last-child { margin-bottom: 0; }
+.about-skills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.skill-pill {
+  font-size: 11px; font-weight: 600; color: var(--ink2);
+  border: 1px solid var(--border2); border-radius: 20px; padding: 5px 12px;
+}
+
+/* ─── RESUME / CONTACT ─── */
+.resume { padding: 96px 48px; text-align: center; }
+.resume-inner { max-width: 640px; margin: 0 auto; }
+.resume h2 {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.4vw, 36px);
+  color: var(--ink); margin-bottom: 16px;
+}
+.resume p { font-size: 15.5px; color: var(--ink2); margin-bottom: 32px; }
+.resume-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  font-size: 13px; font-weight: 600; letter-spacing: .02em;
+  color: var(--white); background: var(--ink); text-decoration: none;
+  border-radius: 24px; padding: 13px 28px; transition: background .15s;
+}
+.btn-primary:hover { background: var(--teal); }
+.btn-secondary {
+  font-size: 13px; font-weight: 600; letter-spacing: .02em;
+  color: var(--ink); background: transparent; text-decoration: none;
+  border: 1px solid var(--border2); border-radius: 24px; padding: 13px 28px;
+  transition: border-color .15s, background .15s;
+}
+.btn-secondary:hover { border-color: var(--ink3); background: var(--white); }
+
+footer { padding: 32px 48px; text-align: center; border-top: 1px solid var(--border); }
+footer p { font-size: 12.5px; color: var(--ink3); }
+
+@media (max-width: 900px) {
+  .feature-row { grid-template-columns: 1fr; padding: 32px; }
+  .feature-row.reverse .feature-visual { order: 1; }
+  .feature-row.reverse .feature-text { order: 2; }
+  .feature-desc, .feature-divider { max-width: none; }
+}
+@media (max-width: 640px) {
+  nav { flex-wrap: wrap; height: auto; padding: 12px 24px; gap: 10px; }
+  .nav-links { flex-wrap: wrap; gap: 12px 18px; justify-content: flex-start; }
+  .intro, .work, .about, .resume { padding-left: 24px; padding-right: 24px; }
+}
+
+/* ─── CS01 dashboard thumbnail (real prototype UI, scaled) ─── */
+.pd-scope .chrome {
+  background: #1e1e1e; padding: 9px 16px;
+  display: flex; align-items: center; gap: 7px;
+}
+.pd-scope .dot { width: 11px; height: 11px; border-radius: 50%; }
+.pd-scope .url-bar {
+  flex: 1; background: rgba(255,255,255,.07); border-radius: 5px;
+  height: 22px; margin: 0 14px; display: flex; align-items: center; padding: 0 12px;
+  cursor: text;
+}
+.pd-scope .url-bar span { font-size: 10px; color: rgba(255,255,255,.3); letter-spacing: .01em; }
+
+/* ── App topbar ── */
+.pd-scope .topbar {
+  background: var(--teal); height: 44px; padding: 0 22px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.pd-scope .brand { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.9); letter-spacing: .07em; text-transform: uppercase; }
+.pd-scope .top-nav { display: flex; gap: 4px; align-items: center; }
+.pd-scope .top-nav-item {
+  font-size: 11px; color: rgba(255,255,255,.55); cursor: pointer;
+  padding: 6px 12px; border-radius: 6px; transition: background .12s, color .12s;
+  white-space: nowrap;
+}
+.pd-scope .top-nav-item:hover { background: rgba(255,255,255,.1); color: rgba(255,255,255,.85); }
+.pd-scope .top-nav-item.active { color: #fff; font-weight: 600; background: rgba(255,255,255,.15); }
+.pd-scope .topbar-right { display: flex; align-items: center; gap: 10px; }
+.pd-scope .avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,.25); display: flex; align-items: center;
+  justify-content: center; font-size: 10px; font-weight: 700; color: #fff;
+  cursor: pointer;
+}
+.pd-scope .topbar-search {
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.15);
+  border-radius: 6px; padding: 4px 10px; font-size: 10px; color: rgba(255,255,255,.45);
+  width: 140px;
+}
+
+/* ── App layout ── */
+.pd-scope .app-layout { display: flex; height: 600px; }
+
+/* ── Sidebar ── */
+.pd-scope .sidebar {
+  width: 172px; background: var(--white); border-right: 1px solid var(--border);
+  padding: 16px 0; flex-shrink: 0; overflow-y: auto;
+}
+.pd-scope .sidebar-group { padding: 0 10px; margin-bottom: 18px; }
+.pd-scope .sidebar-section {
+  font-size: 8px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink3); padding: 0 8px; margin-bottom: 4px;
+}
+.pd-scope .sidebar-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 8px; border-radius: 6px;
+  font-size: 11px; color: var(--ink2); cursor: pointer;
+  margin-bottom: 1px; transition: background .1s, color .1s;
+}
+.pd-scope .sidebar-item:hover { background: var(--offwhite); color: var(--ink); }
+.pd-scope .sidebar-item.active { background: var(--teal-light); color: var(--teal); font-weight: 600; }
+.pd-scope .sidebar-item .si-icon { font-size: 12px; width: 16px; text-align: center; flex-shrink: 0; }
+.pd-scope .sbadge {
+  margin-left: auto; font-size: 8px; font-weight: 700; padding: 1px 6px;
+  border-radius: 8px; background: var(--teal); color: #fff;
+}
+.pd-scope .sbadge.warn { background: var(--red); }
+
+/* ── Main content ── */
+.pd-scope .main-content {
+  flex: 1; overflow-y: auto; background: var(--offwhite);
+  display: flex; flex-direction: column;
+}
+
+/* ── Screen visibility ── */
+.pd-scope .screen { display: none; flex-direction: column; flex: 1; }
+.pd-scope .screen.active { display: flex; }
+
+/* ── Page top bar ── */
+.pd-scope .page-top {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 14px 22px; display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-shrink: 0;
+}
+.pd-scope .page-top-left h1 { font-size: 15px; font-weight: 600; color: var(--ink); }
+.pd-scope .page-top-left p { font-size: 10px; color: var(--ink3); margin-top: 2px; }
+.pd-scope .page-top-right { display: flex; gap: 8px; align-items: center; }
+.pd-scope .search-input {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--offwhite); border: 1px solid var(--border);
+  border-radius: 6px; padding: 5px 10px; font-size: 10px; color: var(--ink3); width: 180px;
+}
+.pd-scope .btn {
+  padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  border: none; cursor: pointer; font-family: var(--sans); transition: opacity .12s;
+}
+.pd-scope .btn:hover { opacity: .85; }
+.pd-scope .btn-primary { background: var(--teal); color: #fff; }
+.pd-scope .btn-ghost { background: var(--white); border: 1px solid var(--border); color: var(--ink2); }
+
+/* ── Stat strip ── */
+.pd-scope .stat-strip {
+  display: grid; background: var(--white);
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.pd-scope .stat-cell {
+  padding: 14px 18px; border-right: 1px solid var(--border); cursor: pointer;
+  transition: background .12s;
+}
+.pd-scope .stat-cell:last-child { border-right: none; }
+.pd-scope .stat-cell:hover { background: var(--teal-light); }
+.pd-scope .sc-n { font-size: 22px; font-weight: 600; color: var(--teal); line-height: 1; }
+.pd-scope .sc-l { font-size: 9px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink3); margin-top: 4px; }
+.pd-scope .sc-d { font-size: 9px; margin-top: 5px; }
+.pd-scope .sc-d.up { color: var(--green); }
+.pd-scope .sc-d.warn { color: var(--red); }
+.pd-scope .sc-d.neu { color: var(--ink3); }
+
+/* ── Alert strips ── */
+.pd-scope .alert {
+  padding: 9px 22px; font-size: 11px; display: flex;
+  align-items: center; gap: 8px; flex-shrink: 0; border-bottom: 1px solid transparent;
+}
+.pd-scope .alert.info { background: var(--teal-light); border-color: var(--teal-mid); color: var(--teal); }
+.pd-scope .alert.warn { background: var(--amber-light); border-color: #f0c090; color: var(--amber); }
+.pd-scope .alert.danger { background: var(--red-light); border-color: #f4b8b8; color: var(--red); }
+.pd-scope .alert-cta {
+  margin-left: auto; font-size: 10px; font-weight: 700; cursor: pointer;
+  text-decoration: underline; white-space: nowrap;
+}
+
+/* ── Filter bar ── */
+.pd-scope .filter-bar {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 8px 22px; display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.pd-scope .filter-label { font-size: 9px; color: var(--ink3); font-weight: 700; text-transform: uppercase; letter-spacing: .07em; }
+.pd-scope .fchip {
+  padding: 3px 12px; border-radius: 14px; font-size: 10px; font-weight: 500;
+  border: 1px solid var(--border); color: var(--ink2); cursor: pointer;
+  background: var(--white); transition: all .1s;
+}
+.pd-scope .fchip:hover { border-color: var(--teal-mid); color: var(--teal); }
+.pd-scope .fchip.active { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 600; }
+.pd-scope .fdivider { width: 1px; height: 16px; background: var(--border); margin: 0 4px; }
+
+/* ── Table ── */
+.pd-scope .table-wrap { flex: 1; overflow-y: auto; }
+.pd-scope table { width: 100%; border-collapse: collapse; }
+.pd-scope thead tr { background: var(--surface); position: sticky; top: 0; z-index: 1; }
+.pd-scope th {
+  font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+  color: var(--ink3); padding: 9px 12px; text-align: left;
+  border-bottom: 1px solid var(--border); white-space: nowrap;
+}
+.pd-scope td { font-size: 11px; color: var(--ink2); padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.pd-scope tr:last-child td { border-bottom: none; }
+.pd-scope tr.data-row:hover td { background: rgba(0,109,119,.04); cursor: pointer; }
+.pd-scope .td-id { font-weight: 600; color: var(--ink); }
+.pd-scope .td-flag { color: var(--red); }
+.pd-scope .td-link-style { color: var(--teal); font-weight: 500; }
+
+/* ── Badges ── */
+.pd-scope .chip {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 2px 9px; border-radius: 10px; font-size: 9px; font-weight: 700; white-space: nowrap;
+}
+.pd-scope .chip-review { background: var(--amber-light); color: var(--amber); }
+.pd-scope .chip-approved { background: var(--green-light); color: var(--green); }
+.pd-scope .chip-pending { background: var(--teal-light); color: var(--teal); }
+.pd-scope .chip-rejected { background: var(--red-light); color: var(--red); }
+.pd-scope .chip-transit { background: var(--teal-light); color: var(--teal); }
+.pd-scope .chip-received { background: var(--green-light); color: var(--green); }
+.pd-scope .chip-partial { background: var(--amber-light); color: var(--amber); }
+.pd-scope .chip-unmatched { background: var(--amber-light); color: var(--amber); }
+.pd-scope .chip-overdue { background: var(--red-light); color: var(--red); }
+.pd-scope .chip-matched { background: var(--green-light); color: var(--green); }
+
+/* ── Row actions ── */
+.pd-scope .row-actions { display: flex; gap: 4px; }
+.pd-scope .act {
+  padding: 3px 9px; border-radius: 5px; font-size: 9px; font-weight: 600;
+  border: 1px solid var(--border); background: var(--white); color: var(--ink2);
+  cursor: pointer; white-space: nowrap; font-family: var(--sans); transition: all .1s;
+}
+.pd-scope .act:hover { border-color: var(--teal-mid); color: var(--teal); }
+.pd-scope .act.primary { background: var(--teal); border-color: var(--teal); color: #fff; }
+.pd-scope .act.primary:hover { background: var(--teal-d); }
+.pd-scope .act.danger { background: var(--red-light); border-color: #f4b8b8; color: var(--red); }
+
+/* ── Pagination ── */
+.pd-scope .pagination {
+  background: var(--white); border-top: 1px solid var(--border);
+  padding: 8px 22px; display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
+}
+.pd-scope .pg-info { font-size: 9px; color: var(--ink3); }
+.pd-scope .pg-btns { display: flex; gap: 4px; }
+.pd-scope .pg-btn {
+  padding: 3px 9px; border-radius: 5px; font-size: 9px;
+  border: 1px solid var(--border); background: var(--white); color: var(--ink2);
+  cursor: pointer; font-family: var(--sans);
+}
+.pd-scope .pg-btn.active { background: var(--teal); border-color: var(--teal); color: #fff; font-weight: 600; }
+
+/* ── Dashboard specific ── */
+.pd-scope .dash-grid { padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; flex: 1; }
+.pd-scope .panel { background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.pd-scope .panel-head {
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.pd-scope .panel-title { font-size: 11px; font-weight: 600; color: var(--ink); }
+.pd-scope .panel-link { font-size: 10px; color: var(--teal); cursor: pointer; }
+.pd-scope .panel-link:hover { text-decoration: underline; }
+.pd-scope .dash-stat-row { display: grid; grid-template-columns: repeat(4,1fr); }
+.pd-scope .dash-stat { padding: 14px 18px; border-right: 1px solid var(--border); cursor: pointer; transition: background .12s; }
+.pd-scope .dash-stat:last-child { border-right: none; }
+.pd-scope .dash-stat:hover { background: var(--teal-light); }
+.pd-scope .ds-n { font-size: 22px; font-weight: 600; color: var(--teal); line-height: 1; }
+.pd-scope .ds-l { font-size: 9px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink3); margin-top: 4px; }
+.pd-scope .ds-d { font-size: 9px; margin-top: 5px; }
+.pd-scope .ds-d.up { color: var(--green); }
+.pd-scope .ds-d.warn { color: var(--red); }
+.pd-scope .ds-d.neu { color: var(--ink3); }
+.pd-scope .dash-alert {
+  margin: 0 16px 4px; border-radius: 0 8px 8px 0;
+  padding: 9px 14px; font-size: 11px; display: flex; align-items: center; gap: 8px;
+  border-left: 3px solid var(--red); background: var(--red-light); color: var(--red);
+  cursor: pointer; transition: opacity .12s;
+}
+.pd-scope .dash-alert:hover { opacity: .85; }
+.pd-scope .task-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 14px; border-bottom: 1px solid var(--border); cursor: pointer;
+  transition: background .1s;
+}
+.pd-scope .task-item:last-child { border-bottom: none; }
+.pd-scope .task-item:hover { background: var(--offwhite); }
+.pd-scope .task-icon {
+  width: 26px; height: 26px; border-radius: 6px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 12px;
+  background: var(--teal-light); color: var(--teal);
+}
+.pd-scope .task-icon.warn { background: var(--amber-light); color: var(--amber); }
+.pd-scope .task-icon.danger { background: var(--red-light); color: var(--red); }
+.pd-scope .task-text { font-size: 11px; color: var(--ink); line-height: 1.4; font-weight: 500; }
+.pd-scope .task-meta { font-size: 9px; color: var(--ink3); margin-top: 2px; }
+.pd-scope .task-chip { display: inline-block; padding: 0 6px; border-radius: 3px; font-size: 8px; background: var(--teal-light); color: var(--teal); font-weight: 600; }
+
+/* ─── CS02 dashboard thumbnail (real Star Watch UI, scaled) ─── */
+
+/* ── browser chrome ── */
+.qm-scope .chrome { background: #1e1e1e; padding: 9px 16px; display: flex; align-items: center; gap: 7px; }
+.qm-scope .dot { width: 11px; height: 11px; border-radius: 50%; }
+.qm-scope .url-bar { flex: 1; background: rgba(255,255,255,.07); border-radius: 5px; height: 22px; margin: 0 14px; display: flex; align-items: center; padding: 0 12px; }
+.qm-scope .url-bar span { font-size: 10px; color: rgba(255,255,255,.3); letter-spacing: .01em; }
+
+/* ── app topbar (real product branding: dark teal, distinct from case-study gold accent) ── */
+.qm-scope .qm-topbar {
+  background: var(--teal); height: 46px; padding: 0 22px;
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.qm-scope .qm-brand { display: flex; align-items: center; gap: 9px; }
+.qm-scope .qm-brand-mark { width: 18px; height: 18px; background: linear-gradient(135deg,#1c94ab,var(--teal)); clip-path: polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
+.qm-scope .qm-brand-text { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; color: #fff; text-transform: uppercase; }
+.qm-scope .qm-nav { display: flex; align-items: center; gap: 4px; }
+.qm-scope .qm-nav-item { font-size: 11px; font-weight: 600; padding: 7px 14px; border-radius: 6px; color: rgba(255,255,255,.45); }
+.qm-scope .qm-nav-item.on { color: rgba(255,255,255,.9); }
+.qm-scope .qm-nav-item.active { background: #1c94ab; color: #fff; }
+.qm-scope .qm-avatar { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,.18); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; }
+
+/* ── breadcrumb + page header ── */
+.qm-scope .qm-crumb { background: var(--white); border-bottom: 1px solid var(--border); padding: 8px 22px; font-size: 11px; }
+.qm-scope .qm-crumb span { color: var(--ink3); }
+.qm-scope .qm-crumb a { color: var(--teal); text-decoration: none; font-weight: 500; }
+.qm-scope .qm-page-header {
+  background: var(--white); border-bottom: 1px solid var(--border);
+  padding: 14px 22px 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+}
+.qm-scope .qm-ph-left h1 { font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.qm-scope .qm-ph-left .qm-stars { font-size: 11px; color: var(--ink2); }
+.qm-scope .qm-ph-left .qm-star-fill { color: var(--gold); }
+.qm-scope .qm-ph-left .qm-star-empty { color: var(--border2); }
+.qm-scope .qm-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.qm-scope .qm-pf-item { border: 1px solid var(--border2); border-radius: 6px; background: var(--offwhite); padding: 6px 26px 6px 10px; position: relative; min-width: 110px; }
+.qm-scope .qm-pf-label { font-size: 8.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink3); margin-bottom: 2px; }
+.qm-scope .qm-pf-val { font-size: 11px; font-weight: 600; color: var(--teal); }
+.qm-scope .qm-pf-item::after { content: '▾'; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: var(--ink3); font-size: 9px; }
+
+/* ── measure category cards ── */
+.qm-scope .qm-main { background: #eef1f2; padding: 16px 22px 20px; }
+.qm-scope .qm-section-h { font-size: 12.5px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+.qm-scope .qm-cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.qm-scope .qm-cat-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px 16px; box-shadow: var(--shadow-sm); }
+.qm-scope .qm-cat-title { font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--teal); text-transform: uppercase; margin-bottom: 6px; }
+.qm-scope .qm-cat-meta { font-size: 9.5px; color: var(--ink3); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 4px; }
+.qm-scope .qm-chart-wrap svg text { font-family: var(--sans); }
+.qm-scope .qm-cat-stats { display: flex; gap: 26px; margin-top: 8px; }
+.qm-scope .qm-cs-num { font-size: 15px; font-weight: 700; color: var(--ink); }
+.qm-scope .qm-cs-num.muted { color: var(--ink3); font-weight: 600; }
+.qm-scope .qm-cs-underline { height: 2px; width: 100%; margin: 4px 0; border-radius: 2px; }
+.qm-scope .qm-cs-underline.teal { background: var(--teal); }
+.qm-scope .qm-cs-underline.gold { border-top: 2px dashed var(--gold); }
+.qm-scope .qm-cs-label { font-size: 8.5px; color: var(--ink2); line-height: 1.3; }
+
+@media (max-width: 900px) { .qm-scope .qm-cat-grid { grid-template-columns: 1fr; } }
+
+.ambiguity { padding: 96px 48px; background: var(--offwhite); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.ambiguity-inner { max-width: 1080px; margin: 0 auto; }
+.ambiguity h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.4vw, 38px); color: var(--ink); margin-bottom: 20px; }
+.ambiguity-lead { font-size: 16px; color: var(--ink2); line-height: 1.75; max-width: 720px; margin-bottom: 48px; }
+.ambiguity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+.ambiguity-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 32px; }
+.ambiguity-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); margin-bottom: 10px; }
+.ambiguity-card h3 { font-family: var(--serif); font-weight: 400; font-size: 19px; line-height: 1.3; color: var(--ink); margin-bottom: 12px; }
+.ambiguity-card p { font-size: 14.5px; color: var(--ink2); line-height: 1.65; margin-bottom: 18px; }
+.ambiguity-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+@media (max-width: 640px) {
+  .ambiguity { padding: 64px 24px; }
+}
+
+.designops { padding: 96px 48px; background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.designops-inner { max-width: 1080px; margin: 0 auto; }
+.designops h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(28px, 3.4vw, 38px); color: var(--ink); margin-bottom: 20px; }
+.designops-lead { font-size: 16px; color: var(--ink2); line-height: 1.75; max-width: 720px; margin-bottom: 36px; }
+.designops-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px; }
+.designops-card { background: var(--offwhite); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 24px; }
+.designops-card h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.designops-card p { font-size: 13.5px; color: var(--ink2); line-height: 1.55; }
+
+@media (max-width: 640px) {
+  .designops { padding: 64px 24px; }
+}
+
+</style>
+<style>
+.leadership-teaser{padding:88px 24px;background:#f4f6f8;color:#1b2836}.leadership-teaser-inner{max-width:1100px;margin:auto}.leadership-teaser h2{font-size:clamp(1.7rem,3vw,2.7rem);max-width:780px;line-height:1.18;margin:18px 0}.leadership-teaser p{max-width:740px;line-height:1.7;margin-bottom:28px}.more-work-heading{font-size:1.35rem;margin:60px 0 12px;padding-top:24px;border-top:1px solid #d9e1e7}.case-brief{max-width:1120px;margin:36px auto;padding:25px 30px;border:1px solid #cfdbe5;border-left:5px solid #467f9d;border-radius:12px;background:#f6f9fb;color:#1e3345}.case-brief h2{font-size:1.15rem!important;margin:0 0 12px!important;color:#19334a!important}.case-brief p{line-height:1.65;margin:7px 0;color:#284155}.case-brief strong{color:#172e42}@media(max-width:700px){.case-brief{margin:24px 16px;padding:20px}.leadership-teaser{padding:60px 20px}}</style><style>
+.process-section{padding:clamp(64px,8vw,112px) 24px;background:#f7f7f3;color:#1a1a18}
+.process-inner{max-width:1100px;margin:0 auto}
+.process-section .process-eyebrow{font:700 11px/1.4 'Inter',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#1e3a5f;margin-bottom:16px}
+.process-section h2{font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(32px,4.3vw,52px);line-height:1.12;max-width:850px;margin:0 0 20px}
+.process-intro{font-size:clamp(16px,1.7vw,19px);line-height:1.75;color:#4a4a46;max-width:810px;margin:0 0 34px}
+.process-scale{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 34px}
+.process-scale span{border:1px solid #c9d4df;border-radius:50px;padding:9px 15px;font-size:12px;font-weight:600;color:#1e3a5f;background:#fff}
+.process-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.process-step{background:#fff;border:1px solid #e3e3dd;border-radius:12px;padding:25px 26px;min-width:0}
+.process-step-number{font:400 28px/1 'DM Serif Display',Georgia,serif;color:#9fb3cc;margin-bottom:12px}
+.process-step h3{font:600 17px/1.4 'Inter',sans-serif;color:#1a1a18;margin:0 0 9px}
+.process-step p{font:400 14px/1.65 'Inter',sans-serif;color:#4a4a46;margin:0}
+.process-principles{border-left:3px solid #006d77;margin-top:28px;padding:3px 0 3px 20px;font-size:14px;line-height:1.75;color:#4a4a46}
+.process-principles strong{color:#1a1a18}
+.process-closing{font:italic clamp(19px,2.3vw,25px)/1.5 'DM Serif Display',Georgia,serif;color:#1e3a5f;margin:28px 0 0;max-width:850px}
+@media(max-width:700px){.process-grid{grid-template-columns:1fr}.process-step{padding:22px}.process-section{padding-left:20px;padding-right:20px}}
+</style><style>
+.leadership-principles{padding:clamp(60px,7vw,96px) 24px;background:#fff}
+.leadership-principles-inner{max-width:1100px;margin:auto}
+.leadership-principles h2{font:400 clamp(30px,4vw,42px)/1.2 'DM Serif Display',Georgia,serif;margin:12px 0 28px;color:#1a1a18}
+.leadership-principles-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.leadership-principle{border:1px solid #e5e5e0;border-radius:12px;padding:26px;background:#f8f8f5}
+.leadership-principle h3{font:600 16px/1.4 Inter,sans-serif;margin:0 0 10px;color:#1a1a18}
+.leadership-principle p{font:400 14px/1.7 Inter,sans-serif;margin:0;color:#4a4a46}
+@media(max-width:680px){.leadership-principles-grid{grid-template-columns:1fr}}
+</style><style>
+.process-momentum{border-left:4px solid #006d77;background:#eaf4f2;padding:22px 26px;margin:0 0 28px;border-radius:0 10px 10px 0;max-width:860px}
+.process-momentum strong{display:block;font:600 17px/1.4 'Inter',sans-serif;color:#1a1a18;margin-bottom:7px}
+.process-momentum p{font:400 14px/1.7 'Inter',sans-serif;color:#4a4a46;margin:0}
+</style><style>
+/* ─── CARDS: match AI Process card style (.ai-step) ─── */
+.leadership-principle,.process-step,.ambiguity-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:28px;display:flex;flex-direction:column;min-width:0}
+.process-grid{gap:20px}.leadership-principles-grid{gap:20px}.ambiguity-grid{gap:20px}
+.process-step-number,.ambiguity-eyebrow{font:700 11px/1.4 Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.leadership-principle h3,.process-step h3,.ambiguity-card h3{font-family:var(--serif);font-weight:400;font-size:22px;line-height:1.25;color:var(--ink);margin:0 0 10px}
+.leadership-principle p,.process-step p,.ambiguity-card p{font-family:Inter,sans-serif;font-size:14px;font-weight:400;color:var(--ink2);line-height:1.6;margin:0}
+.ambiguity-card p{margin-bottom:18px}
+.ambiguity-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:16px;border-top:1px solid var(--border)}
+.ambiguity-tags .skill-pill{font-size:11px;font-weight:600;color:var(--teal);background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:20px;padding:3px 10px}
+@media(max-width:700px){.process-step{padding:28px}}
+</style><style>
+/* People leadership: mentorship and team development */
+.people-leadership{padding:clamp(64px,8vw,100px) 24px;background:var(--offwhite);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.people-leadership-inner{max-width:1100px;margin:auto}
+.people-leadership h2{font:400 clamp(30px,4vw,42px)/1.2 var(--serif);margin:12px 0 20px;color:var(--ink)}
+.people-leadership-lead{font-size:16px;line-height:1.75;color:var(--ink2);max-width:790px;margin-bottom:32px}
+.people-leadership-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.people-leadership-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);padding:28px}
+.people-leadership-card .people-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.people-leadership-card h3{font:400 22px/1.25 var(--serif);margin:0 0 12px;color:var(--ink)}
+.people-leadership-card p{font-size:14px;line-height:1.65;color:var(--ink2)}
+.people-leadership-close{margin-top:30px;border-left:3px solid var(--teal);padding:4px 0 4px 20px;font:italic clamp(19px,2.3vw,25px)/1.5 var(--serif);color:var(--navy);max-width:840px}
+@media(max-width:680px){.people-leadership-grid{grid-template-columns:1fr}.people-leadership-card{padding:24px}}
+</style><style id="site-nav-style">
+nav.site-nav{position:sticky;top:0;z-index:1000;background:rgba(248,248,246,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid #e4e4e0;padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:64px;margin:0;box-shadow:none;font-family:'Inter',-apple-system,sans-serif;box-sizing:border-box;width:100%}
+nav.site-nav .nav-brand{display:inline-flex;align-items:center;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#1a1a18}
+nav.site-nav .nav-links{display:flex;gap:32px;align-items:center;margin:0;padding:0}
+nav.site-nav .nav-links a{font-size:12px;font-weight:500;color:#4a4a46;text-decoration:none;letter-spacing:.02em;transition:color .15s;padding:0;border:0;background:none;line-height:1.6}
+nav.site-nav .nav-links a:hover{color:#006d77}
+nav.site-nav .nav-links a.nav-resume{font-size:12px;font-weight:500;letter-spacing:.02em;color:#4a4a46;white-space:nowrap;border:1px solid #d0d0cb;border-radius:20px;padding:7px 16px;transition:background .15s,border-color .15s}
+nav.site-nav .nav-links a.nav-resume:hover{background:#fff;border-color:#8a8a84;color:#1a1a18}
+@media (max-width:640px){
+ nav.site-nav{flex-wrap:wrap;height:auto;padding:12px 24px;gap:10px}
+ nav.site-nav .nav-links{flex-wrap:wrap;gap:12px 18px;justify-content:flex-start}
+}
+</style>
+<style id="process-intro-size">
+/* How I Work intro paragraph: fixed 16px */
+.process-intro{font-size:16px}
+</style>
+<style id="footer-email-style">
+footer .footer-email{margin-top:10px;font-size:13px}
+footer .footer-email a{color:inherit;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px;transition:opacity .15s}
+footer .footer-email a:hover{opacity:.75}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav class="site-nav" id="top" aria-label="Main">
+<a class="nav-brand" href="index.html#top"><img alt="William Teppig" src="images/f77d54b9a753.webp" style="height:28px;width:auto;display:block;"/></a>
+<div class="nav-links">
+<a href="index.html#work">Work</a>
+<a href="index.html#leadership">Leadership</a>
+<a href="index.html#process">How I Work</a>
+<a href="index.html#about">About</a>
+</div>
+</nav>
+<!-- ─── INTRO ─── -->
+<section class="intro" id="top">
+<div class="intro-inner">
+<div class="intro-eyebrow">LEADERSHIP · ALIGNMENT · EXECUTION</div>
+<h1>How I lead design.</h1>
+<p class="intro-sub">My role is to turn complex product challenges into focused, actionable work. I connect research with product strategy, guide teams through key decisions, and stay hands-on from early concepts through implementation.</p>
+</div>
+</section>
+<!-- ─── WORK ─── -->
+<!-- ─── DESIGNING THROUGH AMBIGUITY ─── -->
+<section class="leadership-principles" id="leadership-principles"><div class="leadership-principles-inner"><div class="section-eyebrow">Leadership principles</div><h2>The conditions for better decisions</h2><div class="leadership-principles-grid"><article class="leadership-principle"><h3>Create clarity from ambiguity</h3><p>Ambiguity does not stop progress. I move forward with what we know when the risk is low, while actively identifying and investigating higher-risk assumptions.</p></article><article class="leadership-principle"><h3>Align around shared outcomes</h3><p>Connect user needs, business priorities, and technical constraints.</p></article><article class="leadership-principle"><h3>Make tradeoffs visible</h3><p>Compare alternatives using evidence, feasibility, accessibility, and business value.</p></article><article class="leadership-principle"><h3>Own outcomes beyond handoff</h3><p>Partner through build, QA, launch, and iteration, not just design delivery.</p></article></div></div></section>
+<section aria-labelledby="people-leadership-title" class="people-leadership" id="people-leadership">
+<div class="people-leadership-inner">
+<div class="section-eyebrow">People leadership · Premier</div>
+<h2 id="people-leadership-title">Developing designers. Strengthening teams.</h2>
+<p class="people-leadership-lead">At Premier, I mentored three UX designers and one UX researcher, helping them work through design challenges, develop their craft, and build the confidence to own increasingly complex work. My approach combines practical coaching with thoughtful critique, shared standards, and room for independent decision-making.</p>
+<div class="people-leadership-grid">
+<article class="people-leadership-card"><div class="people-label">01 · Grow</div><h3>Mentorship &amp; professional growth</h3><p>Coached junior designers on UX methods, helped teammates recognize their strengths and build new skills, and supported their growth as they took on more complex projects.</p></article>
+<article class="people-leadership-card"><div class="people-label">02 · Challenge</div><h3>Design critique &amp; actionable feedback</h3><p>Facilitated design reviews that challenged assumptions and encouraged constructive discussion. Offered specific feedback to help designers refine solutions and strengthen their reasoning.</p></article>
+<article class="people-leadership-card"><div class="people-label">03 · Elevate</div><h3>Design quality &amp; shared practices</h3><p>Established shared UX principles and encouraged consistent practices, helping the team improve accessibility, usability, and interaction design across its work.</p></article>
+<article class="people-leadership-card"><div class="people-label">04 · Empower</div><h3>Ownership &amp; team development</h3><p>Gave designers meaningful ownership and autonomy without micromanaging. Created opportunities for knowledge sharing, peer feedback, collaborative problem-solving, and continuous improvement.</p></article>
+</div>
+<p class="people-leadership-close">Strong design leadership isn't about having all the answers. It's about helping others build the judgment and confidence to find better ones.</p>
+</div>
+</section>
+<section aria-labelledby="process-title" class="process-section" id="process"><div class="process-inner"><div class="process-eyebrow">How I work</div><h2 id="process-title">The Process: Structured to Scale with Ambiguity</h2><p class="process-intro">I use seven connected activities as a toolkit, not a fixed sequence. The depth of each activity depends on what the team already knows, the impact of getting a decision wrong, and the evidence needed to proceed. Some work calls for deeper discovery; other work can move directly into prototyping or delivery.</p><div class="process-momentum" role="note"><strong>Keep delivery moving while reducing uncertainty.</strong><p>I separate reversible, low-risk choices from assumptions that could significantly affect users or the business. Teams can act on reliable information today while we investigate consequential unknowns through targeted research, prototypes, and feedback as the work unfolds.</p></div><div aria-label="The process scales to the situation" class="process-scale"><span>High ambiguity · Deep framing and discovery</span><span>Moderate ambiguity · Focused research and validation</span><span>Low ambiguity · Reuse evidence and accelerate delivery</span></div><div class="process-grid"><div class="process-step"><div class="process-step-number">01</div><h3>Frame</h3><p>Align on the user problem, business outcomes, assumptions, constraints, and success metrics.</p></div><div class="process-step"><div class="process-step-number">02</div><h3>Discover</h3><p>Interview users and stakeholders; review analytics and existing research; map people, processes, data, systems, and decisions.</p></div><div class="process-step"><div class="process-step-number">03</div><h3>Synthesize</h3><p>Turn findings into journeys, workflows, opportunity areas, and a shared experience strategy.</p></div><div class="process-step"><div class="process-step-number">04</div><h3>Explore</h3><p>Compare concepts, information architecture, and task flows against user needs, feasibility, accessibility, and business goals.</p></div><div class="process-step"><div class="process-step-number">05</div><h3>Validate</h3><p>Prototype at the lowest useful fidelity. Test realistic tasks and risky assumptions; use feedback to iterate.</p></div><div class="process-step"><div class="process-step-number">06</div><h3>Deliver &amp; Launch</h3><p>Finalize UI, content, states, accessibility checks, and engineering specs. Stay engaged through build, QA, and release.</p></div><div class="process-step"><div class="process-step-number">07</div><h3>Measure &amp; Iterate</h3><p>Review task success, time on task, errors, adoption, and business KPIs. Feed learnings into the next cycle.</p></div></div><p class="process-principles"><strong>Principles: </strong>Start with the problem, not a solution. Test behavior, not just preferences. Use established design-system patterns and accessibility checks. Collaborate with engineering before and after handoff.</p><p class="process-principles"><a href="index.html#process" style="color:var(--teal,#006d77);font-weight:600;text-decoration:none;">See how I use AI at each step →</a></p><p class="process-closing">“Handoff isn’t the end of UX. I stay involved through implementation and measure whether the shipped experience improved the outcome.”</p></div></section><section class="ambiguity" id="ambiguity">
+<div class="ambiguity-inner">
+<div class="section-eyebrow">Evidence from the work</div>
+<h2>Making thoughtful tradeoffs when conditions aren’t ideal.</h2>
+<p class="ambiguity-lead">Real projects rarely offer ideal conditions. These examples show how I weighed competing needs, limited time, technical feasibility, and imperfect evidence—making deliberate choices about what to prioritize, what to simplify, and what to revisit.</p>
+<div class="ambiguity-grid"><div class="ambiguity-card"><div class="ambiguity-eyebrow">Strategic alignment · Healthcare quality</div><h3>Balancing competing priorities</h3><p>Product leadership needed executive visibility, quality teams needed granular measures, and hospital users needed to spot failing measures quickly. Rather than optimize for one audience at the expense of the others, I interviewed stakeholders, mapped workflows and CMS reporting, and used shared use cases and journey maps to define a direction that balanced those needs. The tradeoff was prioritizing common, actionable workflows over trying to satisfy every request at once.</p><div class="ambiguity-tags"><span class="skill-pill">Stakeholder alignment · Research synthesis</span></div></div><div class="ambiguity-card"><div class="ambiguity-eyebrow">Delivery tradeoffs · Healthcare analytics</div><h3>Trading interaction depth for timely delivery</h3><p>We had designed a highly interactive performance-data experience, but engineering estimates showed it could not ship on schedule. I partnered with product and engineering to protect the core workflow while simplifying the implementation into Power BI. We gave up some interaction richness in the near term to deliver useful functionality on time, while keeping the richer experience on the roadmap.</p><div class="ambiguity-tags"><span class="skill-pill">Product and engineering partnership</span></div></div><div class="ambiguity-card"><div class="ambiguity-eyebrow">Research judgment · Limited access</div><h3>Moving forward without ideal research access</h3><p>Direct access to users is not always available at the start of a project. Waiting for perfect evidence can stall progress; treating assumptions as facts creates another risk. I use support insights, business analysts, analytics, competitive products, and subject-matter experts to form provisional hypotheses, make uncertainty explicit, and design a path to validate with users when access becomes possible.</p><div class="ambiguity-tags"><span class="skill-pill">Assumptions and validation</span></div></div><div class="ambiguity-card"><div class="ambiguity-eyebrow">Decision facilitation · Concept exploration</div><h3>Choosing among imperfect design options</h3><p>Stakeholders can favor different solutions, and no concept maximizes usability, implementation speed, and business value at once. I develop alternative concepts—including rapid AI-assisted prototypes where useful—and compare them with stakeholders and users. Making the tradeoffs visible helps teams choose a defensible direction instead of defaulting to the loudest opinion or the first idea.</p><div class="ambiguity-tags"><span class="skill-pill">Concept comparison and feasibility</span></div></div></div>
+</div>
+</section>
+<!-- ─── DESIGNOPS ─── -->
+<!-- ─── ABOUT ─── -->
+<!-- ─── RESUME / CONTACT ─── -->
+<section class="resume">
+<div class="resume-inner">
+<h2>Let's talk</h2>
+<p>Open to conversations about UX leadership roles in enterprise SaaS, healthcare, and financial services.</p>
+<div class="resume-actions">
+<a class="btn-secondary" href="mailto:wteppig@gmail.com">wteppig@gmail.com</a>
+<a class="btn-secondary" href="https://www.linkedin.com/in/billteppig/" rel="noopener" target="_blank">LinkedIn</a>
+</div>
+</div>
+</section>
+<footer>
+<p><strong>William Teppig</strong>  ·  UX Lead  ·  Enterprise Healthcare &amp; Financial Services Platforms</p>
+<p class="footer-email"><a href="mailto:wteppig@gmail.com">wteppig@gmail.com</a></p>
+</footer>
+</body>
+</html>
