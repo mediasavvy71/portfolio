@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Creating scalable branding across channels · William Teppig</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --white:      #ffffff;
+  --offwhite:   #f8f8f6;
+  --surface:    #f2f2ef;
+  --border:     #e4e4e0;
+  --border2:    #d0d0cb;
+  --ink:        #1a1a18;
+  --ink2:       #4a4a46;
+  --ink3:       #8a8a84;
+  --purple:      #8259a6;
+  --purple-light:#f3eef6;
+  --purple-mid:  #c7b4d7;
+  --teal:       #006d77;
+  --teal-light: #e8f4f5;
+  --green:      #3b6d11;
+  --green-light:#eaf3de;
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+  --serif:      'DM Serif Display', Georgia, serif;
+  --sans:       'Inter', -apple-system, sans-serif;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 16px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg:  0 12px 40px rgba(0,0,0,.09), 0 2px 8px rgba(0,0,0,.05);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--offwhite); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(248,248,246,.92); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border); padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between; height: 64px;
+}
+.nav-brand { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a { font-size: 12px; font-weight: 500; color: var(--ink2); text-decoration: none; letter-spacing: .02em; transition: color .15s; }
+.nav-links a:hover { color: var(--purple); }
+.nav-resume {
+  font-size: 11px; font-weight: 600; letter-spacing: .06em; color: var(--ink); text-decoration: none; white-space: nowrap;
+  border: 1px solid var(--border2); border-radius: 20px; padding: 7px 16px; transition: background .15s, border-color .15s;
+}
+.nav-resume:hover { background: var(--white); border-color: var(--ink3); }
+.footer-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px; margin-bottom: 18px; }
+.footer-nav a { font-size: 12px; font-weight: 500; color: var(--ink2); text-decoration: none; letter-spacing: .02em; transition: color .15s; }
+.footer-nav a:hover { color: var(--purple); }
+
+.hero { background: var(--white); padding: 88px 0 0; border-bottom: none; }
+.hero-inner { max-width: 1176px; margin: 0 auto; padding: 0 48px 56px; }
+.hero-mockup-band { padding: 0 48px; display: flex; justify-content: center; line-height: 0; }
+.hero-mockup-band img { display: block; width: 100%; max-width: 1100px; height: auto; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--purple);
+  margin-bottom: 24px;
+}
+.hero-eyebrow::before { display: none; }
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 400; line-height: 1.1; color: var(--ink);
+  margin-bottom: 24px;
+}
+.hero h1 em { color: var(--purple); font-style: italic; }
+.hero-sub {
+  font-size: 16px; color: var(--ink2);
+  line-height: 1.65; margin-bottom: 48px; font-weight: 400;
+}
+.hero-meta {
+  display: flex; flex-wrap: wrap; gap: 0;
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  overflow: hidden; background: var(--offwhite);
+}
+.hero-meta-item {
+  padding: 20px 28px; flex: 1; min-width: 160px;
+  border-right: 1px solid var(--border);
+}
+.hero-meta-item:last-child { border-right: none; }
+.meta-label {
+  font-size: 11px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 6px;
+}
+.meta-val { font-size: 14px; font-weight: 500; color: var(--ink); }
+.impact-bar { background: var(--purple); padding: 40px 48px; }
+.impact-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; }
+.impact-stat { padding: 0 32px; border-right: 1px solid rgba(255,255,255,.2); }
+.impact-stat:first-child { padding-left: 0; }
+.impact-stat:last-child { border-right: none; }
+.impact-num { font-family: var(--serif); font-size: 48px; color: #fff; line-height: 1; margin-bottom: 6px; }
+.impact-desc { font-size: 13px; color: rgba(255,255,255,.8); line-height: 1.5; }
+h2 { border-left: 4px solid var(--purple); padding-left: 16px; }
+h3::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--purple); margin-right: 9px; vertical-align: middle; }
+.card h4::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: currentColor; margin-right: 7px; vertical-align: middle; }
+.status-tag::before { content: '● '; }
+
+.content { padding: 72px 48px 96px; }
+.content-inner { max-width: 1080px; margin: 0 auto; }
+h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 2.8vw, 30px); color: var(--ink); margin: 56px 0 20px; }
+h2:first-child { margin-top: 0; }
+h3 { font-size: 16px; font-weight: 700; color: var(--ink); margin: 30px 0 10px; }
+p { margin: 0 0 18px; color: #2b2b2b; font-size: 15.5px; }
+.lede { font-size: 17.5px; color: var(--ink); }
+ul { margin: 0 0 18px; padding-left: 22px; }
+li { margin-bottom: 9px; color: #2b2b2b; font-size: 15.5px; }
+
+.callout {
+  background: var(--purple-light); border-left: 3px solid var(--purple);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 20px 24px; margin: 24px 0; font-size: 15.5px; color: #4a2f61;
+}
+.callout strong { color: var(--ink); }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 22px 0 8px; }
+.card { background: var(--white); border: 1px solid var(--border); border-top: 3px solid var(--purple); border-radius: var(--radius-md); padding: 20px 22px; box-shadow: var(--shadow-sm); }
+.card h4 { margin: 0 0 8px; font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--purple); font-weight: 700; }
+.card p { margin: 0; font-size: 14px; color: #333; }
+
+.diagram-wrap { margin: 30px 0 8px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 28px 24px; box-shadow: var(--shadow-sm); }
+.diagram-caption { font-size: 12.5px; color: var(--ink3); text-align: center; margin-top: 14px; }
+
+.shot-wrap { margin: 30px 0 8px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; box-shadow: var(--shadow-sm); }
+.shot-wrap img { width: 100%; height: auto; display: block; border-radius: 8px; border: 1px solid var(--border); }
+.shot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 30px 0 8px; }
+.shot-grid .shot-wrap { margin: 0; }
+.shot-single { max-width: 460px; margin-left: auto; margin-right: auto; }
+
+.shot-wrap img.js-lightbox-img, .shot-grid img.js-lightbox-img { cursor: zoom-in; transition: opacity .15s; }
+.shot-wrap img.js-lightbox-img:hover, .shot-grid img.js-lightbox-img:hover { opacity: .82; }
+
+.lightbox-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(20,18,15,.92);
+  z-index: 1000; align-items: center; justify-content: center; padding: 48px;
+}
+.lightbox-overlay.active { display: flex; }
+.lightbox-stage { position: relative; max-width: 1160px; width: 100%; display: flex; flex-direction: column; align-items: center; }
+.lightbox-stage img { max-width: 100%; max-height: 76vh; border-radius: 8px; box-shadow: var(--shadow-lg); display: block; }
+.lightbox-caption { color: rgba(255,255,255,.72); font-size: 13px; margin-top: 18px; text-align: center; max-width: 700px; }
+.lightbox-close {
+  position: absolute; top: -46px; right: 0; background: none; border: none;
+  color: #fff; font-size: 30px; line-height: 1; cursor: pointer; padding: 4px 8px;
+}
+.lightbox-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,.14); border: none; color: #fff;
+  width: 46px; height: 46px; border-radius: 50%; font-size: 20px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: background .15s;
+}
+.lightbox-nav:hover { background: rgba(255,255,255,.26); }
+.lightbox-prev { left: -68px; }
+.lightbox-next { right: -68px; }
+@media (max-width: 900px) {
+  .lightbox-overlay { padding: 24px; }
+  .lightbox-prev { left: 4px; }
+  .lightbox-next { right: 4px; }
+}
+
+.status-tag {
+  display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em;
+  background: var(--purple-light); color: var(--purple); padding: 5px 12px; border-radius: 20px; margin-bottom: 12px;
+}
+
+hr.rule { border: none; border-top: 1px solid var(--border); margin: 60px 0; }
+
+.case-nav { background: var(--white); border-top: 1px solid var(--border); padding: 48px; }
+.case-nav-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.case-nav-card {
+  border: 1px solid var(--border); border-radius: var(--radius-md); padding: 28px 32px;
+  text-decoration: none; display: block; background: var(--offwhite);
+  box-shadow: var(--shadow-sm); transition: box-shadow .15s;
+}
+.case-nav-card:hover { box-shadow: var(--shadow-md); }
+.case-nav-card.next { text-align: right; }
+.case-nav-label { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 8px; }
+.case-nav-title { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--ink); line-height: 1.25; margin-bottom: 8px; }
+.case-nav-meta { font-size: 12px; font-weight: 500; color: var(--ink3); }
+
+@media (max-width: 640px) {
+  .case-nav-inner { grid-template-columns: 1fr; }
+  .case-nav-card.next { text-align: left; }
+}
+
+footer { padding: 32px 48px; text-align: center; border-top: 1px solid var(--border); }
+footer p { font-size: 12.5px; color: var(--ink3); }
+
+@media (max-width: 640px) {
+  nav { flex-wrap: wrap; height: auto; padding: 12px 24px; gap: 10px; }
+  .hero, .content { padding-left: 24px; padding-right: 24px; }
+  .grid2 { grid-template-columns: 1fr; }
+}
+</style>
+<style>.case-brief{max-width:1080px;margin:32px auto;padding:24px 30px;border:1px solid #cad8e4;border-left:5px solid #467f9d;border-radius:12px;background:#f6f9fb;color:#20394c}.case-brief h2{font-size:1.2rem!important;margin:0 0 12px!important;color:#19334a!important}.case-brief p{font-size:1rem;line-height:1.65;margin:8px 0;color:#284155}@media(max-width:700px){.case-brief{margin:20px 16px;padding:18px}}</style><style>
+/* Shared, responsive case-study impact bar */
+.impact-bar { background: var(--teal, #176a70); padding: 32px clamp(20px, 5vw, 48px); color: #fff; }
+.impact-bar .impact-eyebrow { max-width:1080px; margin:0 auto 22px; color:rgba(255,255,255,.76); font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+.impact-bar .impact-inner { max-width:1080px; margin:0 auto; display:grid; grid-template-columns:repeat(var(--impact-count, 3),minmax(0,1fr)); gap:0; }
+.impact-bar .impact-stat { min-width:0; padding:0 24px; border-right:1px solid rgba(255,255,255,.24); }
+.impact-bar .impact-stat:first-child { padding-left:0; }
+.impact-bar .impact-stat:last-child { border-right:0; }
+.impact-bar .impact-num { color:#fff; font-size:clamp(30px,4.4vw,50px); line-height:1.08; margin:0 0 8px; font-weight:650; overflow-wrap:anywhere; }
+.impact-bar .impact-desc { color:rgba(255,255,255,.9); font-size:14px; line-height:1.5; max-width:260px; }
+@media(max-width:640px) {
+ .impact-bar .impact-inner { grid-template-columns:1fr; gap:16px; }
+ .impact-bar .impact-stat, .impact-bar .impact-stat:first-child { padding:0 0 16px; border-right:0; border-bottom:1px solid rgba(255,255,255,.24); }
+ .impact-bar .impact-stat:last-child { border-bottom:0; padding-bottom:0; }
+}
+</style><link href="case-study-typography.css" rel="stylesheet"/><style id="index-navigation-unified">
+/* Index navigation: identical styles on all case studies */
+body > nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(248,248,246,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+body > nav .nav-brand {
+  font-size: 12px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+  display: inline-flex; align-items: center;
+}
+body > nav .nav-links { display: flex; gap: 32px; align-items: center; }
+body > nav .nav-links a {
+  font-size: 12px; font-weight: 500; color: var(--ink2);
+  text-decoration: none; letter-spacing: .02em; transition: color .15s;
+}
+body > nav .nav-links a:hover { color: var(--teal); }
+body > nav .nav-resume {
+  font-size: 11px; font-weight: 600; letter-spacing: .06em;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+  border: 1px solid var(--border2); border-radius: 20px;
+  padding: 7px 16px; transition: background .15s, border-color .15s;
+}
+body > nav .nav-resume:hover { background: var(--white); border-color: var(--ink3); }
+@media(max-width:700px){body > nav{padding-left:20px;padding-right:20px;gap:12px}body > nav .nav-links{gap:12px;flex-wrap:wrap}body > nav .nav-links a{white-space:nowrap}}
+</style>
+<style>
+/* Shared bottom navigation across the five portfolio case studies */
+.portfolio-case-pager{background:#fff;border-top:1px solid #e4e4e0;padding:48px clamp(20px,5vw,48px);font-family:var(--sans,'Inter',sans-serif)}
+.portfolio-case-pager__inner{max-width:1080px;margin:auto}
+.portfolio-case-pager__heading{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#77776f;margin:0 0 18px}
+.portfolio-case-pager__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.portfolio-case-pager__card{display:flex;flex-direction:column;gap:10px;padding:24px;border:1px solid #e4e4e0;border-radius:10px;background:#fff;text-decoration:none;color:#1a1a18;min-width:0;transition:border-color .2s,box-shadow .2s,transform .2s}
+.portfolio-case-pager__card:hover,.portfolio-case-pager__card:focus-visible{border-color:var(--navy,#1e3a5f);box-shadow:0 5px 20px rgba(0,0,0,.08);transform:translateY(-2px)}
+.portfolio-case-pager__direction{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--navy,#1e3a5f)}
+.portfolio-case-pager__title{font-family:var(--serif,Georgia,serif);font-size:clamp(19px,2.1vw,24px);line-height:1.25;font-weight:400}
+.portfolio-case-pager__meta{font-size:12px;color:#77776f;margin-top:auto}
+.portfolio-case-pager__all{display:inline-block;margin-top:22px;font-size:13px;font-weight:600;color:var(--navy,#1e3a5f);text-decoration:none}
+.portfolio-case-pager__all:hover{text-decoration:underline}
+@media(max-width:640px){.portfolio-case-pager__grid{grid-template-columns:1fr}.portfolio-case-pager{padding-top:32px;padding-bottom:32px}}
+</style><style>
+/* Case-study pager must not inherit global nav layout/sticky behavior. */
+.portfolio-case-pager[role="navigation"] {position:static!important;top:auto!important;z-index:auto!important;display:block!important;height:auto!important;min-height:0!important;max-height:none!important;align-items:initial!important;justify-content:initial!important;flex-wrap:initial!important;gap:0!important;backdrop-filter:none!important;background:#fff!important;border-bottom:0!important;border-top:1px solid #e4e4e0!important;padding:48px clamp(20px,5vw,48px)!important;}
+.portfolio-case-pager[role="navigation"] .portfolio-case-pager__grid {display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:20px!important;}
+.portfolio-case-pager[role="navigation"] .portfolio-case-pager__card {display:flex!important;flex-direction:column!important;gap:10px!important;height:auto!important;}
+@media(max-width:640px){.portfolio-case-pager[role="navigation"] {padding:32px 20px!important;}.portfolio-case-pager[role="navigation"] .portfolio-case-pager__grid {grid-template-columns:1fr!important;}}
+</style><style>
+/* Flexible Branding footer: consistent with the dark case-study footer */
+footer.black-case-footer { background: #1a1a18; padding: 48px 24px; text-align: center; border-top: none; }
+footer.black-case-footer p { margin: 0; font-size: 13px; line-height: 1.6; color: rgba(255,255,255,.55); }
+footer.black-case-footer strong { color: rgba(255,255,255,.8); }
+</style><style id="cs-contrib-style">
+/* My Contributions: shared styling matched to Case Study 01 */
+.cs-contrib-band{background:#f8f8f6;padding:56px 48px;border-bottom:1px solid #e4e4e0;}
+.cs-contrib-band .section-inner{max-width:1080px;margin:0 auto;}
+.cs-contrib-band .role-callout{background:#edf2f5;border:1px solid #c8d8e4;border-radius:12px;padding:28px 32px;margin:0;box-shadow:none;max-width:none;}
+.cs-contrib-band .role-callout h3{font-family:'Inter',-apple-system,sans-serif;font-size:13px;font-weight:700;color:#3d5a6c;text-transform:uppercase;letter-spacing:.08em;line-height:normal;margin:0 0 12px;}
+.cs-contrib-band .role-callout ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin:0;padding:0;}
+.cs-contrib-band .role-callout li{display:block;font-family:'Inter',-apple-system,sans-serif;font-size:14px;color:#4a4a46;line-height:1.5;padding-left:22px;margin:0;}
+.cs-contrib-band .role-callout li::before{content:'\2192';color:#3d5a6c;font-weight:600;display:inline-block;width:22px;margin-left:-22px;}
+.cs-contrib-band .role-callout h3::before,.cs-contrib-band .role-callout h3::after{content:none;display:none;}
+@media (max-width:640px){.cs-contrib-band{padding:40px 20px;}}
+</style>
+<style id="cs-standard-2026">
+.glance{max-width:1176px;margin:56px auto 8px;padding:0 48px;font-family:'Inter',-apple-system,sans-serif}
+.glance-box{border:1px solid #e4e4e0;border-radius:16px;background:#f8f8f6;padding:32px 36px}
+.glance-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px}
+.glance-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#006d77}
+.glance-time{font-size:12px;color:#8a8a84}
+.glance-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.glance-item h4{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a8a84;margin:0 0 8px}
+.glance-item p{font-size:14.5px;line-height:1.6;color:#1a1a18;margin:0}
+.glance-item p.meas{font-size:12.5px;color:#4a4a46;margin-top:10px;padding-top:10px;border-top:1px solid #e4e4e0}
+.cs-todo{display:block;margin-top:10px;font-size:12px;line-height:1.5;color:#7a4a12;background:#fdf0e6;border:1px dashed #e0a160;border-radius:6px;padding:6px 10px}
+.result-list.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cs-close{background:#1a1a18;color:#fff;padding:88px 48px;font-family:'Inter',-apple-system,sans-serif}
+.cs-close-inner{max-width:1080px;margin:0 auto}
+.cs-close-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#b2d8dc;margin-bottom:18px}
+.cs-close-takeaway{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(24px,3vw,34px);line-height:1.3;color:#fff;max-width:860px;margin:0 0 18px}
+.cs-close-body{font-size:16px;line-height:1.7;color:rgba(255,255,255,.78);max-width:760px;margin:0 0 40px}
+.cs-close-next{border-top:1px solid rgba(255,255,255,.18);padding-top:28px;margin-bottom:44px}
+.cs-close-next h3{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;margin:0 0 14px;font-family:'Inter',sans-serif}
+.cs-close-next ul{margin:0;padding-left:20px}
+.cs-close-next li{font-size:15.5px;line-height:1.65;color:rgba(255,255,255,.85);margin-bottom:8px}
+.cs-close .cs-todo{display:inline-block;margin:0 0 12px}
+.cs-close-nav{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.cs-close-nav a{color:#fff;text-decoration:none;font-size:14px;font-weight:600}
+.cs-close-nav a.next{background:#fff;color:#1a1a18;border-radius:24px;padding:13px 24px}
+.cs-close-nav a.next span{color:#006d77}
+.cs-close-nav a.back{color:rgba(255,255,255,.7)}
+.cs-close-nav a:hover{opacity:.85}
+@media(max-width:900px){.glance-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.result-list.result-grid{grid-template-columns:1fr}.glance{padding:0 20px;margin-top:36px}.glance-box{padding:24px}.glance-grid{grid-template-columns:1fr;gap:20px}.cs-close{padding:64px 24px}}
+</style>
+<style id="site-nav-style">
+nav.site-nav{position:sticky;top:0;z-index:1000;background:rgba(248,248,246,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid #e4e4e0;padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:64px;margin:0;box-shadow:none;font-family:'Inter',-apple-system,sans-serif;box-sizing:border-box;width:100%}
+nav.site-nav .nav-brand{display:inline-flex;align-items:center;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#1a1a18}
+nav.site-nav .nav-links{display:flex;gap:32px;align-items:center;margin:0;padding:0}
+nav.site-nav .nav-links a{font-size:12px;font-weight:500;color:#4a4a46;text-decoration:none;letter-spacing:.02em;transition:color .15s;padding:0;border:0;background:none;line-height:1.6}
+nav.site-nav .nav-links a:hover{color:#006d77}
+nav.site-nav .nav-links a.nav-resume{font-size:12px;font-weight:500;letter-spacing:.02em;color:#4a4a46;white-space:nowrap;border:1px solid #d0d0cb;border-radius:20px;padding:7px 16px;transition:background .15s,border-color .15s}
+nav.site-nav .nav-links a.nav-resume:hover{background:#fff;border-color:#8a8a84;color:#1a1a18}
+@media (max-width:640px){
+ nav.site-nav{flex-wrap:wrap;height:auto;padding:12px 24px;gap:10px}
+ nav.site-nav .nav-links{flex-wrap:wrap;gap:12px 18px;justify-content:flex-start}
+}
+</style>
+<style id="lpl-white-bg">
+/* Hero and At a glance band: white instead of the page gray */
+.hero{background:#fff}
+section.glance{max-width:none;margin:0;background:#fff;padding:56px max(48px,calc((100% - 1176px)/2 + 48px)) 8px}
+@media(max-width:640px){section.glance{padding:36px 20px 8px}}
+section.content{background:#fff}
+</style>
+<style id="footer-email-style">
+footer .footer-email{margin-top:10px;font-size:13px}
+footer .footer-email a{color:inherit;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px;transition:opacity .15s}
+footer .footer-email a:hover{opacity:.75}
+</style>
+</head>
+<body>
+<nav class="site-nav" id="top" aria-label="Main">
+<a class="nav-brand" href="index.html#top"><img alt="William Teppig" src="images/f77d54b9a753.webp" style="height:28px;width:auto;display:block;"/></a>
+<div class="nav-links">
+<a href="index.html#work">Work</a>
+<a href="index.html#leadership">Leadership</a>
+<a href="index.html#process">How I Work</a>
+<a href="index.html#about">About</a>
+</div>
+</nav>
+<section class="hero">
+<div class="hero-inner">
+<div class="hero-eyebrow">LPL Financial · Enterprise Platforms</div>
+<h1 class="t-h1">Creating scalable branding across channels</h1>
+<p class="hero-sub">Branding changes were scattered across products and delivery channels, creating inconsistent customer experiences and repeated implementation work. I designed a governed asset-management model with organizational inheritance and channel-specific controls to scale branding without losing local flexibility.</p>
+</div>
+<div class="hero-mockup-band">
+<img alt="Business Configurator Branding tab for Pruman Financial Corp, showing all six channels (Statement, Letter, Forms: Print, Forms: Digital Notification, Client Reporting, and Account View) with their assigned logos" src="images/9273bf296e3a.webp"/>
+</div>
+</section>
+
+<!-- IMPACT BAR -->
+<div aria-label="Impact and results" class="impact-bar" style="background-color: var(--purple, #8259a6);"><div class="impact-eyebrow t-kicker">Impact &amp; Results</div><div class="impact-inner" style="--impact-count:3"><div class="impact-stat"><div class="impact-num t-impact-num">6</div><div class="impact-desc t-impact-desc">Channels live</div></div><div class="impact-stat"><div class="impact-num t-impact-num">10</div><div class="impact-desc t-impact-desc">Additional channels planned</div></div><div class="impact-stat"><div class="impact-num t-impact-num">1</div><div class="impact-desc t-impact-desc">Governed logo repository</div></div></div></div>
+
+<!-- AT A GLANCE (30-second summary) -->
+<section class="glance" aria-label="At a glance"><div class="glance-box">
+<div class="glance-head"><div class="glance-label">At a glance</div></div>
+<div class="glance-grid">
+<div class="glance-item"><h4>The problem</h4><p>Each channel team had built its own logo tool, so file types, colors, resolutions and storage all differed, and firms' logos rendered inconsistently across client materials.</p></div>
+<div class="glance-item"><h4>My role &amp; team</h4><p>Senior Product Designer. Led the design of Flexible Branding inside LPL's Business Configurator.</p></div>
+<div class="glance-item"><h4>Key decision</h4><p>Treat the logo repository as infrastructure: upload once per channel, inherit down the organization hierarchy, and override only by Rep ID.</p></div>
+<div class="glance-item"><h4>Outcome</h4><p>One governed repository, live for 6 of 16 channels, replacing six separately built logo tools. The program is rolling out as part of LPL's Personalization work.</p></div>
+</div></div></section>
+<section class="content">
+<div class="content-inner">
+<h2 class="t-h2">Overview</h2>
+<p class="lede">LPL Financial supports thousands of independent advisory firms and institutions, each with its own visual identity and its own expectations for how that identity should appear in client-facing materials. Before this work, every application or channel team (statements, letters, forms, reporting, account view) had built its own tool for managing logos, with no shared standard between them.</p>
+<p>I led the design of Flexible Branding, which created a centralized brand management platform inside the Business Configurator, a single source of truth for logos and branding assets across advisors, institutions, and enterprise teams. Replacing fragmented, application-specific branding with a scalable, one-to-many distribution model gave LPL a future-ready capability: one that ensures brand consistency, simplifies governance, and accelerates delivery across current and future digital experiences.</p>
+<p>Sixteen channels are expected to need branding in total; six are supported today (Statements, Letters, Forms: Print, Forms: Digital Notifications, Client Reporting, and Account View), with the remaining ten rolling in as the program expands.</p>
+<h2 class="t-h2">The Problem</h2>
+<p>Because each channel team built its own logo-management tool independently, there was no shared standard for how a firm's brand should be stored or presented. That fragmentation showed up as inconsistency across nearly every dimension a logo touches:</p>
+<ul>
+<li><strong>Inconsistent file types and formats.</strong> One channel's tool expected TIFF, another JPEG, another PNG, with no shared convention for which format belonged where.</li>
+<li><strong>Inconsistent colors and resolutions.</strong> Color models (CMYK vs. RGB) and resolution requirements varied by tool, so the same logo could render correctly in one output and wrong in another.</li>
+<li><strong>Inconsistent file sizes and dimensions.</strong> Each tool enforced its own size and dimension limits, with no central reference for what a channel actually required.</li>
+<li><strong>Inconsistent file management locations.</strong> Logos lived wherever each team's tool happened to store them, so there was no single place to find, audit, or update a firm's current branding.</li>
+</ul>
+<p>These inconsistencies weren't just an internal maintenance headache; they made customers upset. A firm might see its logo rendered crisply on a statement and blurry or off-brand on a client report, with no clear way to fix it themselves. The goal wasn't a branding "feature" bolted onto one more channel; it was a single, governed repository that every channel could draw from, so a firm's identity looked right everywhere, consistently.</p>
+<h2 class="t-h2">Design Approach</h2>
+<p>I designed Flexible Branding as a single, centrally managed logo repository rather than a set of one-off branding tools scattered across each channel team. The core decision: logos are uploaded and governed <em>once</em>, per channel, in one place, and every downstream output reads from that same source instead of maintaining its own copy.</p>
+<div class="grid2">
+<div class="card">
+<h4>Upload once, per channel</h4>
+<p>Each of the 16 channels keeps its own technical requirements (format, dimensions, resolution, color model, file size), but every upload happens in the same governed repository instead of a separate team tool.</p>
+</div>
+<div class="card">
+<h4>Organized by organization</h4>
+<p>Branding lives on the Business Configurator's org record, alongside Service Agreements, People, and Fee Settings, so brand management sits where every other firm-level configuration already lives.</p>
+</div>
+<div class="card">
+<h4>Inherit down the hierarchy</h4>
+<p>A Parent Organization's branding applies to its DBA / Child Organizations by default, so a multi-entity firm doesn't have to re-upload the same logos for every sub-brand.</p>
+</div>
+<div class="card">
+<h4>Override at the Rep ID level</h4>
+<p>When an individual rep needs a different logo than their firm's default (a co-branded practice, for example), "Assign logo by Rep ID" lets that be set as a granular exception, not a new ticket.</p>
+</div>
+</div>
+<div class="diagram-wrap">
+<svg style="width:100%;height:auto;" viewbox="0 0 720 220" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<marker id="arrowA" markerheight="10" markerwidth="10" orient="auto" refx="8" refy="3">
+<path d="M0,0 L8,3 L0,6 Z" fill="#8a8a84"></path>
+</marker>
+</defs>
+<rect fill="#f3eef6" height="64" rx="8" stroke="#8259a6" stroke-width="1.5" width="180" x="14" y="78"></rect>
+<text fill="#1a1a18" font-family="Inter, sans-serif" font-size="12.5" font-weight="700" text-anchor="middle" x="104" y="105">Logo Repository</text>
+<text fill="#4a4a46" font-family="Inter, sans-serif" font-size="10.5" text-anchor="middle" x="104" y="123">Business Configurator</text>
+<line marker-end="url(#arrowA)" stroke="#8a8a84" stroke-width="1.5" x1="194" x2="234" y1="110" y2="110"></line>
+<rect fill="#ffffff" height="34" rx="7" stroke="#d0d0cb" stroke-width="1.2" width="168" x="234" y="6"></rect>
+<text fill="#1a1a18" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="318" y="27">Statements</text>
+<rect fill="#ffffff" height="34" rx="7" stroke="#d0d0cb" stroke-width="1.2" width="168" x="234" y="44"></rect>
+<text fill="#1a1a18" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="318" y="65">Letters</text>
+<rect fill="#ffffff" height="34" rx="7" stroke="#d0d0cb" stroke-width="1.2" width="168" x="234" y="82"></rect>
+<text fill="#1a1a18" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="318" y="103">Forms: Print</text>
+<rect fill="#ffffff" height="34" rx="7" stroke="#d0d0cb" stroke-width="1.2" width="168" x="234" y="120"></rect>
+<text fill="#1a1a18" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="318" y="141">Forms: Digital Notifications</text>
+<rect fill="#ffffff" height="34" rx="7" stroke="#d0d0cb" stroke-width="1.2" width="168" x="234" y="158"></rect>
+<text fill="#1a1a18" font-family="Inter, sans-serif" font-size="11" font-weight="600" text-anchor="middle" x="318" y="179">Client Reporting</text>
+<rect fill="#ffffff" height="20" rx="6" stroke="#d0d0cb" stroke-width="1.2" width="168" x="234" y="196"></rect>
+<text fill="#1a1a18" font-family="Inter, sans-serif" font-size="10" font-weight="600" text-anchor="middle" x="318" y="209">Account View · +10 more</text>
+<line marker-end="url(#arrowA)" stroke="#8a8a84" stroke-width="1.2" x1="402" x2="452" y1="110" y2="110"></line>
+<rect fill="#f3eef6" height="100" rx="10" stroke="#8259a6" stroke-width="1.5" width="254" x="452" y="60"></rect>
+<text fill="#1a1a18" font-family="Inter, sans-serif" font-size="13" font-weight="700" text-anchor="middle" x="579" y="98">One consistent identity</text>
+<text fill="#4a4a46" font-family="Inter, sans-serif" font-size="11" text-anchor="middle" x="579" y="118">per firm, per DBA, and</text>
+<text fill="#4a4a46" font-family="Inter, sans-serif" font-size="11" text-anchor="middle" x="579" y="136">optionally per Rep ID</text>
+</svg>
+<div class="diagram-caption">One governed logo repository drives all 16 branded channels: Account View, Statements, Letters, Forms, and Client Reporting shown here.</div>
+</div>
+<h2 class="t-h2">How It Works</h2>
+<p>The repository concept is easiest to see in the actual flow, from a firm's place in the org hierarchy down to a single advisor's override.</p>
+<div class="shot-wrap shot-single">
+<img alt="Business Configurator Details tab for Pruman Financial Corp, showing the organization summary, contact information, and Rep IDs table" class="js-lightbox-img" src="images/c0ac4258ad1d.webp"/>
+<div class="diagram-caption">Every firm enters through its place in the org hierarchy. Pruman Financial Corp is a parent organization with four DBA offices (Smith Wealth Partners East, West, North, and South), visible right in the org switcher. Branding set at the parent cascades to all four by default.</div>
+</div>
+<div class="shot-grid">
+<div class="shot-wrap">
+<img alt="Business Configurator Branding tab showing six empty logo upload cards for Statement, Letter, Forms: Print, Forms: Digital Notification, Client Reporting, and Account View" class="js-lightbox-img" src="images/ac8e7f4b731d.webp"/>
+</div>
+<div class="shot-wrap">
+<img alt="macOS file picker open over the Branding tab, selecting a logo file to upload" class="js-lightbox-img" src="images/0748eb65f688.webp"/>
+</div>
+</div>
+<div class="diagram-caption">The Branding tab is where all six channels converge, each with its own inherited spec (left). Uploading is a standard file picker: no special software, no engineering ticket (right).</div>
+<div class="shot-grid">
+<div class="shot-wrap">
+<img alt="Business Configurator Branding tab with all six channels populated, each showing a Ready to use or Submitted to Broadridge status" class="js-lightbox-img" src="images/c22413a45bcd.webp"/>
+</div>
+<div class="shot-wrap">
+<img alt="Assign logo by Rep ID screen listing individual reps under a parent firm with per-rep logo override cards" class="js-lightbox-img" src="images/7f0de64fba8d.webp"/>
+</div>
+</div>
+<div class="diagram-caption">Once uploaded, every channel shows its status at a glance (left). For the rare exception, an admin can override a single channel for a single Rep ID without disturbing the org-level default everyone else inherits (right).</div>
+<h2 class="t-h2">Key Design Decisions</h2>
+<h3>1. Treat the logo repository as infrastructure, not a per-channel field</h3>
+<p>The single most important framing decision was refusing to let each channel team keep its own logo tool. Instead of a logo field on the statements team's roadmap and a separate one on the client reporting team's roadmap, Flexible Branding lives in one repository and every channel is a consumer of that same source. That's what fixes the file type, format, color, resolution, size, and location inconsistencies at the root instead of patching each tool individually.</p>
+<h3>2. Respect each channel's real technical constraints</h3>
+<p>Centralizing the repository didn't mean forcing one spec onto every channel. A statement logo genuinely needs 300dpi CMYK TIFF art for print production; an Account View logo is a small PNG icon. I designed each upload card to surface its own format, dimension, resolution, and file-size requirements up front, so firms get it right the first time instead of trial-and-error rejections.</p>
+<h3>3. Model the org hierarchy, not just the firm</h3>
+<p>Firms aren't flat; a Parent Organization can have several DBA / Child Organizations (regional offices, sub-practices), and within those, individual reps identified by Rep ID. I designed branding to inherit down that hierarchy by default, with "Assign logo by Rep ID" as an explicit override path for the exceptions, rather than requiring every level to be configured independently.</p>
+<h2 class="t-h2">Constraints I designed within</h2>
+<ul>
+<li><strong>Six team-built tools, six sets of habits.</strong> Statements, Letters, Forms, Client Reporting, and Account View teams each had their own way of handling logos; the design had to be good enough that firms and internal ops would actually adopt one repository over six familiar ones.</li>
+<li><strong>Genuinely different technical specs per channel.</strong> Print-oriented channels (Statements, Letters) require production-grade TIFF/CMYK art at 300dpi; digital surfaces accept JPEG/PNG at web resolutions. The design had to hold both without pretending they're the same problem.</li>
+<li><strong>Multi-entity firm structures.</strong> Parent Organizations, DBA/Child Organizations, and individual Rep IDs each needed a coherent place in the branding model, including third-party downstream dependencies, like statement logos that get submitted to a print vendor (Broadridge) once approved.</li>
+</ul>
+<p>Because the underlying requirements genuinely differ by channel: a printed statement logo needs 300dpi CMYK TIFF art; an Account View logo is a 40×44px PNG. The repository doesn't force one spec onto every channel. It centralizes <em>where</em> logos live and <em>how</em> they're managed, while keeping each channel's real technical constraints visible at the point of upload.</p>
+</div>
+</section>
+<!-- CASE STUDY NAV -->
+
+<!-- STANDARD ENDING -->
+<section class="cs-close"><div class="cs-close-inner">
+<div class="cs-close-label">Reflection</div>
+<p class="cs-close-takeaway">Six tools were all downstream of the same unmet need: a firm wanting to look like itself, everywhere.</p>
+<p class="cs-close-body">Treating the repository as infrastructure, with room for each channel's real constraints, means a seventeenth channel registers once and inherits the same governance.</p>
+<div class="cs-close-next"><h3>What I'd do next</h3><ul><li>Bring the remaining ten channels onto the same repository as part of the Personalization program.</li><li>Extend self-service branding configuration out to firms directly.</li></ul></div>
+<div class="cs-close-nav"><a class="back" href="index.html#work">← All work</a><a class="next" href="remitra_supplier_portal.html">Next case study: <span>Remitra: Influencing product strategy through facilitation →</span></a></div>
+</div></section>
+<footer class="black-case-footer">
+<p><strong>Creating scalable branding across channels</strong>  ·  William Teppig  ·  LPL Financial</p>
+<p class="footer-email"><a href="mailto:wteppig@gmail.com">wteppig@gmail.com</a></p>
+</footer>
+<div class="lightbox-overlay" id="lightboxOverlay">
+<div class="lightbox-stage">
+<button aria-label="Close" class="lightbox-close" id="lightboxClose">×</button>
+<button aria-label="Previous image" class="lightbox-nav lightbox-prev" id="lightboxPrev">‹</button>
+<img alt="" id="lightboxImg" src=""/>
+<button aria-label="Next image" class="lightbox-nav lightbox-next" id="lightboxNext">›</button>
+<div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+</div>
+<script>
+(function(){
+  var thumbs = Array.prototype.slice.call(document.querySelectorAll('.js-lightbox-img'));
+  var overlay = document.getElementById('lightboxOverlay');
+  var imgEl = document.getElementById('lightboxImg');
+  var capEl = document.getElementById('lightboxCaption');
+  var idx = 0;
+
+  function show(i){
+    idx = (i + thumbs.length) % thumbs.length;
+    imgEl.src = thumbs[idx].src;
+    imgEl.alt = thumbs[idx].alt;
+    capEl.textContent = thumbs[idx].alt;
+    overlay.classList.add('active');
+  }
+  function close(){ overlay.classList.remove('active'); }
+
+  thumbs.forEach(function(t, i){
+    t.addEventListener('click', function(){ show(i); });
+  });
+  document.getElementById('lightboxClose').addEventListener('click', close);
+  document.getElementById('lightboxPrev').addEventListener('click', function(){ show(idx - 1); });
+  document.getElementById('lightboxNext').addEventListener('click', function(){ show(idx + 1); });
+  overlay.addEventListener('click', function(e){ if (e.target === overlay) close(); });
+  document.addEventListener('keydown', function(e){
+    if (!overlay.classList.contains('active')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') show(idx - 1);
+    if (e.key === 'ArrowRight') show(idx + 1);
+  });
+})();
+</script>
+</body>
+</html>

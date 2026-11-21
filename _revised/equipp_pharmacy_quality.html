@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Beyond the Score: Finding the Right Patient Intervention · William Teppig</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --white:#ffffff; --offwhite:#f8f8f6; --surface:#f2f2ef; --border:#e4e4e0; --border2:#d0d0cb;
+  --ink:#1a1a18; --ink2:#4a4a46; --ink3:#8a8a84;
+  --teal:#006d77; --teal-light:#e8f4f5; --teal-mid:#b2d8dc;
+  --slate:#3d5a6c; --slate-light:#edf2f5;
+  --amber:#b5621e; --amber-light:#fdf0e6;
+  --crimson:#a32d2d; --crimson-light:#fbebeb;
+  --green:#3b6d11; --green-light:#eaf3de;
+  --navy:#1e3a5f;
+  /* Case study accent: pharmacy teal */
+  --accent:#006d77; --accent-light:#e8f4f5; --accent-mid:#b2d8dc;
+  --radius-sm:6px; --radius-md:12px; --radius-lg:20px;
+  --serif:'DM Serif Display', Georgia, serif;
+  --sans:'Inter', -apple-system, sans-serif;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 16px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg:0 12px 40px rgba(0,0,0,.09), 0 2px 8px rgba(0,0,0,.05);
+}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { font-family:var(--sans); background:var(--offwhite); color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+/* NAV (matches index navigation on all case studies) */
+body > nav { position:sticky; top:0; z-index:100; background:rgba(248,248,246,.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); padding:0 48px; display:flex; align-items:center; justify-content:space-between; height:64px; }
+body > nav .nav-brand { font-size:12px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--ink); text-decoration:none; display:inline-flex; align-items:center; }
+body > nav .nav-links { display:flex; gap:32px; align-items:center; }
+body > nav .nav-links a { font-size:12px; font-weight:500; color:var(--ink2); text-decoration:none; letter-spacing:.02em; transition:color .15s; }
+body > nav .nav-links a:hover { color:var(--teal); }
+@media(max-width:700px){ body > nav{padding-left:20px;padding-right:20px;gap:12px} body > nav .nav-links{gap:12px;flex-wrap:wrap} body > nav .nav-links a{white-space:nowrap} }
+
+/* HERO */
+.hero { background:var(--white); display:flex; flex-direction:column; padding:88px 0 0; border-bottom:1px solid var(--border); }
+.hero-content { padding:0 48px 56px; max-width:1176px; width:100%; margin:0 auto; }
+.hero-eyebrow { display:inline-flex; align-items:center; gap:8px; font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:24px; }
+.hero h1 { font-family:var(--serif); font-size:clamp(36px,5vw,58px); font-weight:400; line-height:1.1; color:var(--ink); margin-bottom:24px; }
+.hero-sub { font-size:16px; color:var(--ink2); line-height:1.65; margin-bottom:24px; }
+.hero-sub:last-of-type { margin-bottom:48px; }
+.hero-meta { display:flex; flex-wrap:wrap; border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; background:var(--offwhite); }
+.hero-meta-item { padding:20px 28px; flex:1; min-width:160px; border-right:1px solid var(--border); }
+.hero-meta-item:last-child { border-right:none; }
+.meta-label { font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--ink3); margin-bottom:6px; }
+.meta-val { font-size:14px; font-weight:500; color:var(--ink); }
+.hero-mockup-band { padding:0 48px; display:flex; justify-content:center; margin-bottom:-1px; }
+.hero-mockup-window { width:100%; max-width:1100px; background:var(--white); border:1px solid var(--border); border-bottom:none; border-radius:12px 12px 0 0; overflow:hidden; box-shadow:0 -8px 40px rgba(0,109,119,.1), 0 -2px 16px rgba(0,0,0,.08); }
+.chrome { background:#1e1e1e; padding:9px 16px; display:flex; align-items:center; gap:7px; }
+.chrome .dot { width:11px; height:11px; border-radius:50%; }
+.chrome .url-bar { flex:1; background:rgba(255,255,255,.07); border-radius:5px; height:22px; margin:0 14px; display:flex; align-items:center; padding:0 12px; }
+.chrome .url-bar span { font-size:10px; color:rgba(255,255,255,.3); letter-spacing:.01em; }
+
+/* IMPACT BAR */
+.impact-bar { background:var(--accent); padding:32px clamp(20px,5vw,48px); color:#fff; }
+.impact-bar .impact-eyebrow { max-width:1080px; margin:0 auto 22px; color:rgba(255,255,255,.76); font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+.impact-bar .impact-inner { max-width:1080px; margin:0 auto; display:grid; grid-template-columns:repeat(var(--impact-count,3),minmax(0,1fr)); gap:0; }
+.impact-bar .impact-stat { min-width:0; padding:0 24px; border-right:1px solid rgba(255,255,255,.24); }
+.impact-bar .impact-stat:first-child { padding-left:0; }
+.impact-bar .impact-stat:last-child { border-right:0; }
+.impact-bar .impact-num { color:#fff; font-size:clamp(30px,4.4vw,50px); line-height:1.08; margin:0 0 8px; font-weight:650; }
+.impact-bar .impact-desc { color:rgba(255,255,255,.9); font-size:14px; line-height:1.5; max-width:280px; }
+@media(max-width:640px){ .impact-bar .impact-inner{grid-template-columns:1fr;gap:16px} .impact-bar .impact-stat,.impact-bar .impact-stat:first-child{padding:0 0 16px;border-right:0;border-bottom:1px solid rgba(255,255,255,.24)} .impact-bar .impact-stat:last-child{border-bottom:0;padding-bottom:0} }
+
+/* CONTRIBUTIONS */
+.cs-contrib-band { background:#f8f8f6; padding:56px 48px; border-bottom:1px solid #e4e4e0; }
+.role-callout { background:var(--slate-light); border:1px solid #c8d8e4; border-radius:12px; padding:28px 32px; }
+.role-callout h3 { font-size:13px; font-weight:700; color:var(--slate); text-transform:uppercase; letter-spacing:.08em; margin:0 0 12px; }
+.role-callout ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.role-callout li { font-size:14px; color:var(--ink2); line-height:1.5; padding-left:22px; }
+.role-callout li::before { content:'\2192'; color:var(--slate); font-weight:600; display:inline-block; width:22px; margin-left:-22px; }
+
+/* SECTIONS */
+.section { padding:80px 48px; border-bottom:1px solid var(--border); }
+#context { background:var(--white); } #discovery { background:var(--offwhite); } #design { background:var(--white); } #findings { background:var(--offwhite); } #outcomes { background:var(--white); }
+.section-inner { max-width:1080px; margin:0 auto; }
+.section-label { display:inline-flex; align-items:center; gap:8px; font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:16px; }
+.section-label span { background:var(--accent-light); color:var(--accent); width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; }
+h2.section-title { font-family:var(--serif); font-size:clamp(26px,3vw,36px); font-weight:400; color:var(--ink); line-height:1.2; margin-bottom:40px; }
+h3.sub-title { font-family:var(--serif); font-size:22px; font-weight:400; margin-bottom:8px; color:var(--ink); line-height:1.25; }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start; }
+.three-col { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.text-body { font-size:15px; color:var(--ink2); line-height:1.7; }
+.text-sm { font-size:13px; color:var(--ink2); line-height:1.65; }
+.mt-16{margin-top:16px} .mt-24{margin-top:24px} .mt-32{margin-top:32px} .mt-48{margin-top:48px} .mb-24{margin-bottom:24px}
+.arrow-list { list-style:none; display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+.arrow-list li { display:flex; align-items:flex-start; gap:10px; font-size:15px; color:var(--ink2); line-height:1.5; }
+.arrow-list li::before { content:'\2192'; color:var(--accent); font-weight:600; flex-shrink:0; }
+
+/* CARDS */
+.problem-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-md); padding:28px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden; }
+.problem-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--accent); }
+.problem-card h3 { font-size:15px; font-weight:600; color:var(--ink); margin-bottom:10px; line-height:1.3; }
+.problem-card p { font-size:14px; color:var(--ink2); line-height:1.6; }
+.insight-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-md); padding:20px 22px; box-shadow:var(--shadow-sm); }
+.insight-icon { width:36px; height:36px; border-radius:var(--radius-sm); background:var(--accent-light); display:flex; align-items:center; justify-content:center; margin-bottom:12px; font-size:18px; }
+.insight-card h4 { font-size:13px; font-weight:600; color:var(--ink); margin-bottom:6px; }
+.insight-card p { font-size:13px; color:var(--ink2); line-height:1.55; }
+.pullquote { background:var(--accent-light); border-left:4px solid var(--accent); border-radius:0 var(--radius-md) var(--radius-md) 0; padding:28px 32px; margin:40px 0; }
+.pullquote blockquote { font-family:var(--serif); font-size:20px; font-style:italic; color:var(--accent); line-height:1.5; margin-bottom:12px; }
+.pullquote cite { font-size:12px; font-weight:600; color:var(--ink2); letter-spacing:.06em; text-transform:uppercase; font-style:normal; }
+
+/* PARTICIPANTS */
+.participant-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; }
+.participant { background:var(--white); border:1px solid var(--border); border-radius:10px; padding:16px; box-shadow:var(--shadow-sm); }
+.participant .pid { width:34px; height:34px; border-radius:50%; background:var(--accent-light); color:var(--accent); font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; margin-bottom:10px; }
+.participant .ptype { font-size:12px; font-weight:600; color:var(--ink); line-height:1.35; margin-bottom:4px; }
+.participant .pnote { font-size:11px; color:var(--ink3); line-height:1.45; }
+
+/* WORKFLOW TRACK */
+.process-track { display:flex; position:relative; margin:32px 0 8px; }
+.process-track::before { content:''; position:absolute; top:28px; left:12%; right:12%; height:2px; background:var(--accent-mid); z-index:0; }
+.process-step { flex:1; text-align:center; position:relative; z-index:1; padding:0 12px; }
+.step-dot { width:56px; height:56px; border-radius:50%; background:var(--white); border:2px solid var(--accent); color:var(--accent); display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-family:var(--serif); font-size:22px; box-shadow:var(--shadow-sm); }
+.step-label { font-size:13px; font-weight:600; color:var(--ink); line-height:1.3; }
+.step-sub { font-size:12px; color:var(--ink3); margin-top:4px; line-height:1.45; }
+.step-friction { display:inline-block; margin-top:10px; font-size:10.5px; font-weight:600; color:var(--crimson); background:var(--crimson-light); border-radius:20px; padding:3px 10px; }
+
+/* DECISION ROWS */
+.decision { display:grid; grid-template-columns:1fr 1.15fr; gap:40px; align-items:center; padding:40px 0; border-top:1px solid var(--border); }
+.decision:first-of-type { border-top:none; }
+.decision-kicker { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:10px; }
+.decision h4 { font-family:var(--serif); font-size:22px; font-weight:400; color:var(--ink); line-height:1.25; margin-bottom:12px; }
+.decision p { font-size:14px; color:var(--ink2); line-height:1.65; }
+.decision .tested { margin-top:14px; font-size:13px; color:var(--ink2); line-height:1.55; background:var(--offwhite); border:1px solid var(--border); border-radius:8px; padding:12px 14px; }
+.decision .tested strong { color:var(--accent); font-size:10px; letter-spacing:.1em; text-transform:uppercase; display:block; margin-bottom:4px; }
+.shot { border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-md); background:var(--white); cursor:zoom-in; }
+.shot img { display:block; width:100%; height:auto; }
+.decision-callout { background:var(--amber-light); border:1px solid #f0d2b8; border-radius:var(--radius-md); padding:24px 28px; margin-top:8px; }
+.decision-callout .k { font-size:11px; font-weight:700; color:var(--amber); text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px; }
+.decision-callout p { font-size:14px; color:var(--ink2); line-height:1.65; }
+
+/* FINDINGS */
+.finding-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.finding { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-md); padding:22px 24px; box-shadow:var(--shadow-sm); display:flex; gap:18px; }
+.finding .count { font-family:var(--serif); font-size:30px; line-height:1; color:var(--crimson); min-width:96px; flex-shrink:0; }
+.finding .count small { display:block; font-family:var(--sans); font-size:10px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--ink3); margin-top:6px; }
+.finding h4 { font-size:14px; font-weight:600; color:var(--ink); margin-bottom:6px; }
+.finding p { font-size:13px; color:var(--ink2); line-height:1.55; }
+.finding.good .count { color:var(--green); }
+.compare { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:24px auto 0; max-width:760px; }
+.compare figure { background:var(--white); border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-sm); }
+.compare img { display:block; width:100%; height:auto; }
+.compare figcaption { padding:12px 16px; font-size:12px; color:var(--ink2); line-height:1.5; border-top:1px solid var(--border); }
+.compare figcaption strong { color:var(--ink); }
+.split-band { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.split-col { border-radius:var(--radius-md); padding:24px 28px; }
+.split-col.good { background:var(--green-light); border:1px solid #cfe3bb; }
+.split-col.fix { background:var(--amber-light); border:1px solid #f0d2b8; }
+.split-col h4 { font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; margin-bottom:12px; }
+.split-col.good h4 { color:var(--green); } .split-col.fix h4 { color:var(--amber); }
+.split-col ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.split-col li { font-size:13.5px; color:var(--ink2); line-height:1.5; display:flex; justify-content:space-between; gap:12px; }
+.split-col li span { font-weight:600; color:var(--ink); white-space:nowrap; }
+
+/* OUTCOMES */
+.result-list { display:flex; flex-direction:column; gap:16px; }
+.result-item { display:flex; align-items:flex-start; gap:16px; background:var(--white); border:1px solid var(--border); border-radius:var(--radius-md); padding:20px 24px; box-shadow:var(--shadow-sm); }
+.result-icon { width:40px; height:40px; border-radius:var(--radius-sm); background:var(--accent-light); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.result-item h4 { font-size:14px; font-weight:600; color:var(--ink); margin-bottom:4px; }
+.result-item p { font-size:13px; color:var(--ink2); line-height:1.55; }
+.rec-list { counter-reset:rec; list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:10px 24px; }
+.rec-list li { counter-increment:rec; display:flex; gap:12px; font-size:13.5px; color:var(--ink2); line-height:1.5; padding:12px 0; border-bottom:1px solid var(--border); }
+.rec-list li::before { content:counter(rec,decimal-leading-zero); font-family:var(--serif); font-size:16px; color:var(--accent); flex-shrink:0; min-width:24px; }
+.rec-list li em { font-style:normal; font-size:10px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--ink3); margin-left:auto; white-space:nowrap; padding-left:8px; }
+.panel { border-radius:var(--radius-md); padding:28px 32px; }
+.panel.accent { background:var(--accent-light); border:1px solid var(--accent-mid); }
+.panel.slate { background:var(--slate-light); border:1px solid #c8d8e4; }
+.panel .k { font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; margin-bottom:16px; }
+.panel.accent .k { color:var(--accent); } .panel.slate .k { color:var(--slate); }
+.panel .row { display:flex; gap:10px; font-size:14px; color:var(--ink2); line-height:1.55; margin-bottom:10px; }
+.panel .row:last-child { margin-bottom:0; }
+.panel .row b { color:var(--accent); flex-shrink:0; }
+.panel.slate .row b { color:var(--slate); }
+.reflection { font-family:var(--serif); font-style:italic; font-size:clamp(22px,2.6vw,28px); line-height:1.4; color:var(--navy); max-width:860px; }
+
+/* ARTIFACTS + MODAL */
+.artifact-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.artifact-card { border:1px solid var(--border); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-sm); background:var(--white); cursor:pointer; transition:transform .15s, box-shadow .15s; }
+.artifact-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); }
+.artifact-card .thumb { height:190px; overflow:hidden; border-bottom:1px solid var(--border); }
+.artifact-card img { display:block; width:100%; height:auto; }
+.artifact-label { padding:10px 14px; font-size:11px; font-weight:600; color:var(--ink2); }
+.artifact-card:hover .artifact-label::after { content:' \2197'; color:var(--accent); }
+#artifact-modal { display:none; position:fixed; inset:0; z-index:1000; background:rgba(20,20,18,.72); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:32px; }
+#artifact-modal.open { display:flex; }
+.modal-box { background:var(--white); border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); width:100%; max-width:1100px; max-height:calc(100vh - 64px); display:flex; flex-direction:column; overflow:hidden; animation:modal-in .18s ease; }
+@keyframes modal-in { from{opacity:0;transform:translateY(12px) scale(.98)} to{opacity:1;transform:none} }
+.modal-header { display:flex; align-items:center; justify-content:space-between; padding:20px 28px 18px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.modal-title { font-size:14px; font-weight:600; color:var(--ink); }
+.modal-btn { width:32px; height:32px; border-radius:50%; border:1px solid var(--border); background:var(--offwhite); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--ink2); line-height:1; }
+.modal-btn:hover { background:var(--border); }
+.modal-body { overflow-y:auto; padding:28px; flex:1; }
+.modal-body p { font-size:13px; color:var(--ink2); margin-bottom:18px; line-height:1.6; }
+.modal-body img { display:block; width:100%; height:auto; border:1px solid var(--border); border-radius:8px; }
+
+footer { background:var(--ink); padding:48px; text-align:center; }
+footer p { font-size:13px; color:rgba(255,255,255,.4); }
+footer strong { color:rgba(255,255,255,.75); }
+
+@media (max-width:900px){ .participant-grid{grid-template-columns:repeat(3,1fr)} .artifact-grid{grid-template-columns:1fr 1fr} }
+@media (max-width:768px){
+  body > nav{padding:0 20px}
+  .hero-content,.hero-mockup-band,.section,.cs-contrib-band{padding-left:20px;padding-right:20px}
+  .two-col,.three-col,.finding-grid,.compare,.split-band,.decision,.rec-list,.artifact-grid{grid-template-columns:1fr}
+  .participant-grid{grid-template-columns:1fr 1fr}
+  .hero-meta{flex-direction:column}
+  .process-track{flex-direction:column;gap:20px} .process-track::before{display:none}
+}
+</style>
+<link href="case-study-typography.css" rel="stylesheet"/>
+<style id="cs-standard-2026">
+.glance{max-width:1176px;margin:56px auto 8px;padding:0 48px;font-family:'Inter',-apple-system,sans-serif}
+.glance-box{border:1px solid #e4e4e0;border-radius:16px;background:#f8f8f6;padding:32px 36px}
+.glance-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px}
+.glance-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#006d77}
+.glance-time{font-size:12px;color:#8a8a84}
+.glance-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.glance-item h4{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a8a84;margin:0 0 8px}
+.glance-item p{font-size:14.5px;line-height:1.6;color:#1a1a18;margin:0}
+.glance-item p.meas{font-size:12.5px;color:#4a4a46;margin-top:10px;padding-top:10px;border-top:1px solid #e4e4e0}
+.cs-todo{display:block;margin-top:10px;font-size:12px;line-height:1.5;color:#7a4a12;background:#fdf0e6;border:1px dashed #e0a160;border-radius:6px;padding:6px 10px}
+.result-list.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cs-close{background:#1a1a18;color:#fff;padding:88px 48px;font-family:'Inter',-apple-system,sans-serif}
+.cs-close-inner{max-width:1080px;margin:0 auto}
+.cs-close-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#b2d8dc;margin-bottom:18px}
+.cs-close-takeaway{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(24px,3vw,34px);line-height:1.3;color:#fff;max-width:860px;margin:0 0 18px}
+.cs-close-body{font-size:16px;line-height:1.7;color:rgba(255,255,255,.78);max-width:760px;margin:0 0 40px}
+.cs-close-next{border-top:1px solid rgba(255,255,255,.18);padding-top:28px;margin-bottom:44px}
+.cs-close-next h3{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;margin:0 0 14px;font-family:'Inter',sans-serif}
+.cs-close-next ul{margin:0;padding-left:20px}
+.cs-close-next li{font-size:15.5px;line-height:1.65;color:rgba(255,255,255,.85);margin-bottom:8px}
+.cs-close .cs-todo{display:inline-block;margin:0 0 12px}
+.cs-close-nav{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.cs-close-nav a{color:#fff;text-decoration:none;font-size:14px;font-weight:600}
+.cs-close-nav a.next{background:#fff;color:#1a1a18;border-radius:24px;padding:13px 24px}
+.cs-close-nav a.next span{color:#006d77}
+.cs-close-nav a.back{color:rgba(255,255,255,.7)}
+.cs-close-nav a:hover{opacity:.85}
+@media(max-width:900px){.glance-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.result-list.result-grid{grid-template-columns:1fr}.glance{padding:0 20px;margin-top:36px}.glance-box{padding:24px}.glance-grid{grid-template-columns:1fr;gap:20px}.cs-close{padding:64px 24px}}
+</style>
+<style id="site-nav-style">
+nav.site-nav{position:sticky;top:0;z-index:1000;background:rgba(248,248,246,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid #e4e4e0;padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:64px;margin:0;box-shadow:none;font-family:'Inter',-apple-system,sans-serif;box-sizing:border-box;width:100%}
+nav.site-nav .nav-brand{display:inline-flex;align-items:center;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#1a1a18}
+nav.site-nav .nav-links{display:flex;gap:32px;align-items:center;margin:0;padding:0}
+nav.site-nav .nav-links a{font-size:12px;font-weight:500;color:#4a4a46;text-decoration:none;letter-spacing:.02em;transition:color .15s;padding:0;border:0;background:none;line-height:1.6}
+nav.site-nav .nav-links a:hover{color:#006d77}
+nav.site-nav .nav-links a.nav-resume{font-size:12px;font-weight:500;letter-spacing:.02em;color:#4a4a46;white-space:nowrap;border:1px solid #d0d0cb;border-radius:20px;padding:7px 16px;transition:background .15s,border-color .15s}
+nav.site-nav .nav-links a.nav-resume:hover{background:#fff;border-color:#8a8a84;color:#1a1a18}
+@media (max-width:640px){
+ nav.site-nav{flex-wrap:wrap;height:auto;padding:12px 24px;gap:10px}
+ nav.site-nav .nav-links{flex-wrap:wrap;gap:12px 18px;justify-content:flex-start}
+}
+</style>
+<style id="glance-white-bg">
+/* At a glance: full-width white band instead of the page's gray background */
+section.glance{max-width:none;margin:0;background:#fff;padding:56px max(48px,calc((100% - 1176px)/2 + 48px)) 8px}
+@media(max-width:640px){section.glance{padding:36px 20px 8px}}
+</style>
+<style id="footer-email-style">
+footer .footer-email{margin-top:10px;font-size:13px}
+footer .footer-email a{color:inherit;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px;transition:opacity .15s}
+footer .footer-email a:hover{opacity:.75}
+</style>
+</head>
+<body>
+<nav class="site-nav" id="top" aria-label="Main">
+<a class="nav-brand" href="index.html#top"><img alt="William Teppig" src="images/f77d54b9a753.webp" style="height:28px;width:auto;display:block;"/></a>
+<div class="nav-links">
+<a href="index.html#work">Work</a>
+<a href="index.html#leadership">Leadership</a>
+<a href="index.html#process">How I Work</a>
+<a href="index.html#about">About</a>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+<div class="hero-content">
+<div class="hero-eyebrow">Premier + Pharmacy Quality Solutions · Pharmacy Quality</div>
+<h1 class="t-h1">Beyond the Score: Finding the Right Patient Intervention</h1>
+<p class="hero-sub">Pharmacies are paid on how well their patients take their medications, across many health plan programs at once. EQuIPP showed pharmacists which measures were failing, but acting on that meant outlier spreadsheets, Excel exports and notes kept in other systems.</p>
+<p class="hero-sub">I designed and tested EQuIPP 2.0, a concept for a proposed Premier and Pharmacy Quality Solutions partnership that connected measure performance to the patients behind it and the interventions pharmacists record. Six pharmacist sessions validated the workflow, and showed the real risk was comprehension, not navigation.</p>
+</div>
+<div class="hero-mockup-band">
+<div class="hero-mockup-window">
+<div class="chrome">
+<div class="dot" style="background:#ff5f57;"></div><div class="dot" style="background:#febc2e;"></div><div class="dot" style="background:#28c840;"></div>
+<div class="url-bar"><span>EQuIPP 2.0 · clickable prototype · Measures</span></div>
+</div>
+<img alt="EQuIPP 2.0 Measures dashboard: measure cards for Antidepressant Management, Cholesterol PDC, Diabetes PDC, High-Risk Medications, Asthma and RASA PDC, each with a six-month trend, rate, goal, patient count and gap" src="images/e4d09b6ca5f1.webp" style="display:block;width:100%;height:auto;"/>
+</div>
+</div>
+</section>
+
+<!-- RESEARCH AT A GLANCE -->
+<div aria-label="Research at a glance" class="impact-bar">
+<div class="impact-eyebrow t-kicker">Research at a Glance</div>
+<div class="impact-inner" style="--impact-count:3">
+<div class="impact-stat"><div class="impact-num t-impact-num">6</div><div class="impact-desc t-impact-desc">Pharmacists from 6 pharmacy organizations in moderated think-aloud usability test sessions</div></div>
+<div class="impact-stat"><div class="impact-num t-impact-num">3 of 6</div><div class="impact-desc t-impact-desc">Misread a lower-is-better measure as failing, exposing a comprehension risk</div></div>
+<div class="impact-stat"><div class="impact-num t-impact-num">8</div><div class="impact-desc t-impact-desc">Prioritized recommendations to shape the next design iteration</div></div>
+</div>
+</div>
+
+
+<!-- AT A GLANCE (30-second summary) -->
+<section class="glance" aria-label="At a glance"><div class="glance-box">
+<div class="glance-head"><div class="glance-label">At a glance</div></div>
+<div class="glance-grid">
+<div class="glance-item"><h4>The problem</h4><p>Pharmacists could see failing quality measures in EQuIPP, but acting on them meant outlier spreadsheets, Excel exports and notes kept in other systems.</p></div>
+<div class="glance-item"><h4>My role &amp; team</h4><p>Principal UX Designer for a proposed Premier and Pharmacy Quality Solutions partnership. Helped gather use cases, designed the prototype, and planned and moderated all six sessions.</p></div>
+<div class="glance-item"><h4>Key decision</h4><p>Organize the prototype as one continuous workflow (identify, investigate, prioritize, act and document) and keep the six-month trend line that requirements proposed replacing with an arrow.</p></div>
+<div class="glance-item"><h4>Outcome</h4><p>The workflow was validated with six pharmacists. Three of six misread a lower-is-better measure, which reframed the risk from navigation to comprehension and produced eight prioritized recommendations.</p></div>
+</div></div></section>
+
+<!-- 1 CONTEXT -->
+<section class="section" id="context">
+<div class="section-inner">
+<div class="section-label t-kicker"><span>1</span>Context &amp; Problem Space</div>
+<h2 class="section-title t-h2">Pharmacists could see the score, but not the path to improving it</h2>
+<div class="two-col">
+<div>
+<p class="text-body t-body">Health plans pay pharmacies bonuses, or charge them fees, based on quality measures such as adherence to diabetes, cholesterol and blood pressure medications. A patient counts as adherent when their proportion of days covered (PDC) stays above a threshold, usually 80%. A single pharmacy can sit in a Humana network, a UnitedHealthcare plan, an Express Scripts program and more, each with its own goals.</p>
+<p class="text-body mt-24 t-body">EQuIPP was good at reporting performance. Turning performance into work was the hard part. Pharmacists described pulling outlier files, keeping call lists in spreadsheets, printing patient lists to carry through the day, and documenting in their dispensing systems. Every day they had to answer the same questions:</p>
+<ul class="arrow-list">
+<li>Which measure needs my attention first?</li>
+<li>Which patients are driving the gap?</li>
+<li>Who can I still help before the year closes?</li>
+<li>How do I show the plan I did my due diligence?</li>
+</ul>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;">
+<div class="problem-card"><h3>Many Programs, One Pharmacist</h3><p>Each health plan program has its own measures, goals and payouts. Pharmacists triage by plan because that is how they are judged, but the data was not organized that way.</p></div>
+<div class="problem-card"><h3>Performance Disconnected From Patients</h3><p>Seeing that Diabetes PDC was below goal did not tell a pharmacist which four patients to call, or which of them could still reach 80% before year end.</p></div>
+<div class="problem-card"><h3>Documentation Lived Elsewhere</h3><p>Checkbox documentation could not tell the story of an intervention, so notes lived in dispensing systems and spreadsheets. The record of effort was scattered.</p></div>
+</div>
+</div>
+<div class="pullquote">
+<blockquote>"I want to focus my work where we get the most bang for the buck."</blockquote>
+<cite>P3 · Pharmacist · Warehouse club pharmacy</cite>
+</div>
+<div class="section-label mt-32 t-kicker"><span>&darr;</span>Goal</div>
+<div class="three-col">
+<div class="insight-card"><div class="insight-icon">🎯</div><h4>From Measure to Patient</h4><p>Take a pharmacist from a failing measure to the exact patients behind it in one continuous path.</p></div>
+<div class="insight-card"><div class="insight-icon">📋</div><h4>Prioritize the Work</h4><p>Help pharmacists decide who to call first, by plan, gap and how close each patient is to the threshold.</p></div>
+<div class="insight-card"><div class="insight-icon">✍️</div><h4>Close the Loop</h4><p>Let pharmacists record what they did and why, per measure, so effort is visible to them and to payers.</p></div>
+</div>
+</div>
+</section>
+
+<!-- 2 DISCOVERY -->
+<section class="section" id="discovery">
+<div class="section-inner">
+<div class="section-label t-kicker"><span>2</span>Discovery &amp; Research Approach</div>
+<h2 class="section-title t-h2">Starting from use cases, then putting a prototype in front of pharmacists</h2>
+<div class="two-col">
+<div>
+<p class="text-body t-body">I helped gather use cases from Pharmacy Quality Solutions client feedback for four user types: single pharmacies, corporate and regional groups, payers, and internal PQS staff. The single-pharmacy use case was the clearest signal. Users wanted to see the actual names behind every patient count, filter by program, see the prescription behind each outlier, and keep a documentation history that survived data refreshes.</p>
+<p class="text-body mt-24 t-body">Those needs shaped the prototype. To test it, I ran remote moderated think-aloud usability test sessions over Zoom. Each pharmacist shared their screen and worked through one realistic scenario without guidance. When they got stuck, I asked what they expected to happen. The rest of each session explored programs, payouts, documentation and immunizations.</p>
+</div>
+<div>
+<div class="panel slate">
+<div class="k">The Scenario</div>
+<p class="t-quote" style="font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.5;color:var(--navy);">"You need to determine which measures need the most improvement. Then find the patients that need clinical interventions in order to increase the measure's quality performance."</p>
+<p class="text-sm mt-16">Why moderated: terms like PDC, outlier, gap and designation carry exact meanings. I needed to hear how each pharmacist interpreted them, not just whether they clicked the right thing.</p>
+</div>
+</div>
+</div>
+<div class="mt-48">
+<div class="section-label t-kicker"><span>&darr;</span>Participants · February 2020</div>
+<h3 class="sub-title" style="margin-bottom:24px;">Six pharmacists, six very different ways of working</h3>
+<div class="participant-grid">
+<div class="participant"><div class="pid">P1</div><div class="ptype">Pharmacist</div><div class="pnote">Pharmacy organization</div></div>
+<div class="participant"><div class="pid">P2</div><div class="ptype">Pharmacist</div><div class="pnote">Pharmacy network</div></div>
+<div class="participant"><div class="pid">P3</div><div class="ptype">Pharmacist</div><div class="pnote">Warehouse club pharmacy</div></div>
+<div class="participant"><div class="pid">P4</div><div class="ptype">Quality lead</div><div class="pnote">Grocery chain pharmacy</div></div>
+<div class="participant"><div class="pid">P5</div><div class="ptype">Pharmacist</div><div class="pnote">Community pharmacy, proactive call-list workflow</div></div>
+<div class="participant"><div class="pid">P6</div><div class="ptype">Pharmacist</div><div class="pnote">National chain pharmacy</div></div>
+</div>
+<p class="text-sm mt-16">I kept evidence separate for each participant before looking for patterns. P5's pharmacy calls every Medicare patient on a "star drug" every week, so EQuIPP mattered less to him. Keeping him distinct stopped one proactive outlier from steering the roadmap.</p>
+</div>
+</div>
+</section>
+
+<!-- 3 DESIGN -->
+<section class="section" id="design">
+<div class="section-inner">
+<div class="section-label t-kicker"><span>3</span>Design Process</div>
+<h2 class="section-title t-h2">One continuous workflow, organized around the decisions pharmacists make</h2>
+<div class="two-col mb-24">
+<div>
+<p class="text-body t-body">The data already existed. What was missing was a structure that followed how pharmacists think. I organized the prototype around five questions, one per tab: how am I performing (Measures), what is it worth (My Programs), where do I stand with each plan (Quality Improvement Programs), who needs help (Patients), and Immunization.</p>
+</div>
+<div>
+<p class="text-body t-body">Every screen served one workflow: spot the gap, find the patients behind it, act, and document. Each step carried forward the context a pharmacist needs for the next one: the measure, the plan, the patient's rate and their intervention status.</p>
+</div>
+</div>
+<div class="process-track">
+<div class="process-step"><div class="step-dot">1</div><div class="step-label">Identify</div><div class="step-sub">Measure cards flag a failing score and its gap</div></div>
+<div class="process-step"><div class="step-dot">2</div><div class="step-label">Investigate</div><div class="step-sub">Measure detail shows benchmarks and the patients behind it</div></div>
+<div class="process-step"><div class="step-dot">3</div><div class="step-label">Prioritize</div><div class="step-sub">Patient list with plan, rate, designations and status</div></div>
+<div class="process-step"><div class="step-dot">4</div><div class="step-label">Act &amp; Document</div><div class="step-sub">Intervention modal and per-measure history</div></div>
+</div>
+
+
+<div class="mt-48">
+<div class="decision">
+<div>
+<div class="decision-kicker">Decision 01 · Measures Dashboard</div>
+<h4>Four numbers that decide whether to drill in</h4>
+<p>Each card puts rate, goal, patient count and gap side by side, under a pass or fail icon and a six-month trend. The gap tells a pharmacist how many patients stand between them and the goal, which is how they choose where to spend the week.</p>
+<div class="tested"><strong>What testing showed</strong>Participants scanned the cards quickly. One compared picking a measure by its gap to deciding which of three credit cards to pay off first.</div>
+</div>
+<div class="shot" data-art="Measures Dashboard"><img alt="Measures dashboard with eight measure cards" data-img="dash"/></div>
+</div>
+<div class="decision-callout">
+<div class="k">Design Call · Keeping the Trend Line</div>
+<p>Early requirements and the single-pharmacy use case proposed replacing the dashboard trend line with a simple up or down arrow. I kept the six-month trend. The direction and size of a change are part of judging a measure, and pharmacists need that history to tell whether a gap is closing or widening. Testing backed this up: four participants used the trends to decide where to focus. It also showed the cost, which became the study's main finding.</p>
+</div>
+<div class="decision">
+<div>
+<div class="decision-kicker">Decision 02 · Measure Detail</div>
+<h4>One click from a failing score to the patients behind it</h4>
+<p>The detail page shows the score against organization, state and all-EQuIPP averages, then tabs for the patients, programs, health plans and insurance mix behind that single measure. Pharmacists can switch measures from a dropdown without going back.</p>
+<div class="tested"><strong>What testing showed</strong>Drilling from a measure to its detail "works the way he would expect," in one participant's words. Participants valued the comparators and the status column.</div>
+</div>
+<div class="shot" data-art="Measure Detail · Patients"><img alt="Diabetes PDC measure detail with comparators and patient list" data-img="detail"/></div>
+</div>
+<div class="decision">
+<div>
+<div class="decision-kicker">Decision 03 · Patient View</div>
+<h4>Every gap a patient has, not just the one you arrived from</h4>
+<p>The patient list ranks people by the number of measures where they have an opportunity. The patient view groups their PDC measures as tiles and lists every other measure below, so a pharmacist can address several issues in a single call.</p>
+<div class="tested"><strong>What testing showed</strong>Pharmacists wanted exactly this holistic view. As one said, "Diabetes is important but we also deal with patients holistically." But four of six could not explain the "# of Measures" label.</div>
+</div>
+<div class="shot" data-art="Patient View"><img alt="Patient view with PDC measure tiles and other measures table" data-img="patient"/></div>
+</div>
+<div class="decision">
+<div>
+<div class="decision-kicker">Decision 04 · Intervention &amp; Documentation</div>
+<h4>Capture the intervention where the work happens</h4>
+<p>The intervention modal records actions taken, the primary barrier, the outcome and a free-text note. A Patient Documentation tab keeps every entry per measure over time, and a header link keeps the latest data-refresh notice within reach.</p>
+<div class="tested"><strong>What testing showed</strong>Documentation decides whether pharmacists work in the platform at all. One said seeing past actions on his outliers would be "more time effective for me than that information being in my pharmacy system."</div>
+</div>
+<div class="shot" data-art="Intervention Modal"><img alt="Intervention modal with action, barrier, outcome and notes" data-img="intervention"/></div>
+</div>
+</div>
+
+<div class="mt-32">
+<h3 class="sub-title">Design Artifacts</h3>
+<p class="text-sm mb-24">Screens from the EQuIPP 2.0 clickable prototype tested with pharmacists. Payout and some patient values were placeholders. Click any card to view the full screen.</p>
+<div class="artifact-grid">
+<div class="artifact-card" data-art="Measures Dashboard"><div class="thumb"><img alt="" data-img="dash"/></div><div class="artifact-label">Measures Dashboard</div></div>
+<div class="artifact-card" data-art="Measure Detail · Patients"><div class="thumb"><img alt="" data-img="detail"/></div><div class="artifact-label">Measure Detail · Patients</div></div>
+<div class="artifact-card" data-art="Measure Detail · Quality Programs"><div class="thumb"><img alt="" data-img="qip"/></div><div class="artifact-label">Measure Detail · Quality Programs</div></div>
+<div class="artifact-card" data-art="All Patients"><div class="thumb"><img alt="" data-img="patients"/></div><div class="artifact-label">All Patients</div></div>
+<div class="artifact-card" data-art="Patient View"><div class="thumb"><img alt="" data-img="patient"/></div><div class="artifact-label">Patient View</div></div>
+<div class="artifact-card" data-art="Intervention Modal"><div class="thumb"><img alt="" data-img="intervention"/></div><div class="artifact-label">Intervention Modal</div></div>
+<div class="artifact-card" data-art="Patient Documentation History"><div class="thumb"><img alt="" data-img="doc"/></div><div class="artifact-label">Patient Documentation History</div></div>
+<div class="artifact-card" data-art="My Programs"><div class="thumb"><img alt="" data-img="programslist"/></div><div class="artifact-label">My Programs</div></div>
+<div class="artifact-card" data-art="Program Detail · Payouts"><div class="thumb"><img alt="" data-img="programs"/></div><div class="artifact-label">Program Detail · Payouts</div></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 4 FINDINGS -->
+<section class="section" id="findings">
+<div class="section-inner">
+<div class="section-label t-kicker"><span>4</span>Usability Findings</div>
+<h2 class="section-title t-h2">The workflow held up. The meaning of the numbers didn't.</h2>
+<div class="two-col mb-24">
+<p class="text-body t-body">Participants moved from a failing measure to the patients behind it mostly unaided. Navigation was not the problem. The biggest risks to a pharmacist acting correctly were a misread measure direction, unclear terms and an incomplete record of interventions.</p>
+<p class="text-body t-body">The clearest example: High-Risk Medications is a measure where lower is better. Its card said so. But its trend line sat below the goal line, which on every other card meant failure. Three of six participants picked it as their worst measure.</p>
+</div>
+<div class="compare">
+<figure><img alt="Diabetes PDC card: higher is better, rate below goal, failing" src="images/e5204ac8db17.webp"/><figcaption><strong>Diabetes PDC · Higher is better.</strong> Line below goal means failing. Participants read this correctly.</figcaption></figure>
+<figure><img alt="High-Risk Medications card: lower is better, rate below goal, passing" src="images/f8420492bfef.webp"/><figcaption><strong>High-Risk Medications · Lower is better.</strong> Same picture, opposite meaning. The chart spoke louder than the label.</figcaption></figure>
+</div>
+<div class="finding-grid mt-32">
+<div class="finding"><div class="count">3/6<small>participants</small></div><div><h4>Measure direction misread</h4><p>Picked High-Risk Medications as worst. They read the chart and skipped the "Lower is better" label beneath the title.</p></div></div>
+<div class="finding"><div class="count">4/6<small>participants</small></div><div><h4>Terminology unclear</h4><p>Could not explain "# of Measures," and several mixed up gaps, outliers and opportunities. "I feel like I sort of stumbled through it," said one.</p></div></div>
+<div class="finding"><div class="count">4/6<small>participants</small></div><div><h4>Breadcrumbs overlooked</h4><p>Looked for a back button or clicked the logo before noticing the breadcrumb. One called it "awfully small."</p></div></div>
+<div class="finding"><div class="count">5/6<small>participants</small></div><div><h4>Wanted to filter by program</h4><p>Payers judge pharmacies plan by plan. "I am going to focus mainly on what we are evaluated on," said P5.</p></div></div>
+<div class="finding"><div class="count">5/6<small>participants</small></div><div><h4>Triage closest-to-goal first</h4><p>Described working the "low-hanging fruit" first, especially late in the year. The prototype sorted by rate and had no at-risk view.</p></div></div>
+<div class="finding"><div class="count">5/6<small>participants</small></div><div><h4>Documentation needs the story</h4><p>Wanted to record why a patient was non-adherent, per measure, over time, without being locked in, to show due diligence.</p></div></div>
+</div>
+<div class="pullquote">
+<blockquote>"At times, patients aren't just outliers, they are an opportunity."</blockquote>
+<cite>P2 · Pharmacist · Pharmacy network</cite>
+</div>
+<div class="split-band">
+<div class="split-col good"><h4>What Worked</h4><ul>
+<li>Measure cards for fast triage <span>5 of 6</span></li>
+<li>Measure-to-patient drill-down <span>Validated</span></li>
+<li>Benchmarks and comparators <span>3 of 6</span></li>
+<li>Patient-level, cross-measure view <span>Valued</span></li>
+</ul></div>
+<div class="split-col fix"><h4>What Needed Refinement</h4><ul>
+<li>Direction cue tied to the rate <span>3 of 6</span></li>
+<li>Terminology and column help <span>4 of 6</span></li>
+<li>Breadcrumb visibility <span>4 of 6</span></li>
+<li>Program filter and at-risk sorting <span>5 of 6</span></li>
+</ul></div>
+</div>
+</div>
+</section>
+
+<!-- 5 OUTCOMES -->
+<section class="section" id="outcomes">
+<div class="section-inner">
+<div class="section-label t-kicker"><span>5</span>Outcomes &amp; Recommendations</div>
+<h2 class="section-title t-h2">A validated workflow and a prioritized roadmap for the next iteration</h2>
+<div class="two-col">
+<div class="result-list">
+<div class="result-item"><div class="result-icon">✅</div><div><h4>Core Workflow Validated</h4><p>Pharmacists wanted to go from measure to patient to action in one place, and navigated the connected flow mostly unaided before any production code was written.</p></div></div>
+<div class="result-item"><div class="result-icon">🔎</div><div><h4>Risk Reframed: Comprehension Over Navigation</h4><p>The research moved the team's attention from layout to meaning: direction, terminology and goal sources, the places where a misread number sends the wrong patient a call.</p></div></div>
+<div class="result-item"><div class="result-icon">🧭</div><div><h4>Pharmacist Mental Models Documented</h4><p>Unprompted, pharmacists described the same triage strategy: plan first, then patients closest to the threshold. That became a design requirement, not an anecdote.</p></div></div>
+</div>
+<div>
+<div class="panel accent">
+<div class="k">What I Validated · What Still Needed Testing</div>
+<div class="row"><b>&check;</b>The measure-to-patient workflow and card layout for triage</div>
+<div class="row"><b>&check;</b>Demand for plan-level and patient-level views</div>
+<div class="row"><b>&#9675;</b>Payout figures, which were placeholders in the prototype</div>
+<div class="row"><b>&#9675;</b>Documentation in depth, since most feedback was about the current EQuIPP</div>
+<div class="row"><b>&#9675;</b>The eight recommendations, which were not built and needed a second round of testing</div>
+</div>
+</div>
+</div>
+
+<div class="mt-48">
+<h3 class="sub-title" style="margin-bottom:20px;">Eight prioritized recommendations</h3>
+<ol class="rec-list">
+<li>Move the Higher or Lower is better cue next to the performance rate <em>High</em></li>
+<li>Add an At-Risk status for patients nearing non-adherence <em>High</em></li>
+<li>Add a program filter to every patient list <em>High</em></li>
+<li>Add Outlier, At-Risk and Adherent views to all patient lists <em>High</em></li>
+<li>Standardize labels and validate terminology with users <em>Medium</em></li>
+<li>Open the whole patient record from inside a measure drill-down <em>Medium</em></li>
+<li>Increase the affordance of status icons <em>Medium</em></li>
+<li>Reorder tabs to Measures, Patients, Quality Improvement Programs, My Programs, Immunization <em>Low</em></li>
+</ol>
+</div>
+
+
+</div>
+</section>
+
+
+<!-- STANDARD ENDING -->
+<section class="cs-close"><div class="cs-close-inner">
+<div class="cs-close-label">Reflection</div>
+<p class="cs-close-takeaway">A dashboard people can read is not the same as a workflow they can act on.</p>
+<p class="cs-close-body">Participants read the trend charts fluently, and half still drew the wrong conclusion from one. In healthcare data, the meaning of a number, its direction, its denominator and who set its goal, has to sit right next to the number.</p>
+<div class="cs-close-next"><h3>What I'd do next</h3><ul><li>Test the comprehension fixes and at-risk sorting with the same scenario.</li><li>Add a direction-reading task to measure the difference.</li></ul></div>
+<div class="cs-close-nav"><a class="back" href="index.html#work">← All work</a><a class="next" href="Crisis%20Forecasting%20Planning.html">Next case study: <span>Designing a crisis forecasting MVP under uncertainty →</span></a></div>
+</div></section>
+<footer>
+<p><strong>Beyond the Score: Finding the Right Patient Intervention</strong>  ·  William Teppig  ·  Premier</p>
+<p class="footer-email"><a href="mailto:wteppig@gmail.com">wteppig@gmail.com</a></p>
+</footer>
+
+<div aria-labelledby="modal-title-text" aria-modal="true" id="artifact-modal" role="dialog">
+<div class="modal-box">
+<div class="modal-header">
+<div class="modal-title" id="modal-title-text"></div>
+<div style="display:flex;align-items:center;gap:8px;">
+<button aria-label="Previous screen" class="modal-btn" id="modal-prev-btn">&lsaquo;</button>
+<button aria-label="Next screen" class="modal-btn" id="modal-next-btn">&rsaquo;</button>
+<button aria-label="Close" class="modal-btn" id="modal-close-btn">&times;</button>
+</div>
+</div>
+<div class="modal-body" id="modal-body"></div>
+</div>
+</div>
+<script>
+var IMG={dash:'images/649c050cdbd7.webp',detail:'images/fa4490f5c980.webp',qip:'images/dca681c69597.webp',patients:'images/ecec2640513b.webp',patient:'images/a929a8b87948.webp',intervention:'images/971600307d8c.webp',doc:'images/0edf2c9b6591.webp',programs:'images/b40bcc8f7f90.webp',programslist:'images/7f06439ea41c.webp'};
+document.querySelectorAll('img[data-img]').forEach(function(i){i.src=IMG[i.getAttribute('data-img')];});
+(function(){
+  var art = {
+    'Measures Dashboard': ['Eight measure cards, each with a six-month trend, pass or fail status, direction label, rate, goal, patient count and gap.', 'dash'],
+    'Measure Detail · Patients': ['Diabetes PDC against organization, state and all-EQuIPP averages, with the outlier patients behind the score.', 'detail'],
+    'Measure Detail · Quality Programs': ['The same measure broken down by health plan program, with goal rate, gap and percentile rank.', 'qip'],
+    'All Patients': ['Every outlier patient ranked by the number of measures where they have an opportunity.', 'patients'],
+    'Patient View': ['One patient across all measures: PDC tiles with Rx numbers, plus every other measure and its outlier status.', 'patient'],
+    'Intervention Modal': ['Action taken, primary barrier, outcome and a free-text note, recorded from the patient list.', 'intervention'],
+    'Patient Documentation History': ['Intervention history grouped by measure, with a header link to the latest data-refresh notice.', 'doc'],
+    'My Programs': ['Each health plan program with estimated current and maximum payout and program performance. Values were placeholders.', 'programslist'],
+    'Program Detail · Payouts': ['Program description, payout tiers, estimated payouts and the program measures with links to their outliers.', 'programs']
+  };
+  var keys = Object.keys(art), cur = 0;
+  var modal = document.getElementById('artifact-modal'), title = document.getElementById('modal-title-text'), body = document.getElementById('modal-body');
+  function render(){ var k = keys[cur]; title.textContent = k; body.innerHTML = '<p>' + art[k][0] + '</p><img alt="' + k + '" src="' + IMG[art[k][1]] + '">'; body.scrollTop = 0; }
+  function open(k){ cur = Math.max(0, keys.indexOf(k)); render(); modal.classList.add('open'); document.body.style.overflow = 'hidden'; document.getElementById('modal-close-btn').focus(); }
+  function close(){ modal.classList.remove('open'); document.body.style.overflow = ''; body.innerHTML = ''; }
+  document.querySelectorAll('[data-art]').forEach(function(el){
+    el.setAttribute('tabindex','0'); el.setAttribute('role','button');
+    el.addEventListener('click', function(){ open(el.getAttribute('data-art')); });
+    el.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); open(el.getAttribute('data-art')); } });
+  });
+  document.getElementById('modal-close-btn').onclick = close;
+  document.getElementById('modal-next-btn').onclick = function(){ cur = (cur+1)%keys.length; render(); };
+  document.getElementById('modal-prev-btn').onclick = function(){ cur = (cur-1+keys.length)%keys.length; render(); };
+  modal.addEventListener('click', function(e){ if(e.target===modal) close(); });
+  document.addEventListener('keydown', function(e){ if(!modal.classList.contains('open')) return; if(e.key==='Escape') close(); else if(e.key==='ArrowRight') document.getElementById('modal-next-btn').click(); else if(e.key==='ArrowLeft') document.getElementById('modal-prev-btn').click(); });
+})();
+</script>
+</body>
+</html>

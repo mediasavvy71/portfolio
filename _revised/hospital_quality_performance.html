@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Turning fragmented healthcare data into actionable intelligence · William Teppig</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --white:      #ffffff;
+  --offwhite:   #f8f8f6;
+  --surface:    #f2f2ef;
+  --border:     #e4e4e0;
+  --border2:    #d0d0cb;
+  --ink:        #1a1a18;
+  --ink2:       #4a4a46;
+  --ink3:       #8a8a84;
+  --teal:       #006d77;
+  --teal-light: #e8f4f5;
+  --teal-mid:   #b2d8dc;
+  --slate:      #3d5a6c;
+  --slate-light:#edf2f5;
+  --amber:      #b5621e;
+  --amber-light:#fdf0e6;
+  /* Case study 02 accent: warm amber/gold for healthcare quality */
+  --gold:       #b07d2a;
+  --gold-light: #fdf5e6;
+  --gold-mid:   #e6c97a;
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+  --serif:      'DM Serif Display', Georgia, serif;
+  --sans:       'Inter', -apple-system, sans-serif;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 16px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg:  0 12px 40px rgba(0,0,0,.09), 0 2px 8px rgba(0,0,0,.05);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--offwhite);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(248,248,246,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.nav-brand {
+  font-size: 12px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+}
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  font-size: 12px; font-weight: 500; color: var(--ink2);
+  text-decoration: none; letter-spacing: .02em; transition: color .15s;
+}
+.nav-links a:hover { color: var(--teal); }
+.nav-resume {
+  font-size: 11px; font-weight: 600; letter-spacing: .06em;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+  border: 1px solid var(--border2); border-radius: 20px;
+  padding: 7px 16px; transition: background .15s, border-color .15s;
+}
+.nav-resume:hover { background: var(--white); border-color: var(--ink3); }
+
+/* ─── HERO ─── */
+.hero {
+  background: var(--white);
+  padding: 88px 48px 72px;
+  border-bottom: 1px solid var(--border);
+}
+.hero-inner { max-width: 1080px; margin: 0 auto; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 24px;
+}
+.hero-eyebrow::before { display: none; }
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 400; line-height: 1.1; color: var(--ink);
+  max-width: none; margin-bottom: 24px;
+}
+.hero h1 em { color: var(--gold); font-style: italic; }
+.hero-sub {
+  font-size: 16px; color: var(--ink2); max-width: none;
+  line-height: 1.65; margin-bottom: 48px; font-weight: 400;
+}
+.hero-meta {
+  display: flex; flex-wrap: wrap; gap: 0;
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  overflow: hidden; background: var(--offwhite);
+}
+.hero-meta-item {
+  padding: 20px 28px; flex: 1; min-width: 160px;
+  border-right: 1px solid var(--border);
+}
+.hero-meta-item:last-child { border-right: none; }
+.meta-label {
+  font-size: 10px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 6px;
+}
+.meta-val { font-size: 14px; font-weight: 500; color: var(--ink); }
+
+/* ─── IMPACT BAR ─── */
+.impact-bar { background: var(--gold); padding: 40px 48px; }
+.impact-inner {
+  max-width: 1080px; margin: 0 auto;
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 2px;
+}
+.impact-stat { padding: 0 32px; border-right: 1px solid rgba(255,255,255,.2); }
+.impact-stat:first-child { padding-left: 0; }
+.impact-stat:last-child { border-right: none; }
+.impact-num { font-family: var(--serif); font-size: 48px; color: #fff; line-height: 1; margin-bottom: 6px; }
+.impact-desc { font-size: 13px; color: rgba(255,255,255,.8); line-height: 1.5; }
+
+/* ─── SECTIONS ─── */
+.section { padding: 80px 48px; border-bottom: 1px solid var(--border); }
+.section:nth-child(even) { background: var(--white); }
+.section:nth-child(odd)  { background: var(--offwhite); }
+/* Explicit backgrounds (order-independent) so inserting new blocks elsewhere on the page never flips these */
+#context   { background: var(--white); }
+#discovery { background: var(--offwhite); }
+#design    { background: var(--white); }
+#outcomes  { background: var(--offwhite); }
+.section-inner { max-width: 1080px; margin: 0 auto; }
+
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 10px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 16px;
+}
+.section-label span {
+  background: var(--gold-light); color: var(--gold);
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0;
+}
+
+h2.section-title {
+  font-family: var(--serif);
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 400; color: var(--ink); line-height: 1.2;
+  margin-bottom: 40px;
+}
+
+/* ─── TWO / THREE COL ─── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.three-col { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+.four-col { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+
+/* ─── PROBLEM CARDS ─── */
+.problem-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 28px;
+  box-shadow: var(--shadow-sm); position: relative; overflow: hidden;
+}
+.problem-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--gold);
+}
+.problem-card h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 10px; line-height: 1.3; }
+.problem-card p { font-size: 14px; color: var(--ink2); line-height: 1.6; }
+
+/* ─── QUOTE ─── */
+.pullquote {
+  background: var(--gold-light); border-left: 4px solid var(--gold);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 28px 32px; margin: 40px 0;
+}
+.pullquote blockquote {
+  font-family: var(--serif); font-size: 20px; font-style: italic;
+  color: var(--gold); line-height: 1.5; margin-bottom: 12px;
+}
+.pullquote cite {
+  font-size: 12px; font-weight: 600; color: var(--ink2);
+  letter-spacing: .06em; text-transform: uppercase; font-style: normal;
+}
+
+/* ─── PROCESS STEPS ─── */
+.process-track {
+  display: flex; gap: 0; position: relative; margin: 40px 0;
+}
+.process-track::before {
+  content: ''; position: absolute;
+  top: 28px; left: 28px; right: 28px; height: 2px;
+  background: var(--border2); z-index: 0;
+}
+.process-step { flex: 1; text-align: center; position: relative; z-index: 1; padding: 0 8px; }
+.step-dot {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--white); border: 2px solid var(--gold-mid);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px; font-size: 20px; box-shadow: var(--shadow-sm);
+}
+.process-step.active .step-dot { background: var(--gold); border-color: var(--gold); }
+.step-label { font-size: 11px; font-weight: 600; color: var(--ink2); line-height: 1.3; }
+.step-sub { font-size: 10px; color: var(--ink3); margin-top: 3px; }
+
+/* ─── INSIGHT CARDS ─── */
+.insight-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+.insight-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 20px 22px; box-shadow: var(--shadow-sm);
+}
+.insight-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  background: var(--gold-light); display: flex; align-items: center;
+  justify-content: center; margin-bottom: 12px; font-size: 18px;
+}
+.insight-card h4 { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.insight-card p { font-size: 13px; color: var(--ink2); line-height: 1.55; }
+
+/* ─── ROLE CALLOUT ─── */
+.role-callout {
+  background: var(--slate-light); border: 1px solid #c8d8e4;
+  border-radius: var(--radius-md); padding: 28px 32px; margin-bottom: 40px;
+}
+.role-callout h3 { font-size: 13px; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+.role-callout ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.role-callout li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--ink2); line-height: 1.5; }
+.role-callout li::before { content: '→'; color: var(--slate); font-weight: 600; flex-shrink: 0; }
+
+/* ─── RESULTS ─── */
+.result-list { display: flex; flex-direction: column; gap: 16px; }
+.result-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--radius-md); padding: 20px 24px; box-shadow: var(--shadow-sm);
+}
+.result-icon {
+  width: 40px; height: 40px; border-radius: var(--radius-sm);
+  background: var(--gold-light); display: flex; align-items: center;
+  justify-content: center; font-size: 20px; flex-shrink: 0;
+}
+.result-item h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.result-item p { font-size: 13px; color: var(--ink2); line-height: 1.55; }
+
+/* ─── CHIP / DELIVERABLE ─── */
+.deliverable-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.chip {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 20px; padding: 6px 14px;
+  font-size: 12px; font-weight: 500; color: var(--ink2); box-shadow: var(--shadow-sm);
+}
+
+/* ─── DESIGN ARTIFACTS (mockup cards + modal) ─── */
+.artifact-card { cursor: pointer; transition: transform .15s, box-shadow .15s; }
+.artifact-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.artifact-card:hover .artifact-label::after { content: ' ↗'; color: var(--gold); }
+.artifact-label { padding: 10px 14px; font-size: 11px; font-weight: 600; color: var(--ink2); border-top: 1px solid var(--border); }
+
+/* ─── MODAL ─── */
+#artifact-modal {
+  display: none; position: fixed; inset: 0; z-index: 1000;
+  background: rgba(20,20,18,.72); backdrop-filter: blur(4px);
+  align-items: center; justify-content: center; padding: 32px;
+}
+#artifact-modal.open { display: flex; }
+.modal-box {
+  background: var(--white); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg); width: 100%; max-width: 1000px;
+  max-height: calc(100vh - 64px); display: flex; flex-direction: column;
+  overflow: hidden; animation: modal-in .18s ease;
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(12px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 28px 18px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.modal-title { font-size: 14px; font-weight: 600; color: var(--ink); }
+.modal-close {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--offwhite);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--ink2); line-height: 1; transition: background .12s;
+}
+.modal-close:hover { background: var(--border); }
+.modal-body { overflow-y: auto; padding: 32px 28px; flex: 1; }
+
+/* ─── CASE STUDY NAV FOOTER ─── */
+.cs-nav {
+  background: var(--white); border-top: 1px solid var(--border);
+  padding: 48px;
+}
+.cs-nav-inner {
+  max-width: 1080px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+}
+.cs-nav-card {
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  padding: 28px 32px; text-decoration: none; display: block;
+  transition: box-shadow .15s, transform .15s; box-shadow: var(--shadow-sm);
+}
+.cs-nav-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.cs-nav-label {
+  font-size: 10px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink3); margin-bottom: 8px;
+}
+.cs-nav-title {
+  font-family: var(--serif); font-size: 20px; font-weight: 400;
+  color: var(--ink); margin-bottom: 8px; line-height: 1.25;
+}
+.cs-nav-meta { font-size: 12px; color: var(--ink3); }
+.cs-nav-card.prev .cs-nav-label::before { content: '← '; }
+.cs-nav-card.next .cs-nav-label { text-align: right; }
+.cs-nav-card.next .cs-nav-label::after { content: ' →'; }
+.cs-nav-card.next .cs-nav-title { text-align: right; }
+.cs-nav-card.next .cs-nav-meta { text-align: right; }
+
+/* ─── FOOTER ─── */
+footer { background: var(--ink); padding: 48px; text-align: center; }
+footer p { font-size: 13px; color: rgba(255,255,255,.4); }
+footer strong { color: rgba(255,255,255,.75); }
+
+/* ─── UTILITIES ─── */
+.text-sm  { font-size: 13px; color: var(--ink2); line-height: 1.65; }
+.text-body { font-size: 15px; color: var(--ink2); line-height: 1.7; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mt-32 { margin-top: 32px; }
+.mb-24 { margin-bottom: 24px; }
+
+@media (max-width: 640px) {
+  nav { flex-wrap: wrap; height: auto; padding: 12px 24px; gap: 10px; }
+  .nav-links { flex-wrap: wrap; gap: 14px 18px; justify-content: flex-start; }
+}
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .hero, .section, .impact-bar, .cs-nav { padding-left: 20px; padding-right: 20px; }
+  .two-col, .three-col, .four-col, .insight-grid, .artifact-grid, .cs-nav-inner { grid-template-columns: 1fr; }
+  .impact-inner { grid-template-columns: 1fr; gap: 24px; }
+  .impact-stat { border-right: none; padding-left: 0; }
+  .hero-meta { flex-direction: column; }
+  .process-track { flex-direction: column; gap: 16px; }
+  .process-track::before { display: none; }
+}
+
+/* ─── HERO VARIANT: PRODUCT MOCKUP HERO ─── */
+.hero {
+  background: var(--white);
+  display: flex; flex-direction: column;
+  padding: 88px 0 0;
+  border-bottom: 1px solid var(--border);
+}
+.hero-content { padding: 0 48px 56px; max-width: 1176px; width: 100%; margin: 0 auto; }
+.hero-mockup-band { padding: 0 48px; display: flex; justify-content: center; margin-bottom: -1px; }
+.hero-mockup-window {
+  width: 100%; max-width: 1100px;
+  background: var(--white); border: 1px solid var(--border); border-bottom: none;
+  border-radius: 12px 12px 0 0; overflow: hidden;
+  box-shadow: 0 -8px 40px rgba(0,109,119,.1), 0 -2px 16px rgba(0,0,0,.08);
+  font-family: var(--sans);
+}
+
+/* ── browser chrome ── */
+.qm-scope .chrome { background: #1e1e1e; padding: 9px 16px; display: flex; align-items: center; gap: 7px; }
+.qm-scope .dot { width: 11px; height: 11px; border-radius: 50%; }
+.qm-scope .url-bar { flex: 1; background: rgba(255,255,255,.07); border-radius: 5px; height: 22px; margin: 0 14px; display: flex; align-items: center; padding: 0 12px; }
+.qm-scope .url-bar span { font-size: 10px; color: rgba(255,255,255,.3); letter-spacing: .01em; }
+
+</style>
+<style>.case-brief{max-width:1080px;margin:32px auto;padding:24px 30px;border:1px solid #cad8e4;border-left:5px solid #467f9d;border-radius:12px;background:#f6f9fb;color:#20394c}.case-brief h2{font-size:1.2rem!important;margin:0 0 12px!important;color:#19334a!important}.case-brief p{font-size:1rem;line-height:1.65;margin:8px 0;color:#284155}@media(max-width:700px){.case-brief{margin:20px 16px;padding:18px}}</style><style>
+/* Shared, responsive case-study impact bar */
+.impact-bar { background: var(--teal, #176a70); padding: 32px clamp(20px, 5vw, 48px); color: #fff; }
+.impact-bar .impact-eyebrow { max-width:1080px; margin:0 auto 22px; color:rgba(255,255,255,.76); font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+.impact-bar .impact-inner { max-width:1080px; margin:0 auto; display:grid; grid-template-columns:repeat(var(--impact-count, 3),minmax(0,1fr)); gap:0; }
+.impact-bar .impact-stat { min-width:0; padding:0 24px; border-right:1px solid rgba(255,255,255,.24); }
+.impact-bar .impact-stat:first-child { padding-left:0; }
+.impact-bar .impact-stat:last-child { border-right:0; }
+.impact-bar .impact-num { color:#fff; font-size:clamp(30px,4.4vw,50px); line-height:1.08; margin:0 0 8px; font-weight:650; overflow-wrap:anywhere; }
+.impact-bar .impact-desc { color:rgba(255,255,255,.9); font-size:14px; line-height:1.5; max-width:260px; }
+@media(max-width:640px) {
+ .impact-bar .impact-inner { grid-template-columns:1fr; gap:16px; }
+ .impact-bar .impact-stat, .impact-bar .impact-stat:first-child { padding:0 0 16px; border-right:0; border-bottom:1px solid rgba(255,255,255,.24); }
+ .impact-bar .impact-stat:last-child { border-bottom:0; padding-bottom:0; }
+}
+</style><link href="case-study-typography.css" rel="stylesheet"/><style id="index-navigation-unified">
+/* Index navigation: identical styles on all case studies */
+body > nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(248,248,246,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+body > nav .nav-brand {
+  font-size: 12px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+  display: inline-flex; align-items: center;
+}
+body > nav .nav-links { display: flex; gap: 32px; align-items: center; }
+body > nav .nav-links a {
+  font-size: 12px; font-weight: 500; color: var(--ink2);
+  text-decoration: none; letter-spacing: .02em; transition: color .15s;
+}
+body > nav .nav-links a:hover { color: var(--teal); }
+body > nav .nav-resume {
+  font-size: 11px; font-weight: 600; letter-spacing: .06em;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+  border: 1px solid var(--border2); border-radius: 20px;
+  padding: 7px 16px; transition: background .15s, border-color .15s;
+}
+body > nav .nav-resume:hover { background: var(--white); border-color: var(--ink3); }
+@media(max-width:700px){body > nav{padding-left:20px;padding-right:20px;gap:12px}body > nav .nav-links{gap:12px;flex-wrap:wrap}body > nav .nav-links a{white-space:nowrap}}
+</style>
+<style>
+/* Shared bottom navigation across the five portfolio case studies */
+.portfolio-case-pager{background:#fff;border-top:1px solid #e4e4e0;padding:48px clamp(20px,5vw,48px);font-family:var(--sans,'Inter',sans-serif)}
+.portfolio-case-pager__inner{max-width:1080px;margin:auto}
+.portfolio-case-pager__heading{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#77776f;margin:0 0 18px}
+.portfolio-case-pager__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.portfolio-case-pager__card{display:flex;flex-direction:column;gap:10px;padding:24px;border:1px solid #e4e4e0;border-radius:10px;background:#fff;text-decoration:none;color:#1a1a18;min-width:0;transition:border-color .2s,box-shadow .2s,transform .2s}
+.portfolio-case-pager__card:hover,.portfolio-case-pager__card:focus-visible{border-color:var(--navy,#1e3a5f);box-shadow:0 5px 20px rgba(0,0,0,.08);transform:translateY(-2px)}
+.portfolio-case-pager__direction{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--navy,#1e3a5f)}
+.portfolio-case-pager__title{font-family:var(--serif,Georgia,serif);font-size:clamp(19px,2.1vw,24px);line-height:1.25;font-weight:400}
+.portfolio-case-pager__meta{font-size:12px;color:#77776f;margin-top:auto}
+.portfolio-case-pager__all{display:inline-block;margin-top:22px;font-size:13px;font-weight:600;color:var(--navy,#1e3a5f);text-decoration:none}
+.portfolio-case-pager__all:hover{text-decoration:underline}
+@media(max-width:640px){.portfolio-case-pager__grid{grid-template-columns:1fr}.portfolio-case-pager{padding-top:32px;padding-bottom:32px}}
+</style><style id="cs-contrib-style">
+/* My Contributions: shared styling matched to Case Study 01 */
+.cs-contrib-band{background:#f8f8f6;padding:56px 48px;border-bottom:1px solid #e4e4e0;}
+.cs-contrib-band .section-inner{max-width:1080px;margin:0 auto;}
+.cs-contrib-band .role-callout{background:#edf2f5;border:1px solid #c8d8e4;border-radius:12px;padding:28px 32px;margin:0;box-shadow:none;max-width:none;}
+.cs-contrib-band .role-callout h3{font-family:'Inter',-apple-system,sans-serif;font-size:13px;font-weight:700;color:#3d5a6c;text-transform:uppercase;letter-spacing:.08em;line-height:normal;margin:0 0 12px;}
+.cs-contrib-band .role-callout ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin:0;padding:0;}
+.cs-contrib-band .role-callout li{display:block;font-family:'Inter',-apple-system,sans-serif;font-size:14px;color:#4a4a46;line-height:1.5;padding-left:22px;margin:0;}
+.cs-contrib-band .role-callout li::before{content:'\2192';color:#3d5a6c;font-weight:600;display:inline-block;width:22px;margin-left:-22px;}
+.cs-contrib-band .role-callout h3::before,.cs-contrib-band .role-callout h3::after{content:none;display:none;}
+@media (max-width:640px){.cs-contrib-band{padding:40px 20px;}}
+</style>
+<style id="cs-standard-2026">
+.glance{max-width:1176px;margin:56px auto 8px;padding:0 48px;font-family:'Inter',-apple-system,sans-serif}
+.glance-box{border:1px solid #e4e4e0;border-radius:16px;background:#f8f8f6;padding:32px 36px}
+.glance-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px}
+.glance-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#006d77}
+.glance-time{font-size:12px;color:#8a8a84}
+.glance-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.glance-item h4{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a8a84;margin:0 0 8px}
+.glance-item p{font-size:14.5px;line-height:1.6;color:#1a1a18;margin:0}
+.glance-item p.meas{font-size:12.5px;color:#4a4a46;margin-top:10px;padding-top:10px;border-top:1px solid #e4e4e0}
+.cs-todo{display:block;margin-top:10px;font-size:12px;line-height:1.5;color:#7a4a12;background:#fdf0e6;border:1px dashed #e0a160;border-radius:6px;padding:6px 10px}
+.result-list.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cs-close{background:#1a1a18;color:#fff;padding:88px 48px;font-family:'Inter',-apple-system,sans-serif}
+.cs-close-inner{max-width:1080px;margin:0 auto}
+.cs-close-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#b2d8dc;margin-bottom:18px}
+.cs-close-takeaway{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(24px,3vw,34px);line-height:1.3;color:#fff;max-width:860px;margin:0 0 18px}
+.cs-close-body{font-size:16px;line-height:1.7;color:rgba(255,255,255,.78);max-width:760px;margin:0 0 40px}
+.cs-close-next{border-top:1px solid rgba(255,255,255,.18);padding-top:28px;margin-bottom:44px}
+.cs-close-next h3{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;margin:0 0 14px;font-family:'Inter',sans-serif}
+.cs-close-next ul{margin:0;padding-left:20px}
+.cs-close-next li{font-size:15.5px;line-height:1.65;color:rgba(255,255,255,.85);margin-bottom:8px}
+.cs-close .cs-todo{display:inline-block;margin:0 0 12px}
+.cs-close-nav{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.cs-close-nav a{color:#fff;text-decoration:none;font-size:14px;font-weight:600}
+.cs-close-nav a.next{background:#fff;color:#1a1a18;border-radius:24px;padding:13px 24px}
+.cs-close-nav a.next span{color:#006d77}
+.cs-close-nav a.back{color:rgba(255,255,255,.7)}
+.cs-close-nav a:hover{opacity:.85}
+@media(max-width:900px){.glance-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.result-list.result-grid{grid-template-columns:1fr}.glance{padding:0 20px;margin-top:36px}.glance-box{padding:24px}.glance-grid{grid-template-columns:1fr;gap:20px}.cs-close{padding:64px 24px}}
+</style>
+<style id="site-nav-style">
+nav.site-nav{position:sticky;top:0;z-index:1000;background:rgba(248,248,246,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid #e4e4e0;padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:64px;margin:0;box-shadow:none;font-family:'Inter',-apple-system,sans-serif;box-sizing:border-box;width:100%}
+nav.site-nav .nav-brand{display:inline-flex;align-items:center;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#1a1a18}
+nav.site-nav .nav-links{display:flex;gap:32px;align-items:center;margin:0;padding:0}
+nav.site-nav .nav-links a{font-size:12px;font-weight:500;color:#4a4a46;text-decoration:none;letter-spacing:.02em;transition:color .15s;padding:0;border:0;background:none;line-height:1.6}
+nav.site-nav .nav-links a:hover{color:#006d77}
+nav.site-nav .nav-links a.nav-resume{font-size:12px;font-weight:500;letter-spacing:.02em;color:#4a4a46;white-space:nowrap;border:1px solid #d0d0cb;border-radius:20px;padding:7px 16px;transition:background .15s,border-color .15s}
+nav.site-nav .nav-links a.nav-resume:hover{background:#fff;border-color:#8a8a84;color:#1a1a18}
+@media (max-width:640px){
+ nav.site-nav{flex-wrap:wrap;height:auto;padding:12px 24px;gap:10px}
+ nav.site-nav .nav-links{flex-wrap:wrap;gap:12px 18px;justify-content:flex-start}
+}
+</style>
+<style id="hq-white-bg">
+/* Hero and At a glance band: white instead of the page gray */
+.hero{background:#fff}
+section.glance{max-width:none;margin:0;background:#fff;padding:56px max(48px,calc((100% - 1176px)/2 + 48px)) 8px}
+@media(max-width:640px){section.glance{padding:36px 20px 8px}}
+</style>
+<style id="footer-email-style">
+footer .footer-email{margin-top:10px;font-size:13px}
+footer .footer-email a{color:inherit;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px;transition:opacity .15s}
+footer .footer-email a:hover{opacity:.75}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav class="site-nav" id="top" aria-label="Main">
+<a class="nav-brand" href="index.html#top"><img alt="William Teppig" src="images/f77d54b9a753.webp" style="height:28px;width:auto;display:block;"/></a>
+<div class="nav-links">
+<a href="index.html#work">Work</a>
+<a href="index.html#leadership">Leadership</a>
+<a href="index.html#process">How I Work</a>
+<a href="index.html#about">About</a>
+</div>
+</nav>
+<!-- HERO -->
+<section class="hero">
+<div class="hero-content">
+<div class="hero-eyebrow">Premier · Healthcare Analytics</div>
+<h1 class="t-h1">Turning fragmented healthcare data into actionable intelligence</h1>
+<p class="hero-sub">Healthcare quality teams relied on five disconnected reporting systems to identify performance gaps. I led UX research and design strategy to establish a role-driven information architecture that brought critical measures, benchmarks, and next steps into a more coherent experience.</p>
+<p class="hero-sub">I led the UX strategy and design of a unified quality intelligence platform that helped healthcare organizations monitor performance, identify quality gaps, compare results against benchmarks, and take action before issues affected future ratings.</p>
+</div>
+<!-- Hi-fi product mockup: below hero text -->
+<div class="hero-mockup-band">
+<div class="hero-mockup-window">
+<div class="qm-scope">
+<!-- Browser chrome -->
+<div class="chrome">
+<div class="dot" style="background:#ff5f57;"></div>
+<div class="dot" style="background:#febc2e;"></div>
+<div class="dot" style="background:#28c840;"></div>
+<div class="url-bar"><span>premierconnect.com/starwatch</span></div>
+</div>
+<!-- Real product screenshot: Star Watch, Measure Category Performance -->
+<img alt="Star Watch overview showing Measure Category Performance for Mortality, Readmission, Safety of Care, and Patient Experience" src="images/28cf860bada3.webp" style="display:block;width:100%;height:auto;"/>
+</div>
+</div>
+</div>
+</section>
+<!-- IMPACT BAR -->
+<div aria-label="Impact and results" class="impact-bar" style="background-color: var(--gold, #b07d2a);"><div class="impact-eyebrow t-kicker">Impact &amp; Results</div><div class="impact-inner" style="--impact-count:2"><div class="impact-stat"><div class="impact-num t-impact-num">6×</div><div class="impact-desc t-impact-desc">Faster identification of underperforming measures</div></div><div class="impact-stat"><div class="impact-num t-impact-num">4×</div><div class="impact-desc t-impact-desc">More time spent on quality improvement</div></div></div></div>
+
+
+<!-- AT A GLANCE (30-second summary) -->
+<section class="glance" aria-label="At a glance"><div class="glance-box">
+<div class="glance-head"><div class="glance-label">At a glance</div></div>
+<div class="glance-grid">
+<div class="glance-item"><h4>The problem</h4><p>Quality teams pieced together performance from five disconnected reporting systems, with reports arriving 4–6 months late and no path to corrective action.</p></div>
+<div class="glance-item"><h4>My role &amp; team</h4><p>UX Lead and Researcher. Led discovery with clinical, quality and executive stakeholders, and partnered with clinical subject matter experts, product and engineering.</p></div>
+<div class="glance-item"><h4>Key decision</h4><p>Design the missing information architecture: one drill-down path from health system to measure category to individual measure, with each role entering at its own level.</p></div>
+<div class="glance-item"><h4>Outcome</h4><p>6× faster identification of underperforming measures and 4× more time spent on quality improvement. The business took the product to market and the client asked to expand its scope.</p></div>
+</div></div></section>
+<!-- CONTEXT -->
+<section class="section" id="context">
+<div class="section-inner">
+<div class="section-label t-kicker"><span>1</span>Context &amp; Problem Space</div>
+<h2 class="section-title t-h2">Hospitals couldn't manage what they couldn't see</h2>
+<div class="two-col">
+<div>
+<p class="text-body t-body">CMS evaluates hospitals across four major quality domains: Mortality, Readmissions, Safety of Care, and Patient Experience. Improvements in these areas affect publicly reported Star Ratings, but those ratings often reflect care delivered years earlier. Organizations must continuously monitor performance long before results appear in public reporting.</p>
+<p class="text-body mt-24 t-body">During discovery we found that hospitals were trying to manage these measures using information scattered across multiple reporting systems, spreadsheets, and manual processes. Quality analysts spent more time assembling reports than understanding why performance was changing.</p>
+<p class="text-body mt-24 t-body">Without a single view of organizational performance, leaders struggled to answer basic questions:</p>
+<ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:12px;">
+<li style="display:flex;align-items:flex-start;gap:10px;font-size:15px;color:var(--ink2);line-height:1.5;"><span style="color:var(--gold);font-weight:600;flex-shrink:0;">→</span>Where are we underperforming?</li>
+<li style="display:flex;align-items:flex-start;gap:10px;font-size:15px;color:var(--ink2);line-height:1.5;"><span style="color:var(--gold);font-weight:600;flex-shrink:0;">→</span>Which hospitals or departments need attention?</li>
+<li style="display:flex;align-items:flex-start;gap:10px;font-size:15px;color:var(--ink2);line-height:1.5;"><span style="color:var(--gold);font-weight:600;flex-shrink:0;">→</span>Which measures are driving the problem?</li>
+<li style="display:flex;align-items:flex-start;gap:10px;font-size:15px;color:var(--ink2);line-height:1.5;"><span style="color:var(--gold);font-weight:600;flex-shrink:0;">→</span>What should we do next?</li>
+</ul>
+<p class="text-body mt-24 t-body">The result was a reactive process that focused on reporting historical performance rather than improving future outcomes.</p>
+</div>
+<div class="gap-col" style="display:flex;flex-direction:column;gap:16px;">
+<div class="problem-card">
+<h3>Fragmented Data Ecosystem</h3>
+<p>Quality measures were collected, stored, and reported across five disconnected systems. No single view of organizational performance existed across measure categories or facility levels.</p>
+</div>
+<div class="problem-card">
+<h3>Stale, Unusable Reporting</h3>
+<p>Reports were delivered 4–6 months after the measurement period, by which time the data reflected conditions too old to act on. Users described the reports as "already historical" on arrival.</p>
+</div>
+<div class="problem-card">
+<h3>No Path to Corrective Action</h3>
+<p>Even when users could identify a performance gap, the system provided no guidance on what to do next. Corrective action planning was done entirely outside the platform, in spreadsheets and email.</p>
+</div>
+</div>
+</div>
+<div class="pullquote">
+<blockquote>"The data is there; we just can't see it until it's too late to do anything about it."</blockquote>
+<cite>Quality Data Analyst · Regional Hospital System</cite>
+</div>
+<div class="section-label mt-32 t-kicker"><span>↓</span>Goal</div>
+<div class="three-col">
+<div class="insight-card">
+<div class="insight-icon">🎯</div>
+<h4>Near Real-Time Visibility</h4>
+<p>Create a quality performance dashboard that displays KPIs in near real-time, replacing the 6-month lag in current reporting cycles.</p>
+</div>
+<div class="insight-card">
+<div class="insight-icon">🔍</div>
+<h4>Role-Driven Drill-Down</h4>
+<p>Give users tools to quickly navigate from organizational summary to measure category to individual facility, matched to how each role actually investigates performance.</p>
+</div>
+<div class="insight-card">
+<div class="insight-icon">⚡</div>
+<h4>Guided Corrective Action</h4>
+<p>Surface the corrective actions users need to take, rather than requiring them to interpret raw data and decide independently.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- DISCOVERY -->
+<section class="section" id="discovery">
+<div class="section-inner">
+<div class="section-label t-kicker"><span>2</span>Discovery &amp; Systems Mapping</div>
+<h2 class="section-title t-h2">A cross-functional research effort to map the full quality data ecosystem</h2>
+<div>
+<p class="text-body t-body">Our UX team conducted formative research by interviewing and observing primary stakeholders across their daily workflows. I collaborated with Clinical Subject Matter Experts to map the quality data process end-to-end, understanding how a quality analyst actually does their job, what data they access, where they get stuck, and what decisions they need to make.</p>
+<p class="text-body mt-24 t-body">A critical finding emerged early: <strong>organization size fundamentally shapes the quality analyst role.</strong> In smaller facilities, one analyst handles every phase of the quality cycle, from pulling raw measures to presenting board-level reports. In larger systems, these responsibilities are distributed across specialized roles. This insight directly drove our persona architecture and the role-based navigation system we designed.</p>
+</div>
+<div class="three-col mt-24">
+<div class="insight-card">
+<div class="insight-icon">🏥</div>
+<h4>Org Size Shapes Everything</h4>
+<p>Smaller organizations have one analyst handling the full quality cycle. Larger systems distribute work across 4–6 specialized roles. A single UX pattern couldn't serve both without role-based customization.</p>
+</div>
+<div class="insight-card">
+<div class="insight-icon">📊</div>
+<h4>Volume Overwhelm is Universal</h4>
+<p>Regardless of org size, every quality analyst cited data volume as their primary challenge. They spend more time assembling data than analyzing it; the system should do the assembly.</p>
+</div>
+<div class="insight-card">
+<div class="insight-icon">🔗</div>
+<h4>Five Systems, No Single Source</h4>
+<p>Quality data flowed through CMS, internal QI platforms, departmental spreadsheets, state reporting tools, and EHR exports. None of them talked to each other.</p>
+</div>
+</div>
+<!-- Personas -->
+<div class="mt-32">
+<div class="section-label t-kicker"><span>↓</span>Qualitative Personas</div>
+<h3 style="font-family:var(--serif);font-size:22px;font-weight:400;margin-bottom:24px;color:var(--ink);">Four roles across the quality data lifecycle</h3>
+<div class="four-col">
+<div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+<div style="height:3px;background:var(--gold);"></div>
+<div style="padding:20px 18px;">
+<div style="width:40px;height:40px;border-radius:50%;background:var(--gold-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--gold);margin-bottom:10px;">L</div>
+<div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Linda</div>
+<div style="font-size:10px;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Quality Data Analyst</div>
+<div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:var(--gold-light);border-radius:6px;border-left:2px solid var(--gold);margin-bottom:12px;">"I bring together disperse data from every department, but I spend more time formatting it than analyzing it."</div>
+<div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Key struggles</div>
+<div style="display:flex;flex-direction:column;gap:4px;">
+<div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--gold);flex-shrink:0;">·</span>Uses QualityAdvisor to perform tasks the tool was never built to support, then extends and enriches the data in Excel</div>
+<div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--gold);flex-shrink:0;">·</span>Spends significant time formatting graphs and tables, which cuts into research and analysis time</div>
+<div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--gold);flex-shrink:0;">·</span>Very good at disseminating information, but struggles to present it efficiently and coherently to decision makers</div>
+</div>
+</div>
+</div>
+<div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+<div style="height:3px;background:#3b6d11;"></div>
+<div style="padding:20px 18px;">
+<div style="width:40px;height:40px;border-radius:50%;background:#eaf3de;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#3b6d11;margin-bottom:10px;">R</div>
+<div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Romona</div>
+<div style="font-size:10px;color:#3b6d11;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Director of Quality</div>
+<div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:#eaf3de;border-radius:6px;border-left:2px solid #3b6d11;margin-bottom:12px;">"We're still exchanging data by paper and fax; that's not sustainable when patient safety is on the line."</div>
+<div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Key struggles</div>
+<div style="display:flex;flex-direction:column;gap:4px;">
+<div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#3b6d11;flex-shrink:0;">·</span>Lack of interoperability: data is still exchanged via paper and faxes</div>
+<div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#3b6d11;flex-shrink:0;">·</span>Optimizing clinical workflows to provide actionable data at the point of care</div>
+<div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#3b6d11;flex-shrink:0;">·</span>Personnel shortages and burnout, while keeping up with advances in medical science</div>
+</div>
+</div>
+</div>
+<div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+<div style="height:3px;background:#854f0b;"></div>
+<div style="padding:20px 18px;">
+<div style="width:40px;height:40px;border-radius:50%;background:#faeeda;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#854f0b;margin-bottom:10px;">R</div>
+<div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Randy</div>
+<div style="font-size:10px;color:#854f0b;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Department Manager / Physician</div>
+<div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:#faeeda;border-radius:6px;border-left:2px solid #854f0b;margin-bottom:12px;">"I see 25 to 30 patients a day; I need performance data that actually reflects my practice, not noise."</div>
+<div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Key struggles</div>
+<div style="display:flex;flex-direction:column;gap:4px;">
+<div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#854f0b;flex-shrink:0;">·</span>No robust system exists to measure physician performance, and limited ability to reduce noise in the data</div>
+<div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#854f0b;flex-shrink:0;">·</span>No defined process for what to do when a measure falls beyond threshold</div>
+<div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#854f0b;flex-shrink:0;">·</span>No external peer comparison, and PQRS measures apply only to Medicare patients</div>
+</div>
+</div>
+</div>
+<div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);">
+<div style="height:3px;background:#185fa5;"></div>
+<div style="padding:20px 18px;">
+<div style="width:40px;height:40px;border-radius:50%;background:#e6f1fb;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:#185fa5;margin-bottom:10px;">J</div>
+<div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:2px;">Juan</div>
+<div style="font-size:10px;color:#185fa5;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Chief Medical Officer</div>
+<div style="font-size:12px;color:var(--ink2);font-style:italic;line-height:1.55;padding:8px 10px;background:#e6f1fb;border-radius:6px;border-left:2px solid #185fa5;margin-bottom:12px;">"I need physicians to understand exactly what's expected of them, and a way to raise the bar through peer competition."</div>
+<div style="font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Key struggles</div>
+<div style="display:flex;flex-direction:column;gap:4px;">
+<div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Available solutions aren't centralized: no single streamlined workflow</div>
+<div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Inconsistent charting formats and difficulty inferring data into action plans</div>
+<div style="font-size:11px;color:var(--ink2);display:flex;gap:6px;align-items:flex-start;"><span style="color:#185fa5;flex-shrink:0;">·</span>Not proactive in finding more information; wants to work from a tablet</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- User Flow -->
+<div class="mt-32">
+<div class="section-label t-kicker"><span>↓</span>User Flow</div>
+<h3 style="font-family:var(--serif);font-size:22px;font-weight:400;margin-bottom:8px;color:var(--ink);">How the organization should work: from raw measures to executive action</h3>
+<p class="text-sm mb-24 t-small">The reporting cascade mapped during discovery: the quality analyst surfaces performance from the dashboard, the director of quality routes it up to the CMO and down to department managers, and the loop closes with a CMO-directed action plan.</p>
+<div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-sm);">
+<img alt="User flow diagram showing the quality reporting cascade: Linda (Quality Data Analyst) reviews the Quality Dashboard and sends Monthly/Yearly Quality and Departmental reports to Romona (Director of Quality), who routes an Organizational Quality Report up to Juan (Chief Medical Officer) and a Departmental Quality Report down to Randy (Dept Manager/Physician), who creates an Action Plan; Juan reviews the report and provides feedback to department managers, closing the loop." src="images/7af3112b5052.webp" style="display:block;width:100%;height:auto;"/>
+</div>
+</div>
+</div>
+</section>
+<!-- DESIGN -->
+<section class="section" id="design">
+<div class="section-inner">
+<div class="section-label t-kicker"><span>3</span>Design Process</div>
+<h2 class="section-title t-h2">From ecosystem map to unified design system for quality intelligence</h2>
+<div class="two-col mb-24">
+<div>
+<p class="text-body t-body">Research revealed that the problem wasn't a missing chart; it was a missing architecture. Quality data existed in silos because no one had designed an information model that connected measure categories, organizational levels, and time dimensions into a single navigable structure.</p>
+<p class="text-body mt-24 t-body">I designed a role-driven experience where each persona enters at the right level of the data hierarchy and can drill down or escalate without leaving the platform. The recommendation system surfaces corrective actions inline, closing the loop that had always required a separate workflow outside the system.</p>
+</div>
+<div>
+<div style="background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:var(--radius-md);padding:24px;">
+<div style="font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px;">Design System Contributions</div>
+<div style="display:flex;flex-direction:column;gap:10px;">
+<div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Established chart component patterns for data-dense clinical contexts, optimized for contrast ratios and legibility under time pressure</div>
+<div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Designed a reusable measure category card component used across 4 clinical domains (Mortality, Safety, Readmissions, Patient Experience)</div>
+<div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Created accessibility-first data visualization guidelines: WCAG AA compliant color system for performance indicators (good / watch / critical)</div>
+<div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink2);"><span style="color:var(--gold);font-weight:700;flex-shrink:0;">→</span>Defined progressive disclosure patterns for org-to-facility-to-measure drill-down navigation</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Information Architecture & Hierarchy -->
+<div class="mt-32">
+<h3 style="font-family:var(--serif);font-size:22px;font-weight:400;margin-bottom:16px;color:var(--ink);">Information Architecture &amp; Hierarchy</h3>
+<p style="font-size:13px;color:var(--ink2);margin-bottom:18px;line-height:1.6;">The Star Watch drill-down hierarchy: a single navigable path from facility overview to individual measure, replacing the disconnected reports users previously had to assemble by hand. Each level carries a matching breadcrumb and URL state, so any view can be bookmarked or shared.</p>
+<!-- Legend -->
+<div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+<div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink2);"><span style="width:10px;height:10px;border-radius:50%;background:var(--gold);display:inline-block;"></span>Shipped in this release</div>
+<div style="display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink2);"><span style="width:10px;height:10px;border-radius:50%;border:1.5px dashed var(--ink3);display:inline-block;"></span>Identified opportunity, not yet built</div>
+</div>
+<!-- Persistent filters -->
+<div style="border:1px dashed var(--border2);border-radius:10px;padding:10px 16px;margin-bottom:20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+<div style="font-size:9.5px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;">Persistent at every level</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;">
+<span style="font-size:10.5px;font-weight:500;color:var(--ink2);background:var(--white);border:1px solid var(--border);border-radius:20px;padding:3px 10px;">Health System</span>
+<span style="font-size:10.5px;font-weight:500;color:var(--ink2);background:var(--white);border:1px solid var(--border);border-radius:20px;padding:3px 10px;">Facility (CCN)</span>
+<span style="font-size:10.5px;font-weight:500;color:var(--ink2);background:var(--white);border:1px solid var(--border);border-radius:20px;padding:3px 10px;">Time Interval</span>
+<span style="font-size:10.5px;font-weight:500;color:var(--ink2);background:var(--white);border:1px solid var(--border);border-radius:20px;padding:3px 10px;">Comparator</span>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:0;">
+<!-- L1: Entry & Overview (combined entry, landing overview, and category cards) -->
+<div style="display:flex;gap:14px;">
+<div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--gold);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">L1</div>
+<div style="flex:1;border:1px solid var(--border);border-radius:10px;padding:12px 16px;background:var(--white);box-shadow:var(--shadow-sm);">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+<div style="font-size:12.5px;font-weight:600;color:var(--ink);">Star Watch: Entry &amp; Overview | Premier General (S19175) | Q4 2019</div>
+<div style="font-size:10px;color:var(--ink3);font-family:monospace;">PremierConnect / Star Watch</div>
+</div>
+<div style="font-size:11px;color:var(--ink2);margin-top:4px;">Reached from the top-level product nav (alongside Quality Measures Reporter and Pay for Performance), and lands on the CMS Star Rating + Measure Category Performance grid, the landing view for every role</div>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);">
+<span style="font-size:9.5px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;">Filterable to</span>
+<span style="font-size:10px;font-weight:500;color:var(--gold);background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:20px;padding:2px 9px;">Facility</span>
+<span style="font-size:10px;font-weight:500;color:var(--gold);background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:20px;padding:2px 9px;">Specialty</span>
+<span style="font-size:10px;font-weight:500;color:var(--gold);background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:20px;padding:2px 9px;">Department</span>
+<span style="font-size:10px;font-weight:500;color:var(--gold);background:var(--gold-light);border:1px solid var(--gold-mid);border-radius:20px;padding:2px 9px;">Doctor</span>
+</div>
+<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+<div style="font-size:10px;color:var(--ink3);margin-bottom:6px;">4 measure category cards; click any card to drill in</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+<div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;box-shadow:var(--shadow-sm);">
+<div style="font-size:18px;margin-bottom:4px;">💔</div>
+<div style="font-size:11px;font-weight:600;color:var(--ink);">Mortality</div>
+<div style="font-size:9.5px;color:var(--ink3);margin-top:2px;">7 measures</div>
+</div>
+<div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;box-shadow:var(--shadow-sm);">
+<div style="font-size:18px;margin-bottom:4px;">🔄</div>
+<div style="font-size:11px;font-weight:600;color:var(--ink);">Readmission</div>
+<div style="font-size:9.5px;color:var(--ink3);margin-top:2px;">8 measures</div>
+</div>
+<div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;box-shadow:var(--shadow-sm);">
+<div style="font-size:18px;margin-bottom:4px;">🛡️</div>
+<div style="font-size:11px;font-weight:600;color:var(--ink);">Safety of Care</div>
+<div style="font-size:9.5px;color:var(--ink3);margin-top:2px;">8 measures</div>
+</div>
+<div style="background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;box-shadow:var(--shadow-sm);">
+<div style="font-size:18px;margin-bottom:4px;">😊</div>
+<div style="font-size:11px;font-weight:600;color:var(--ink);">Patient Experience</div>
+<div style="font-size:9.5px;color:var(--ink3);margin-top:2px;">10 measures</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div style="width:2px;height:20px;background:var(--border2);margin-left:16px;"></div>
+<!-- L2: Category detail -->
+<div style="display:flex;gap:14px;">
+<div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--gold);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">L2</div>
+<div style="flex:1;border:1px solid var(--border);border-radius:10px;padding:12px 16px;background:var(--white);box-shadow:var(--shadow-sm);">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+<div style="font-size:12.5px;font-weight:600;color:var(--ink);">Measure Category: e.g. Mortality</div>
+<div style="font-size:10px;color:var(--ink3);font-family:monospace;">.../starwatch/category/mortality</div>
+</div>
+<div style="font-size:11px;color:var(--ink2);margin-top:4px;">Category trend chart + full measures table with Exceeds / Fails / Does Not Qualify status per measure; click any row to drill in</div>
+</div>
+</div>
+<div style="width:2px;height:20px;background:var(--border2);margin-left:16px;"></div>
+<!-- L3: Measure detail -->
+<div style="display:flex;gap:14px;">
+<div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--gold);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">L3</div>
+<div style="flex:1;border:1px solid var(--border);border-radius:10px;padding:12px 16px;background:var(--white);box-shadow:var(--shadow-sm);">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+<div style="font-size:12.5px;font-weight:600;color:var(--ink);">Measure Detail: e.g. AMI 30-Day Mortality Rate</div>
+<div style="font-size:10px;color:var(--ink3);font-family:monospace;">.../starwatch/measure/ami-30day-mortality</div>
+</div>
+<div style="font-size:11px;color:var(--ink2);margin-top:4px;">Trend + peer/CMS benchmark chart with an optional forward projection, plus Service Line Performance breakdown</div>
+</div>
+</div>
+<div style="width:2px;height:20px;border-left:2px dashed var(--ink3);margin-left:16px;background:none;"></div>
+<!-- L4: Corrective action (opportunity, not built) -->
+<div style="display:flex;gap:14px;">
+<div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--white);border:1.5px dashed var(--ink3);color:var(--ink3);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;">L4</div>
+<div style="flex:1;border:1.5px dashed var(--border2);border-radius:10px;padding:12px 16px;background:var(--offwhite);">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+<div style="font-size:12.5px;font-weight:600;color:var(--ink2);">Corrective Action Workflow: identified gap</div>
+<div style="font-size:10px;color:var(--ink3);">Not yet built</div>
+</div>
+<div style="font-size:11px;color:var(--ink3);margin-top:4px;">Recommended next step, owner assignment, and timeline. Today this happens outside the platform, in spreadsheets and email. Scoped as the natural extension of the L3 view.</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Design Artifacts -->
+<div class="mt-32">
+<h3 style="font-family:var(--serif);font-size:22px;font-weight:400;margin-bottom:8px;color:var(--ink);">Design Artifacts</h3>
+<p class="text-sm mb-24 t-small">Screens from the shipped Star Watch experience, from the facility-level overview down through category and individual measure detail. Click any card to view the full artifact.</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+<div class="artifact-card" style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);background:var(--white);">
+<img alt="Star Watch overview: Measure Category Performance for Mortality, Readmission, Safety of Care, and Patient Experience" src="images/28cf860bada3.webp" style="display:block;width:100%;height:auto;"/>
+<div class="artifact-label">L1: Measure Category Overview</div>
+</div>
+<div class="artifact-card" style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);background:var(--white);">
+<img alt="Mortality measure category detail with trend chart and full measures table" src="images/52bf08837609.webp" style="display:block;width:100%;height:auto;"/>
+<div class="artifact-label">L2: Mortality Category Detail</div>
+</div>
+<div class="artifact-card" style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);background:var(--white);">
+<img alt="Acute Myocardial Infarction 30-Day Mortality Rate measure detail with service line performance breakdown" src="images/a83ede1f2ba0.webp" style="display:block;width:100%;height:auto;"/>
+<div class="artifact-label">L3: AMI Measure Detail</div>
+</div>
+<div class="artifact-card" style="border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);background:var(--white);">
+<img alt="Acute Myocardial Infarction measure detail with Show Projection enabled, revealing a forecast band and hover tooltip" src="images/e4791de6b296.webp" style="display:block;width:100%;height:auto;"/>
+<div class="artifact-label">L3: AMI Measure Detail, Show Projection</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- OUTCOMES -->
+<section class="section" id="outcomes">
+<div class="section-inner">
+<div class="section-label t-kicker"><span>4</span>Outcomes &amp; Impact</div>
+<h2 class="section-title t-h2">Near real-time KPI visibility turned reactive reporting into faster corrective action</h2>
+<div>
+<div class="result-list result-grid">
+<div class="result-item">
+<div class="result-icon">🔗</div>
+<div>
+<h4>Five Systems Unified Into One Experience</h4>
+<p>The information architecture and role-driven navigation model provided a single entry point into quality data that had previously lived across CMS portals, QI platforms, state systems, EHR exports, and departmental spreadsheets.</p>
+</div>
+</div>
+<div class="result-item">
+<div class="result-icon">⚡</div>
+<div>
+<h4>Near Real-Time KPI Visibility</h4>
+<p>Replacing 6-month-old static reports with a near real-time dashboard gave quality analysts and clinical directors a fundamentally different relationship with their performance data: actionable instead of historical.</p>
+</div>
+</div>
+<div class="result-item">
+<div class="result-icon">📈</div>
+<div>
+<h4>Business Confidence to Go to Market</h4>
+<p>The business team advanced the product to market following design completion, with the client requesting continued engagement to expand the platform's scope, a direct signal of stakeholder confidence in the experience design.</p>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</section>
+<!-- FOOTER -->
+<!-- CASE STUDY NAV -->
+
+<!-- STANDARD ENDING -->
+<section class="cs-close"><div class="cs-close-inner">
+<div class="cs-close-label">Reflection</div>
+<p class="cs-close-takeaway">The problem wasn't a missing chart. It was a missing architecture.</p>
+<p class="cs-close-body">Once measure categories, organizational levels and time were connected in one navigable model, every role had a way in at the right level of detail.</p>
+<div class="cs-close-next"><h3>What I'd do next</h3><ul><li>Design and test the corrective action workflow (recommended next step, owner and timeline) so action planning moves out of spreadsheets and email and into the platform.</li></ul></div>
+<div class="cs-close-nav"><a class="back" href="index.html#work">← All work</a><a class="next" href="flexible-branding-case-study.html">Next case study: <span>Creating scalable branding across channels →</span></a></div>
+</div></section>
+<footer>
+<p><strong>Turning fragmented healthcare data into actionable intelligence</strong>  ·  William Teppig  ·  Premier</p>
+<p class="footer-email"><a href="mailto:wteppig@gmail.com">wteppig@gmail.com</a></p>
+</footer>
+<!-- MODAL -->
+<div aria-labelledby="modal-title-text" aria-modal="true" id="artifact-modal" role="dialog">
+<div class="modal-box">
+<div class="modal-header">
+<div class="modal-title" id="modal-title-text"></div>
+<div style="display:flex;align-items:center;gap:8px;">
+<button aria-label="Previous artifact" class="modal-close" id="modal-prev-btn" title="Previous">‹</button>
+<button aria-label="Next artifact" class="modal-close" id="modal-next-btn" title="Next">›</button>
+<button aria-label="Close" class="modal-close" id="modal-close-btn">×</button>
+</div>
+</div>
+<div class="modal-body" id="modal-body"></div>
+</div>
+</div>
+<script>
+(function() {
+  var artifacts = {
+    'L1: Measure Category Overview': { html: `
+      <p style="font-size:13px;color:var(--ink2);margin-bottom:20px;line-height:1.6;">The Star Watch landing view: CMS Star Rating and Measure Category Performance grid, filterable by facility, specialty, department, or doctor.</p>
+      <img src="images/28cf860bada3.webp" alt="Star Watch overview: Measure Category Performance for Mortality, Readmission, Safety of Care, and Patient Experience" style="display:block;width:100%;height:auto;border:1px solid var(--border);border-radius:8px;">` },
+
+    'L2: Mortality Category Detail': { html: `
+      <p style="font-size:13px;color:var(--ink2);margin-bottom:20px;line-height:1.6;">Drilling into the Mortality category reveals a trend chart against CMS and Premier benchmarks alongside the full measures table, with Exceeds / Fails / Does Not Qualify status per measure.</p>
+      <img src="images/52bf08837609.webp" alt="Mortality measure category detail with trend chart and full measures table" style="display:block;width:100%;height:auto;border:1px solid var(--border);border-radius:8px;">` },
+
+    'L3: AMI Measure Detail': { html: `
+      <p style="font-size:13px;color:var(--ink2);margin-bottom:20px;line-height:1.6;">Individual measure detail for Acute Myocardial Infarction 30-Day Mortality Rate, including a Service Line Performance breakdown.</p>
+      <img src="images/a83ede1f2ba0.webp" alt="Acute Myocardial Infarction 30-Day Mortality Rate measure detail with service line performance breakdown" style="display:block;width:100%;height:auto;border:1px solid var(--border);border-radius:8px;">` },
+
+    'L3: AMI Measure Detail, Show Projection': { html: `
+      <p style="font-size:13px;color:var(--ink2);margin-bottom:20px;line-height:1.6;">The same measure view with Show Projection enabled, overlaying an estimated CMS rate, confidence range, and hover tooltip for forward-looking benchmarking.</p>
+      <img src="images/e4791de6b296.webp" alt="Acute Myocardial Infarction measure detail with Show Projection enabled, revealing a forecast band and hover tooltip" style="display:block;width:100%;height:auto;border:1px solid var(--border);border-radius:8px;">` }
+  };
+
+  var cardEls = document.querySelectorAll('.artifact-card');
+  var keyOrder = [];
+  cardEls.forEach(function(card) {
+    var label = card.querySelector('.artifact-label');
+    if (!label) return;
+    var key = label.textContent.trim().replace(' ↗','');
+    if (!artifacts[key]) return;
+    keyOrder.push(key);
+    card.setAttribute('tabindex','0');
+    card.setAttribute('role','button');
+    card.setAttribute('aria-label','View full ' + key);
+    card.addEventListener('click', function() { openModal(key); });
+    card.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){e.preventDefault();openModal(key);} });
+  });
+
+  var modal = document.getElementById('artifact-modal');
+  var modalTitle = document.getElementById('modal-title-text');
+  var modalBody = document.getElementById('modal-body');
+  var closeBtn = document.getElementById('modal-close-btn');
+  var prevBtn = document.getElementById('modal-prev-btn');
+  var nextBtn = document.getElementById('modal-next-btn');
+  var currentIndex = -1;
+
+  function renderModal() {
+    var key = keyOrder[currentIndex];
+    modalTitle.textContent = key;
+    modalBody.innerHTML = artifacts[key].html;
+    modalBody.scrollTop = 0;
+  }
+  function openModal(key) {
+    currentIndex = keyOrder.indexOf(key);
+    if (currentIndex === -1) currentIndex = 0;
+    renderModal();
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+  }
+  function showNext() {
+    if (!keyOrder.length) return;
+    currentIndex = (currentIndex + 1) % keyOrder.length;
+    renderModal();
+  }
+  function showPrev() {
+    if (!keyOrder.length) return;
+    currentIndex = (currentIndex - 1 + keyOrder.length) % keyOrder.length;
+    renderModal();
+  }
+  function closeModal() {
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+    modalBody.innerHTML = '';
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  nextBtn.addEventListener('click', showNext);
+  prevBtn.addEventListener('click', showPrev);
+  modal.addEventListener('click', function(e){ if(e.target===modal) closeModal(); });
+  document.addEventListener('keydown', function(e){
+    if (!modal.classList.contains('open')) return;
+    if (e.key==='Escape') closeModal();
+    else if (e.key==='ArrowRight') showNext();
+    else if (e.key==='ArrowLeft') showPrev();
+  });
+})();
+</script>
+</body>
+</html>

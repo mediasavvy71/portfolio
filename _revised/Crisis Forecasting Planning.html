@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Designing a crisis forecasting MVP under uncertainty · William Teppig</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --white:      #ffffff;
+  --offwhite:   #f8f8f6;
+  --surface:    #f2f2ef;
+  --border:     #e4e4e0;
+  --border2:    #d0d0cb;
+  --ink:        #1a1a18;
+  --ink2:       #4a4a46;
+  --ink3:       #8a8a84;
+  --teal:       #006d77;
+  --teal-light: #e8f4f5;
+  --teal-mid:   #b2d8dc;
+  --slate:      #3d5a6c;
+  --slate-light:#edf2f5;
+  --amber:      #b5621e;
+  --amber-light:#fdf0e6;
+  --teal-d:     #00555e;
+  --green:      #3b6d11;
+  --green-light:#eaf3de;
+  --red:        #a32d2d;
+  --red-light:  #fcebeb;
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+  --serif:      'DM Serif Display', Georgia, serif;
+  --sans:       'Inter', -apple-system, sans-serif;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:  0 4px 16px rgba(0,0,0,.07), 0 1px 4px rgba(0,0,0,.04);
+  --shadow-lg:  0 12px 40px rgba(0,0,0,.09), 0 2px 8px rgba(0,0,0,.05);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--offwhite);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(248,248,246,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.nav-brand {
+  font-size: 12px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+  display: inline-flex; align-items: center;
+}
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  font-size: 12px; font-weight: 500; color: var(--ink2);
+  text-decoration: none; letter-spacing: .02em; transition: color .15s;
+}
+.nav-links a:hover { color: var(--teal); }
+.nav-resume {
+  font-size: 11px; font-weight: 600; letter-spacing: .06em;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+  border: 1px solid var(--border2); border-radius: 20px;
+  padding: 7px 16px; transition: background .15s, border-color .15s;
+}
+.nav-resume:hover { background: var(--white); border-color: var(--ink3); }
+
+/* ─── HERO (centered variant) ─── */
+.hero {
+  background: var(--white);
+  padding: 72px 48px 64px;
+}
+.hero-inner { max-width: 1080px; margin: 0 auto; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--teal);
+  margin-bottom: 24px;
+}
+.hero-eyebrow::before { display: none; }
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(34px, 4.6vw, 52px);
+  font-weight: 400; line-height: 1.15; color: var(--ink);
+  margin-bottom: 24px;
+}
+.hero h1 em { color: var(--teal); font-style: italic; }
+.hero-sub {
+  font-size: 17px; color: var(--ink2);
+  line-height: 1.65; margin-bottom: 48px; font-weight: 400;
+}
+.hero-meta {
+  display: flex; flex-wrap: wrap; gap: 0;
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  overflow: hidden; background: var(--offwhite);
+}
+.hero-meta-item { padding: 20px 26px; flex: 1; min-width: 180px; border-right: 1px solid var(--border); }
+.hero-meta-item:last-child { border-right: none; }
+.meta-label { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); margin-bottom: 6px; }
+.meta-val { font-size: 13.5px; font-weight: 500; color: var(--ink); line-height: 1.4; }
+
+/* ─── OVERVIEW / CONTRIBUTIONS STRIP ─── */
+.overview-strip { background: var(--white); padding: 0 48px 72px; border-bottom: 1px solid var(--border); }
+.overview-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr; gap: 56px; }
+.overview-inner h3 { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--teal); margin-bottom: 14px; }
+.overview-inner p { font-size: 15px; color: var(--ink2); line-height: 1.75; }
+.contrib-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.contrib-list li { font-size: 14px; color: var(--ink2); line-height: 1.55; padding-left: 20px; position: relative; }
+.contrib-list li::before { content: '–'; position: absolute; left: 0; color: var(--teal); }
+
+/* ─── IMPACT BAR ─── */
+.impact-bar { background: var(--teal); padding: 40px 48px; }
+.impact-inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+.impact-stat { padding: 0 32px; border-right: 1px solid rgba(255,255,255,.2); }
+.impact-stat:first-child { padding-left: 0; }
+.impact-stat:last-child { border-right: none; }
+.impact-num { font-family: var(--serif); font-size: 44px; color: #fff; line-height: 1; margin-bottom: 6px; }
+.impact-desc { font-size: 13px; color: rgba(255,255,255,.78); line-height: 1.5; }
+
+/* ─── SECTIONS ─── */
+.section { padding: 80px 48px; border-bottom: 1px solid var(--border); }
+.section:nth-child(even) { background: var(--white); }
+.section:nth-child(odd)  { background: var(--offwhite); }
+.section-inner { max-width: 1080px; margin: 0 auto; }
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 10px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 16px;
+}
+.section-label span {
+  background: var(--teal-light); color: var(--teal);
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0;
+}
+h2.section-title {
+  font-family: var(--serif); font-size: clamp(26px, 3vw, 36px);
+  font-weight: 400; color: var(--ink); line-height: 1.25; margin-bottom: 40px; max-width: 760px;
+}
+
+/* ─── LAYOUT GRIDS ─── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.three-col { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+
+/* ─── ROLE CALLOUT ─── */
+.role-callout { background: var(--slate-light); border: 1px solid #c8d8e4; border-radius: var(--radius-md); padding: 28px 32px; margin-bottom: 40px; }
+.role-callout h3 { font-size: 13px; font-weight: 700; color: var(--slate); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+.role-callout ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.role-callout li { font-size: 14px; color: var(--ink2); line-height: 1.5; padding-left: 22px; }
+.role-callout li::before { content: '→'; color: var(--slate); font-weight: 600; display: inline-block; width: 22px; margin-left: -22px; }
+
+/* ─── PROBLEM CARDS ─── */
+.problem-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 28px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+.problem-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--teal); }
+.problem-card h3 { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 10px; line-height: 1.3; }
+.problem-card p { font-size: 14px; color: var(--ink2); line-height: 1.6; }
+
+/* ─── QUOTE ─── */
+.pullquote { background: var(--teal-light); border-left: 4px solid var(--teal); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 28px 32px; margin: 40px 0; }
+.pullquote blockquote { font-family: var(--serif); font-size: 20px; font-style: italic; color: var(--teal); line-height: 1.5; margin-bottom: 12px; }
+.pullquote cite { font-size: 12px; font-weight: 600; color: var(--ink2); letter-spacing: .06em; text-transform: uppercase; font-style: normal; }
+
+/* ─── PERSONA CARDS ─── */
+.persona-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 24px; box-shadow: var(--shadow-sm); }
+.persona-avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 19px; margin-bottom: 14px; background: var(--teal-light); }
+.persona-name { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.persona-role { font-size: 11px; color: var(--teal); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px; }
+.persona-card p { font-size: 13px; color: var(--ink2); line-height: 1.55; margin-bottom: 10px; }
+.persona-need { background: var(--teal-light); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 12px; color: var(--teal); font-style: italic; line-height: 1.5; }
+
+/* ─── PROCESS STEPS ─── */
+.process-track { display: flex; gap: 0; position: relative; margin: 40px 0 8px; }
+.process-track::before { content: ''; position: absolute; top: 24px; left: 24px; right: 24px; height: 2px; background: var(--border2); z-index: 0; }
+.process-step { flex: 1; text-align: center; position: relative; z-index: 1; padding: 0 8px; }
+.step-dot {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--white); border: 2px solid var(--teal-mid);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px; font-size: 15px; box-shadow: var(--shadow-sm);
+}
+.process-step.active .step-dot { background: var(--teal); border-color: var(--teal); color: #fff; }
+.step-label { font-size: 11px; font-weight: 600; color: var(--ink2); line-height: 1.3; }
+.step-sub { font-size: 10px; color: var(--ink3); margin-top: 3px; }
+
+/* ─── ARTIFACT GRID ─── */
+.artifact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 32px; }
+.artifact-card { border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-sm); background: var(--white); }
+.artifact-screen { background: var(--surface); aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; padding: 16px; }
+.artifact-screen-inner { width: 100%; background: var(--white); border-radius: var(--radius-sm); border: 1px solid var(--border); padding: 10px; height: 100%; display: flex; flex-direction: column; gap: 6px; }
+.mock-bar { height: 7px; border-radius: 4px; background: var(--border); }
+.mock-bar.teal { background: var(--teal-mid); }
+.mock-bar.short { width: 55%; }
+.mock-bar.shorter { width: 35%; }
+.mock-row { display: flex; gap: 5px; }
+.mock-block { flex: 1; height: 24px; border-radius: 3px; background: var(--surface); border: 1px solid var(--border); }
+.mock-block.teal { background: var(--teal-light); border-color: var(--teal-mid); }
+.mock-block.sm { height: 16px; }
+.artifact-label { padding: 10px 12px; font-size: 10.5px; font-weight: 600; color: var(--ink2); border-top: 1px solid var(--border); }
+.artifact-label span { display: block; font-size: 9.5px; font-weight: 500; color: var(--ink3); margin-top: 2px; }
+
+/* ─── RESULTS ─── */
+.result-list { display: flex; flex-direction: column; gap: 16px; }
+.result-item { display: flex; align-items: flex-start; gap: 16px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 20px 24px; box-shadow: var(--shadow-sm); }
+.result-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--teal-light); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+.result-item h4 { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.result-item p { font-size: 13px; color: var(--ink2); line-height: 1.55; }
+
+/* ─── UTILITIES ─── */
+.text-sm { font-size: 13px; color: var(--ink2); line-height: 1.65; }
+.text-body { font-size: 15px; color: var(--ink2); line-height: 1.7; }
+.mt-8 { margin-top: 8px; } .mt-16 { margin-top: 16px; } .mt-24 { margin-top: 24px; } .mt-32 { margin-top: 32px; }
+.mb-24 { margin-bottom: 24px; } .mb-32 { margin-bottom: 32px; }
+.gap-col { display: flex; flex-direction: column; gap: 16px; }
+.tag-right { text-align: right; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); margin-bottom: 14px; }
+
+/* ─── FOOTER ─── */
+footer { background: var(--ink); padding: 48px; text-align: center; }
+footer p { font-size: 13px; color: rgba(255,255,255,.4); }
+footer strong { color: rgba(255,255,255,.75); }
+
+@media (max-width: 768px) {
+  nav { padding-left: 20px; padding-right: 20px; }
+  .hero, .section, .impact-bar, .overview-strip { padding-left: 20px; padding-right: 20px; }
+  .two-col, .three-col, .overview-inner, .artifact-grid { grid-template-columns: 1fr; }
+  .impact-inner { grid-template-columns: 1fr; gap: 24px; }
+  .impact-stat { border-right: none; padding-left: 0; }
+  .hero-meta { flex-direction: column; }
+  .process-track { flex-direction: column; gap: 16px; }
+  .process-track::before { display: none; }
+}
+
+/* ─── ARTIFACT CARD INTERACTION ─── */
+.artifact-card { cursor: pointer; transition: transform .15s, box-shadow .15s; }
+.artifact-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.artifact-card .artifact-label { position: relative; }
+.artifact-card .artifact-label::after { content: '⤢ View'; position: absolute; right: 12px; top: 10px; font-size: 9.5px; font-weight: 700; color: var(--teal); opacity: 0; transition: opacity .15s; }
+.artifact-card:hover .artifact-label::after { opacity: 1; }
+
+/* ─── LIGHTBOX ─── */
+#lightbox {
+  display: none; position: fixed; inset: 0; z-index: 1000;
+  background: rgba(20,20,18,.86); backdrop-filter: blur(4px);
+  align-items: center; justify-content: center; padding: 40px;
+}
+#lightbox.open { display: flex; }
+.lightbox-box {
+  background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
+  width: 100%; max-width: 1040px; max-height: calc(100vh - 80px);
+  display: flex; flex-direction: column; overflow: hidden;
+  animation: lightbox-in .18s ease;
+}
+@keyframes lightbox-in { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.lightbox-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px; border-bottom: 1px solid var(--border); flex-shrink: 0; gap: 16px;
+}
+.lightbox-title-wrap { min-width: 0; }
+.lightbox-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.lightbox-desc { font-size: 12.5px; color: var(--ink2); line-height: 1.5; }
+.lightbox-close {
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+  border: 1px solid var(--border); background: var(--offwhite); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+  color: var(--ink2); line-height: 1; transition: background .12s;
+}
+.lightbox-close:hover { background: var(--border); }
+.lightbox-body { position: relative; overflow-y: auto; background: var(--surface); display: flex; align-items: center; justify-content: center; flex: 1; }
+.lightbox-body img { width: 100%; display: block; }
+.lightbox-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border);
+  background: rgba(255,255,255,.92); cursor: pointer; font-size: 18px; color: var(--ink);
+  display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md);
+  transition: background .12s;
+}
+.lightbox-nav:hover { background: var(--white); }
+.lightbox-nav.prev { left: 16px; }
+.lightbox-nav.next { right: 16px; }
+.lightbox-footer { padding: 12px 24px; border-top: 1px solid var(--border); flex-shrink: 0; text-align: center; font-size: 11px; color: var(--ink3); }
+
+/* ─── HERO MOCKUP ─── */
+.hero-mockup-img { width: 100%; display: block; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow-lg); margin-top: 48px; }
+
+@media (max-width: 768px) {
+  .lightbox-nav { width: 36px; height: 36px; font-size: 15px; }
+  #lightbox { padding: 16px; }
+}
+
+</style>
+<style>.case-brief{max-width:1080px;margin:32px auto;padding:24px 30px;border:1px solid #cad8e4;border-left:5px solid #467f9d;border-radius:12px;background:#f6f9fb;color:#20394c}.case-brief h2{font-size:1.2rem!important;margin:0 0 12px!important;color:#19334a!important}.case-brief p{font-size:1rem;line-height:1.65;margin:8px 0;color:#284155}@media(max-width:700px){.case-brief{margin:20px 16px;padding:18px}}</style><style>
+/* Match the contribution callout treatment used across case studies. */
+.overview-inner .role-callout h3 { color: var(--slate); font-size: 13px; margin-bottom: 12px; }
+</style><style>
+/* Shared, responsive case-study impact bar */
+.impact-bar { background: var(--teal, #176a70); padding: 32px clamp(20px, 5vw, 48px); color: #fff; }
+.impact-bar .impact-eyebrow { max-width:1080px; margin:0 auto 22px; color:rgba(255,255,255,.76); font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+.impact-bar .impact-inner { max-width:1080px; margin:0 auto; display:grid; grid-template-columns:repeat(var(--impact-count, 3),minmax(0,1fr)); gap:0; }
+.impact-bar .impact-stat { min-width:0; padding:0 24px; border-right:1px solid rgba(255,255,255,.24); }
+.impact-bar .impact-stat:first-child { padding-left:0; }
+.impact-bar .impact-stat:last-child { border-right:0; }
+.impact-bar .impact-num { color:#fff; font-size:clamp(30px,4.4vw,50px); line-height:1.08; margin:0 0 8px; font-weight:650; overflow-wrap:anywhere; }
+.impact-bar .impact-desc { color:rgba(255,255,255,.9); font-size:14px; line-height:1.5; max-width:260px; }
+@media(max-width:640px) {
+ .impact-bar .impact-inner { grid-template-columns:1fr; gap:16px; }
+ .impact-bar .impact-stat, .impact-bar .impact-stat:first-child { padding:0 0 16px; border-right:0; border-bottom:1px solid rgba(255,255,255,.24); }
+ .impact-bar .impact-stat:last-child { border-bottom:0; padding-bottom:0; }
+}
+</style><link href="case-study-typography.css" rel="stylesheet"/><style id="crisis-index-theme">/* Crisis Forecasting uses the amber palette assigned on index.html (.feature-amber). */
+:root { --teal:#b5621e; --teal-light:#fdf0e6; --teal-mid:#e8b98a; --teal-d:#914c17; }
+/* Preserve white contrast for the impact bar. */
+.impact-bar { background-color:#b5621e; }
+</style><style id="index-navigation-unified">
+/* Index navigation: identical styles on all case studies */
+body > nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(248,248,246,.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+body > nav .nav-brand {
+  font-size: 12px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink); text-decoration: none;
+  display: inline-flex; align-items: center;
+}
+body > nav .nav-links { display: flex; gap: 32px; align-items: center; }
+body > nav .nav-links a {
+  font-size: 12px; font-weight: 500; color: var(--ink2);
+  text-decoration: none; letter-spacing: .02em; transition: color .15s;
+}
+body > nav .nav-links a:hover { color: var(--teal); }
+body > nav .nav-resume {
+  font-size: 11px; font-weight: 600; letter-spacing: .06em;
+  color: var(--ink); text-decoration: none; white-space: nowrap;
+  border: 1px solid var(--border2); border-radius: 20px;
+  padding: 7px 16px; transition: background .15s, border-color .15s;
+}
+body > nav .nav-resume:hover { background: var(--white); border-color: var(--ink3); }
+@media(max-width:700px){body > nav{padding-left:20px;padding-right:20px;gap:12px}body > nav .nav-links{gap:12px;flex-wrap:wrap}body > nav .nav-links a{white-space:nowrap}}
+</style>
+<style>
+/* Shared bottom navigation across the five portfolio case studies */
+.portfolio-case-pager{background:#fff;border-top:1px solid #e4e4e0;padding:48px clamp(20px,5vw,48px);font-family:var(--sans,'Inter',sans-serif)}
+.portfolio-case-pager__inner{max-width:1080px;margin:auto}
+.portfolio-case-pager__heading{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#77776f;margin:0 0 18px}
+.portfolio-case-pager__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.portfolio-case-pager__card{display:flex;flex-direction:column;gap:10px;padding:24px;border:1px solid #e4e4e0;border-radius:10px;background:#fff;text-decoration:none;color:#1a1a18;min-width:0;transition:border-color .2s,box-shadow .2s,transform .2s}
+.portfolio-case-pager__card:hover,.portfolio-case-pager__card:focus-visible{border-color:var(--navy,#1e3a5f);box-shadow:0 5px 20px rgba(0,0,0,.08);transform:translateY(-2px)}
+.portfolio-case-pager__direction{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--navy,#1e3a5f)}
+.portfolio-case-pager__title{font-family:var(--serif,Georgia,serif);font-size:clamp(19px,2.1vw,24px);line-height:1.25;font-weight:400}
+.portfolio-case-pager__meta{font-size:12px;color:#77776f;margin-top:auto}
+.portfolio-case-pager__all{display:inline-block;margin-top:22px;font-size:13px;font-weight:600;color:var(--navy,#1e3a5f);text-decoration:none}
+.portfolio-case-pager__all:hover{text-decoration:underline}
+@media(max-width:640px){.portfolio-case-pager__grid{grid-template-columns:1fr}.portfolio-case-pager{padding-top:32px;padding-bottom:32px}}
+</style><style id="cs-contrib-style">
+/* My Contributions: shared styling matched to Case Study 01 */
+.cs-contrib-band{background:#f8f8f6;padding:56px 48px;border-bottom:1px solid #e4e4e0;}
+.cs-contrib-band .section-inner{max-width:1080px;margin:0 auto;}
+.cs-contrib-band .role-callout{background:#edf2f5;border:1px solid #c8d8e4;border-radius:12px;padding:28px 32px;margin:0;box-shadow:none;max-width:none;}
+.cs-contrib-band .role-callout h3{font-family:'Inter',-apple-system,sans-serif;font-size:13px;font-weight:700;color:#3d5a6c;text-transform:uppercase;letter-spacing:.08em;line-height:normal;margin:0 0 12px;}
+.cs-contrib-band .role-callout ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin:0;padding:0;}
+.cs-contrib-band .role-callout li{display:block;font-family:'Inter',-apple-system,sans-serif;font-size:14px;color:#4a4a46;line-height:1.5;padding-left:22px;margin:0;}
+.cs-contrib-band .role-callout li::before{content:'\2192';color:#3d5a6c;font-weight:600;display:inline-block;width:22px;margin-left:-22px;}
+.cs-contrib-band .role-callout h3::before,.cs-contrib-band .role-callout h3::after{content:none;display:none;}
+@media (max-width:640px){.cs-contrib-band{padding:40px 20px;}}
+</style>
+<style id="cs-standard-2026">
+.glance{max-width:1176px;margin:56px auto 8px;padding:0 48px;font-family:'Inter',-apple-system,sans-serif}
+.glance-box{border:1px solid #e4e4e0;border-radius:16px;background:#f8f8f6;padding:32px 36px}
+.glance-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px}
+.glance-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#006d77}
+.glance-time{font-size:12px;color:#8a8a84}
+.glance-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
+.glance-item h4{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a8a84;margin:0 0 8px}
+.glance-item p{font-size:14.5px;line-height:1.6;color:#1a1a18;margin:0}
+.glance-item p.meas{font-size:12.5px;color:#4a4a46;margin-top:10px;padding-top:10px;border-top:1px solid #e4e4e0}
+.cs-todo{display:block;margin-top:10px;font-size:12px;line-height:1.5;color:#7a4a12;background:#fdf0e6;border:1px dashed #e0a160;border-radius:6px;padding:6px 10px}
+.result-list.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cs-close{background:#1a1a18;color:#fff;padding:88px 48px;font-family:'Inter',-apple-system,sans-serif}
+.cs-close-inner{max-width:1080px;margin:0 auto}
+.cs-close-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#b2d8dc;margin-bottom:18px}
+.cs-close-takeaway{font-family:'DM Serif Display',Georgia,serif;font-size:clamp(24px,3vw,34px);line-height:1.3;color:#fff;max-width:860px;margin:0 0 18px}
+.cs-close-body{font-size:16px;line-height:1.7;color:rgba(255,255,255,.78);max-width:760px;margin:0 0 40px}
+.cs-close-next{border-top:1px solid rgba(255,255,255,.18);padding-top:28px;margin-bottom:44px}
+.cs-close-next h3{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;margin:0 0 14px;font-family:'Inter',sans-serif}
+.cs-close-next ul{margin:0;padding-left:20px}
+.cs-close-next li{font-size:15.5px;line-height:1.65;color:rgba(255,255,255,.85);margin-bottom:8px}
+.cs-close .cs-todo{display:inline-block;margin:0 0 12px}
+.cs-close-nav{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.cs-close-nav a{color:#fff;text-decoration:none;font-size:14px;font-weight:600}
+.cs-close-nav a.next{background:#fff;color:#1a1a18;border-radius:24px;padding:13px 24px}
+.cs-close-nav a.next span{color:#006d77}
+.cs-close-nav a.back{color:rgba(255,255,255,.7)}
+.cs-close-nav a:hover{opacity:.85}
+@media(max-width:900px){.glance-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.result-list.result-grid{grid-template-columns:1fr}.glance{padding:0 20px;margin-top:36px}.glance-box{padding:24px}.glance-grid{grid-template-columns:1fr;gap:20px}.cs-close{padding:64px 24px}}
+</style>
+<style id="site-nav-style">
+nav.site-nav{position:sticky;top:0;z-index:1000;background:rgba(248,248,246,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid #e4e4e0;padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:64px;margin:0;box-shadow:none;font-family:'Inter',-apple-system,sans-serif;box-sizing:border-box;width:100%}
+nav.site-nav .nav-brand{display:inline-flex;align-items:center;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#1a1a18}
+nav.site-nav .nav-links{display:flex;gap:32px;align-items:center;margin:0;padding:0}
+nav.site-nav .nav-links a{font-size:12px;font-weight:500;color:#4a4a46;text-decoration:none;letter-spacing:.02em;transition:color .15s;padding:0;border:0;background:none;line-height:1.6}
+nav.site-nav .nav-links a:hover{color:#006d77}
+nav.site-nav .nav-links a.nav-resume{font-size:12px;font-weight:500;letter-spacing:.02em;color:#4a4a46;white-space:nowrap;border:1px solid #d0d0cb;border-radius:20px;padding:7px 16px;transition:background .15s,border-color .15s}
+nav.site-nav .nav-links a.nav-resume:hover{background:#fff;border-color:#8a8a84;color:#1a1a18}
+@media (max-width:640px){
+ nav.site-nav{flex-wrap:wrap;height:auto;padding:12px 24px;gap:10px}
+ nav.site-nav .nav-links{flex-wrap:wrap;gap:12px 18px;justify-content:flex-start}
+}
+</style>
+<style id="glance-white-bg">
+/* At a glance: full-width white band instead of the page's gray background */
+section.glance{max-width:none;margin:0;background:#fff;padding:56px max(48px,calc((100% - 1176px)/2 + 48px)) 8px}
+@media(max-width:640px){section.glance{padding:36px 20px 8px}}
+</style>
+<style id="footer-email-style">
+footer .footer-email{margin-top:10px;font-size:13px}
+footer .footer-email a{color:inherit;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px;transition:opacity .15s}
+footer .footer-email a:hover{opacity:.75}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav class="site-nav" id="top" aria-label="Main">
+<a class="nav-brand" href="index.html#top"><img alt="William Teppig" src="images/f77d54b9a753.webp" style="height:28px;width:auto;display:block;"/></a>
+<div class="nav-links">
+<a href="index.html#work">Work</a>
+<a href="index.html#leadership">Leadership</a>
+<a href="index.html#process">How I Work</a>
+<a href="index.html#about">About</a>
+</div>
+</nav>
+<!-- HERO -->
+<section class="hero">
+<div class="hero-inner">
+<div class="hero-eyebrow">Premier · Crisis Response</div>
+<h1 class="t-h1">Designing a crisis forecasting MVP under uncertainty</h1>
+<p class="hero-sub">During the early COVID-19 crisis, the team needed an early-warning product before the audience, data model, and requirements had stabilized. I led UX decisions for a focused MVP, balancing speed, evolving evidence, and the needs of three different user groups.</p>
+<img alt="Crisis Forecasting and Planning: county drill-down showing active and predicted cases with a confidence band, and facility-level bed capacity" class="hero-mockup-img" src="images/a321607bde94.webp"/>
+</div>
+</section>
+<!-- OVERVIEW -->
+<div class="overview-strip">
+<div class="overview-inner" style="grid-template-columns:1fr;">
+<div>
+<h3>Overview</h3>
+<p>Premier's Crisis Forecasting and Planning tool used the company's national database to track Covid-19 symptoms nationally and predict where outbreaks would emerge next, so resources could reach frontline healthcare workers before a crisis peaked. Almost nothing about the problem was settled when design work started: not the users, not the data, not the format an "outbreak forecast" should even take. This case study is about designing inside that uncertainty, and treating the absence of a brief as a design constraint in its own right, rather than waiting for one to arrive.</p>
+</div>
+</div>
+</div>
+<!-- IMPACT BAR -->
+<div aria-label="Impact and results" class="impact-bar" style=";background-color:#b5621e;"><div class="impact-eyebrow t-kicker">Impact &amp; Results</div><div class="impact-inner" style="--impact-count:3"><div class="impact-stat"><div class="impact-num t-impact-num">MVP</div><div class="impact-desc t-impact-desc">Shipped despite evolving requirements</div></div><div class="impact-stat"><div class="impact-num t-impact-num">3</div><div class="impact-desc t-impact-desc">Distinct audiences considered</div></div><div class="impact-stat"><div class="impact-num t-impact-num">Weeks</div><div class="impact-desc t-impact-desc">Compressed discovery-to-delivery cycle</div></div></div></div>
+
+
+<!-- AT A GLANCE (30-second summary) -->
+<section class="glance" aria-label="At a glance"><div class="glance-box">
+<div class="glance-head"><div class="glance-label">At a glance</div></div>
+<div class="glance-grid">
+<div class="glance-item"><h4>The problem</h4><p>Early in COVID-19, Premier needed an outbreak early-warning product before its users, data model or requirements had been settled.</p></div>
+<div class="glance-item"><h4>My role &amp; team</h4><p>Principal UX Designer. Partnered with Premier Supply Chain Management, data science and engineering, with weekly and sometimes daily reviews as the model changed.</p></div>
+<div class="glance-item"><h4>Key decision</h4><p>Design one forecast for three audiences at different levels of detail, skip lo-fi, and treat every high-fidelity build as a hypothesis reviewed with data science.</p></div>
+<div class="glance-item"><h4>Outcome</h4><p>An MVP shipped in weeks on Premier's existing BI reporting platform, and the way of working was reused on later crisis-response efforts.</p></div>
+</div></div></section>
+
+<!-- SECTION 1: CONTEXT -->
+<section class="section" id="context">
+<div class="section-inner">
+<div class="section-label t-kicker"><span>1</span>Context &amp; the Absence of a Brief</div>
+<h2 class="section-title t-h2">Three kinds of ambiguity, all unresolved at the same time</h2>
+<div class="three-col">
+<div class="problem-card">
+<h3>No Precedent</h3>
+<p>There was no existing outbreak-forecasting product for individual hospital systems to adapt: no established layout, no interaction pattern, no prior version to critique. Every screen was a first draft of a category that didn't exist yet.</p>
+</div>
+<div class="problem-card">
+<h3>A Moving Data Model</h3>
+<p>The forecasting model itself was being built in parallel with the interface. Predictions, and how confident the model was in them, changed week to week, meaning the UI had to represent uncertainty that was itself still in motion.</p>
+</div>
+<div class="problem-card">
+<h3>An Undefined Audience</h3>
+<p>State and regional health authorities, hospital administrators, and frontline clinicians all needed the same underlying data, but for different decisions, at different levels of detail, and nobody had yet decided who the tool served first.</p>
+</div>
+</div>
+<div class="pullquote mt-32">
+<blockquote>"We don't fully know what the model is going to tell us yet. Design something we can be wrong about, and change every week."</blockquote>
+<cite>Supply Chain Executive, Week One</cite>
+</div>
+</div>
+</section>
+<!-- SECTION 2: NAVIGATING THE UNKNOWN -->
+<section class="section" id="navigating">
+<div class="section-inner">
+<div class="section-label t-kicker"><span>2</span>Navigating the Unknown</div>
+<h2 class="section-title t-h2">Designing for three audiences before any of them were formally scoped</h2>
+<p class="text-body mb-32 t-body">Rather than wait for stakeholders to settle on a single primary user, I worked from the assumption that all three groups would need to use the same underlying forecast, just at different altitudes. That assumption became the organizing principle for the interface, and it held up as the project matured.</p>
+<div class="three-col">
+<div class="persona-card">
+<div class="persona-avatar">🗺️</div>
+<div class="persona-name">Public Health Authority</div>
+<div class="persona-role">State / Regional</div>
+<p>Needed to see where outbreaks were predicted to worsen at a granular enough level to target a response, without shutting down an entire state.</p>
+<div class="persona-need">"Show me the ZIP codes, not just the state."</div>
+</div>
+<div class="persona-card">
+<div class="persona-avatar">🏥</div>
+<div class="persona-name">Hospital Administrator</div>
+<div class="persona-role">Facility Operations</div>
+<p>Needed enough lead time in a predicted spike to convert capacity, order PPE and drugs, and staff up before the surge arrived, not after.</p>
+<div class="persona-need">"Tell me early enough that I can actually do something about it."</div>
+</div>
+<div class="persona-card">
+<div class="persona-avatar">🩺</div>
+<div class="persona-name">Frontline Clinician</div>
+<div class="persona-role">Patient Care</div>
+<p>Needed a read on which patients were most likely to need hospitalization or the ICU, so at-risk patients could be watched more closely.</p>
+<div class="persona-need">"I don't need the national picture; I need this patient."</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: DESIGN UNDER UNCERTAINTY -->
+<section class="section" id="design">
+<div class="section-inner">
+<div class="section-label t-kicker"><span>3</span>Deciding Without Data to Validate Against</div>
+<h2 class="section-title t-h2">Skipping the safety net of a conventional design process, deliberately</h2>
+<p class="text-body mb-32 t-body">A standard discovery → wireframe → usability test → hi-fi cycle assumes time to validate assumptions before committing to them. That time didn't exist. So the process inverted: go straight to high-fidelity, treat each version as a hypothesis rather than a spec, and rely on tight, direct loops with the data science team to catch what testing normally would.</p>
+<div class="process-track">
+<div class="process-step">
+<div class="step-dot">1</div>
+<div class="step-label">Frame the Unknowns</div>
+<div class="step-sub">Name what wasn't settled instead of waiting on it</div>
+</div>
+<div class="process-step active">
+<div class="step-dot">2</div>
+<div class="step-label">Build Hi-Fi Directly</div>
+<div class="step-sub">Skip lo-fi; there was no time to validate twice</div>
+</div>
+<div class="process-step active">
+<div class="step-dot">3</div>
+<div class="step-label">Review With Data Science</div>
+<div class="step-sub">Weekly, sometimes daily, sync as the model changed</div>
+</div>
+<div class="process-step active">
+<div class="step-dot">4</div>
+<div class="step-label">Ship the Current Best Answer</div>
+<div class="step-sub">Not the final one; the current one</div>
+</div>
+<div class="process-step">
+<div class="step-dot">5</div>
+<div class="step-label">Reopen as Guidance Shifted</div>
+<div class="step-sub">Treat "done" as provisional</div>
+</div>
+</div>
+<div class="tag-right mt-32">First Hi-Fi Pass, No Lo-Fi Wireframes</div>
+<p class="text-body mb-24 t-body">These are the actual first hi-fidelity mockups, not wireframes. With no time for a lo-fi round, the county-level drill-down and the national heatmap were designed directly at production fidelity, then argued over and revised in place.</p>
+<div class="two-col">
+<div class="artifact-card">
+<img alt="Crisis Forecasting and Planning: county drill-down showing active and predicted cases with a confidence band, and facility-level bed capacity" src="images/a321607bde94.webp" style="width:100%; display:block; border-bottom:1px solid var(--border);"/>
+<div class="artifact-label">National Heatmap<span>Every county scored and ranked by predicted case growth and social activity grade, so a response could target the specific counties trending worst, not an entire state</span></div>
+</div>
+<div class="artifact-card">
+<img alt="Crisis Forecasting and Planning: national county-level heatmap of predicted Covid-19 cases" src="images/cb6a90def902.webp" style="width:100%; display:block; border-bottom:1px solid var(--border);"/>
+<div class="artifact-label">County Drill-Down<span>Active vs. predicted cases with a confidence band, plus facility-level staffed beds and market share, built so a hospital administrator could see lead time, not just a headline number</span></div>
+</div>
+</div>
+<h3 style="font-family: var(--serif); font-size: 22px; font-weight:400; margin: 40px 0 12px; color: var(--ink);">What Actually Shipped: the MVP</h3>
+<p class="text-body mb-24 t-body">The ambiguity didn't stop at users and data; it extended to how the thing got built. With no time to spec and staff a custom application, engineering shipped the first release on top of the team's existing BI reporting platform instead. It meant giving up bespoke interaction design in exchange for a working, data-connected product in weeks. The custom hi-fi direction above became the target; this MVP was the fastest path to something real in front of users.</p>
+<div class="three-col">
+<div class="artifact-card">
+<img alt="MVP dashboard, national map view, built on a BI reporting platform" src="images/cb51a86d63b1.webp" style="width:100%; display:block; border-bottom:1px solid var(--border);"/>
+<div class="artifact-label">Map View<span>County-level markers sized and colored by predicted case growth, built on the platform's stock geo-mapping layer rather than a custom map</span></div>
+</div>
+<div class="artifact-card">
+<img alt="MVP dashboard, all-counties chart view, built on a BI reporting platform" src="images/757f7520447f.webp" style="width:100%; display:block; border-bottom:1px solid var(--border);"/>
+<div class="artifact-label">All Counties View<span>Ranked growth-rate list plus predicted-vs-reported case trend with a confidence band: the reporting platform's native chart and filter controls, repurposed for outbreak tracking</span></div>
+</div>
+<div class="artifact-card">
+<img alt="MVP dashboard, county drill-down view, built on a BI reporting platform" src="images/9ded3d8c178c.webp" style="width:100%; display:block; border-bottom:1px solid var(--border);"/>
+<div class="artifact-label">County Drill-Down<span>Selecting a county filters the trend chart and the facility table below it, the same drill-down logic from the hi-fi concept, rebuilt in off-the-shelf report filters</span></div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: OUTCOMES -->
+<section class="section" id="outcomes">
+<div class="section-inner">
+<div class="section-label t-kicker"><span>4</span>Outcomes</div>
+<h2 class="section-title t-h2">The ambiguity didn't resolve before launch; the tool shipped anyway</h2>
+<div>
+<div class="result-list result-grid">
+<div class="result-item">
+<div class="result-icon">📍</div>
+<div>
+<h4>Targeted Response Over Blunt Shutdowns</h4>
+<p>Instead of shutting down a whole state during an outbreak, authorities could marshal resources to the specific ZIP codes where the model predicted conditions would worsen.</p>
+</div>
+</div>
+<div class="result-item">
+<div class="result-icon">🛏️</div>
+<div>
+<h4>Lead Time for Hospitals</h4>
+<p>Facilities could convert part of a hospital to a Covid-specific ward and order additional PPE, drugs, and equipment ahead of a predicted spike, instead of reacting to one already underway.</p>
+</div>
+</div>
+<div class="result-item">
+<div class="result-icon">🩺</div>
+<div>
+<h4>Earlier Clinical Risk Signals</h4>
+<p>Clinicians could better determine the risk that a particular patient would need hospitalization or the ICU, and watch at-risk patients more closely as a result.</p>
+</div>
+</div>
+<div class="result-item">
+<div class="result-icon">🔁</div>
+<div>
+<h4>A Repeatable Way to Work Under Uncertainty</h4>
+<p>The project became a working template for how to design when the brief, the data, and the users are all still forming, one Premier reused on later crisis-response efforts.</p>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</section>
+<!-- CASE STUDY NAV -->
+
+<!-- STANDARD ENDING -->
+<section class="cs-close"><div class="cs-close-inner">
+<div class="cs-close-label">Reflection</div>
+<p class="cs-close-takeaway">The absence of a brief is a design constraint, not a reason to wait.</p>
+<p class="cs-close-body">Treating each build as something to be argued with, and data science reviews as the stand-in for testing there wasn't time to run, became a repeatable way to design under uncertainty.</p>
+<div class="cs-close-next"><h3>What I'd do next</h3><ul><li>Move from the BI-platform MVP toward the custom high-fidelity direction that became the target.</li><li>Run the usability testing with all three audiences that the timeline didn't allow.</li></ul></div>
+<div class="cs-close-nav"><a class="back" href="index.html#work">← All work</a><a class="next" href="collections_agent_workstation.html">Next case study: <span>Moving complex decisions from agents to the system →</span></a></div>
+</div></section>
+<footer>
+<p><strong>Designing a crisis forecasting MVP under uncertainty</strong>  ·  William Teppig  ·  Premier Crisis Forecasting and Planning</p>
+<p class="footer-email"><a href="mailto:wteppig@gmail.com">wteppig@gmail.com</a></p>
+</footer>
+<!-- LIGHTBOX -->
+<div id="lightbox">
+<div class="lightbox-box">
+<div class="lightbox-header">
+<div class="lightbox-title-wrap">
+<div class="lightbox-title" id="lightbox-title"></div>
+<div class="lightbox-desc" id="lightbox-desc"></div>
+</div>
+<button aria-label="Close" class="lightbox-close" id="lightbox-close">×</button>
+</div>
+<div class="lightbox-body">
+<button aria-label="Previous" class="lightbox-nav prev" id="lightbox-prev">‹</button>
+<img alt="" id="lightbox-img" src=""/>
+<button aria-label="Next" class="lightbox-nav next" id="lightbox-next">›</button>
+</div>
+<div class="lightbox-footer" id="lightbox-counter"></div>
+</div>
+</div>
+<script>
+(function () {
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.artifact-card'));
+  var gallery = cards.map(function (card) {
+    var img = card.querySelector('img');
+    var label = card.querySelector('.artifact-label');
+    var span = label.querySelector('span');
+    var desc = span ? span.textContent : '';
+    var titleClone = label.cloneNode(true);
+    var spanInClone = titleClone.querySelector('span');
+    if (spanInClone) titleClone.removeChild(spanInClone);
+    var title = titleClone.textContent.trim();
+    return { src: img.src, alt: img.alt, title: title, desc: desc };
+  });
+
+  var lightbox = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lightbox-img');
+  var lbTitle = document.getElementById('lightbox-title');
+  var lbDesc = document.getElementById('lightbox-desc');
+  var lbCounter = document.getElementById('lightbox-counter');
+  var current = 0;
+
+  function render() {
+    var item = gallery[current];
+    lbImg.src = item.src;
+    lbImg.alt = item.alt;
+    lbTitle.textContent = item.title;
+    lbDesc.textContent = item.desc;
+    lbCounter.textContent = (current + 1) + ' / ' + gallery.length;
+  }
+
+  function open(idx) {
+    current = idx;
+    render();
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function close() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function prev() { current = (current - 1 + gallery.length) % gallery.length; render(); }
+  function next() { current = (current + 1) % gallery.length; render(); }
+
+  cards.forEach(function (card, idx) {
+    card.addEventListener('click', function () { open(idx); });
+  });
+
+  document.getElementById('lightbox-close').addEventListener('click', close);
+  document.getElementById('lightbox-prev').addEventListener('click', function (e) { e.stopPropagation(); prev(); });
+  document.getElementById('lightbox-next').addEventListener('click', function (e) { e.stopPropagation(); next(); });
+  lightbox.addEventListener('click', function (e) { if (e.target === lightbox) close(); });
+  document.addEventListener('keydown', function (e) {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowLeft') prev();
+    if (e.key === 'ArrowRight') next();
+  });
+})();
+</script>
+</body>
+</html>
