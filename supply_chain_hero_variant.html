@@ -8,7 +8,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
 :root{
   --white:#fff;--offwhite:#f8f8f6;--surface:#f2f2ef;--border:#e4e4e0;--border2:#d0d0cb;
-  --ink:#1a1a18;--ink2:#4a4a46;--ink3:#76766f;
+  --ink:#1a1a18;--ink2:#4a4a46;--ink3:#6b6b66;
   --teal:#006d77;--teal-d:#00555e;--teal-light:#e8f4f5;--teal-mid:#b2d8dc;
   --slate:#3d5a6c;--slate-light:#edf2f5;
   --amber:#9a520f;--amber-light:#fdf0e6;
@@ -63,7 +63,7 @@ nav{position:sticky;top:0;z-index:100;background:rgba(248,248,246,.92);backdrop-
   --jm-teal-head:#E2F5F2;  --jm-teal-bg:#e1f5f2;  --jm-teal-fg:#0a4d54;
   --jm-coral-head:#FBEEE4; --jm-coral-bg:#fbeee3; --jm-coral-fg:#8a3d10;
   --jm-amber-head:#FBF1D9; --jm-amber-bg:#fbf1d8; --jm-amber-fg:#7a5c07;
-  --jm-green-text:#2f7d32; --jm-blue-text:#1c5fa0; --jm-teal-text:#0f6e7a; --jm-coral-text:#c9591c; --jm-amber-text:#b8860b;
+  --jm-green-text:#276b2a; --jm-blue-text:#1c5fa0; --jm-teal-text:#0f6e7a; --jm-coral-text:#a8481a; --jm-amber-text:#8a6508;
   font-family: var(--sans); color: var(--jm-ink); background: var(--jm-card); padding: 8px;
 }
 .jm-scope table{ width:100%; border-collapse:collapse; table-layout:fixed; }
@@ -280,9 +280,9 @@ footer strong{color:rgba(255,255,255,.8)}
 .glance-box{border:1px solid #e4e4e0;border-radius:16px;background:#f8f8f6;padding:32px 36px}
 .glance-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:22px}
 .glance-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#006d77}
-.glance-time{font-size:12px;color:#8a8a84}
+.glance-time{font-size:12px;color:#6b6b66}
 .glance-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px}
-.glance-item h4{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a8a84;margin:0 0 8px}
+.glance-item h3{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6b6b66;margin:0 0 8px}
 .glance-item p{font-size:14.5px;line-height:1.6;color:#1a1a18;margin:0}
 .glance-item p.meas{font-size:12.5px;color:#4a4a46;margin-top:10px;padding-top:10px;border-top:1px solid #e4e4e0}
 .cs-todo{display:block;margin-top:10px;font-size:12px;line-height:1.5;color:#7a4a12;background:#fdf0e6;border:1px dashed #e0a160;border-radius:6px;padding:6px 10px}
@@ -305,6 +305,8 @@ footer strong{color:rgba(255,255,255,.8)}
 .cs-close-nav a:hover{opacity:.85}
 @media(max-width:900px){.glance-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.result-list.result-grid{grid-template-columns:1fr}.glance{padding:0 20px;margin-top:36px}.glance-box{padding:24px}.glance-grid{grid-template-columns:1fr;gap:20px}.cs-close{padding:64px 24px}}
+.glance-label{margin:0;font-family:'Inter',-apple-system,sans-serif;line-height:1.4}
+.glance-item h3{font-family:'Inter',-apple-system,sans-serif;line-height:1.4;font-style:normal}
 </style>
 <style id="site-nav-style">
 nav.site-nav{position:sticky;top:0;z-index:1000;background:rgba(248,248,246,.92);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid #e4e4e0;padding:0 48px;display:flex;align-items:center;justify-content:space-between;height:64px;margin:0;box-shadow:none;font-family:'Inter',-apple-system,sans-serif;box-sizing:border-box;width:100%}
@@ -313,7 +315,7 @@ nav.site-nav .nav-links{display:flex;gap:32px;align-items:center;margin:0;paddin
 nav.site-nav .nav-links a{font-size:12px;font-weight:500;color:#4a4a46;text-decoration:none;letter-spacing:.02em;transition:color .15s;padding:0;border:0;background:none;line-height:1.6}
 nav.site-nav .nav-links a:hover{color:#006d77}
 nav.site-nav .nav-links a.nav-resume{font-size:12px;font-weight:500;letter-spacing:.02em;color:#4a4a46;white-space:nowrap;border:1px solid #d0d0cb;border-radius:20px;padding:7px 16px;transition:background .15s,border-color .15s}
-nav.site-nav .nav-links a.nav-resume:hover{background:#fff;border-color:#8a8a84;color:#1a1a18}
+nav.site-nav .nav-links a.nav-resume:hover{background:#fff;border-color:#6b6b66;color:#1a1a18}
 @media (max-width:640px){
  nav.site-nav{flex-wrap:wrap;height:auto;padding:12px 24px;gap:10px}
  nav.site-nav .nav-links{flex-wrap:wrap;gap:12px 18px;justify-content:flex-start}
@@ -335,8 +337,26 @@ footer .footer-email{margin-top:10px;font-size:13px}
 footer .footer-email a{color:inherit;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:1px;transition:opacity .15s}
 footer .footer-email a:hover{opacity:.75}
 </style>
+<style id="a11y-base">
+.skip-link{position:absolute;left:12px;top:-80px;z-index:3000;background:#1a1a18;color:#fff;padding:10px 16px;border-radius:6px;font:600 14px/1.2 'Inter',-apple-system,sans-serif;text-decoration:none}
+.skip-link:focus{top:12px;outline:2px solid #006d77;outline-offset:2px}
+main:focus{outline:none}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+</style>
+<style id="a11y-contrast">
+/* Contrast fixes (WCAG 1.4.3) */
+footer p{color:rgba(255,255,255,.72)}
+.impact-eyebrow,.impact-eyebrow.t-kicker{color:#fff !important}
+.url-bar,.url-bar span,.chrome span{color:#b4b4b4 !important}
+.sn{color:#5f8696 !important}
+.principle-num{color:#5b7290}
+</style>
+<style id="a11y-reflow">/* Reflow at 320px (WCAG 1.4.10) */
+.two-col>*,.three-col>*{min-width:0}
+</style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to main content</a>
 
 <nav class="site-nav" id="top" aria-label="Main">
 <a class="nav-brand" href="index.html#top"><img alt="William Teppig" src="images/f77d54b9a753.webp" style="height:28px;width:auto;display:block;"/></a>
@@ -347,6 +367,7 @@ footer .footer-email a:hover{opacity:.75}
 <a href="index.html#about">About</a>
 </div>
 </nav>
+<main id="main" tabindex="-1">
 
 <!-- HERO -->
 <section class="hero">
@@ -371,12 +392,12 @@ footer .footer-email a:hover{opacity:.75}
 
 <!-- AT A GLANCE (30-second summary) -->
 <section class="glance" aria-label="At a glance"><div class="glance-box">
-<div class="glance-head"><div class="glance-label">At a glance</div></div>
+<div class="glance-head"><h2 class="glance-label">At a glance</h2></div>
 <div class="glance-grid">
-<div class="glance-item"><h4>The problem</h4><p>Approving a routine requisition in Premier's legacy ERP meant three menu levels, a 22-column queue, nine tabs and an approve/reject dialog where both boxes could be checked.</p></div>
-<div class="glance-item"><h4>My role &amp; team</h4><p>Principal UX Designer. Owned the Buyer experience: buyer interviews, the heuristic evaluation, journey mapping and redesigned screens on the Fireball Design System.</p></div>
-<div class="glance-item"><h4>Key decision</h4><p>Rebuild the flow around the five questions an approver asks, and replace the two-checkbox dialog with clearly named Approve and Reject actions on the review page.</p></div>
-<div class="glance-item"><h4>Outcome</h4><p>40% fewer steps across primary procurement tasks, a 23% productivity improvement, and an approval queue cut from 22 to 10 columns.</p></div>
+<div class="glance-item"><h3>The problem</h3><p>Approving a routine requisition in Premier's legacy ERP meant three menu levels, a 22-column queue, nine tabs and an approve/reject dialog where both boxes could be checked.</p></div>
+<div class="glance-item"><h3>My role &amp; team</h3><p>Principal UX Designer. Owned the Buyer experience: buyer interviews, the heuristic evaluation, journey mapping and redesigned screens on the PINC AI Design System.</p></div>
+<div class="glance-item"><h3>Key decision</h3><p>Rebuild the flow around the five questions an approver asks, and replace the two-checkbox dialog with clearly named Approve and Reject actions on the review page.</p></div>
+<div class="glance-item"><h3>Outcome</h3><p>40% fewer steps across primary procurement tasks, a 23% productivity improvement, and an approval queue cut from 22 to 10 columns.</p></div>
 </div></div></section>
 
 <!-- 1 CONTEXT -->
@@ -427,7 +448,7 @@ footer .footer-email a:hover{opacity:.75}
       <article class="eval-card">
         <div class="eval-shot" data-lb="l1_dashboard"><img alt="Legacy ERP dashboard" data-img="l1_dashboard.jpg"/></div>
         <div class="eval-body">
-          <div class="eval-head"><h4>01 · ERP dashboard</h4><span class="sev high">High</span></div>
+          <div class="eval-head"><h4 aria-level="3">01 · ERP dashboard</h4><span class="sev high">High</span></div>
           <p><strong>Finding:</strong> Shows EDI exceptions, invoice types and match exceptions as month-by-month reports, with no indication of what needs the user's attention. Large empty panels sit next to cramped navigation and tiny labels.</p>
           <p class="rec"><strong>Recommendation:</strong> Role-based KPIs, summaries of exceptions the user can act on, and a prominent "Pending my approval" entry point.</p>
         </div>
@@ -519,7 +540,7 @@ footer .footer-email a:hover{opacity:.75}
 
 
     <div class="breakdowns" style="margin-top:0">
-      <div class="bd"><h5>Discoverability</h5><p>The way to approvals isn't obvious. Users have to know the right module and submenu.</p></div>
+      <div class="bd"><h5 aria-level="4">Discoverability</h5><p>The way to approvals isn't obvious. Users have to know the right module and submenu.</p></div>
       <div class="bd"><h5>Selection</h5><p>Finding the most urgent request means scanning across 22 columns.</p></div>
       <div class="bd"><h5>Evaluation</h5><p>Users piece the decision together themselves: what, why, how much, and whether it's in policy.</p></div>
       <div class="bd"><h5>Decision</h5><p>A technical form pattern for an action with real consequences.</p></div>
@@ -551,12 +572,12 @@ footer .footer-email a:hover{opacity:.75}
   <div class="section-inner">
     <div class="section-label"><span>4</span>Before &amp; After</div>
     <h2 class="section-title">Each stage of the journey, redesigned to answer one question</h2>
-    <p class="lede">These redesigned screens are part of the Buyer experience I owned and were built with the Fireball Design System. Each stage below puts the legacy screen next to the new one and lists the evaluation findings the change addresses. Click any screen to enlarge it.</p>
+    <p class="lede">These redesigned screens are part of the Buyer experience I owned and were built with the PINC AI Design System. Each stage below puts the legacy screen next to the new one and lists the evaluation findings the change addresses. Click any screen to enlarge it.</p>
 
 
     <!-- 0 dashboard -->
     <div class="ba-panel">
-      <div class="ba-head"><div><div class="ba-step">Stage 01</div><h4>From reports to a to-do list</h4><p>The legacy dashboard showed six months of EDI and invoice statistics. The new one opens on what needs action today: counts, alerts and shortcuts to start work.</p></div><span class="ba-q">What needs my attention?</span></div>
+      <div class="ba-head"><div><div class="ba-step">Stage 01</div><h4 aria-level="3">From reports to a to-do list</h4><p>The legacy dashboard showed six months of EDI and invoice statistics. The new one opens on what needs action today: counts, alerts and shortcuts to start work.</p></div><span class="ba-q">What needs my attention?</span></div>
       <div class="ba-imgs">
         <div class="ba-col before"><div class="ba-col-label b">Before</div><div class="ba-shot" data-lb="l1_dashboard"><img alt="Legacy dashboard" data-img="l1_dashboard.jpg"/></div>
           <ul><li>Four 2015 report tables showing historic statistics</li><li>No approval count or entry point</li><li>Release notes take up a third of the screen</li></ul></div>
@@ -647,9 +668,9 @@ footer .footer-email a:hover{opacity:.75}
 
     <div class="two-col">
       <div class="result-list">
-        <div class="result-item"><h4>40% fewer task steps</h4><p>Primary procurement workflows went from deep, many-click flows to short paths suited to each role, which addressed the most common complaint from research.</p></div>
+        <div class="result-item"><h4 aria-level="3">40% fewer task steps</h4><p>Primary procurement workflows went from deep, many-click flows to short paths suited to each role, which addressed the most common complaint from research.</p></div>
         <div class="result-item"><h4>23% productivity improvement</h4><p>Showing work up front and cutting navigation gave buyers and approvers back time each day.</p></div>
-        <div class="result-item"><h4>One visual language with Fireball</h4><p>Shared components meant the approvals worklist, review page and dashboard looked and behaved the same, which fixed the inconsistency flagged in the evaluation.</p></div>
+        <div class="result-item"><h4>One visual language with PINC AI</h4><p>Shared components meant the approvals worklist, review page and dashboard looked and behaved the same, which fixed the inconsistency flagged in the evaluation.</p></div>
         <div class="result-item"><h4>Stronger demos</h4><p>Sales and demo teams reported a positive reaction from prospective clients, which supported Premier's goal of winning back market share.</p></div>
       </div>
       <div>
@@ -698,6 +719,7 @@ footer .footer-email a:hover{opacity:.75}
 <div class="cs-close-next"><h3>What I'd do next</h3><ul><li>Run the 12–15 participant usability study with approvers, procurement specialists, requesters and administrators to confirm the severity ratings and set a baseline.</li><li>Measure the redesign against the proposed targets: 95% task completion, 90% first-attempt success and zero wrong approve/reject decisions.</li></ul></div>
 <div class="cs-close-nav"><a class="back" href="index.html#work">← All work</a><a class="next" href="equipp_pharmacy_quality.html">Next case study: <span>Beyond the Score: Finding the Right Patient Intervention →</span></a></div>
 </div></section>
+</main>
 <footer><p><strong>From database report to supply chain decision tool</strong> · William Teppig · Premier</p>
 <p class="footer-email"><a href="mailto:wteppig@gmail.com">wteppig@gmail.com</a></p></footer>
 
@@ -732,6 +754,62 @@ lb.querySelector('.lb-p').onclick=e=>{e.stopPropagation();show(cur-1)};
 lb.querySelector('.lb-n').onclick=e=>{e.stopPropagation();show(cur+1)};
 lb.addEventListener('click',e=>{if(e.target===lb)close()});
 document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='Escape')close();if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1);});
+</script>
+<script id="a11y-helpers">
+/* Accessibility helpers: keyboard-operable image enlargers + modal dialog focus handling */
+(function(){
+  var TRIGGERS='[data-lb],.js-lightbox-img,.artifact-card,.scenario-shot,[data-art]';
+  var DIALOGS='#lb,#lightbox,#lightboxOverlay,#artifact-modal,#scenario-modal';
+  function labelFor(el){
+    var img=el.matches('img')?el:el.querySelector('img');
+    var t=(img&&img.getAttribute('alt'))||el.getAttribute('data-art')||(el.textContent||'').trim().replace(/\s+/g,' ').slice(0,90);
+    return 'Enlarge image: '+t;
+  }
+  document.querySelectorAll(TRIGGERS).forEach(function(el){
+    if(el.closest(DIALOGS)) return;
+    if(el.matches('a[href],button')||el.hasAttribute('tabindex')){ /* already keyboard-operable: just make sure it has a name */
+      var img0=el.querySelector('img'); var hasName=el.getAttribute('aria-label')||(el.innerText||'').trim()||(img0&&img0.getAttribute('alt'));
+      if(!hasName&&el.getAttribute('data-art')) el.setAttribute('aria-label','Enlarge image: '+el.getAttribute('data-art'));
+      return; }
+    el.setAttribute('tabindex','0');
+    if(!el.getAttribute('role')) el.setAttribute('role','button');
+    /* Name: visible text when there is any (so voice-control labels match), otherwise the image's alt text */
+    var visible=(el.innerText||'').trim();
+    if(!el.getAttribute('aria-label')&&!visible) el.setAttribute('aria-label',labelFor(el));
+    if(visible&&!el.getAttribute('aria-roledescription')) el.setAttribute('aria-description','Opens an enlarged view');
+    el.addEventListener('keydown',function(e){
+      if((e.key==='Enter'||e.key===' ')&&e.target===el){ e.preventDefault(); el.click(); }
+    });
+  });
+  var lastOutside=null;
+  document.addEventListener('focusin',function(e){ if(!e.target.closest(DIALOGS)) lastOutside=e.target; },true);
+  document.addEventListener('click',function(e){ var t=e.target.closest&&e.target.closest(TRIGGERS); if(t&&!t.closest(DIALOGS)) lastOutside=t; },true);
+  document.querySelectorAll(DIALOGS).forEach(function(d){
+    if(!d.getAttribute('role')) d.setAttribute('role','dialog');
+    d.setAttribute('aria-modal','true');
+    if(!d.getAttribute('aria-label')&&!d.getAttribute('aria-labelledby')) d.setAttribute('aria-label','Enlarged image');
+    if(!d.hasAttribute('tabindex')) d.setAttribute('tabindex','-1');
+    var wasOpen=false, opener=null;
+    function isOpen(){ var cs=getComputedStyle(d); return cs.display!=='none'&&cs.visibility!=='hidden'&&parseFloat(cs.opacity)>0.05&&d.getClientRects().length>0; }
+    function focusables(){ return [].slice.call(d.querySelectorAll('button,[href],input,[tabindex]:not([tabindex="-1"])')).filter(function(x){ return x.getClientRects().length>0&&!x.disabled; }); }
+    function closeBtn(){ return d.querySelector('[aria-label="Close"],[aria-label="close"],.lb-x,[id*="close"],[id*="Close"]'); }
+    function check(){
+      var o=isOpen();
+      if(o&&!wasOpen){ wasOpen=true; opener=lastOutside;
+        setTimeout(function(){ if(!d.contains(document.activeElement)){ var c=closeBtn(); (c||focusables()[0]||d).focus(); } },40); }
+      else if(!o&&wasOpen){ wasOpen=false; if(opener&&document.contains(opener)&&opener.focus) opener.focus(); }
+    }
+    new MutationObserver(check).observe(d,{attributes:true,attributeFilter:['class','style','aria-hidden','hidden','open']});
+    new MutationObserver(check).observe(document.body,{attributes:true,attributeFilter:['class','style']});
+    d.addEventListener('keydown',function(e){
+      if(!isOpen()) return;
+      if(e.key==='Tab'){ var f=focusables(); if(!f.length){ e.preventDefault(); return; }
+        var first=f[0], last=f[f.length-1];
+        if(e.shiftKey&&(document.activeElement===first||document.activeElement===d)){ e.preventDefault(); last.focus(); }
+        else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); } }
+    });
+  });
+})();
 </script>
 </body>
 </html>
